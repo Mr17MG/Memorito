@@ -1,29 +1,46 @@
-import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
+import QtQuick 2.14 // Require For MouseArea and other
+import QtQuick.Window 2.14 // Require For Screen
+import QtQuick.Controls 2.14 // Require For Drawer and other
+import QtQuick.Controls.Material 2.14 // // Require For Material Theme
+import Qt.labs.settings 1.1
 
 ApplicationWindow {
     id:rootWindow
     visible: true
     title: qsTr("مموریتو")
+    Settings{id:appSetting}
 
-    width: 640
-    height: 480
+    // ApplicationWindow Settings
+    width:  appSetting.value("width" ,640)
+    height: appSetting.value("height",480)
+
     minimumWidth: Screen.width/5<380?380:Screen.width/5
     minimumHeight: Screen.height/3<480?480:Screen.height/3
-    property bool ltr: false
+
+    x:appSetting.value("appX",40)
+    y:appSetting.value("appY",40)
+
+    onClosing: {
+        appSetting.setValue("appX",rootWindow.x)
+        appSetting.setValue("appY",rootWindow.y)
+
+        appSetting.setValue("width", rootWindow.width)
+        appSetting.setValue("height",rootWindow.height)
+    }
+
+    // Multi Language
+    property bool ltr: Number(appSetting.value("language",translator.getLanguages().FA)) === translator.getLanguages().ENG
     LayoutMirroring.enabled: ltr
     LayoutMirroring.childrenInherit: true
 
+    //Responsive UI
     property real size1W: uiFunctions.getWidthSize(1,Screen)
     property real size1H: uiFunctions.getHeightSize(1,Screen)
     property real size1F: uiFunctions.getFontSize(1,Screen)
     property int nRow : uiFunctions.checkDisplayForNumberofRows(Screen)
     property real firstRowMinSize: 60*size1W
     property real firstRowMaxWidth: nRow ==2?rootWindow.width*2.5/8:rootWindow.width*1.80/8
-
     UiFunctions { id : uiFunctions }
-
     onWidthChanged: {
         if(firstRow.width > firstRowMaxWidth)
             firstRow.width = firstRowMaxWidth
@@ -31,6 +48,26 @@ ApplicationWindow {
             firstRow.width = firstRowMaxWidth
     }
 
+    //Header
+    header : Loader{
+        id:headerRect
+        width: parent.width
+        height: 45*size1H
+        active: nRow===1
+        visible: nRow===1
+        sourceComponent: Item{
+            Button{
+                anchors.right: parent.right
+                anchors.top: parent.top
+                visible: drawerLoader.active
+                onClicked: {
+                    drawerLoader.item.open()
+                }
+            }
+        }
+    }
+
+    //Drawer
     Loader{
         id:drawerLoader
         active: nRow===1
@@ -46,24 +83,7 @@ ApplicationWindow {
         }
     }
 
-    header : Loader{
-        id:headerRect
-        width: parent.width
-        height: 45*size1H
-        active: nRow===1
-        visible: nRow===1
-        sourceComponent: Item{
-            Button{
-                anchors.right: parent.right
-                anchors.top: parent.top
-                text: qsTr("Menu")
-                visible: drawerLoader.active
-                onClicked: {
-                    drawerLoader.item.open()
-                }
-            }
-        }
-    }
+
 
     Row {
         id:mainRow
@@ -146,9 +166,19 @@ ApplicationWindow {
                 }
                 Button{
                     anchors.centerIn: parent
-                    text: qsTr("change Right to Left")
+                    text: qsTr("تغییر زبان")
                     onClicked: {
                         ltr= !ltr
+                        if(!ltr)
+                        {
+                            translator.updateLanguage(translator.getLanguages().FA);
+                            appSetting.setValue("language",translator.getLanguages().FA)
+                        }
+                        else {
+                            translator.updateLanguage(translator.getLanguages().ENG);
+                            appSetting.setValue("language",translator.getLanguages().ENG)
+
+                        }
                     }
                 }
             }
