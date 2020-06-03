@@ -1,4 +1,4 @@
-import QtQuick 2.14
+import QtQuick 2.14 // Require For QtObject
 
 QtObject {
     function getHeightMargin(window)

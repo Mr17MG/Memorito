@@ -1,5 +1,5 @@
-import QtQuick 2.14
-import QtGraphicalEffects 1.0
+import QtQuick 2.14 // Require For Listview
+import QtGraphicalEffects 1.14 // Require For ColorOverlay
 
 ListView{
     property color background: "white"
@@ -76,11 +76,11 @@ ListView{
     }
     model: ListModel{
         ListElement{
-            title:qsTr("Settings")
+            title:qsTr("تنظیمات")
             //            pageSource : "qrc:/Pages/Friends/FriendsMain.qml"
             iconSrc: "file:///media/MrMG/Codes/03-Qt/TestProjects/TestColumn/Icons/setting.svg"
         }ListElement{
-            title:qsTr("Settings")
+            title:qsTr("پروژه ها")
             //            pageSource : "qrc:/Pages/Friends/FriendsMain.qml"
             iconSrc: "file:///media/MrMG/Codes/03-Qt/TestProjects/TestColumn/Icons/setting.svg"
         }
