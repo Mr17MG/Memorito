@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>icon.png</file>
+        <file>menu.svg</file>
+        <file>dots.svg</file>
+        <file>close.svg</file>
+        <file>arrow.svg</file>
     </qresource>
 </RCC>
