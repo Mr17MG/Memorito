@@ -12,7 +12,6 @@ ListView{
 
     id:listView
     anchors.fill: parent
-    anchors.left: parent.left
     clip: true
     onContentYChanged: {
         if(contentY<0 || contentHeight < listView.height)
