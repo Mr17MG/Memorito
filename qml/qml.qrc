@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>DrawerBody.qml</file>
         <file>UiFunctions.qml</file>
+        <file>AppHeader.qml</file>
     </qresource>
 </RCC>
