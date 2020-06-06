@@ -3,30 +3,30 @@ import QtQuick 2.14 // Require For QtObject
 QtObject {
     function getHeightMargin(window)
     {
-        var heightRatio = 667/window.height;
-        var widthRatio = 375/window.width;
+        var heightRatio = 1366/window.height;
+        var widthRatio = 768/window.width;
         if(heightRatio<widthRatio)
-            return (window.height - 667 / widthRatio) /2;
+            return (window.height - 1366 / widthRatio) /2;
         return 0;
     }
 
     function getWidthMargin(window)
     {
-        var heightRatio = 667/window.height;
-        var widthRatio = 375/window.width;
+        var heightRatio = 1366/window.height;
+        var widthRatio = 768/window.width;
         if(heightRatio>widthRatio)
-            return (window.width - 375 / heightRatio) /2;
+            return (window.width - 768 / heightRatio) /2;
         return 0;
     }
 
     function getHeightSize(size,window)
     {
-        return (size / (667 / (window.height-getHeightMargin(window)*2)));
+        return (size / (1366 / (window.height-getHeightMargin(window)*2)));
     }
 
     function getWidthSize(size,window)
     {
-        return (size / (375 / (window.width-getWidthMargin(window)*2)));
+        return (size / (768 / (window.width-getWidthMargin(window)*2)));
     }
 
     function getFontSize(a,window)

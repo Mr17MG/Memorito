@@ -22,9 +22,9 @@ HEADERS += \
 
 
 RESOURCES += \
-    ts/Translations.qrc \
     qml/qml.qrc \
-    svg/svg.qrc
+    svg/svg.qrc \
+    ts/ts.qrc
 
 TRANSLATIONS += \
     ts/en.ts

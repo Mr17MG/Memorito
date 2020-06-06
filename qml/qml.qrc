@@ -4,5 +4,7 @@
         <file>DrawerBody.qml</file>
         <file>UiFunctions.qml</file>
         <file>AppHeader.qml</file>
+        <file>AppStyle.qml</file>
+        <file>AppSettings.qml</file>
     </qresource>
 </RCC>

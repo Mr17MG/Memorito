@@ -16,16 +16,19 @@ int main(int argc, char *argv[])
     app.setDesktopFileName("Memorito");
     app.setOrganizationDomain("Memorito.ir");
 
-    // App Style
+    //**************** App Style ****************//
     QQuickStyle::setStyle("Material");
     app.setWindowIcon(QIcon(":/icon.png"));
+    //*******************************************//
 
     QQmlApplicationEngine engine;
 
-    // Load Language of App
+    //**************** Load Language of App ****************//
     QSettings settings;
-    Translator mTrans(&app,&engine,settings.value("language",89).toInt()); // QLocale::Persian  == 89
+    Translator mTrans(&app,&engine,settings.value("AppLanguage",89).toInt()); // QLocale::Persian  == 89
     engine.rootContext()->setContextProperty("translator",(QObject *)&mTrans);
+    //******************************************************//
+
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

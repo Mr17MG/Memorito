@@ -3,49 +3,51 @@ import QtQuick.Window 2.14 // Require For Screen
 import QtQuick.Controls 2.14 // Require For Drawer and other
 import QtQuick.Controls.Material 2.14 // // Require For Material Theme
 import Qt.labs.settings 1.1 // Require For appSettings
+import QtGraphicalEffects 1.14 // Require for ColorOverlay
 
 ApplicationWindow {
     id:rootWindow
+
+    /********************************************************************************/
+    //////////////////////// ApplicationWindow Settings //////////////////////////////
     visible: true
     title: qsTr("مموریتو")
-    Settings{id:appSetting}
-
-    // ApplicationWindow Settings
-    width: Qt.platform.os === "android" || Qt.platform.os === "ios"?Screen.width:appSetting.value("width" ,640)
-    height: Qt.platform.os === "android" || Qt.platform.os === "ios"?Screen.height:appSetting.value("height",480)
+    width: Qt.platform.os === "android" || Qt.platform.os === "ios"?Screen.width:appSetting.value("AppWidth" ,640)
+    height: Qt.platform.os === "android" || Qt.platform.os === "ios"?Screen.height:appSetting.value("AppHeight",480)
 
     minimumWidth: Screen.width/5<380?380:Screen.width/5
     minimumHeight: Screen.height/3<480?480:Screen.height/3
 
-    x:Qt.platform.os === "android" || Qt.platform.os === "ios"?0:appSetting.value("appX",40)
-    y:Qt.platform.os === "android" || Qt.platform.os === "ios"?0:appSetting.value("appY",40)
+    x:Qt.platform.os === "android" || Qt.platform.os === "ios"?0:appSetting.value("AppX",40)
+    y:Qt.platform.os === "android" || Qt.platform.os === "ios"?0:appSetting.value("AppY",40)
 
     onClosing: {
         if(Qt.platform.os !== "android" || Qt.platform.os !== "ios")
         {
-            appSetting.setValue("appX",rootWindow.x)
-            appSetting.setValue("appY",rootWindow.y)
+            appSetting.setValue("AppX",rootWindow.x)
+            appSetting.setValue("AppY",rootWindow.y)
 
-            appSetting.setValue("width", rootWindow.width)
-            appSetting.setValue("height",rootWindow.height)
+            appSetting.setValue("AppWidth", rootWindow.width)
+            appSetting.setValue("AppHeight",rootWindow.height)
         }
     }
 
-    // Multi Language
-    property bool ltr: Number(appSetting.value("language",translator.getLanguages().FA)) === translator.getLanguages().ENG
+    /********************************************************************************/
+    ////////////////////////////////// Multi Language ////////////////////////////////
+    property bool ltr: Number(appSetting.value("AppLanguage",translator.getLanguages().FA)) === translator.getLanguages().ENG
     LayoutMirroring.enabled: ltr
     LayoutMirroring.childrenInherit: true
 
-    //Responsive UI
+    /********************************************************************************/
+    ///////////////////////////////// Responsive UI //////////////////////////////////
     property real size1W: uiFunctions.getWidthSize(1,Screen)
     property real size1H: uiFunctions.getHeightSize(1,Screen)
     property real size1F: uiFunctions.getFontSize(1,Screen)
 
     property int nRow : uiFunctions.checkDisplayForNumberofRows(Screen)
-    property real firstRowMinSize: 60*size1W
+    property real firstRowMinSize: 140*size1W
     property real firstRowMaxWidth: nRow ==2?rootWindow.width*2.5/8:rootWindow.width*1.80/8
 
-    UiFunctions { id : uiFunctions }
     onWidthChanged: {
         if(rootWindow.width>Screen.width/3 && drawerLoader.active && drawerLoader.item.visible)
         {
@@ -60,6 +62,34 @@ ApplicationWindow {
         else if(firstRow.width > firstRowMaxWidth)
             firstRow.width = firstRowMaxWidth
     }
+
+    /********************************************************************************/
+    ////////////////////////////// Application Styles ////////////////////////////////
+    AppStyle{id:appStyle}
+
+    Material.theme: Number(appSetting.value("AppTheme",0))
+    Material.onThemeChanged: {
+        appSetting.setValue("AppTheme",Material.theme)
+    }
+
+    Material.primary: appStyle.primaryColor
+
+    function setAppTheme(index)
+    {
+//        statusBar.color = index?"#EAEAEA":"#171717"
+        Material.theme = index
+    }
+
+    function getAppTheme()
+    {
+        return Material.theme
+    }
+
+
+    /********************************************************************************/
+    UiFunctions { id : uiFunctions }
+    Settings{id:appSetting}
+
 
     //Header
     header : AppHeader{}
@@ -79,7 +109,7 @@ ApplicationWindow {
             height: drawerLoader.height
             width: drawerLoader.width
             edge: ltr?Qt.LeftEdge:Qt.RightEdge
-            dragMargin:30*size1W
+            dragMargin:50*size1W
         }
     }
 
@@ -98,27 +128,39 @@ ApplicationWindow {
                     width = 0
                 else width = firstRowMinSize
             }
-            property color background: "#cccccc"
-
             sourceComponent: Item{
-                DrawerBody{id:drawer;background:firstRow.background }
+                DrawerBody{id:drawer}
+                Rectangle{
+                    id:drawerBackground
+                    anchors.fill: parent
+                    color: appStyle.shadowColor
+                    z:-1
+                }
+
                 Loader{
+                    id:resizerLoader
                     active: !ltr
-                    width: 5*size1W
+                    width: 20*size1W
                     height: parent.height
                     anchors.left: parent.left
                     sourceComponent:Rectangle{
                         anchors.fill: parent
-                        color: drawer.background
+                        color: drawerBackground.color
                         Image{
+                            id:dotsImg
                             anchors.centerIn: parent
-                            width: 15*size1W
+                            width: 50*size1W
                             height: width
                             source: "qrc:/dots.svg"
                             sourceSize.width: width*2
                             sourceSize.height: height*2
+                            visible: false
                         }
-
+                        ColorOverlay{
+                            source: dotsImg
+                            anchors.fill: dotsImg
+                            color: appStyle.textColor
+                        }
                         MouseArea {
                             anchors.fill: parent
                             drag.target: parent
@@ -155,24 +197,38 @@ ApplicationWindow {
                            :nRow===2?rootWindow.width-firstRow.width
                                     :(rootWindow.width-firstRow.width)/2
             height: parent.height
-            sourceComponent: Rectangle {
-                color: "pink"
+            sourceComponent: Item {
                 clip: true
+                Rectangle{
+                    anchors.left: parent.left
+                    height: parent.height
+                    color: "gray"
+                    width: 10*size1W
+                    visible: nRow === 3
+                }
+
                 Loader{
                     active: ltr && firstRow.active
-                    width: 5*size1W
+                    width: 20*size1W
                     height: parent.height
                     anchors.right: parent.right
                     sourceComponent:Rectangle{
                         anchors.fill: parent
-                        color: firstRow.background
+                        color: appStyle.shadowColor
                         Image{
+                            id:dotsImg2
                             anchors.centerIn: parent
-                            width: 15*size1W
+                            width: 50*size1W
                             height: width
                             source: "qrc:/dots.svg"
                             sourceSize.width: width*2
                             sourceSize.height: height*2
+                            visible: false
+                        }
+                        ColorOverlay{
+                            source: dotsImg2
+                            anchors.fill: dotsImg2
+                            color: appStyle.textColor
                         }
                         MouseArea {
                             anchors.fill: parent
@@ -208,11 +264,11 @@ ApplicationWindow {
                         if(!ltr)
                         {
                             translator.updateLanguage(translator.getLanguages().FA);
-                            appSetting.setValue("language",translator.getLanguages().FA)
+                            appSetting.setValue("AppLanguage",translator.getLanguages().FA)
                         }
                         else {
                             translator.updateLanguage(translator.getLanguages().ENG);
-                            appSetting.setValue("language",translator.getLanguages().ENG)
+                            appSetting.setValue("AppLanguage",translator.getLanguages().ENG)
 
                         }
                     }
@@ -225,7 +281,7 @@ ApplicationWindow {
             active: nRow>=3
             width:  nRow===3?(rootWindow.width-firstRow.width)/2:0
             height: parent.height
-            sourceComponent: Rectangle { color: "lightBlue"}
+            sourceComponent: Item{}
         }
     }
 
