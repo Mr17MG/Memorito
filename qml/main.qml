@@ -112,7 +112,7 @@ ApplicationWindow {
 
     Text {
         id: waitText
-        text: qsTr("Made with ♥")
+        text: qsTr("ساخته شده با ♥")
         font{family: appStyle.shabnam;pixelSize: 30*size1F;bold: true}
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 40*size1W
@@ -133,6 +133,5 @@ ApplicationWindow {
         active: true
         sourceComponent: Memorito{id:memorito}
     }
-
 
 }
