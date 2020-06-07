@@ -6,5 +6,29 @@
         <file>AppHeader.qml</file>
         <file>AppStyle.qml</file>
         <file>AppSettings.qml</file>
+        <file>Components/Button.qml</file>
+        <file>Components/CheckBox.qml</file>
+        <file>Components/CheckIndicator.qml</file>
+        <file>Components/ComboBox.qml</file>
+        <file>Components/ConfirmDialog.qml</file>
+        <file>Components/ConfirmDialogButton.qml</file>
+        <file>Components/Dialog.qml</file>
+        <file>Components/ErrorLog.qml</file>
+        <file>Components/MessageDialog.qml</file>
+        <file>Components/PageIndicator.qml</file>
+        <file>Components/RadioButton.qml</file>
+        <file>Components/RadioIndicator.qml</file>
+        <file>Components/SlideDelegate.qml</file>
+        <file>Components/Switch.qml</file>
+        <file>Components/SwitchIndicator.qml</file>
+        <file>Components/TextField.qml</file>
+        <file>Components/TextInput.qml</file>
+        <file>Components/ListView.qml</file>
+        <file>Components/BusyIndicator.qml</file>
+        <file>UsefulFunctions.qml</file>
+        <file>Memorito.qml</file>
+        <file>FirstColumn.qml</file>
+        <file>MainColumn.qml</file>
+        <file>ThirdColumn.qml</file>
     </qresource>
 </RCC>
