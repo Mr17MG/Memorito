@@ -1,7 +1,7 @@
-import QtQuick 2.14
-import QtQuick.Controls.Material 2.14
+import QtQuick 2.14 // Require for Item and FontLoader
+import QtQuick.Controls.Material 2.14 // Require for Material.Color
 
-QtObject {
+Item {
     property color textColor : getAppTheme()?"white":"black"
     property color primaryColor : Material.color(primaryInt)
     property color shadowColor : getAppTheme()?"#171717":"#EAEAEA"
@@ -11,5 +11,11 @@ QtObject {
         appSetting.setValue("AppColor",primaryInt)
     }
 
+    property alias shabnam: shabnamFont.name
 
+    FontLoader{
+        id:shabnamFont
+        name: "shabnam"
+        source: "qrc:/Shabnam.ttf"
+    }
 }
