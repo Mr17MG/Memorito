@@ -21,10 +21,16 @@ void Translator::updateLanguage(int lang)
         mApp->removeTranslator(&mTranslator);
         break;
     }
+    currentLang = lang;
     mEngine->retranslate();
 }
 
 QVariantMap Translator::getLanguages()
 {
     return languageList;
+}
+
+int Translator::getCurrentLanguage()
+{
+    return currentLang;
 }

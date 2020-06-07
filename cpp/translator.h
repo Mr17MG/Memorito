@@ -14,17 +14,17 @@ class Translator : public QObject
 public:
     QVariantMap languageList;
     Translator(QGuiApplication *app,QQmlApplicationEngine *engine,int lang);
-    QString getEmptyString();
-    QVariantList getLanguagesEnum();
 
 public slots:
-    void updateLanguage(int lang);
-    QVariantMap getLanguages();
+    Q_INVOKABLE void updateLanguage(int lang);
+    Q_INVOKABLE QVariantMap getLanguages();
+    Q_INVOKABLE int getCurrentLanguage();
 
 private:
     QQmlApplicationEngine * mEngine;
     QGuiApplication * mApp;
     QTranslator mTranslator;
+    int currentLang;
 
 };
 
