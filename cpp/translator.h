@@ -5,14 +5,12 @@
 #include <QGuiApplication> // Require for QGuiApplication
 #include <QTranslator> // Require for mTranslator
 #include <QQmlApplicationEngine> // Require For mEngine
-#include <QLocale> // Require For Qlocal::English
+#include <QLocale> // Require For Qlocal::English and Qlocale::Persian
 
 class Translator : public QObject
 {
-    Q_OBJECT
 
 public:
-    QVariantMap languageList;
     Translator(QGuiApplication *app,QQmlApplicationEngine *engine,int lang);
 
 public slots:
@@ -21,6 +19,9 @@ public slots:
     Q_INVOKABLE int getCurrentLanguage();
 
 private:
+    Q_OBJECT
+
+    QVariantMap languageList;
     QQmlApplicationEngine * mEngine;
     QGuiApplication * mApp;
     QTranslator mTranslator;
