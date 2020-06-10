@@ -9,8 +9,8 @@ Loader{
         Rectangle{
             anchors.right: parent.right
             height: parent.height
-            color: "gray"
-            width: 10*size1W
+            color: appStyle.primaryColor
+            width: 2*size1W
             visible: nRow === 3
         }
     }
