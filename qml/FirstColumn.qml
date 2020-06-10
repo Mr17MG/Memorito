@@ -1,49 +1,27 @@
 import QtQuick 2.14 // Reqiure For Loader
-import QtGraphicalEffects 1.14
-import "qrc:/" as App
+import "qrc:/AppBase" as Base // Require For DrawerBody
 
 Loader{
     id:firstColumn
     active: nRow>1
     width: nRow===1?0:firstColumnMinSize
     height: parent.height
-    onActiveChanged: {
-        if(!active)
-            width = 0
-        else width = firstColumnMinSize
-    }
     sourceComponent: Item{
-        App.DrawerBody{id:drawer}
-        Rectangle{
-            id:drawerBackground
-            anchors.fill: parent
-            color: appStyle.shadowColor
-            z:-1
-        }
-
+        Base.DrawerBody{id:drawer}
         Loader{
             id:resizerLoader
+            asynchronous:true
             active: !ltr
-            width: 20*size1W
+            width: 10*size1W
             height: parent.height
             anchors.left: parent.left
-            sourceComponent:Rectangle{
+            sourceComponent:Item{
                 anchors.fill: parent
-                color: drawerBackground.color
-                Image{
-                    id:dotsImg
-                    anchors.centerIn: parent
-                    width: 50*size1W
-                    height: width
-                    source: "qrc:/dots.svg"
-                    sourceSize.width: width*2
-                    sourceSize.height: height*2
-                    visible: false
-                }
-                ColorOverlay{
-                    source: dotsImg
-                    anchors.fill: dotsImg
-                    color: appStyle.textColor
+                Rectangle{
+                    height: parent.height
+                    width: 2*size1W
+                    color: appStyle.primaryColor
+                    anchors.left: parent.left
                 }
                 MouseArea {
                     anchors.fill: parent
