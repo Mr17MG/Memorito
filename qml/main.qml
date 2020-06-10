@@ -4,9 +4,12 @@ import QtQuick.Controls 2.14 // Require For Drawer and other
 import QtQuick.Controls.Material 2.14 // // Require For Material Theme
 import Qt.labs.settings 1.1 // Require For appSettings
 import QtGraphicalEffects 1.14 // Require for DropShadow
+import "qrc:/AppBase/" as Base
+import "qrc:/Functions/" as F
 
 ApplicationWindow {
     id:rootWindow
+
     /********************************************************************************/
     //////////////////////// ApplicationWindow Settings //////////////////////////////
 
@@ -35,7 +38,7 @@ ApplicationWindow {
     /********************************************************************************/
     ////////////////////////////////// Multi Language ////////////////////////////////
 
-    property bool ltr: Number(appSetting.value("AppLanguage",(translator?translator.getLanguages().FA:""))) === (translator?translator.getLanguages().ENG:"")
+    property bool ltr: translator?translator.getCurrentLanguage() === translator.getLanguages().ENG:false
     LayoutMirroring.enabled: ltr
     LayoutMirroring.childrenInherit: true
 
@@ -59,7 +62,7 @@ ApplicationWindow {
 
     /********************************************************************************/
     ////////////////////////////// Application appStyle ////////////////////////////////
-    AppStyle{id:appStyle}
+    Base.AppStyle{id:appStyle}
 
     Material.theme: Number(appSetting.value("AppTheme",0))
     Material.onThemeChanged: {
@@ -82,8 +85,8 @@ ApplicationWindow {
     /********************************************************************************/
     ////////////////////////////// useful Component ////////////////////////////////
 
-    UiFunctions { id : uiFunctions }
-    UsefulFunctions{id:usefulFunc}
+    F.UiFunctions { id : uiFunctions }
+    F.UsefulFunctions{id:usefulFunc}
     Settings{id:appSetting}
 
 
@@ -113,7 +116,7 @@ ApplicationWindow {
     Text {
         id: waitText
         text: qsTr("ساخته شده با ♥")
-        font{family: appStyle.shabnam;pixelSize: 30*size1F;bold: true}
+        font{family: appStyle.appFont;pixelSize: 30*size1F;bold: true}
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 40*size1W
         anchors.horizontalCenter: parent.horizontalCenter
@@ -121,10 +124,9 @@ ApplicationWindow {
         visible: mainLoader.status !== Loader.Ready
     }
 
-
-
     /********************************************************************************/
     //////////////////////////////// Main App Loader /////////////////////////////////
+    //---------------------- Load Memorito as Main Page -----------------------------/
 
     Loader{
         id:mainLoader

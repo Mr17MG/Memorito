@@ -3,6 +3,7 @@ import QtQuick.Window 2.14
 import QtGraphicalEffects 1.14 // Require for ColorOverlay
 import QtQuick.Controls 2.14 // Require For Drawer and other
 import QtQuick.Controls.Material 2.14 // // Require For Material Theme
+import "qrc:/AppBase" as Base
 
 Page {
 
@@ -26,9 +27,21 @@ Page {
     }
 
     //Header
-    header : AppHeader{}
+    header : Base.AppHeader{}
 
-    //Drawer
+
+    Row {
+        id:mainRow
+        layoutDirection: Qt.RightToLeft
+        height: parent.height
+        FirstColumn{id:firstColumn}
+        MainColumn{id:mainColumn}
+        ThirdColumn{id:thirdColumn}
+
+    }
+
+
+    //Drawer if nRow = 1 // one Column
     Loader{
         id:drawerLoader
         active: nRow===1
@@ -36,9 +49,9 @@ Page {
         height: mainRow.height
         y: header.height
         sourceComponent: Drawer{
-            DrawerBody{}
+            Base.DrawerBody{}
             Overlay.modal: Rectangle {
-                color: getAppTheme()?"#aa424242":"#80000000"
+                color: getAppTheme()?"#aa606060":"#80000000"
             }
             y: header.height
             height: drawerLoader.height
@@ -59,15 +72,4 @@ Page {
             }
         }
     }
-
-    Row {
-        id:mainRow
-        layoutDirection: Qt.RightToLeft
-        height: parent.height
-        FirstColumn{id:firstColumn}
-        MainColumn{id:mainColumn}
-        ThirdColumn{id:thirdColumn}
-
-    }
-
 }
