@@ -22,27 +22,18 @@ Loader{
         Loader{
             id: resizerLoader
             active: ltr && firstColumn.active
-            width: 20*size1W
+            width: 10*size1W
             height: parent.height
             anchors.right: parent.right
-            sourceComponent:Rectangle{
+            sourceComponent:Item{
                 anchors.fill: parent
-                color: appStyle.shadowColor
-                Image{
-                    id:dotsImg2
-                    anchors.centerIn: parent
-                    width: 50*size1W
-                    height: width
-                    source: "qrc:/dots.svg"
-                    sourceSize.width: width*2
-                    sourceSize.height: height*2
-                    visible: false
+                Rectangle{
+                    height: parent.height
+                    width: 2*size1W
+                    color: appStyle.primaryColor
+                    anchors.left: parent.left
                 }
-                ColorOverlay{
-                    source: dotsImg2
-                    anchors.fill: dotsImg2
-                    color: appStyle.textColor
-                }
+
                 MouseArea {
                     anchors.fill: parent
                     drag.target: parent
