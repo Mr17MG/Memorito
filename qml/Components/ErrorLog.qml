@@ -64,6 +64,6 @@ Dialog {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
-        font { family: appStyle.shabnam; pixelSize: size1F*13;bold:false }
+        font { family: appStyle.appFont; pixelSize: size1F*13;bold:false }
     }
 }

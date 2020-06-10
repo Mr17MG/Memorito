@@ -34,7 +34,7 @@ ListView {
         anchors.topMargin: size1H*20
         anchors.horizontalCenter: parent.horizontalCenter
         color: emptyListColor
-        font { family: appStyle.shabnam; pixelSize: size1F*15;bold:true}
+        font { family: appStyle.appFont; pixelSize: size1F*15;bold:true}
     }
     Item{
         anchors.centerIn: parent
@@ -45,7 +45,7 @@ ListView {
             text: qsTr("در حال بارگذاری")
             anchors.top:parent.top
             anchors.horizontalCenter: parent.horizontalCenter
-            font { family: appStyle.shabnam; pixelSize: size1F*17;bold:true}
+            font { family: appStyle.appFont; pixelSize: size1F*17;bold:true}
             color: emptyListColor
         }
 

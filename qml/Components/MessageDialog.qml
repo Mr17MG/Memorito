@@ -21,7 +21,7 @@ App.Dialog {
     Text {
         id: title
         text: msgTitle?msgTitle:qsTr("خطا")
-        font { family: appStyle.shabnam; pixelSize: size1F*17;bold: true }
+        font { family: appStyle.appFont; pixelSize: size1F*17;bold: true }
         anchors.top: parent.top
         anchors.topMargin: size1H*10
         anchors.left: parent.left
@@ -48,7 +48,7 @@ App.Dialog {
         anchors.rightMargin: size1W*15
         anchors.left: parent.left
         anchors.leftMargin: size1W*15
-        font { family: appStyle.shabnam; pixelSize: size1F*14 }
+        font { family: appStyle.appFont; pixelSize: size1F*14 }
         color: textColor
     }
 

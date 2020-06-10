@@ -31,7 +31,7 @@ ComboBox {
 
     id:control
     height: size1H*30
-    font { family: appStyle.shabnam; pixelSize: size1F*35}
+    font { family: appStyle.appFont; pixelSize: size1F*35}
     indicator: Image {
         id:imageIndicator
         anchors.verticalCenter: parent.verticalCenter

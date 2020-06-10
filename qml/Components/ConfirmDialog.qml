@@ -20,7 +20,7 @@ App.Dialog{
         id: title
         text: dialogTitle
         color: textColor
-        font { family: appStyle.shabnam; pixelSize: size1F*17;bold: true }
+        font { family: appStyle.appFont; pixelSize: size1F*17;bold: true }
         anchors.top: parent.top
         anchors.topMargin: size1H*10
         anchors.left: parent.left
@@ -39,7 +39,7 @@ App.Dialog{
         id: text
         text:dialogText
         color: textColor
-        font { family: appStyle.shabnam; pixelSize: size1F*17 }
+        font { family: appStyle.appFont; pixelSize: size1F*17 }
         horizontalAlignment: Text.AlignHCenter
         width: parent.width
         anchors.top: title.bottom

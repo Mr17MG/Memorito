@@ -8,7 +8,7 @@ TextField{
     property alias placeholder: textFieldPlaceHolder
     property alias toolTip: tooltip
     Material.accent: primaryColor
-    font{family: appStyle.shabnam;pixelSize: 14*size1F;bold:true}
+    font{family: appStyle.appFont;pixelSize: 14*size1F;bold:true}
     selectByMouse: true
     renderType:Text.NativeRendering
     placeholderTextColor: "transparent"
@@ -17,7 +17,7 @@ TextField{
         timeout: 6000
         x:textField.width-width
         y:(textField.height-height)/2
-        font{family: appStyle.shabnam;pixelSize: 10*size1F;bold:true}
+        font{family: appStyle.appFont;pixelSize: 10*size1F;bold:true}
     }
     PlaceholderText {
         id: textFieldPlaceHolder
@@ -27,7 +27,7 @@ TextField{
         anchors.bottomMargin: textField.focus || textField.text!=""?40*size1H:15*size1H
         anchors.left: textField.left
 //        anchors.leftMargin: textField.focus || textField.text!=""?0:15
-        font{family: appStyle.shabnam;pixelSize:( textField.focus || textField.text!=""?12*size1F:14*size1F);bold:true}
+        font{family: appStyle.appFont;pixelSize:( textField.focus || textField.text!=""?12*size1F:14*size1F);bold:true}
         Behavior on anchors.bottomMargin {
             NumberAnimation{ duration: 160}
         }

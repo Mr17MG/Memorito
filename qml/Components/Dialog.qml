@@ -52,7 +52,7 @@ Dialog {
         anchors.topMargin: -parent.y +size1H*10
         anchors.right: close.left
         anchors.rightMargin: size1W*10
-        font { family: appStyle.shabnam; pixelSize: size1F*12 }
+        font { family: appStyle.appFont; pixelSize: size1F*12 }
         MouseArea{
             anchors.rightMargin: -size1W*10
             anchors.leftMargin: -size1W*10
@@ -75,7 +75,7 @@ Dialog {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: size1H*35
-        font { family: appStyle.shabnam; pixelSize: size1F*12 }
+        font { family: appStyle.appFont; pixelSize: size1F*12 }
         Material.background: primaryColor
         Image {
             id: buttonIcon

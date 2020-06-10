@@ -28,7 +28,7 @@ Item {
         Text {
             id: name
             text: title
-            font { family: appStyle.shabnam; pixelSize: fontSize;bold: true }
+            font { family: appStyle.appFont; pixelSize: fontSize;bold: true }
             color: buttonEnabled?buttonTextColor:"#ebebeb"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
