@@ -24,7 +24,7 @@ HEADERS += \
 RESOURCES += \
     qml/qml.qrc \
     svg/svg.qrc \
-    tff/tff.qrc \
+    ttf/ttf.qrc \
     ts/ts.qrc
 
 TRANSLATIONS += \
