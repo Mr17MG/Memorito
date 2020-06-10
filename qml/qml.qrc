@@ -1,11 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>DrawerBody.qml</file>
-        <file>UiFunctions.qml</file>
-        <file>AppHeader.qml</file>
-        <file>AppStyle.qml</file>
-        <file>AppSettings.qml</file>
         <file>Components/Button.qml</file>
         <file>Components/CheckBox.qml</file>
         <file>Components/CheckIndicator.qml</file>
@@ -25,10 +20,15 @@
         <file>Components/TextInput.qml</file>
         <file>Components/ListView.qml</file>
         <file>Components/BusyIndicator.qml</file>
-        <file>UsefulFunctions.qml</file>
         <file>Memorito.qml</file>
         <file>FirstColumn.qml</file>
         <file>MainColumn.qml</file>
         <file>ThirdColumn.qml</file>
+        <file>AppBase/AppHeader.qml</file>
+        <file>AppBase/AppSettings.qml</file>
+        <file>AppBase/AppStyle.qml</file>
+        <file>AppBase/DrawerBody.qml</file>
+        <file>Functions/UiFunctions.qml</file>
+        <file>Functions/UsefulFunctions.qml</file>
     </qresource>
 </RCC>
