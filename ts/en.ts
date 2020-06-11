@@ -4,7 +4,7 @@
 <context>
     <name>AppHeader</name>
     <message>
-        <location filename="../qml/AppHeader.qml" line="19"/>
+        <location filename="../qml/AppBase/AppHeader.qml" line="20"/>
         <source>مموریتو</source>
         <translation>Memorito</translation>
     </message>
@@ -12,17 +12,17 @@
 <context>
     <name>AppSettings</name>
     <message>
-        <location filename="../qml/AppSettings.qml" line="19"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="19"/>
         <source>طرح زمینه</source>
         <translation>Application Theme</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="27"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="27"/>
         <source>روشن</source>
         <translation>Light</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="43"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="43"/>
         <source>تیره</source>
         <translation>Dark</translation>
     </message>
@@ -35,117 +35,117 @@
         <translation type="vanished">Colors</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="57"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="57"/>
         <source>رنگ اصلی</source>
         <translation>Primary Color</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="72"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="72"/>
         <source>رنگ‌ها</source>
         <translation>Colors</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="78"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="78"/>
         <source>قرمز</source>
         <translation>Red</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="79"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="79"/>
         <source>صورتی</source>
         <translation>Pink</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="80"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="80"/>
         <source>بنفش</source>
         <translation>Purple</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="81"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="81"/>
         <source>بنفش تیره</source>
         <translation>Deep Purple</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="82"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="82"/>
         <source>نیلی</source>
         <translation>Indigo</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="83"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="83"/>
         <source>آبی</source>
         <translation>Blue</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="84"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="84"/>
         <source>آبی روشن</source>
         <translation>Light Blue</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="85"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="85"/>
         <source>فیروزه‌ای</source>
         <translation>Cyan</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="86"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="86"/>
         <source>سبز تیره</source>
         <translation>Teal</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="87"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="87"/>
         <source>سبز</source>
         <translation>Green</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="88"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="88"/>
         <source>سبز روشن</source>
         <translation>Light Green</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="89"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="89"/>
         <source>لیمویی</source>
         <translation>Lime</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="90"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="90"/>
         <source>زرد</source>
         <translation>Yellow</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="91"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="91"/>
         <source>کهربایی</source>
         <translation>Amber</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="92"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="92"/>
         <source>نارنجی</source>
         <translation>Orange</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="93"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="93"/>
         <source>نارنجی تیره</source>
         <translation>DeepOrange</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="94"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="94"/>
         <source>قهوه‌ای</source>
         <translation>Brown</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="95"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="95"/>
         <source>خاکستری</source>
         <translation>Grey</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="96"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="96"/>
         <source>آبی خاکستری</source>
         <translation>BlueGrey</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="131"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="131"/>
         <source>زبان</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../qml/AppSettings.qml" line="144"/>
+        <location filename="../qml/AppBase/AppSettings.qml" line="144"/>
         <source>زبان‌ها</source>
         <translation>Languages</translation>
     </message>
@@ -171,12 +171,12 @@
 <context>
     <name>DrawerBody</name>
     <message>
-        <location filename="../qml/DrawerBody.qml" line="132"/>
+        <location filename="../qml/AppBase/DrawerBody.qml" line="139"/>
         <source>تنظیمات</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../qml/DrawerBody.qml" line="136"/>
+        <location filename="../qml/AppBase/DrawerBody.qml" line="143"/>
         <source>پروژه ها</source>
         <translation>Projects</translation>
     </message>
@@ -208,14 +208,100 @@
     </message>
 </context>
 <context>
+    <name>SignIn</name>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="19"/>
+        <source>ورود به حساب</source>
+        <translation>Sign In</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="27"/>
+        <source>ایمیل یا نام کاربری</source>
+        <translation>Email or Username</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="33"/>
+        <source>رمز عبور</source>
+        <translation>Password</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="40"/>
+        <source>وارد شو</source>
+        <translation>Sign in</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="50"/>
+        <source>حساب نداری؟</source>
+        <translation>Don&apos;t have an account?</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="59"/>
+        <source>ثبت نام کن</source>
+        <translation>Sign Up</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="71"/>
+        <source>English Version</source>
+        <translation>نسخه فارسی</translation>
+    </message>
+</context>
+<context>
+    <name>SignUp</name>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="18"/>
+        <source>ساخت حساب</source>
+        <translation>Sign Up</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="26"/>
+        <source>نام کاربری</source>
+        <translation>Username</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="32"/>
+        <source>ایمیل</source>
+        <translation>Email</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="38"/>
+        <source>رمز عبور</source>
+        <translation>Password</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="46"/>
+        <source>تکرار رمز عبور</source>
+        <translation>Confirm Password</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="53"/>
+        <source>بساز</source>
+        <translation>Sign Up</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="63"/>
+        <source>حساب داری؟</source>
+        <translation>Have an account?</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="72"/>
+        <source>وارد شو</source>
+        <translation>Sign In</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignUp.qml" line="84"/>
+        <source>English Version</source>
+        <translation>نسخه فارسی</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="14"/>
+        <location filename="../qml/main.qml" line="17"/>
         <source>مموریتو</source>
         <translation>Memorito</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="115"/>
+        <location filename="../qml/main.qml" line="118"/>
         <source>ساخته شده با ♥</source>
         <translation>Made With ♥</translation>
     </message>
