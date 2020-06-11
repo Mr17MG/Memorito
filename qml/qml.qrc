@@ -30,5 +30,8 @@
         <file>AppBase/DrawerBody.qml</file>
         <file>Functions/UiFunctions.qml</file>
         <file>Functions/UsefulFunctions.qml</file>
+        <file>Account/AccountMain.qml</file>
+        <file>Account/SignIn.qml</file>
+        <file>Account/SignUp.qml</file>
     </qresource>
 </RCC>
