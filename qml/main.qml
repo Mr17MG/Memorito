@@ -133,7 +133,8 @@ ApplicationWindow {
         anchors.fill: parent
         asynchronous: true
         active: true
-        sourceComponent: Memorito{id:memorito}
+//        sourceComponent: Memorito{id:memorito}
+        source: "qrc:/Account/AccountMain.qml"
     }
 
 }
