@@ -195,6 +195,14 @@
     </message>
 </context>
 <context>
+    <name>MainSplash</name>
+    <message>
+        <location filename="../qml/Splash/MainSplash.qml" line="105"/>
+        <source>English Version</source>
+        <translation>نسخه فارسی</translation>
+    </message>
+</context>
+<context>
     <name>MessageDialog</name>
     <message>
         <location filename="../qml/Components/MessageDialog.qml" line="19"/>
@@ -210,37 +218,37 @@
 <context>
     <name>SignIn</name>
     <message>
-        <location filename="../qml/Account/SignIn.qml" line="19"/>
+        <location filename="../qml/Account/SignIn.qml" line="20"/>
         <source>ورود به حساب</source>
         <translation>Sign In</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignIn.qml" line="27"/>
+        <location filename="../qml/Account/SignIn.qml" line="28"/>
         <source>ایمیل یا نام کاربری</source>
         <translation>Email or Username</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignIn.qml" line="33"/>
+        <location filename="../qml/Account/SignIn.qml" line="34"/>
         <source>رمز عبور</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignIn.qml" line="40"/>
+        <location filename="../qml/Account/SignIn.qml" line="41"/>
         <source>وارد شو</source>
         <translation>Sign in</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignIn.qml" line="50"/>
+        <location filename="../qml/Account/SignIn.qml" line="51"/>
         <source>حساب نداری؟</source>
         <translation>Don&apos;t have an account?</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignIn.qml" line="59"/>
+        <location filename="../qml/Account/SignIn.qml" line="60"/>
         <source>ثبت نام کن</source>
         <translation>Sign Up</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignIn.qml" line="71"/>
+        <location filename="../qml/Account/SignIn.qml" line="72"/>
         <source>English Version</source>
         <translation>نسخه فارسی</translation>
     </message>
@@ -248,47 +256,47 @@
 <context>
     <name>SignUp</name>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="18"/>
+        <location filename="../qml/Account/SignUp.qml" line="19"/>
         <source>ساخت حساب</source>
         <translation>Sign Up</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="26"/>
+        <location filename="../qml/Account/SignUp.qml" line="27"/>
         <source>نام کاربری</source>
         <translation>Username</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="32"/>
+        <location filename="../qml/Account/SignUp.qml" line="33"/>
         <source>ایمیل</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="38"/>
+        <location filename="../qml/Account/SignUp.qml" line="39"/>
         <source>رمز عبور</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="46"/>
+        <location filename="../qml/Account/SignUp.qml" line="47"/>
         <source>تکرار رمز عبور</source>
         <translation>Confirm Password</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="53"/>
+        <location filename="../qml/Account/SignUp.qml" line="54"/>
         <source>بساز</source>
         <translation>Sign Up</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="63"/>
+        <location filename="../qml/Account/SignUp.qml" line="64"/>
         <source>حساب داری؟</source>
         <translation>Have an account?</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="72"/>
+        <location filename="../qml/Account/SignUp.qml" line="73"/>
         <source>وارد شو</source>
         <translation>Sign In</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignUp.qml" line="84"/>
+        <location filename="../qml/Account/SignUp.qml" line="85"/>
         <source>English Version</source>
         <translation>نسخه فارسی</translation>
     </message>
