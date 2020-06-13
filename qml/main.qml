@@ -53,12 +53,12 @@ ApplicationWindow {
         size1H= uiFunctions.getHeightSize(1,Screen)
         size1F= uiFunctions.getFontSize(1,Screen)
     }
-    onSize1WChanged: {
-        if(mainLoader.status === Loader.Ready)
-        {
-            mainLoader.item.firstColumnMinSize = 140*size1W
-        }
-    }
+//    onSize1WChanged: {
+//        if(mainLoader.status === Loader.Ready)
+//        {
+//            mainLoader.item.firstColumnMinSize = 140*size1W
+//        }
+//    }
 
     /********************************************************************************/
     ////////////////////////////// Application appStyle ////////////////////////////////
@@ -110,7 +110,6 @@ ApplicationWindow {
         color: Material.color(appStyle.primaryInt,Material.Shade200)
         source: iconLogo
         visible: mainLoader.status !== Loader.Ready
-
     }
 
     Text {
@@ -131,7 +130,7 @@ ApplicationWindow {
     Loader{
         id:mainLoader
         anchors.fill: parent
-        asynchronous: true
+        asynchronous: false
         active: true
 //        sourceComponent: Memorito{id:memorito}
         source: "qrc:/Account/AccountMain.qml"
