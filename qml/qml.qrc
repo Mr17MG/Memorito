@@ -33,5 +33,7 @@
         <file>Account/AccountMain.qml</file>
         <file>Account/SignIn.qml</file>
         <file>Account/SignUp.qml</file>
+        <file>Splash/MainSplash.qml</file>
+        <file>Splash/SplashItem.qml</file>
     </qresource>
 </RCC>
