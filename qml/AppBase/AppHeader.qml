@@ -4,8 +4,9 @@ import "qrc:/Components/" as App // Require for Button
 
 Loader{
     id:headerRect
-    width: parent.width
+    width: parent.width - (firstColumn.active?firstColumn.width:0)
     height: 100*size1H
+    anchors.right: firstColumn.active?firstColumn.left:undefined
     sourceComponent:Item{
         Rectangle{
             anchors.bottom: parent.bottom
@@ -15,7 +16,7 @@ Loader{
         }
         Text{
             anchors.verticalCenter: parent.verticalCenter
-            width: firstColumn.active?parent.width-firstColumn.width:parent.width
+            width: parent.width
             horizontalAlignment: Text.AlignHCenter
             text: qsTr("مموریتو")
             font{family: appStyle.appFont;pixelSize: 50*size1F;}
@@ -36,11 +37,7 @@ Loader{
                     else drawerLoader.item.close()
                 }
                 else {
-                    if(firstColumn.width === firstColumnMinSize )
-                    {
-                        firstColumn.width = firstColumnMaxWidth
-                    }
-                    else firstColumn.width = firstColumnMinSize
+                    resizeAnim.start()
                 }
             }
             Image{
@@ -63,7 +60,13 @@ Loader{
                 color: appStyle.primaryColor
             }
         }
-
+        PropertyAnimation{
+            id:resizeAnim
+            duration: 150
+            to : firstColumn.width === firstColumnMinSize?firstColumnMaxWidth: firstColumnMinSize
+            target: firstColumn
+            properties: "width"
+        }
         App.Button{
             flat: true
             implicitWidth: 90*size1W
