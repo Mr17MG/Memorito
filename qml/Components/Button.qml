@@ -47,7 +47,7 @@ T.Button {
     property bool leftBorder: false
     property bool disableLeftRadius: false
     property bool disableRightRadius: false
-    property int bottomRadius: size1W*5
+    property real radius: size1W*5
     property string borderColor: "transparent"
     property color disableColor: Material.hintTextColor
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
@@ -69,9 +69,9 @@ T.Button {
     Material.elevation: flat ? control.down || control.hovered ? 2 : 0
                              : control.down ? 8 : 2
     Material.background: flat ? "transparent" : appStyle.primaryInt
-    Material.foreground: appStyle.textColor
+    Material.foreground: flat?appStyle.textColor:"White"
     font.capitalization: Font.MixedCase
-
+    font.family : appStyle.appFont
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
@@ -94,16 +94,21 @@ T.Button {
         //y: 6
         width: parent.width
         height: parent.height
-        radius: bottomRadius
+        radius: control.radius
         color: !control.enabled ? control.Material.buttonDisabledColor :
                 control.highlighted ? control.Material.highlightedButtonColor : control.Material.background
+        MouseArea{
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            enabled: false
+        }
 
         PaddedRectangle {
 //            y: parent.height - size1H*4
 //            width: parent.width
 //            height: size1H*4
 
-             radius: bottomRadius
+             radius: control.radius
 //            topPadding: -size1H*2
             anchors.fill: parent
             clip: true
@@ -155,8 +160,8 @@ T.Button {
         }
 
         Ripple {
-            clipRadius: bottomRadius
-            //radius: bottomRadius
+            clipRadius: control.radius
+            //radius: control.radius
             width: parent.width
             height: parent.height
             pressed: control.pressed
@@ -171,7 +176,7 @@ T.Button {
                     y: control.y
                     width: control.width
                     height: control.height
-                    radius: bottomRadius
+                    radius: control.radius
                 }
             }
         }
@@ -182,6 +187,6 @@ T.Button {
         color: "transparent"
         border.color: borderColor
         border.width: size1W
-        radius: bottomRadius
+        radius: radius
     }
 }
