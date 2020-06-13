@@ -51,6 +51,7 @@ Item {
             Item{width: parent.width;height: 30*size1H}
             App.Button{
                 width: parent.width
+                radius: 20*size1W
                 text: qsTr("بساز")
             }
             Item{
@@ -83,6 +84,7 @@ Item {
             anchors.bottom: parent.bottom
             width: parent.width
             text: qsTr("English Version")
+            radius: 20*size1W
             onClicked: {
                 if(!ltr)
                     translator.updateLanguage(31)

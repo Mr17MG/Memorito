@@ -39,6 +39,10 @@ Item{
             App.Button{
                 width: parent.width
                 text: qsTr("وارد شو")
+                radius: 20*size1W
+                onClicked: {
+                    mainLoader.source = "qrc:/Memorito.qml"
+                }
             }
             Item{
                 width: parent.width
@@ -70,6 +74,7 @@ Item{
             anchors.bottom: parent.bottom
             width: parent.width
             text: qsTr("English Version")
+            radius: 20*size1W
             onClicked: {
                 if(!ltr)
                     translator.updateLanguage(31)
