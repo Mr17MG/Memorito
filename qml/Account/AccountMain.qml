@@ -5,6 +5,8 @@ import QtQuick.Window 2.14 // Require for Window
 
 Item {
     property bool isSignIn: true
+    property bool closeSplash: false
+
     function checkSplit(window)
     {
         if(Qt.platform.os === "android" || Qt.platform.os === "ios")
@@ -19,11 +21,11 @@ Item {
         }
     }
     Loader{
-        id:mainLoader
+        id: authLoader
         x: splashLoader.active?isSignIn == !ltr ? width : 0:0
         width: parent.width - splashLoader.width
         height: parent.height
-        source: isSignIn?"qrc:/Account/SignIn.qml":"qrc:/Account/SignUp.qml"
+        source: splashLoader.active === false && closeSplash === false?"qrc:/Splash/MainSplash.qml":isSignIn?"qrc:/Account/SignIn.qml":"qrc:/Account/SignUp.qml"
         Behavior on x {
             NumberAnimation{ duration: 160}
         }
@@ -34,10 +36,8 @@ Item {
         x: isSignIn == !ltr ?0:width
         width: active?parent.width/2:0
         height: parent.height
+        source: "qrc:/Splash/MainSplash.qml"
         active: checkSplit(Screen)
-        sourceComponent: Rectangle{
-            color: Material.color(appStyle.primaryInt,Material.Shade400)
-        }
         Behavior on x {
             NumberAnimation{ duration: 160}
         }
