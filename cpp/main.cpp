@@ -4,7 +4,7 @@
 #include <QQmlContext> // Require For setContextProperty()
 #include <QQuickStyle> // Require For setStyle()
 #include <QIcon> // Require For icon
-#include <QSettings>
+#include <QSettings> // Require For settings
 
 int main(int argc, char *argv[])
 {
