@@ -6,7 +6,7 @@ Item {
     Image {
         id:sImage
         source: imageSource
-        width: parent.width >=600*size1W?600*size1W:parent.width
+        width: parent.width >=600*size1W?550*size1W:(parent.width - 50*size1W)
         height: width
         sourceSize.width: width*2
         sourceSize.height: height*2
@@ -18,6 +18,7 @@ Item {
         id: sText
         text: title
         width: parent.width
+        padding: 10*size1W
         wrapMode: Text.WordWrap
         anchors.top: sImage.bottom
         anchors.topMargin: size1H*5

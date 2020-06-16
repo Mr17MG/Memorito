@@ -4,6 +4,7 @@ import "qrc:/Components" as App
 import QtQuick.Window 2.14 // Require for Window
 
 Item {
+    id:item1
     property bool isSignIn: true
     property bool closeSplash: false
 
@@ -15,14 +16,17 @@ Item {
         }
         else {
             if(rootWindow.width>window.width/3)
+            {
+                closeSplash = true
                 return true;
+            }
             else
                 return false;
         }
     }
     Loader{
         id: authLoader
-        x: splashLoader.active?isSignIn == !ltr ? width : 0:0
+        x: splashLoader.active?(splashLoader.active?isSignIn == !ltr ? width : 0:0):0
         width: parent.width - splashLoader.width
         height: parent.height
         source: splashLoader.active === false && closeSplash === false?"qrc:/Splash/MainSplash.qml":isSignIn?"qrc:/Account/SignIn.qml":"qrc:/Account/SignUp.qml"

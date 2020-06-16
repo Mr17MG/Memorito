@@ -1,19 +1,14 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 
-Dialog {
+Popup {
     id:root
     property alias text : text.text
     property bool isError: true
-    signal show();
     modal: false
     closePolicy: Dialog.NoAutoClose
-    onShow: {
-        root.visible = false
-        root.visible = true
-    }
-    width: parent.width
-    height: size1H*20 + text.height
+    width: 360*size1W
+    height: size1H*50 + text.height
     background: Rectangle{
         color: "white"
         radius: size1W*20
@@ -64,6 +59,6 @@ Dialog {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
-        font { family: appStyle.appFont; pixelSize: size1F*13;bold:false }
+        font { family: appStyle.appFont; pixelSize: size1F*35;bold:false }
     }
 }

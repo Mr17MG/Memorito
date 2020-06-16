@@ -15,8 +15,8 @@ ApplicationWindow {
 
     visible: true
     title: qsTr("مموریتو")
-    width: Qt.platform.os === "android" || Qt.platform.os === "ios"?Screen.width:appSetting.value("AppWidth" ,640)
-    height: Qt.platform.os === "android" || Qt.platform.os === "ios"?Screen.height:appSetting.value("AppHeight",480)
+    width: Qt.platform.os === "android" || Qt.platform.os === "ios"?width:appSetting.value("AppWidth" ,640)
+    height: Qt.platform.os === "android" || Qt.platform.os === "ios"?height:appSetting.value("AppHeight",480)
 
     minimumWidth: Screen.width/5<380?380:Screen.width/5
     minimumHeight: Screen.height/3<480?480:Screen.height/3
@@ -53,12 +53,6 @@ ApplicationWindow {
         size1H= uiFunctions.getHeightSize(1,Screen)
         size1F= uiFunctions.getFontSize(1,Screen)
     }
-//    onSize1WChanged: {
-//        if(mainLoader.status === Loader.Ready)
-//        {
-//            mainLoader.item.firstColumnMinSize = 140*size1W
-//        }
-//    }
 
     /********************************************************************************/
     ////////////////////////////// Application appStyle ////////////////////////////////
@@ -88,7 +82,6 @@ ApplicationWindow {
     F.UiFunctions { id : uiFunctions }
     F.UsefulFunctions{id:usefulFunc}
     Settings{id:appSetting}
-
 
     /********************************************************************************/
     //////////////////////////////// Splash Screen /////////////////////////////////

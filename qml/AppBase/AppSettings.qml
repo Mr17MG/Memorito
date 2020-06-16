@@ -21,7 +21,6 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 color: appStyle.textColor
                 height: themeSwitch.height
-                leftPadding: 10*size1W
             }
             Text{
                 text: qsTr("روشن")

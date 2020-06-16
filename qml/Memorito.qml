@@ -27,7 +27,7 @@ Page {
     }
 
     //Header
-   /* header : */Base.AppHeader{id:header}
+    Base.AppHeader{id:header}
     FirstColumn{id:firstColumn;anchors.right: parent.right;}
 
     Row {
@@ -35,6 +35,8 @@ Page {
         layoutDirection: Qt.RightToLeft
         height: parent.height - header.height
         anchors.top: header.bottom
+        anchors.right: firstColumn.active?firstColumn.left:parent.right
+        anchors.left: parent.left
         MainColumn{id:mainColumn}
         ThirdColumn{id:thirdColumn}
 

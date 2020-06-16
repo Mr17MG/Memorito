@@ -4,11 +4,15 @@ import QtQuick.Controls.Material 2.14 // Require for Material.foreground
 Item{
     property alias emailInput: emailInput
     Item{
-        anchors.topMargin: 50*size1H
-        anchors.rightMargin: 100*size1W
-        anchors.bottomMargin: 30*size1H
-        anchors.leftMargin: 100*size1W
-        anchors.fill: parent
+        anchors{topMargin: 50*size1H
+            rightMargin: 100*size1W
+            bottomMargin: 30*size1H
+            leftMargin: 100*size1W
+            top: parent.top
+            bottom: languageBtn.top
+            left: parent.left
+            right: parent.right
+        }
         Flow{
             width: parent.width
             anchors.centerIn: parent
@@ -69,18 +73,21 @@ Item{
                 }
             }
         }
-        App.Button{
-            flat: true
-            anchors.bottom: parent.bottom
-            width: parent.width
-            text: qsTr("English Version")
-            radius: 20*size1W
-            onClicked: {
-                if(!ltr)
-                    translator.updateLanguage(31)
-                else translator.updateLanguage(89)
-            }
+    }
+    App.Button{
+        id:languageBtn
+        flat: true
+        anchors{
+            bottom: parent.bottom
+            bottomMargin: 30*size1H
         }
-
+        width: parent.width
+        text: qsTr("English Version")
+        radius: 20*size1W
+        onClicked: {
+            if(!ltr)
+                translator.updateLanguage(31)
+            else translator.updateLanguage(89)
+        }
     }
 }

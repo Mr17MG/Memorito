@@ -31,7 +31,7 @@ Loader{
                     height: parent.height
                     width: 2*size1W
                     color: appStyle.primaryColor
-                    anchors.left: parent.left
+                    anchors.right: parent.right
                 }
 
                 MouseArea {
