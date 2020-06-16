@@ -11,9 +11,27 @@ Item {
         anchors.fill: parent
         color: Material.color(appStyle.primaryInt,Material.Shade400)
     }
+    App.Button{
+        id:languageBtn
+        flat: true
+        radius: 20*size1W
+        anchors.top: parent.top
+        width: parent.width
+        text: qsTr("English Version")
+        visible: splashLoader.active === false
+        onClicked: {
+            if(!ltr)
+                translator.updateLanguage(31)
+            else translator.updateLanguage(89)
+        }
+    }
     SwipeView{
         id:view
-        anchors.fill: parent
+        width: parent.width
+        anchors{
+            top:languageBtn.visible?languageBtn.bottom:parent.top
+            bottom: pageIndicator.top
+        }
         clip: true
         SplashItem{
             imageSource: "qrc:/Splash/computer_display_monochromatic.svg"
@@ -69,7 +87,7 @@ Item {
         height: width
         anchors.left: parent.left
         anchors.leftMargin: size1W*25
-        anchors.verticalCenter: flat?parent.verticalCenter:pageIndicator.verticalCenter
+        anchors.verticalCenter: pageIndicator.verticalCenter
         flat: (Qt.platform.os !== "android" && Qt.platform.os !== "ios" && splashLoader.active !== false)
         Material.background: flat?"transparent":Material.color(appStyle.primaryInt,Material.Shade900)
         radius: 20*size1W
@@ -97,7 +115,7 @@ Item {
         id:forwardBtn
         width: size1W*60
         height: width
-        anchors.verticalCenter: flat?parent.verticalCenter:pageIndicator.verticalCenter
+        anchors.verticalCenter: pageIndicator.verticalCenter
         anchors.right: parent.right
         flat: (Qt.platform.os !== "android" && Qt.platform.os !== "ios" && splashLoader.active !== false)
         Material.background: flat?"transparent":Material.color(appStyle.primaryInt,Material.Shade900)
@@ -124,18 +142,6 @@ Item {
             if(view.currentIndex === view.count-1 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))
                 closeSplash = true
             view.currentIndex= ((view.currentIndex+1)%view.count);
-        }
-    }
-    App.Button{
-        flat: true
-        anchors.top: parent.top
-        width: parent.width
-        text: qsTr("English Version")
-        visible: splashLoader.active === false
-        onClicked: {
-            if(!ltr)
-                translator.updateLanguage(31)
-            else translator.updateLanguage(89)
         }
     }
     Timer{
