@@ -4,10 +4,50 @@ import "qrc:/Components/" as App // Require for Button
 
 Loader{
     id:headerRect
-    width: parent.width - (firstColumn.active?firstColumn.width:0)
+    anchors.left: parent.left
+    anchors.right: firstColumn.active?firstColumn.left:parent.right
     height: 100*size1H
-    anchors.right: firstColumn.active?firstColumn.left:undefined
     sourceComponent:Item{
+        Loader{
+            id: resizerLoader
+            active: ltr && firstColumn.active
+            width: 10*size1W
+            height: parent.height
+            anchors.right: parent.right
+            sourceComponent:Item{
+                anchors.fill: parent
+                Rectangle{
+                    height: parent.height
+                    width: 2*size1W
+                    color: appStyle.primaryColor
+                    anchors.right: parent.right
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    drag.target: parent
+                    drag.axis: Drag.XAxis
+                    cursorShape: Qt.SizeHorCursor
+                    onClicked: {
+                        if(firstColumn.width === firstColumnMaxWidth)
+                            firstColumn.width = firstColumnMinSize
+                        else if(firstColumn.width >= firstColumnMinSize)
+                            firstColumn.width = firstColumnMaxWidth
+                    }
+
+                    onMouseXChanged: {
+                        if( drag.active )
+                        {
+                            if ((firstColumn.width + (mouseX)) >= firstColumnMinSize && (firstColumn.width + (mouseX)) <= firstColumnMaxWidth)
+                                firstColumn.width = firstColumn.width + (mouseX)
+                            else if(firstColumn.width + (mouseX) < firstColumnMinSize )
+                                firstColumn.width = firstColumnMinSize
+                            else if((firstColumn.width + (mouseX)) > firstColumnMaxWidth)
+                                firstColumn.width = firstColumnMaxWidth
+                        }
+                    }
+                }
+            }
+        }
         Rectangle{
             anchors.bottom: parent.bottom
             width: parent.width
@@ -28,17 +68,13 @@ Loader{
             implicitWidth: 90*size1W
             implicitHeight: 90*size1H
             anchors.right: parent.right
+            anchors.rightMargin: 10*size1W
+            visible: nRow === 1
             anchors.verticalCenter: parent.verticalCenter
             onClicked: {
-                if(nRow===1)
-                {
-                    if(!drawerLoader.item.visible)
-                        drawerLoader.item.open()
-                    else drawerLoader.item.close()
-                }
-                else {
-                    resizeAnim.start()
-                }
+                if(!drawerLoader.item.visible)
+                    drawerLoader.item.open()
+                else drawerLoader.item.close()
             }
             Image{
                 id:menuImg
