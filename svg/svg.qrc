@@ -13,5 +13,6 @@
         <file>Splash/settings_monochromatic.svg</file>
         <file>next.svg</file>
         <file>check.svg</file>
+        <file>user.svg</file>
     </qresource>
 </RCC>
