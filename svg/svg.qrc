@@ -14,5 +14,6 @@
         <file>next.svg</file>
         <file>check.svg</file>
         <file>user.svg</file>
+        <file>skip.svg</file>
     </qresource>
 </RCC>
