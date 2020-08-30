@@ -5,6 +5,8 @@
 #include <QQuickStyle> // Require For setStyle()
 #include <QIcon> // Require For icon
 #include <QSettings> // Require For settings
+#include "cpp/msysinfo.h" // Require For MSysInfo
+#include "cpp/msecurity.h" // Require For MSecurity
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +31,19 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("translator",(QObject *)&mTrans);
     //******************************************************//
 
+    //**************** in Debug App ****************//
+    #ifdef QT_DEBUG
+    bool isDebug = true;
+    #else
+    bool isDebug = false;
+    #endif
+    engine.rootContext()->setContextProperty("isDebug",isDebug);
+    //******************************************************//
+
+    //**************** Registry C++ To QML ****************//
+    qmlRegisterType<MSysInfo>("MSysInfo", 1, 0, "SystemInfo");
+    qmlRegisterType<MSecurity>("MSecurity", 1, 0, "MSecurity");
+    //******************************************************//
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

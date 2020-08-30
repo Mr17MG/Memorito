@@ -15,9 +15,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         cpp/main.cpp \
+        cpp/msecurity.cpp \
+        cpp/msysinfo.cpp \
         cpp/translator.cpp
 
 HEADERS += \
+    cpp/msecurity.h \
+    cpp/msysinfo.h \
     cpp/translator.h
 
 
