@@ -62,8 +62,8 @@ Item {
         anchors.bottomMargin: size1H*40
         anchors.horizontalCenter: parent.horizontalCenter
         delegate: Rectangle {
-            implicitWidth: size1W*9
-            implicitHeight: size1H*9
+            width: size1W*9
+            height: size1H*9
             radius: width
             color: appStyle.textColor
             opacity: index === pageIndicator.currentIndex ?1 : 0.30
@@ -118,7 +118,9 @@ Item {
             if(autoMoveTimer.running)
                 autoMoveTimer.restart()
             if(view.currentIndex === 0 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))
-                closeSplash = true
+            {
+                authLoader.item.replace("qrc:/Account/SignIn.qml")
+            }
             else view.currentIndex= (view.currentIndex-1)%view.count<0?(view.currentIndex-1)%view.count+view.count:(view.currentIndex-1)%view.count;
         }
     }
@@ -157,7 +159,9 @@ Item {
             if(autoMoveTimer.running)
                 autoMoveTimer.restart()
             if(view.currentIndex === view.count-1 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))
-                closeSplash = true
+            {
+                authLoader.item.replace("qrc:/Account/SignIn.qml")
+            }
             else view.currentIndex= ((view.currentIndex+1)%view.count);
         }
     }
