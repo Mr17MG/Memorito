@@ -45,15 +45,15 @@ ApplicationWindow {
     /********************************************************************************/
     ///////////////////////////////// Responsive UI //////////////////////////////////
 
-    property real size1W//: uiFunctions.getWidthSize(1,Screen)
-    property real size1H//: uiFunctions.getHeightSize(1,Screen)
-    property real size1F//: uiFunctions.getFontSize(1,Screen)
+    property real size1W: uiFunctions.getWidthSize(1,Screen)
+    property real size1H: uiFunctions.getHeightSize(1,Screen)
+    property real size1F: uiFunctions.getFontSize(1,Screen)
     Component.onCompleted: {
-        size1W= uiFunctions.getWidthSize(1,Screen)
-        size1H= uiFunctions.getHeightSize(1,Screen)
-        size1F= uiFunctions.getFontSize(1,Screen)
+        //For one Display
+        //size1W= uiFunctions.getWidthSize(1,Screen)
+        //size1H= uiFunctions.getHeightSize(1,Screen)
+        //size1F= uiFunctions.getFontSize(1,Screen)
     }
-
     /********************************************************************************/
     ////////////////////////////// Application appStyle ////////////////////////////////
     Base.AppStyle{id:appStyle}
@@ -118,7 +118,9 @@ ApplicationWindow {
 
     /********************************************************************************/
     //////////////////////////////// Main App Loader /////////////////////////////////
-    //---------------------- Load Memorito as Main Page -----------------------------/
+
+    property string domain: isDebug?"http://memorito.local"
+                                   :"https://memorito.ir"
 
     Loader{
         id:mainLoader
