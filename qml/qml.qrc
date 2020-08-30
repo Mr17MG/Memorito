@@ -8,7 +8,7 @@
         <file>Components/ConfirmDialog.qml</file>
         <file>Components/ConfirmDialogButton.qml</file>
         <file>Components/Dialog.qml</file>
-        <file>Components/ErrorLog.qml</file>
+        <file>Components/Log.qml</file>
         <file>Components/MessageDialog.qml</file>
         <file>Components/PageIndicator.qml</file>
         <file>Components/RadioButton.qml</file>
@@ -35,5 +35,7 @@
         <file>Account/SignUp.qml</file>
         <file>Splash/MainSplash.qml</file>
         <file>Splash/SplashItem.qml</file>
+        <file>Account/Authentication.qml</file>
+        <file>Account/API.qml</file>
     </qresource>
 </RCC>
