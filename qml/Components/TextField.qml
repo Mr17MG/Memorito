@@ -1,5 +1,6 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+import QtQuick.Controls.Material 2.14
 
 TextField{
     id:textField
@@ -9,6 +10,7 @@ TextField{
     renderType:Text.NativeRendering
     placeholderTextColor: "transparent"
     verticalAlignment: Text.AlignBottom
+    Material.accent: appStyle.primaryColor
 
     Label {
         id: textFieldPlaceHolder
