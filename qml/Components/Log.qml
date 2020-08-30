@@ -1,16 +1,17 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+import QtGraphicalEffects 1.14
 
-Popup {
+Drawer {
     id:root
     property alias text : text.text
     property bool isError: true
     modal: false
     closePolicy: Dialog.NoAutoClose
     width: 360*size1W
-    height: size1H*50 + text.height
+    height: size1H*30 + text.height
     background: Rectangle{
-        color: "white"
+        color: isError?"#F44336":"#8BC34A"
         radius: size1W*20
         border.width: 0
     }
@@ -24,12 +25,14 @@ Popup {
         anchors.right: parent?parent.right:undefined
         anchors.rightMargin: size1W*20
         anchors.verticalCenter: text.verticalCenter
-        width: size1W*30
+        width: size1W*20
         height: width
         sourceSize.width: width*2
         sourceSize.height: height*2
-        source: isError?"qrc:/Icons/cancel-red.svg"
-                       :"qrc:/Icons/check-green.svg"
+        source: "qrc:/close.svg"
+        visible: false
+    }
+    ColorOverlay{
         MouseArea{
             anchors.fill: parent
             anchors.top: parent?parent.top:undefined
@@ -45,11 +48,15 @@ Popup {
                 root.visible=false
             }
         }
+        color: "white"
+        anchors.fill: close
+        source: close
     }
+
     Text{
         id:text
         text: "محل نمایش خطا"
-        color: isError?"red":"green"
+        color: "white"
         width: parent.width - close.width
         anchors.right: close.left
         anchors.rightMargin: size1W*10
@@ -59,6 +66,6 @@ Popup {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
-        font { family: appStyle.appFont; pixelSize: size1F*35;bold:false }
+        font { family: appStyle.appFont; pixelSize: size1F*30;bold:false }
     }
 }
