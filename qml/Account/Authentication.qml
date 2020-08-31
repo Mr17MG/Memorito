@@ -5,7 +5,7 @@ import QtQuick.Controls.Material 2.14 // Require for Material.foreground
 Item {
     property string email: ""
     property int waitingSecond: defaultWaintingTime
-    property int defaultWaintingTime: 180
+    property int defaultWaintingTime: 1
     property bool isReset: false
 
     function secondToMMSS(second)
@@ -19,6 +19,24 @@ Item {
         MM = MM < 10?"0"+MM:MM;
         second = second<10?"0"+second:second;
         return MM+":"+second;
+    }
+
+    function getKeyType()
+    {
+        if (otpInput.text.length >0 && (!isReset || (isReset && passLoader.item.passInput.text.length > 0 && confirmPassLoader.item.confirmPassInput.text.length > 0)))
+            return Qt.EnterKeyGo
+        else
+            return Qt.EnterKeyNext
+    }
+    function getNextFocus()
+    {
+        if( otpInput.text.length < 6 )
+            otpInput.forceActiveFocus()
+        else if(passLoader.item.passInput.text.length === 0 )
+            passLoader.item.passInput.forceActiveFocus()
+        else if( confirmPassLoader.item.confirmPassInput.text.length === 0 )
+            confirmPassLoader.item.confirmPassInput.forceActiveFocus()
+        else confirmBtn.clicked(Qt.RightButton)
     }
 
     Flow{
@@ -61,40 +79,66 @@ Item {
             }
         }
         Loader{
+            id: passLoader
             width: parent.width
             height: 100*size1H
             active: isReset
             visible: active
             sourceComponent: Item{
                 anchors.fill: parent
+                property alias passInput: passInput
+                property alias passwordMoveAnimation: passwordMoveAnimation
                 App.TextField{
                     id:passInput
                     width: parent.width/2
                     height: parent.height
                     anchors.horizontalCenter: parent.horizontalCenter
                     placeholder.text: qsTr("رمز عبور جدید")
-                    validator: RegExpValidator{
-                        regExp: /[0-9۰-۹]{6}/
-                    }
+                    inputMethodHints: Qt.ImhHiddenText
+                    echoMode: App.TextField.Password
+                    EnterKey.type: getKeyType()
+                    Keys.onReturnPressed:  getNextFocus()
+                    Keys.onEnterPressed:  getNextFocus()
+                }
+                SequentialAnimation {
+                    id:passwordMoveAnimation
+                    running: false
+                    loops: 3
+                    NumberAnimation { target: passInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
+                    NumberAnimation { target: passInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
+                    NumberAnimation { target: passInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
                 }
             }
         }
         Loader{
+            id: confirmPassLoader
             width: parent.width
             height: 100*size1H
             active: isReset
             visible: active
             sourceComponent: Item{
                 anchors.fill: parent
+                property alias confirmPassInput: confirmPassInput
+                property alias passwordConfirmMoveAnimation: passwordConfirmMoveAnimation
                 App.TextField{
-                    id:confitrmPassInput
+                    id:confirmPassInput
                     width: parent.width/2
                     height: parent.height
                     anchors.horizontalCenter: parent.horizontalCenter
                     placeholder.text: qsTr("تکرار رمز عبور جدید")
-                    validator: RegExpValidator{
-                        regExp: /[0-9۰-۹]{6}/
-                    }
+                    inputMethodHints: Qt.ImhHiddenText
+                    echoMode: App.TextField.Password
+                    EnterKey.type: getKeyType()
+                    Keys.onReturnPressed:  getNextFocus()
+                    Keys.onEnterPressed:  getNextFocus()
+                }
+                SequentialAnimation {
+                    id:passwordConfirmMoveAnimation
+                    running: false
+                    loops: 3
+                    NumberAnimation { target: confirmPassInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
+                    NumberAnimation { target: confirmPassInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
+                    NumberAnimation { target: confirmPassInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
                 }
             }
         }
@@ -103,15 +147,33 @@ Item {
             width: parent.width
             height: 100*size1H
             App.Button{
+                id:confirmBtn
                 width: parent.width/2
                 text: qsTr("تائید")
-                enabled: (otpInput.text.length === 6 && (!isReset || (isReset && passInput.text.length > 4 && confitrmPassInput.text.length > 4)))
+                enabled: (otpInput.text.length === 6 && (!isReset || (isReset && passLoader.item.passInput.text.length > 4 && confirmPassLoader.item.confirmPassInput.text.length > 4)))
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 radius: 20*size1W
                 onClicked: {
                     if(!isReset)
                         api.validateOTP(email,otpInput.text)
+                    else {
+                        if(passLoader.item.passInput.text === "" )
+                        {
+                            passLoader.item.passwordMoveAnimation.start()
+                            passLoader.item.passInput.forceActiveFocus()
+                            usefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true,authLoader,authLoader.width,true)
+                            return
+                        }
+                        if ( confirmPassLoader.item.confirmPassInput.text === "" || confirmPassLoader.item.confirmPassInput.text !== passLoader.item.passInput.text)
+                        {
+                            confirmPassLoader.item.passwordConfirmMoveAnimation.start()
+                            confirmPassLoader.item.confirmPassInput.forceActiveFocus()
+                            usefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true,authLoader,authLoader.width,true)
+                            return
+                        }
+                        api.resetPass(email, otpInput.text, passLoader.item.passInput.text)
+                    }
                 }
             }
         }
@@ -140,8 +202,12 @@ Item {
                                                                : (secondToMMSS( waitingSecond ) +" " + qsTr("صبر کن"))
                     Material.foreground: appStyle.primaryInt
                     onClicked: {
-                        confitrmInput.clear()
-                        waiterTime.start()
+                        if(waitingSecond === defaultWaintingTime){
+                            otpInput.clear()
+                            waiterTime.start()
+                            api.resendOTP(email)
+                        }
+
                     }
                 }
             }
