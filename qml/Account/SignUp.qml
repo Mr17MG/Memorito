@@ -178,32 +178,32 @@ Item {
                     {
                         usernameMoveAnimation.start()
                         usernameInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader,authLoader.width)
+                        usefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader,authLoader.width,true)
                         return
                     }
                     if(usefulFunc.emailValidation(emailInput.text) === false)
                     {
                         emailMoveAnimation.start()
                         emailInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("لطفا ایمیل خود را به صورت صحیح وارد نمایید"),true,authLoader,authLoader.width)
+                        usefulFunc.showLog(qsTr("لطفا ایمیل خود را به صورت صحیح وارد نمایید"),true,authLoader,authLoader.width,true)
                         return
                     }
                     if(passwordInput.text === "" )
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true,authLoader,authLoader.width)
+                        usefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true,authLoader,authLoader.width,true)
                         return
                     }
                     if ( passwordConfirmInput.text === "" || passwordConfirmInput.text !== passwordInput.text)
                     {
                         passwordConfirmMoveAnimation.start()
                         passwordConfirmInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true,authLoader,authLoader.width)
+                        usefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true,authLoader,authLoader.width,true)
                         return
                     }
 
-                    // Let send to server
+                    // Let's send to server
                     api.signUp(usernameInput.text,emailInput.text,passwordInput.text)
                 }
             }
