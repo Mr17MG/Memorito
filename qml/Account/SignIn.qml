@@ -115,14 +115,14 @@ Item{
                     {
                         usernameMoveAnimation.start()
                         usernameInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader,authLoader.width)
+                        usefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader,authLoader.width,false)
                         return
                     }
                     if(passwordInput.text === "" )
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("لطفا رمزعبور خود را وارد نمایید"),true,authLoader,authLoader.width)
+                        usefulFunc.showLog(qsTr("لطفا رمزعبور خود را وارد نمایید"),true,authLoader,authLoader.width,false)
                         return
                     }
                     api.signIn(usernameInput.text,passwordInput.text)
@@ -148,6 +148,14 @@ Item{
                     text: "<u>" + qsTr("بازنشانی کن") +"<u/>"
                     Material.foreground: appStyle.primaryInt
                     onClicked: {
+                        if(usernameInput.text.length < 4)
+                        {
+                            usernameMoveAnimation.start()
+                            usernameInput.forceActiveFocus()
+                            usefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader,authLoader.width,false)
+                            return
+                        }
+                        api.forgetPass(usernameInput.text)
                     }
                 }
             }
