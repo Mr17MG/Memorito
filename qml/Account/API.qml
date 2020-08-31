@@ -26,11 +26,14 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/signup",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
+
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
             {
+                busyDialog.close()
                 try
                 {
                     let response = xhr.response
@@ -79,11 +82,13 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/validate-otp",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
 
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
             {
+                busyDialog.close()
                 try
                 {
                     let response = xhr.response
@@ -91,6 +96,7 @@ QtObject {
                     {
                         if(response.code === 202){
                             mainLoader.source = "qrc:/Memorito.qml"
+                            //TODO insert to Database
                         }
                     }
                     else {
@@ -138,11 +144,13 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/signin",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
             {
+                busyDialog.close()
                 try
                 {
                     let response = xhr.response
@@ -150,6 +158,7 @@ QtObject {
                     {
                         if(response.code === 202){
                             mainLoader.source = "qrc:/Memorito.qml"
+                            //TODO insert to Database
                         }
                         else if(response.code === 200)
                         {
@@ -166,6 +175,181 @@ QtObject {
                             else if (response.message.includes("password"))
                             {
                                 usefulFunc.showLog(qsTr("رمزعبور وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                            }
+                        }
+                        else
+                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                    }
+
+                }
+                catch(e) {
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                }
+            }
+        }
+    }
+
+    function forgetPass(identifier)
+    {
+        let json = JSON.stringify(
+                {
+                    app_name: sysInfo.getAppName(),
+                    app_version: sysInfo.getAppVersion(),
+                    cpu_arch : sysInfo.getCpuArch(),
+                    kernel_type: sysInfo.getKernelType(),
+                    kernel_version : sysInfo.getKernelVersion(),
+                    machine_unique_id : sysInfo.getMachineUniqueId(),
+                    identifier : identifier ,
+                    os_name: sysInfo.getOsName() ,
+                    os_version : sysInfo.getOsVersion(),
+                    pretty_os_name : sysInfo.getPrettyOsName(),
+                }, null, 1);
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("POST", domain+"/api/v1/forget-pass",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200)
+                        {
+                            authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:true,email:response.result.email})
+                        }
+                    }
+                    else {
+                        if(response.code === 401)
+                        {
+                            if(response.message.includes("username"))
+                            {
+                                usefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                            }
+                        }
+                        else
+                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                    }
+
+                }
+                catch(e) {
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                }
+            }
+        }
+    }
+
+    function resetPass(identifier, otp, password)
+    {
+        let json = JSON.stringify(
+                {
+                    identifier : identifier,
+                    machine_unique_id : sysInfo.getMachineUniqueId(),
+                    hashed_password : security.hashPass(password),
+                    otp : otp
+                }, null, 1);
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("POST", domain+"/api/v1/reset-pass",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
+        xhr.timeout = 10000;
+        console.log(json)
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200)
+                        {
+                            mainLoader.source = "qrc:/Memorito.qml"
+                            //TODO insert to Database
+                        }
+                    }
+                    else {
+                        if(response.code === 401)
+                        {
+                            if(response.message.includes("username"))
+                            {
+                                usefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                            }
+                        }
+                        else if(response.code === 403)
+                        {
+                            if(response.message.includes("OTP"))
+                            {
+                                usefulFunc.showLog(qsTr("کد تائید وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                            }
+                        }
+
+                        else
+                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                    }
+
+                }
+                catch(e) {
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                }
+            }
+        }
+    }
+
+    function resendOTP(identifier)
+    {
+        let json = JSON.stringify(
+                {
+                    identifier : identifier,
+                    machine_unique_id : sysInfo.getMachineUniqueId(),
+                }, null, 1);
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("POST", domain+"/api/v1/resend-otp",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
+        xhr.timeout = 10000;
+        console.log(json)
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    console.log(xhr.responseText)
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200)
+                        {
+                            usefulFunc.showLog(qsTr("کد تایید مجدد به ایمیل شما ارسال شد."),false,authLoader,authLoader.width, false)
+                        }
+                    }
+                    else {
+                        if(response.code === 401)
+                        {
+                            if(response.message.includes("username"))
+                            {
+                                usefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
                             }
                         }
                         else
