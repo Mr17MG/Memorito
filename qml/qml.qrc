@@ -37,5 +37,6 @@
         <file>Splash/SplashItem.qml</file>
         <file>Account/Authentication.qml</file>
         <file>Account/API.qml</file>
+        <file>Components/BusyDialog.qml</file>
     </qresource>
 </RCC>
