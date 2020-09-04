@@ -3,8 +3,14 @@ import "qrc:/AppBase" as Base // Require For DrawerBody
 
 Loader{
     id:firstColumn
-    active: nRow>1
-    width: nRow===1?0:firstColumnMinSize
+    onActiveChanged:{ // required for open app in nrow == 2
+        if(active)
+            width = nRow===1?0:appSetting.value("firstColumnWidth",0)>firstColumnMaxWidth?firstColumnMaxWidth:
+                                                                                           appSetting.value("firstColumnWidth",0)<firstColumnMinSize?firstColumnMinSize:
+                                                                                                                                                      appSetting.value("firstColumnWidth",0)
+        else width=0
+    }
+
     height: parent.height
     sourceComponent: Item{
         Base.DrawerBody{id:drawer}
@@ -33,6 +39,7 @@ Loader{
                             firstColumn.width = firstColumnMinSize
                         else if(firstColumn.width >= firstColumnMinSize)
                             firstColumn.width = firstColumnMaxWidth
+                        appSetting.setValue("firstColumnWidth",firstColumn.width)
                     }
                     onMouseXChanged: {
                         if( drag.active )
@@ -44,6 +51,9 @@ Loader{
                             else if((firstColumn.width - (mouseX)) > firstColumnMaxWidth)
                                 firstColumn.width = firstColumnMaxWidth
                         }
+                    }
+                    onReleased: {
+                        appSetting.setValue("firstColumnWidth",firstColumn.width)
                     }
                 }
 

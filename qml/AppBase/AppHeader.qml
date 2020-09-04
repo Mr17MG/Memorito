@@ -32,6 +32,7 @@ Loader{
                             firstColumn.width = firstColumnMinSize
                         else if(firstColumn.width >= firstColumnMinSize)
                             firstColumn.width = firstColumnMaxWidth
+                        appSetting.setValue("firstColumnWidth",firstColumn.width)
                     }
 
                     onMouseXChanged: {
@@ -44,6 +45,9 @@ Loader{
                             else if((firstColumn.width + (mouseX)) > firstColumnMaxWidth)
                                 firstColumn.width = firstColumnMaxWidth
                         }
+                    }
+                    onReleased: {
+                        appSetting.setValue("firstColumnWidth",firstColumn.width)
                     }
                 }
             }
