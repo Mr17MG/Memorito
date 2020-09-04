@@ -29,7 +29,7 @@ Item {
             if(authLoader.item.depth > 1)
                 authLoader.item.pop();
             else
-                console.log("hi")
+                usefulFunc.showConfirm( qsTr("خروج؟") , qsTr("آیا مایلید از نرم‌افزار خارج شوید؟"), function(){Qt.quit()} )
         }
     }
 
@@ -51,6 +51,7 @@ Item {
                 return false;
         }
     }
+
     Loader{
         id: authLoader
         x: splashLoader.active?(splashLoader.active?isSignIn == !ltr ? width : 0:0):0
