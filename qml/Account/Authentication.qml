@@ -5,7 +5,7 @@ import QtQuick.Controls.Material 2.14 // Require for Material.foreground
 Item {
     property string email: ""
     property int waitingSecond: defaultWaintingTime
-    property int defaultWaintingTime: 1
+    property int defaultWaintingTime: 180
     property bool isReset: false
 
     function secondToMMSS(second)
