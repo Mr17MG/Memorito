@@ -23,7 +23,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/signup",true);
+        xhr.open("POST", domain+"/api/v1/account/signup",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
@@ -79,7 +79,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/validate-otp",true);
+        xhr.open("POST", domain+"/api/v1/account/validate-otp",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
@@ -97,6 +97,7 @@ QtObject {
                         if(response.code === 202){
                             mainLoader.source = "qrc:/Memorito.qml"
                             //TODO insert to Database
+                            userDbFunc.addUser(response.result)
                         }
                     }
                     else {
@@ -141,7 +142,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/signin",true);
+        xhr.open("POST", domain+"/api/v1/account/signin",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
@@ -159,6 +160,7 @@ QtObject {
                         if(response.code === 202){
                             mainLoader.source = "qrc:/Memorito.qml"
                             //TODO insert to Database
+                            userDbFunc.addUser(response.result)
                         }
                         else if(response.code === 200)
                         {
@@ -208,7 +210,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/forget-pass",true);
+        xhr.open("POST", domain+"/api/v1/password/forget-pass",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
@@ -261,7 +263,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/reset-pass",true);
+        xhr.open("POST", domain+"/api/v1/password/reset-pass",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
@@ -281,6 +283,7 @@ QtObject {
                         {
                             mainLoader.source = "qrc:/Memorito.qml"
                             //TODO insert to Database
+                            userDbFunc.addUser(response.result)
                         }
                     }
                     else {
@@ -322,7 +325,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/resend-otp",true);
+        xhr.open("POST", domain+"/api/v1/password/resend-otp",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
@@ -359,6 +362,56 @@ QtObject {
                 }
                 catch(e) {
                     usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                }
+            }
+        }
+    }
+
+    function validateToken(authToken,userId)
+    {
+        let json = JSON.stringify(
+                {
+                    auth_token : authToken,
+                    machine_unique_id : sysInfo.getMachineUniqueId(),
+                }, null, 1);
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("POST", domain+"/api/v1/account/validate-token",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("",function(){ xhr.abort() });
+
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200){
+                            mainLoader.source = "qrc:/Memorito.qml"
+                        }
+                    }
+                    else {
+                        if(response.code === 403)
+                        {
+                            mainLoader.source = "qrc:/Account/AccountMain.qml"
+                            userDbFunc.deleteUser(userId)
+                        }
+
+                        else
+                            usefulFunc.showLog(response.message,true,rootWindow,rootWindow, true)
+                    }
+
+                }
+                catch(e) {
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, true)
+                    mainLoader.source = currentUser?"qrc:/Memorito.qml":"qrc:/Account/AccountMain.qml"
                 }
             }
         }
