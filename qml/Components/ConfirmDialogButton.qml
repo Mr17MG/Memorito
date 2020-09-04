@@ -11,18 +11,18 @@ Item {
     property string buttonColor: ""
     property string buttonTextColor: "white"
     property bool buttonEnabled: true
-    property int radius‌Btn: size1H*5
-    property int fontSize: size1F*15
+    property int radius‌Btn: size1H*15
+    property int fontSize: size1F*25
     property alias icon: itemImage
-    width: size1W*120
-    height: size1H*40
+    width: size1W*200
+    height: size1H*80
     signal buttonClicked
     Rectangle{
         id:root
         width: parent.width
         height: parent.height
         radius: radius‌Btn
-        border.color: flat?textColor:"transparent"
+        border.color: flat?appStyle.textColor:"transparent"
         border.width: size1W
         color: flat?"transparent":(buttonEnabled?buttonColor:"#cbcbcb")
         Text {

@@ -1,26 +1,26 @@
 import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
-import "./" as App
-App.Dialog{
+
+Dialog{
     id:dialog
     property string dialogText: ""
-    property string dialogButtonColor: Material.color(primaryColor)
+    property string dialogTitle: ""
+    property string dialogButtonColor: Material.color(appStyle.primaryColor)
     property alias acceptBtn: acceptBtn
     property alias canselBtn: canselBtn
-    signal canseled
-    signal accepted
+    property var canseled
+    property var accepted
     property var acceptAction
-    width: size1W*320
-    height: size1H*180 + text.lineCount * 20*size1H
-    dialogTitle: qsTr("انصراف")
-    anchors.centerIn: parent
-    hasTitle: false
-    hasCloseIcon: false
+    width: size1W*480
+    height: size1H*330 + text.lineHeight
+    x: -parent.x + (parent===null?0:(parent.width- width)/2)
+    y: -parent.y + (parent===null?0:(parent.height- height)/2)
     Text {
         id: title
         text: dialogTitle
-        color: textColor
-        font { family: appStyle.appFont; pixelSize: size1F*17;bold: true }
+        color: appStyle.textColor
+        font { family: appStyle.appFont; pixelSize: size1F*32;bold: true }
         anchors.top: parent.top
         anchors.topMargin: size1H*10
         anchors.left: parent.left
@@ -28,7 +28,7 @@ App.Dialog{
         horizontalAlignment: Text.AlignHCenter
         Rectangle{
             color: "#ccc"
-            height: size1H
+            height: 2*size1H
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: -size1H*5
@@ -37,9 +37,9 @@ App.Dialog{
     }
     Text {
         id: text
-        text:dialogText
-        color: textColor
-        font { family: appStyle.appFont; pixelSize: size1F*17 }
+        text: dialogText
+        color: appStyle.textColor
+        font { family: appStyle.appFont; pixelSize: size1F*30 }
         horizontalAlignment: Text.AlignHCenter
         width: parent.width
         anchors.top: title.bottom
@@ -47,20 +47,17 @@ App.Dialog{
         wrapMode: Text.WordWrap
     }
     Flow{
-        layoutDirection: "RightToLeft"
-        anchors.right: parent.right
-        anchors.rightMargin: size1W*25
+        layoutDirection: ltr? Qt.LeftToRight : Qt.RightToLeft
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: size1H*20
+        anchors.bottomMargin: size1H*10
         spacing: size1W*30
 
         ConfirmDialogButton{
             id:acceptBtn
             title: qsTr("بلی")
             onButtonClicked: {
-                if(acceptAction!==undefined )
-                    acceptAction();
-                else
+                if(accepted)
                     accepted()
                 dialog.close()
             }
@@ -71,10 +68,11 @@ App.Dialog{
             title: qsTr("خیر")
             flat:true
             onButtonClicked: {
-                canseled()
+                if(canseled)
+                    canseled()
                 dialog.close()
             }
-            buttonTextColor: textColor
+            buttonTextColor: appStyle.textColor
         }
     }
 }

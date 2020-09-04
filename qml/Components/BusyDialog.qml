@@ -11,7 +11,8 @@ Dialog{
     width: text.width + 100 *size1W
     height: width
     background: Rectangle{color: "transparent"}
-    anchors.centerIn: parent
+    x: -parent.x + (parent===null?0:(parent.width- width)/2)
+    y: -parent.y + (parent===null?0:(parent.height- height)/2)
     modal : true
     property var callback
     Shortcut {

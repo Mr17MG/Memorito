@@ -8,6 +8,13 @@ import "qrc:/AppBase" as Base
 Page {
 
     property int nRow : uiFunctions.checkDisplayForNumberofRows(Screen)
+    onNRowChanged: {
+        if(nRow >= 2)
+            firstColumn.active = true
+        else
+            firstColumn.active = false
+    }
+
     property real firstColumnMinSize: 140*size1W
     property real firstColumnMaxWidth: nRow ==2?rootWindow.width*2.5/8:rootWindow.width*1.80/8
 
@@ -24,6 +31,8 @@ Page {
             firstColumn.width = firstColumnMinSize
         else if(firstColumn.width > firstColumnMaxWidth)
             firstColumn.width = firstColumnMaxWidth
+        appSetting.setValue("firstColumnWidth",firstColumn.width)
+
     }
 
     //Header

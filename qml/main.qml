@@ -3,10 +3,10 @@ import QtQuick.Window 2.14 // Require For Screen
 import QtQuick.Controls 2.14 // Require For Drawer and other
 import QtQuick.Controls.Material 2.14 // // Require For Material Theme
 import Qt.labs.settings 1.1 // Require For appSettings
-import QtGraphicalEffects 1.14 // Require for DropShadow
 import "qrc:/AppBase/" as Base
 import "qrc:/Functions/" as F
-
+import QtQuick.LocalStorage 2.14 /*as SQLITE*/
+import "qrc:/Splash/" as Splash
 ApplicationWindow {
     id:rootWindow
 
@@ -79,42 +79,11 @@ ApplicationWindow {
     /********************************************************************************/
     ////////////////////////////// useful Component ////////////////////////////////
 
-    F.UiFunctions { id : uiFunctions }
-    F.UsefulFunctions{id:usefulFunc}
-    Settings{id:appSetting}
+    F.UiFunctions { id: uiFunctions }
+    F.UsefulFunctions{ id: usefulFunc }
+    F.UserDatabase{ id: userDbFunc }
 
-    /********************************************************************************/
-    //////////////////////////////// Splash Screen /////////////////////////////////
-    Image {
-        id:iconLogo
-        source: "qrc:/icon.png"
-        width: 150*size1W
-        height: width
-        anchors.centerIn: parent
-        visible: mainLoader.status !== Loader.Ready
-    }
-    DropShadow {
-        id:dropShadow
-        anchors.fill: iconLogo
-        horizontalOffset: 0*size1W
-        verticalOffset: 0*size1H
-        radius: 50*size1W
-        samples: 30*size1W
-        color: Material.color(appStyle.primaryInt,Material.Shade200)
-        source: iconLogo
-        visible: mainLoader.status !== Loader.Ready
-    }
-
-    Text {
-        id: waitText
-        text: qsTr("ساخته شده با ♥")
-        font{family: appStyle.appFont;pixelSize: 30*size1F;bold: true}
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 40*size1W
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: appStyle.textColor
-        visible: mainLoader.status !== Loader.Ready
-    }
+    Settings{ id: appSetting }
 
     /********************************************************************************/
     //////////////////////////////// Main App Loader /////////////////////////////////
@@ -122,13 +91,16 @@ ApplicationWindow {
     property string domain: isDebug?"http://memorito.local"
                                    :"https://memorito.ir"
 
+    property var dataBase: LocalStorage.openDatabaseSync("Memorito_database","1.0","a GTD based Project",10000)
+    ListModel{ id: users }
+    property var currentUser
+
     Loader{
         id:mainLoader
         anchors.fill: parent
         asynchronous: false
         active: true
-//        sourceComponent: Memorito{id:memorito}
-        source: "qrc:/Account/AccountMain.qml"
+        sourceComponent: Splash.SplashLoader{}
     }
 
 }

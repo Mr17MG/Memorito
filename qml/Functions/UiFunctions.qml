@@ -21,12 +21,14 @@ QtObject {
 
     function getHeightSize(size,window)
     {
-        return (size / (1366 / (window.height-getHeightMargin(window)*2)));
+        let height = (size / (1366 / (window.height-getHeightMargin(window)*2)));
+        return height
     }
 
     function getWidthSize(size,window)
     {
-        return (size / (768 / (window.width-getWidthMargin(window)*2)));
+        let width = (size / (768 / (window.width-getWidthMargin(window)*2)));
+        return width
     }
 
     function getFontSize(a,window)

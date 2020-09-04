@@ -10,7 +10,7 @@ Item{
 
     Text {
         id: userNameText
-        text: "@"+"Mr17MG"
+        text: "@"+currentUser.username
         color: appStyle.textColor
         font{family: appStyle.appFont;pixelSize: 25*size1F;bold:false}
         horizontalAlignment: Text.AlignHCenter

@@ -18,14 +18,14 @@ Dialog {
     property int btnRightPadding: size1W*25
     property int btnIconRightPadding: ltr?15*size1W:size1W*30
     property int btnWidth: size1W*115
-    property string iconSource: "qrc:/Icons/success.svg"
+    property string iconSource: "qrc:/success.svg"
     property alias dialogButton: dialogButton
     property alias buttonIcon: buttonIcon
     Material.background: Material.White
     Image {
         id: close
         visible: hasCloseIcon
-        source: "qrc:/Icons/close-thin.svg"
+        source: "qrc:/close.svg"
         width: size1W*10
         height: size1H*10
         anchors.right: parent.right
