@@ -15,5 +15,19 @@
         <file>check.svg</file>
         <file>user.svg</file>
         <file>skip.svg</file>
+        <file>collect.svg</file>
+        <file>process.svg</file>
+        <file>project.svg</file>
+        <file>refrence.svg</file>
+        <file>someday.svg</file>
+        <file>waiting.svg</file>
+        <file>calendar.svg</file>
+        <file>TaskFlow/attachment.svg</file>
+        <file>TaskFlow/checked.svg</file>
+        <file>TaskFlow/files.svg</file>
+        <file>TaskFlow/first-shot.svg</file>
+        <file>plus.svg</file>
+        <file>hide.svg</file>
+        <file>view.svg</file>
     </qresource>
 </RCC>
