@@ -58,11 +58,25 @@ Loader{
             color: appStyle.primaryColor
             height: 3*size1H
         }
+
         Text{
             anchors.verticalCenter: parent.verticalCenter
-            width: parent.width
+            width: nRow===3 && secondRowTitle.visible ?parent.width/2:parent.width
+            anchors.right: parent.right
             horizontalAlignment: Text.AlignHCenter
-            text: qsTr("مموریتو")
+            text: mainHeaderTitle
+            font{family: appStyle.appFont;pixelSize: 50*size1F;}
+            color: appStyle.textColor
+        }
+
+        Text{
+            id: secondRowTitle
+            anchors.verticalCenter: parent.verticalCenter
+            width: nRow===3?parent.width/2:parent.width
+            anchors.left: parent.left
+            visible: nRow ===3 && text !== ""
+            horizontalAlignment: Text.AlignHCenter
+            text: anotherHeaderTitle
             font{family: appStyle.appFont;pixelSize: 50*size1F;}
             color: appStyle.textColor
         }
@@ -93,8 +107,8 @@ Loader{
                 visible: false
             }
             ColorOverlay{
-                rotation: ltr?0:180
                 id:menuImgColor
+                rotation: ltr?0:180
                 anchors.fill: menuImg
                 source:menuImg
                 color: appStyle.primaryColor
@@ -109,11 +123,15 @@ Loader{
         }
         App.Button{
             flat: true
-            implicitWidth: 90*size1W
-            implicitHeight: 90*size1H
+            width:  90*size1W
+            height: width
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            visible: false
+            visible: mainColumn.item.mainStackView.depth > 1
+            onClicked: {
+                mainColumn.item.mainStackView.pop()
+            }
+
             Image{
                 id:backIcon
                 anchors.centerIn: parent
