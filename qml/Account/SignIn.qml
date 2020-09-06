@@ -1,6 +1,7 @@
 import QtQuick 2.14 // Rquire For Item
 import "qrc:/Components" as App // Require for App.Button and ...
 import QtQuick.Controls.Material 2.14 // Require for Material.foreground
+import QtGraphicalEffects 1.14
 Item{
     function getKeyType()
     {
@@ -88,12 +89,14 @@ Item{
                     placeholder.text: qsTr("رمز عبور")
                     inputMethodHints: Qt.ImhHiddenText
                     echoMode: App.TextField.Password
+                    passwordMaskDelay: 200
                     width: parent.width
                     height: parent.height
                     anchors.horizontalCenter: parent.horizontalCenter
                     EnterKey.type: getKeyType()
                     Keys.onReturnPressed:  getNextFocus()
                     Keys.onEnterPressed:  getNextFocus()
+                    rightPadding: visiblePasswordIcon.width
                     SequentialAnimation {
                         id:passwordMoveAnimation
                         running: false
@@ -101,6 +104,41 @@ Item{
                         NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
                         NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
                         NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
+                    }
+                    Image{
+                        id:visiblePasswordIcon
+                        LayoutMirroring.enabled: false
+                        width: 30*size1W
+                        height: width
+                        source: "qrc:/view.svg"
+                        sourceSize.width: width*2
+                        sourceSize.height: height*2
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: false
+                        anchors.right: parent.right
+                    }
+                    ColorOverlay{
+                        id: visiblePasswordColor
+                        anchors.fill: visiblePasswordIcon
+                        source: visiblePasswordIcon
+                        color: appStyle.textColor
+                        transform:rotation
+                        antialiasing: true
+                        visible: passwordInput.focus && passwordInput.text!=""
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                if(passwordInput.echoMode === App.TextField.Normal)
+                                {
+                                    visiblePasswordIcon.source = "qrc:/view.svg"
+                                    passwordInput.echoMode= App.TextField.Password
+                                }
+                                else{
+                                    visiblePasswordIcon.source = "qrc:/hide.svg"
+                                    passwordInput.echoMode = App.TextField.Normal
+                                }
+                            }
+                        }
                     }
                 }
             }
