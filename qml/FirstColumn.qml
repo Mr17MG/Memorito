@@ -3,6 +3,9 @@ import "qrc:/AppBase" as Base // Require For DrawerBody
 
 Loader{
     id:firstColumn
+    width: nRow===1?0:appSetting.value("firstColumnWidth",0)>firstColumnMaxWidth?firstColumnMaxWidth:
+                                                                                   appSetting.value("firstColumnWidth",0)<firstColumnMinSize?firstColumnMinSize:
+                                                                                                                                              appSetting.value("firstColumnWidth",0)
     onActiveChanged:{ // required for open app in nrow == 2
         if(active)
             width = nRow===1?0:appSetting.value("firstColumnWidth",0)>firstColumnMaxWidth?firstColumnMaxWidth:
