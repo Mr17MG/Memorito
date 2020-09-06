@@ -1,55 +1,83 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.12
-import QtGraphicalEffects 1.1
-import "qrc:/Components/" as C
-import "qrc:/Pages/MainPages/"
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+import QtQuick.Controls.Material 2.14
+import QtGraphicalEffects 1.14
+import "qrc:/Components/" as App
+//import "qrc:/Pages/MainPages/"
 import QtQuick.Dialogs 1.2
 Item {
-    Text {
-        id: taskText
-        text: qsTr("Collect your task here")
-        anchors.horizontalCenter: parent.horizontalCenter
-        font{family: styles.vazir;pixelSize: 14*size1F;bold:true}
-        color: textColor
-        anchors.top: parent.top
-        anchors.topMargin: 5*size1H
+
+    Item{
+        id: titleItem
+        width: parent.width
+        height: 100*size1H
+        anchors{
+            top: parent.top
+            topMargin: 5*size1H
+            left: parent.left
+            right: parent.right
+            rightMargin: 25*size1W
+            leftMargin: 25*size1W
+        }
+        App.TextField{
+            id:usernameInput
+            placeholderText: qsTr("چی تو ذهنته؟")
+            width: parent.width
+            height: parent.height
+            anchors.horizontalCenter: parent.horizontalCenter
+            inputMethodHints: Qt.ImhPreferLowercase
+            font.bold:false
+            SequentialAnimation {
+                id:usernameMoveAnimation
+                running: false
+                loops: 3
+                NumberAnimation { target: usernameInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
+                NumberAnimation { target: usernameInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
+                NumberAnimation { target: usernameInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
+            }
+        }
     }
-    C.TextField{
-        id:titleInput
-        anchors.top: taskText.bottom
-        anchors.topMargin: 10*size1H
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 60*size1H
-        anchors{left: parent.left;leftMargin: 10*size1W;right: parent.right;rightMargin: 10*size1W}
-        Material.primary: primaryColor
-        placeholderText: qsTr("Title")
-    }
+
     Flickable{
         id: control
-        anchors.top: titleInput.bottom
-        anchors.topMargin: 5*size1H
-        anchors.right: parent.right
-        anchors.left: parent.left
+        anchors{
+            top: titleItem.bottom
+            topMargin: 5*size1H
+            right: parent.right
+            rightMargin: 25*size1W
+            left: parent.left
+            leftMargin: 25*size1W
+        }
+        width: parent.width
         height:200*size1H
-        anchors.rightMargin: 10*size1W
-        anchors.leftMargin: 10*size1W
         clip: true
         flickableDirection: Flickable.VerticalFlick
+        onContentYChanged: {
+            if(contentY<0 || contentHeight < control.height)
+                contentY = 0
+            else if(contentY > (contentHeight - control.height))
+                contentY = (contentHeight - control.height)
+        }
+        onContentXChanged: {
+            if(contentX<0 || contentWidth < control.width)
+                contentX = 0
+            else if(contentX > (contentWidth-control.width))
+                contentX = (contentWidth-control.width)
+
+        }
         TextArea.flickable: TextArea{
             id:summaryInput
-            placeholderText: qsTr("Write Your Summary Here")
-            horizontalAlignment: Text.AlignLeft
+            placeholderText: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس")
+            horizontalAlignment: ltr?Text.AlignLeft:Text.AlignRight
             rightPadding: 12*size1W
             leftPadding: 12*size1W
             clip:true
-            color: textColor
+            color: appStyle.textColor
             wrapMode: Text.WordWrap
-            Material.accent: primaryColor
-            font{family: styles.vazir;pixelSize: 14*size1F;bold:false}
-            placeholderTextColor: isLightTheme?"#8D000000":"#ADffffff"
-            background: Rectangle{color: isLightTheme?"#0D000000":"#0Dffffff";radius: 10*size1W}
+            Material.accent: appStyle.primaryColor
+            font{family: appStyle.appFont;pixelSize:  25*size1F;bold:false}
+            placeholderTextColor: getAppTheme()?"#ADffffff":"#8D000000"
+            background: Rectangle{border.color: getAppTheme()?"#ADffffff":"#8D000000";color: "transparent";radius: 10*size1W}
         }
         ScrollBar.vertical: ScrollBar {
             hoverEnabled: true
@@ -61,22 +89,24 @@ Item {
         }
     }
     Rectangle{
-        anchors.top: control.bottom
-        anchors.topMargin: 5*size1W
-        anchors.bottom: submitBtn.top
-        anchors.bottomMargin: 15*size1H
+        anchors{
+            top: control.bottom
+            topMargin: 5*size1W
+            bottom: submitBtn.top
+            bottomMargin: 15*size1H
+            horizontalCenter: parent.horizontalCenter
+        }
         radius: 10*size1W
         width: control.width
         border.width: 1*size1W
-        border.color:isLightTheme?"#8D000000":"#ADffffff"
-        anchors.horizontalCenter: parent.horizontalCenter
+        border.color: getAppTheme()?"#ADffffff":"#8D000000"
         color: "transparent"
         clip: true
         GridView{
             id:grid
             anchors.fill: parent
             anchors.margins: 10*size1W
-            cellWidth: width/3
+            cellWidth: 200*size1W
             cellHeight:  cellWidth + 20*size1H
             clip: true
             ScrollBar.vertical: ScrollBar {
@@ -85,7 +115,7 @@ Item {
                 orientation: Qt.Vertical
                 anchors.right: grid.right
                 height: parent.height
-                width: 8*size1W
+                width: 15*size1W
             }
             onContentYChanged: {
                 if(contentY<0 || contentHeight < grid.height)
@@ -116,29 +146,37 @@ Item {
                 }
                 Image{
                     id:img
-                    source: (model.fileExtension === "jpg" || model.fileExtension === "png")?model.fileSource:"qrc:/Icons/TaskFlow/files.svg"
-                    width: source === "qrc:/Icons/TaskFlow/files.svg"?40*size1W:parent.width - 20*size1W
+                    source: (model.fileExtension === "jpg" || model.fileExtension === "png")?model.fileSource:"qrc:/TaskFlow/files.svg"
+                    width: source === "qrc:/TaskFlow/files.svg"?40*size1W:parent.width - 20*size1W
                     height: width
                     sourceSize.width: width*2
                     sourceSize.height: height*2
                     anchors.horizontalCenter: parent.horizontalCenter
                     fillMode: Image.PreserveAspectFit
                     clip: true
-                    Text {
-                        visible: !(model.fileExtension === "jpg" || model.fileExtension === "png")
-                        text: model.fileExtension
-                        color: "WHITE"
-                        font{family: styles.vazir;pixelSize: 14*size1F;bold:true}
+                    Item{
+                        width: 140*size1W
+                        height: 70*size1H
                         anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 15*size1H
+                        anchors.bottomMargin: 28*size1H
                         anchors.left: parent.left
-                        anchors.leftMargin: 20*size1W
+                        anchors.leftMargin: 12*size1W
+                        visible: !(model.fileExtension === "jpg" || model.fileExtension === "png")
+                        Text {
+                            text: model.fileExtension
+                            color: "white"
+                            font{family: appStyle.appFont;pixelSize: 30*size1F;bold:true}
+                            anchors.fill: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
                     }
+
                 }
                 Text {
                     anchors.bottom: parent.bottom
-                    color: textColor
-                    font{family: styles.vazir;pixelSize: 14*size1F;bold:true}
+                    color: appStyle.textColor
+                    font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
                     text: model.fileName
                     width: parent.width
                     elide: Text.ElideRight
@@ -154,7 +192,7 @@ Item {
                     anchors.verticalCenter: img.verticalCenter
                     Image {
                         id: removeIcon
-                        source: "qrc:/Icons/close.svg"
+                        source: "qrc:/close.svg"
                         width: 15*size1W
                         height: width
                         anchors.centerIn: parent
@@ -190,10 +228,10 @@ Item {
                 anchors.fill: parent
                 Image {
                     id: dragImg
-                    width: 175*size1W
+                    width: 300*size1W
                     visible: attachModel.count === 0
                     height: width
-                    source: "qrc:/Icons/TaskFlow/first-shot.svg"
+                    source: "qrc:/TaskFlow/first-shot.svg"
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
                     sourceSize.width:width*2
@@ -202,9 +240,9 @@ Item {
                 Text {
                     id: dragText
                     visible: attachModel.count === 0
-                    text: qsTr("Drop file here") +"\n"+ qsTr(" or click on plus button")
-                    font{family: styles.vazir;pixelSize: 14*size1F;bold:true}
-                    color: textColor
+                    text: qsTr("فایلتو بکش و اینجا رها کن") +"\n"+ qsTr("یا از دکمه + انتخاب کن")
+                    font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
+                    color: appStyle.textColor
                     anchors.left: dragImg.right
                     anchors.right: parent.right
                     wrapMode: Text.WordWrap
@@ -269,25 +307,25 @@ Item {
 
                 Text {
                     id: name
-                    text: qsTr("for add files click on plus button")
+                    text: qsTr("فایلتو بکش و اینجا رها کن یا از دکمه + انتخاب کن")
                     visible: (Qt.platform.os ==="android" || Qt.platform.os ==="ios") && attachModel.count === 0
                     anchors.centerIn: parent
-                    font{family: styles.vazir;pixelSize: 14*size1F;bold:false}
-                    color: textColor
+                    font{family: appStyle.appFont;pixelSize: 25*size1F;bold:false}
+                    color: appStyle.textColor
                     wrapMode: Text.WordWrap
                     width: parent.width-15*size1W
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
                 Rectangle{
-                    width: 50*size1W
+                    width: 75*size1W
                     height: width
                     radius: width/2
                     anchors.right: parent.right
                     anchors.rightMargin: -15*size1W
                     anchors.top: parent.top
                     anchors.topMargin: -15*size1W
-                    color: Material.color(primaryColor)
+                    color: appStyle.primaryColor
                     MouseArea{
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
@@ -298,12 +336,12 @@ Item {
                     Image {
                         id:plusIcon
                         anchors.left: parent.left
-                        anchors.leftMargin: 7*size1W
+                        anchors.leftMargin: width/3
                         anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 7*size1H
-                        width: 25*size1W
-                        height: 25*size1W
-                        source: "qrc:/Icons/plusIcon.svg"
+                        anchors.bottomMargin: width/3
+                        width: parent.width/2
+                        height: width
+                        source: "qrc:/plus.svg"
                         sourceSize.width: width*2
                         sourceSize.height: height*2
                         visible: false
@@ -327,29 +365,29 @@ Item {
             }
         }
     }
-    C.Button{
+    App.Button{
         id:submitBtn
-        width: 150*size1W
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10*size1W
-        anchors.horizontalCenter: parent.horizontalCenter
-        Material.background: primaryColor
-        font{family: styles.vazir;pixelSize: 14*size1F;bold:false;capitalization: Font.MixedCase}
-        Material.foreground: "white"
-        text: qsTr("Submit")
-        Material.theme: Material.Light
-        bottomRadius: 15*size1W
-        height: 40*size1H
+        width: 370*size1W
+        height: 70*size1H
+        anchors{
+            bottom: parent.bottom
+            bottomMargin: 10*size1W
+            right: parent.right
+            rightMargin: 25*size1W
+        }
+        text: qsTr("بفرست به پردازش نشده ها")
+        radius: 10*size1W
         leftPadding: 35*size1W
-        padding: 0
         Image {
             id:submitIcon
             width: 20*size1W
             height: width
-            source: "qrc:/Icons/TaskFlow/checked.svg"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 40*size1W
+            source: "qrc:/check.svg"
+            anchors{
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                leftMargin: 30*size1W
+            }
             sourceSize.width:width*2
             sourceSize.height:height*2
             visible: false
@@ -358,6 +396,40 @@ Item {
             anchors.fill: submitIcon
             source: submitIcon
             color: "white"
+        }
+    }
+    App.Button{
+        id: advanceBtn
+        width: 250*size1W
+        height: 70*size1H
+        flat: true
+        anchors{
+            bottom: parent.bottom
+            bottomMargin: 10*size1W
+            left: parent.left
+            leftMargin: 25*size1W
+        }
+        text: qsTr("حالت پیشرفته")
+        radius: 10*size1W
+        leftPadding: 35*size1W
+        Image {
+            id: advanceIcon
+            width: 20*size1W
+            height: width
+            source: "qrc:/arrow.svg"
+            anchors{
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                leftMargin: 30*size1W
+            }
+            sourceSize.width:width*2
+            sourceSize.height:height*2
+            visible: false
+        }
+        ColorOverlay{
+            anchors.fill: advanceIcon
+            source: advanceIcon
+            color: appStyle.textColor
         }
     }
 }
