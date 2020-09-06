@@ -40,5 +40,6 @@
         <file>Components/BusyDialog.qml</file>
         <file>Functions/UserDatabase.qml</file>
         <file>Splash/SplashLoader.qml</file>
+        <file>Flow/Collect.qml</file>
     </qresource>
 </RCC>
