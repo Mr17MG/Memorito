@@ -6,7 +6,7 @@ Loader{
     id:mainColumn
     active: nRow>=1
     width: nRow===1?rootWindow.width
-                   :nRow===2?rootWindow.width-firstColumn.width
+                   :thirdColumn.visible === false?rootWindow.width-firstColumn.width
                             :(rootWindow.width-firstColumn.width)/2
     height: parent.height
     sourceComponent: Item {
@@ -17,6 +17,9 @@ Loader{
             anchors.right: resizerLoader.active?resizerLoader.left:parent.right
             anchors.left: parent.left
             height: parent.height
+            initialItem: Rectangle{
+                color: "yellow"
+            }
         }
 
         Loader{
