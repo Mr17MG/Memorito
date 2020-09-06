@@ -20,7 +20,6 @@ Dialog{
         enabled: busy.visible
         onActivated: {
             callback()
-            busy.close()
         }
     }
     App.BusyIndicator{
