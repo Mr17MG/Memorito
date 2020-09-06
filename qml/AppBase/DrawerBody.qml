@@ -21,9 +21,9 @@ Item{
             top: drawerLoader.active?undefined:profileRect.bottom
             topMargin: 10*size1H
             right: drawerLoader.active?profileRect.left:parent.right
-            rightMargin: 10*size1W
+            rightMargin: 5*size1W
             left: parent.left
-            leftMargin: 10*size1W
+            leftMargin: 0*size1W
         }
 
     }
@@ -80,6 +80,7 @@ Item{
         anchors{
             top: drawerLoader.active?profileRect.bottom:userNameText.bottom
             topMargin : 10*size1H
+            bottom: parent.bottom
         }
 
         Rectangle{
@@ -89,7 +90,6 @@ Item{
             color: appStyle.primaryColor
         }
 
-        height:parent.height
         width:parent.width
         delegate: App.Button{
             id: listDelegate
@@ -101,7 +101,10 @@ Item{
                 if(nRow === 1)
                     drawerLoader.item.close()
                 if(pageSource)
+                {
                     mainColumn.item.mainStackView.push(pageSource)
+                    mainHeaderTitle = title
+                }
             }
             Image {
                 id: icon
@@ -113,10 +116,10 @@ Item{
                 visible: false
                 anchors{
                     top: parent.top
-                    topMargin: 20*size1H
+                    topMargin: listDelegate.state1?20*size1H:(parent.height-height)/2
                     right: parent.right
                     rightMargin: listDelegate.state1
-                                 ?(parent.width-width-(nRow===2?10*size1W:0))/2 // Center in parent
+                                 ?(parent.width-width)/2 // Center in parent
                                  :20*size1W
                 }
             }
@@ -141,9 +144,9 @@ Item{
                     top: listDelegate.state1 ? icon.bottom : parent.top
                     topMargin: listDelegate.state1 ? 8*size1H : 32*size1H
                     right: listDelegate.state1 ? parent.right : icon.left
-                    rightMargin: listDelegate.state1 ? 10*size1W : 20*size1W
+                    rightMargin: listDelegate.state1 ? 0 : 20*size1W
                     left: parent.left
-                    leftMargin: nRow === 2 ? 20*size1W : 0
+                    leftMargin: nRow === 2 ? 10*size1W : 0
                 }
             }
             Rectangle{
@@ -151,19 +154,57 @@ Item{
                 width: parent.width
                 height: 2*size1H
                 color: appStyle.primaryColor
+                visible: index !== modelList.count-1
             }
         }
         model: ListModel{
+            id:modelList
+            ListElement{
+                title:qsTr("جمع‌آوری")
+                pageSource :"qrc:/Flow/Collect.qml"
+                iconSrc: "qrc:/collect.svg"
+            }
+            ListElement{
+                title:qsTr("پردازش نشده‌ها")
+                iconSrc: "qrc:/process.svg"
+            }
+            ListElement{
+                title:qsTr("عملیات بعدی")
+                iconSrc: "qrc:/process.svg"
+            }
+            ListElement{
+                title:qsTr("لیست انتظار")
+                iconSrc: "qrc:/waiting.svg"
+            }
+            ListElement{
+                title:qsTr("تقویم")
+                iconSrc: "qrc:/calendar.svg"
+            }
+            ListElement{
+                title:qsTr("شاید یک‌روزی")
+                iconSrc: "qrc:/someday.svg"
+            }
+            ListElement{
+                title:qsTr("پروژه‌ها")
+                iconSrc: "qrc:/project.svg"
+            }
+            ListElement{
+                title:qsTr("مرجع")
+                iconSrc: "qrc:/refrence.svg"
+            }
+            ListElement{
+                title:qsTr("انجام شده‌ها")
+                iconSrc: "qrc:/refrence.svg"
+            }
+            ListElement{
+                title:qsTr("سطل زباله")
+                iconSrc: "qrc:/refrence.svg"
+            }
             ListElement{
                 title:qsTr("تنظیمات")
                 pageSource : "qrc:/AppBase/AppSettings.qml"
                 iconSrc: "qrc:/setting.svg"
-            }ListElement{
-                title:qsTr("پروژه ها")
-                //            pageSource : "qrc:/Pages/Friends/FriendsMain.qml"
-                iconSrc: "qrc:/setting.svg"
             }
-
         }
     }
 }
