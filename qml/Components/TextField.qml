@@ -15,10 +15,10 @@ TextField{
     Label {
         id: textFieldPlaceHolder
         text: textField.placeholderText
-        color: textField.focus || textField.text!=""? getAppTheme()?"#B3ffffff":"#B3000000":appStyle.textColor
+        color: textField.focus || textField.text!=""?appStyle.textColor: getAppTheme()?"#B3ffffff":"#B3000000"
         y: textField.focus || textField.text!=""?0:height-10*size1H
         anchors.right:  textField.right
-        font{family: appStyle.appFont;pixelSize:( textField.focus || textField.text!=""?20*size1F:25*size1F);bold:true}
+        font{family: appStyle.appFont;pixelSize:( textField.focus || textField.text!=""?20*size1F:25*size1F);bold:textField.focus || textField.text}
         Behavior on y {
             NumberAnimation{ duration: 160}
         }
