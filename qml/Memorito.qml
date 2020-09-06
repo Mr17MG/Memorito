@@ -36,6 +36,8 @@ Page {
     }
 
     //Header
+    property string mainHeaderTitle: qsTr("مموریتو")
+    property string anotherHeaderTitle: ""
     Base.AppHeader{id:header}
     FirstColumn{id:firstColumn;anchors.right: parent.right;}
 
@@ -47,7 +49,7 @@ Page {
         anchors.right: firstColumn.active?firstColumn.left:parent.right
         anchors.left: parent.left
         MainColumn{id:mainColumn}
-        ThirdColumn{id:thirdColumn}
+        ThirdColumn{id:thirdColumn;visible: false}
 
     }
 
