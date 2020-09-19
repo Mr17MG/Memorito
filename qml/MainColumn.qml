@@ -6,8 +6,7 @@ Loader{
     id:mainColumn
     active: nRow>=1
     width: nRow===1?rootWindow.width
-                   :thirdColumn.visible === false?rootWindow.width-firstColumn.width
-                            :(rootWindow.width-firstColumn.width)/2
+                   :rootWindow.width-firstColumn.width
     height: parent.height
     sourceComponent: Item {
         clip: true
@@ -17,9 +16,7 @@ Loader{
             anchors.right: resizerLoader.active?resizerLoader.left:parent.right
             anchors.left: parent.left
             height: parent.height
-            initialItem: Rectangle{
-                color: "yellow"
-            }
+            initialItem: "qrc:/Managment/Contexts.qml"
         }
 
         Loader{
