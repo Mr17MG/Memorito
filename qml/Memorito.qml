@@ -4,7 +4,7 @@ import QtGraphicalEffects 1.14 // Require for ColorOverlay
 import QtQuick.Controls 2.14 // Require For Drawer and other
 import QtQuick.Controls.Material 2.14 // // Require For Material Theme
 import "qrc:/AppBase" as Base
-
+import "qrc:/Functions" as F
 Page {
 
     property int nRow : uiFunctions.checkDisplayForNumberofRows(Screen)
@@ -32,24 +32,30 @@ Page {
         else if(firstColumn.width > firstColumnMaxWidth)
             firstColumn.width = firstColumnMaxWidth
         appSetting.setValue("firstColumnWidth",firstColumn.width)
-
     }
 
+    F.UsefulFunctions{id:usefulFunc}
     //Header
     property string mainHeaderTitle: qsTr("مموریتو")
     property string anotherHeaderTitle: ""
     Base.AppHeader{id:header}
+
+
     FirstColumn{id:firstColumn;anchors.right: parent.right;}
 
-    Row {
-        id:mainRow
-        layoutDirection: Qt.RightToLeft
+    ListModel{ id: stackPages }
+    property var pagesCanShowInThird : ["qrc:/Flow/Collect.qml"]
+
+    Component.onCompleted: {
+        stackPages.append({"page":"","title":qsTr("مموریتو")})
+    }
+
+    MainColumn{
+        id:mainColumn
         height: parent.height - header.height
         anchors.top: header.bottom
         anchors.right: firstColumn.active?firstColumn.left:parent.right
         anchors.left: parent.left
-        MainColumn{id:mainColumn}
-        ThirdColumn{id:thirdColumn;visible: false}
 
     }
 
@@ -59,7 +65,7 @@ Page {
         id:drawerLoader
         active: nRow===1
         width: rootWindow.width*2/3
-        height: mainRow.height
+        height: mainColumn.height
         y: header.height
         sourceComponent: Drawer{
             Base.DrawerBody{}
