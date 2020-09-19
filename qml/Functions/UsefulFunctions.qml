@@ -61,4 +61,23 @@ QtObject {
             return true;
         return false
     }
+
+    function mainStackPush(page,title)
+    {
+        if(page !== stackPages.get(stackPages.count-1).page)
+        {
+            mainHeaderTitle = title
+            stackPages.append({"page":page,"title":title})
+            mainColumn.item.mainStackView.push(page)
+        }
+    }
+
+    function mainStackPop()
+    {
+        let prevPage = stackPages.get(stackPages.count-2)
+        mainHeaderTitle = prevPage.title
+        stackPages.remove(stackPages.count-1)
+        mainColumn.item.mainStackView.pop()
+
+    }
 }
