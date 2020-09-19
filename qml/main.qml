@@ -45,14 +45,14 @@ ApplicationWindow {
     /********************************************************************************/
     ///////////////////////////////// Responsive UI //////////////////////////////////
 
-    property real size1W: uiFunctions.getWidthSize(1,Screen)
-    property real size1H: uiFunctions.getHeightSize(1,Screen)
-    property real size1F: uiFunctions.getFontSize(1,Screen)
+    property real size1W//: uiFunctions.getWidthSize(1,Screen)
+    property real size1H//: uiFunctions.getHeightSize(1,Screen)
+    property real size1F//: uiFunctions.getFontSize(1,Screen)
     Component.onCompleted: {
         //For one Display
-        //size1W= uiFunctions.getWidthSize(1,Screen)
-        //size1H= uiFunctions.getHeightSize(1,Screen)
-        //size1F= uiFunctions.getFontSize(1,Screen)
+        size1W= uiFunctions.getWidthSize(1,Screen)
+        size1H= uiFunctions.getHeightSize(1,Screen)
+        size1F= uiFunctions.getFontSize(1,Screen)
     }
     /********************************************************************************/
     ////////////////////////////// Application appStyle ////////////////////////////////
@@ -67,7 +67,7 @@ ApplicationWindow {
 
     function setAppTheme(index)
     {
-        //        statusBar.color = index?"#EAEAEA":"#171717"
+        //statusBar.color = index?"#EAEAEA":"#171717"
         Material.theme = index
     }
 
