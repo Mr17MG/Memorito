@@ -4,6 +4,7 @@ import QtQuick.Controls.Material 2.14
 import "./" as App
 
 App.Dialog {
+    id: messageDialog
     x: (parent.width- width)/2
     y: (parent.height- height)/2
     property alias text : textContainer.text
@@ -15,6 +16,13 @@ App.Dialog {
     onClosed: {
         if(callback!==undefined )
             callback();
+    }
+    Shortcut {
+        sequences: ["Esc", "Back"]
+        enabled: messageDialog.visible
+        onActivated: {
+            messageDialog.close()
+        }
     }
     buttonTitle: qsTr("تایید")
     dialogButton.anchors.bottomMargin: size1W*25

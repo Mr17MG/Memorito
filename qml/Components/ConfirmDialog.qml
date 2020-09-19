@@ -6,14 +6,23 @@ Dialog{
     id:dialog
     property string dialogText: ""
     property string dialogTitle: ""
-    property string dialogButtonColor: Material.color(appStyle.primaryColor)
+    property string dialogButtonColor: appStyle.primaryColor
     property alias acceptBtn: acceptBtn
     property alias canselBtn: canselBtn
     property var canseled
     property var accepted
-    property var acceptAction
+    signal acceptSignal
     width: size1W*480
     height: size1H*330 + text.lineHeight
+    modal: true
+    closePolicy: Dialog.NoAutoClose
+    Shortcut {
+        sequences: ["Esc", "Back"]
+        enabled: dialog.visible
+        onActivated: {
+            dialog.close()
+        }
+    }
     x: -parent.x + (parent===null?0:(parent.width- width)/2)
     y: -parent.y + (parent===null?0:(parent.height- height)/2)
     Text {
@@ -59,6 +68,7 @@ Dialog{
             onButtonClicked: {
                 if(accepted)
                     accepted()
+                acceptSignal()
                 dialog.close()
             }
             buttonColor:dialogButtonColor
