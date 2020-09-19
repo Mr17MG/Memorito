@@ -34,7 +34,7 @@ Item{
         radius: width
         border.color: appStyle.primaryColor
         border.width: 3*size1W
-        color: Material.color(appStyle.primaryInt,Material.shade300)
+        color: Material.color(appStyle.primaryInt,Material.Shade50)
         anchors{
             top: parent.top
             topMargin: 20*size1H
@@ -83,13 +83,6 @@ Item{
             bottom: parent.bottom
         }
 
-        Rectangle{
-            anchors.top: parent.top
-            width: parent.width
-            height: 2*size1H
-            color: appStyle.primaryColor
-        }
-
         width:parent.width
         delegate: App.Button{
             id: listDelegate
@@ -102,8 +95,7 @@ Item{
                     drawerLoader.item.close()
                 if(pageSource)
                 {
-                    mainColumn.item.mainStackView.push(pageSource)
-                    mainHeaderTitle = title
+                    usefulFunc.mainStackPush(pageSource,title)
                 }
             }
             Image {
@@ -127,7 +119,9 @@ Item{
                 id:iconColor
                 anchors.fill: icon
                 source:icon
-                color: /*mainColumn.source.toString() === pageSource? appStyle.primaryColor:*/appStyle.textColor
+                color:stackPages.get(stackPages.count-1).page === pageSource?appStyle.primaryColor
+                                                                            :appStyle.textColor
+
             }
             Text {
                 id: titleText
@@ -149,18 +143,11 @@ Item{
                     leftMargin: nRow === 2 ? 10*size1W : 0
                 }
             }
-            Rectangle{
-                anchors.bottom: parent.bottom
-                width: parent.width
-                height: 2*size1H
-                color: appStyle.primaryColor
-                visible: index !== modelList.count-1
-            }
         }
         model: ListModel{
             id:modelList
             ListElement{
-                title:qsTr("جمع‌آوری")
+                title: qsTr("جمع‌آوری")
                 pageSource :"qrc:/Flow/Collect.qml"
                 iconSrc: "qrc:/collect.svg"
             }
@@ -201,7 +188,16 @@ Item{
                 iconSrc: "qrc:/refrence.svg"
             }
             ListElement{
-                title:qsTr("تنظیمات")
+                title:qsTr("محل‌های انجام")
+                iconSrc: "qrc:/refrence.svg"
+            }
+            ListElement{
+                title:qsTr("دوستان")
+                iconSrc: "qrc:/refrence.svg"
+                pageSource: "qrc:/Managment/Friends.qml"
+            }
+            ListElement{
+                title: qsTr("تنظیمات")
                 pageSource : "qrc:/AppBase/AppSettings.qml"
                 iconSrc: "qrc:/setting.svg"
             }
