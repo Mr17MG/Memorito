@@ -23,7 +23,6 @@
         <file>Memorito.qml</file>
         <file>FirstColumn.qml</file>
         <file>MainColumn.qml</file>
-        <file>ThirdColumn.qml</file>
         <file>AppBase/AppHeader.qml</file>
         <file>AppBase/AppSettings.qml</file>
         <file>AppBase/AppStyle.qml</file>
