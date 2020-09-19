@@ -3,8 +3,8 @@ import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
 import QtGraphicalEffects 1.14
 import "qrc:/Components/" as App
-//import "qrc:/Pages/MainPages/"
 import QtQuick.Dialogs 1.2
+
 Item {
 
     Item{
@@ -13,13 +13,13 @@ Item {
         height: 100*size1H
         anchors{
             top: parent.top
-            topMargin: 5*size1H
+            topMargin: 15*size1H
             left: parent.left
             right: parent.right
             rightMargin: 25*size1W
             leftMargin: 25*size1W
         }
-        App.TextField{
+        App.TextInput{
             id:usernameInput
             placeholderText: qsTr("چی تو ذهنته؟")
             width: parent.width
@@ -42,14 +42,14 @@ Item {
         id: control
         anchors{
             top: titleItem.bottom
-            topMargin: 5*size1H
+            topMargin: 25*size1H
             right: parent.right
             rightMargin: 25*size1W
             left: parent.left
             leftMargin: 25*size1W
         }
         width: parent.width
-        height:200*size1H
+        height: 190*size1H
         clip: true
         flickableDirection: Flickable.VerticalFlick
         onContentYChanged: {
@@ -65,20 +65,23 @@ Item {
                 contentX = (contentWidth-control.width)
 
         }
-        TextArea.flickable: TextArea{
+        TextArea.flickable: App.TextArea{
             id:summaryInput
-            placeholderText: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس")
             horizontalAlignment: ltr?Text.AlignLeft:Text.AlignRight
             rightPadding: 12*size1W
             leftPadding: 12*size1W
-            clip:true
+            topPadding: 20*size1H
+            bottomPadding: 20*size1H
+            clip: true
             color: appStyle.textColor
             wrapMode: Text.WordWrap
             Material.accent: appStyle.primaryColor
             font{family: appStyle.appFont;pixelSize:  25*size1F;bold:false}
             placeholderTextColor: getAppTheme()?"#ADffffff":"#8D000000"
-            background: Rectangle{border.color: getAppTheme()?"#ADffffff":"#8D000000";color: "transparent";radius: 10*size1W}
+            background: Rectangle{border.width: 2*size1W; border.color: summaryInput.focus? appStyle.primaryColor : getAppTheme()?"#ADffffff":"#8D000000";color: "transparent";radius: 15*size1W}
+
         }
+
         ScrollBar.vertical: ScrollBar {
             hoverEnabled: true
             active: hovered || pressed
@@ -88,15 +91,36 @@ Item {
             width: 8*size1W
         }
     }
+    Label {
+        id: controlPlaceHolder
+        text: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس")
+        color: summaryInput.focus || summaryInput.text!==""?appStyle.textColor: getAppTheme()?"#B3ffffff":"#B3000000"
+        anchors.top: control.top
+        anchors.topMargin: summaryInput.focus || summaryInput.text!==""?-10*size1H:15*size1H
+        anchors.right:  control.right
+        anchors.rightMargin: 20*size1W
+        font{family: appStyle.appFont;pixelSize:( summaryInput.focus || summaryInput.text!=""?20*size1F:25*size1F);bold:summaryInput.focus || summaryInput.text}
+        Behavior on anchors.topMargin { NumberAnimation{ duration: 160 } }
+        Rectangle{
+            width: parent.width + 30*size1W
+            anchors.right: parent.right
+            anchors.rightMargin: -15*size1W
+            height: parent.height
+            z:-1
+            color: getAppTheme()?"#2f2f2f":"#fafafa"
+            visible: summaryInput.focus || summaryInput.text!==""
+            radius: 15*size1W
+        }
+    }
     Rectangle{
         anchors{
             top: control.bottom
-            topMargin: 5*size1W
+            topMargin: 25*size1W
             bottom: submitBtn.top
             bottomMargin: 15*size1H
             horizontalCenter: parent.horizontalCenter
         }
-        radius: 10*size1W
+        radius: 15*size1W
         width: control.width
         border.width: 1*size1W
         border.color: getAppTheme()?"#ADffffff":"#8D000000"
@@ -231,7 +255,7 @@ Item {
                     width: 300*size1W
                     visible: attachModel.count === 0
                     height: width
-                    source: "qrc:/TaskFlow/first-shot.svg"
+                    source: dragItem.opacity === 1? "qrc:/TaskFlow/first-shot.svg" :"qrc:/TaskFlow/first-shot-drop.svg"
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
                     sourceSize.width:width*2
@@ -307,8 +331,8 @@ Item {
 
                 Text {
                     id: name
-                    text: qsTr("فایلتو بکش و اینجا رها کن یا از دکمه + انتخاب کن")
-                    visible: (Qt.platform.os ==="android" || Qt.platform.os ==="ios") && attachModel.count === 0
+                    text: qsTr("فایلتو با استفاده از دکمه + انتخاب کن")
+                    visible: !dargLoader.active && attachModel.count === 0
                     anchors.centerIn: parent
                     font{family: appStyle.appFont;pixelSize: 25*size1F;bold:false}
                     color: appStyle.textColor
@@ -376,7 +400,7 @@ Item {
             rightMargin: 25*size1W
         }
         text: qsTr("بفرست به پردازش نشده ها")
-        radius: 10*size1W
+        radius: 15*size1W
         leftPadding: 35*size1W
         Image {
             id:submitIcon
