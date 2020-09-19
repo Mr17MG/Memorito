@@ -29,5 +29,6 @@
         <file>plus.svg</file>
         <file>hide.svg</file>
         <file>view.svg</file>
+        <file>TaskFlow/first-shot-drop.svg</file>
     </qresource>
 </RCC>
