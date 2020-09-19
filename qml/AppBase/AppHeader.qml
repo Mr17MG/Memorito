@@ -129,7 +129,7 @@ Loader{
             anchors.verticalCenter: parent.verticalCenter
             visible: mainColumn.item.mainStackView.depth > 1
             onClicked: {
-                mainColumn.item.mainStackView.pop()
+                 usefulFunc.mainStackPop()
             }
 
             Image{
