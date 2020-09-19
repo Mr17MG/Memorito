@@ -8,10 +8,10 @@ Item {
     // public:
 
     property color contentRectangleColor: "transparent"
-    property color contentRectanglePressedColor: Material.color(primaryColor)
+    property color contentRectanglePressedColor: appStyle.primaryColor
 
     property color deleteButtonColor: "#FF0000"
-    property color deleteButtonPressedColor: textColor == "#000000"?"#10000000":"#80000000"
+    property color deleteButtonPressedColor: appStyle.textColor === "#000000"?"#10000000":"#80000000"
     property int deleteButtonWidth: 50
 
     property int hideOrShowAnimationDuration: 200
