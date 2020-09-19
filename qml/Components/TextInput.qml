@@ -6,24 +6,18 @@ import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
 
 T.TextField {
-    property color primaryTextColor: "#444"
-    property color hintTextColor: "#444"
-    property bool hasBottomBorder: true
-    property color bottomBorderColor: "red"
-    property bool bottomBorderColorChanged : false
     id: control
-    color: textColor
-    horizontalAlignment: Text.AlignHCenter
-    bottomPadding: size1H*10
-    font { /*family: appStyle.iransansBold.name;*/ pixelSize: size1F*12;}
+    color: appStyle.textColor
+    padding: size1H*10
+    font { family: appStyle.appFont; pixelSize: size1F*25;}
     placeholderText: ""
-    Material.accent: appStyle.accentColor1
+    Material.accent: appStyle.primaryColor
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
-                            || contentWidth + leftPadding + rightPadding
+                            controlPlaceHolder ? controlPlaceHolder.implicitWidth + leftPadding + rightPadding : 0)
+                   || contentWidth + leftPadding + rightPadding
     implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
                              background ? background.implicitHeight : 0,
-                             placeholder.implicitHeight + topPadding + bottomPadding)
+                             controlPlaceHolder.implicitHeight + topPadding + bottomPadding)
 
     topPadding: 8*size1H
     selectionColor: Material.accentColor
@@ -31,37 +25,36 @@ T.TextField {
     selectByMouse: true
     verticalAlignment: TextInput.AlignVCenter
     cursorDelegate: CursorDelegate { }
-
-    onTextChanged: {
-        text = functions.faToEnNumber(text)
-    }
-
-    PlaceholderText {
-        id: placeholder
-        x: control.leftPadding
-        y: control.topPadding
-        width: control.width - (control.leftPadding + control.rightPadding)
-        height: control.height - (control.topPadding + control.bottomPadding)
+    horizontalAlignment: ltr?Text.AlignLeft:Text.AlignRight
+    Label {
+        id: controlPlaceHolder
         text: control.placeholderText
-        font: control.font
-        color: control.hintTextColor
-        verticalAlignment: control.verticalAlignment
-        elide: Text.ElideRight
-        visible: !control.length && !control.preeditText && (!control.activeFocus) //|| control.horizontalAlignment !== Qt.AlignHCenter)
-
+        color: control.focus || control.text!==""?appStyle.textColor: getAppTheme()?"#B3ffffff":"#B3000000"
+        y: control.focus || control.text!==""?-10*size1H:height-10*size1H
+        anchors.right:  control.right
+        anchors.rightMargin: parent.padding + 10
+        font{family: appStyle.appFont;pixelSize:( control.focus || control.text!=""?20*size1F:25*size1F);bold:control.focus || control.text}
+        Behavior on y {
+            NumberAnimation{ duration: 160}
+        }
+        Rectangle{
+            width: parent.width + 30*size1W
+            anchors.right: parent.right
+            anchors.rightMargin: -15*size1W
+            height: parent.height
+            z:-1
+            color: getAppTheme()?"#2f2f2f":"#fafafa"
+            visible: control.focus || control.text!==""
+            radius: 15*size1W
+        }
     }
 
     background: Rectangle {
-        visible: hasBottomBorder
-        y: control.height - height - control.bottomPadding + size1H*8
-        width: parent.width
-        height: control.text === "" ?
-                    control.activeFocus || control.hovered ? size1H*2:size1H
-        :size1H*2
-        color: bottomBorderColorChanged?bottomBorderColor:
-                                         control.activeFocus ? control.Material.accentColor
-                                   : (control.hovered ? control.Material.accentColor:
-                                                        control.text‌===""?control.hintTextColor:control.Material.accentColor)
+        id: bgRect
+        anchors.fill: parent
+        border.color: control.focus? appStyle.primaryColor : getAppTheme()?"#ADffffff":"#8D000000"
+        radius: 15*size1W
+        color: "transparent"
     }
 }
 
