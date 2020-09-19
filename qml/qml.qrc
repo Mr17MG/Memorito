@@ -41,5 +41,11 @@
         <file>Functions/UserDatabase.qml</file>
         <file>Splash/SplashLoader.qml</file>
         <file>Flow/Collect.qml</file>
+        <file>Components/TextArea.qml</file>
+        <file>Managment/Friends.qml</file>
+        <file>Components/Menu.qml</file>
+        <file>Components/MenuItem.qml</file>
+        <file>Managment/API.qml</file>
+        <file>Managment/Contexts.qml</file>
     </qresource>
 </RCC>

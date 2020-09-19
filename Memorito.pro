@@ -2,6 +2,8 @@ QT += quick svg quickcontrols2
 
 CONFIG += c++11
 
+include(projects/openssl/openssl.pri)
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Refer to the documentation for the
@@ -57,3 +59,5 @@ android{
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 }
+
+ANDROID_ABIS = armeabi-v7a
