@@ -181,19 +181,20 @@ Item{
             }
             ListElement{
                 title:qsTr("انجام شده‌ها")
-                iconSrc: "qrc:/refrence.svg"
+                iconSrc: "qrc:/done.svg"
             }
             ListElement{
                 title:qsTr("سطل زباله")
-                iconSrc: "qrc:/refrence.svg"
+                iconSrc: "qrc:/trash.svg"
             }
             ListElement{
                 title:qsTr("محل‌های انجام")
-                iconSrc: "qrc:/refrence.svg"
+                pageSource:"qrc:/Managment/Contexts.qml"
+                iconSrc: "qrc:/contexts.svg"
             }
             ListElement{
                 title:qsTr("دوستان")
-                iconSrc: "qrc:/refrence.svg"
+                iconSrc: "qrc:/friends.svg"
                 pageSource: "qrc:/Managment/Friends.qml"
             }
             ListElement{

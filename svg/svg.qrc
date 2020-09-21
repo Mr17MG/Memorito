@@ -30,5 +30,10 @@
         <file>hide.svg</file>
         <file>view.svg</file>
         <file>TaskFlow/first-shot-drop.svg</file>
+        <file>context.svg</file>
+        <file>contexts.svg</file>
+        <file>friends.svg</file>
+        <file>trash.svg</file>
+        <file>done.svg</file>
     </qresource>
 </RCC>
