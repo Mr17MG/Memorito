@@ -76,7 +76,7 @@ Page {
             height: drawerLoader.height
             width: drawerLoader.width
             edge: ltr?Qt.LeftEdge:Qt.RightEdge
-            dragMargin:50*size1W
+            dragMargin:0
             background:Rectangle{
                 color: getAppTheme()?"#424242":"#f5f5f5"
                 LinearGradient {

@@ -205,7 +205,6 @@ QtObject {
                     {
                         if(response.code === 202){
                             mainLoader.source = "qrc:/Memorito.qml"
-                            //TODO insert to Database
                             userDbFunc.addUser(response.result)
                         }
                         else if(response.code === 200)
@@ -429,7 +428,6 @@ QtObject {
                 busyDialog.close()
                 try
                 {
-                    console.log(xhr.responseText)
                     let response = xhr.response
                     if(response.ok)
                     {
