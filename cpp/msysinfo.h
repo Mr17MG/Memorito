@@ -2,6 +2,10 @@
 #define MSYSINFO_H
 #include <QObject>
 #include <QGuiApplication>
+#include <QSettings>
+#include <QUuid>
+#include <QDebug>
+
 class MSysInfo : public QObject
 {
     Q_OBJECT

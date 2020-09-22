@@ -22,7 +22,20 @@ QString MSysInfo::getKernelVersion()
 
 QString MSysInfo::getMachineUniqueId()
 {
-    return sysInfo->machineUniqueId();
+    QSettings *setting = new QSettings();
+    QString returnVal = "";
+    if(setting->value("machineId","").toString()=="")
+    {
+        if(sysInfo->machineUniqueId().toStdString() == "")
+            returnVal = QUuid::createUuid().toString().replace(QRegExp("[{}-]"),"");
+        else
+            returnVal = sysInfo->machineUniqueId();
+        setting->setValue("machineId",returnVal);
+        return returnVal;
+
+    }
+    else
+        return setting->value("machineId","").toString();
 }
 
 QString MSysInfo::getPrettyOsName()
