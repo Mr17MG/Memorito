@@ -16,7 +16,39 @@ Loader{
             anchors.right: resizerLoader.active?resizerLoader.left:parent.right
             anchors.left: parent.left
             height: parent.height
-            initialItem: "qrc:/Managment/Contexts.qml"
+            initialItem: Rectangle{color: "transparent"}
+            pushEnter: Transition {
+                     PropertyAnimation {
+                         property: "opacity"
+                         from: 0
+                         to:1
+                         duration: 100
+                     }
+                 }
+                 pushExit: Transition {
+                     PropertyAnimation {
+                         property: "opacity"
+                         from: 1
+                         to:0
+                         duration: 100
+                     }
+                 }
+                 popEnter: Transition {
+                     PropertyAnimation {
+                         property: "opacity"
+                         from: 0
+                         to:1
+                         duration: 100
+                     }
+                 }
+                 popExit: Transition {
+                     PropertyAnimation {
+                         property: "opacity"
+                         from: 1
+                         to:0
+                         duration: 100
+                     }
+                 }
         }
 
         Loader{
