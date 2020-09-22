@@ -69,6 +69,8 @@ Item{
             onClicked: {
                 if(nRow === 1)
                     drawerLoader.item.close()
+                usefulFunc.mainStackPush("qrc:/Profile.qml",qsTr("پروفایل"))
+
             }
         }
 

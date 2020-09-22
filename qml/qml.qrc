@@ -46,5 +46,6 @@
         <file>Components/MenuItem.qml</file>
         <file>Managment/API.qml</file>
         <file>Managment/Contexts.qml</file>
+        <file>Profile.qml</file>
     </qresource>
 </RCC>
