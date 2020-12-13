@@ -16,7 +16,8 @@ T.CheckBox {
     spacing: 8*size1W
     padding: 8*size1W
     verticalPadding: padding + 7*size1H
-
+    Material.accent: appStyle.primaryInt
+    LayoutMirroring.enabled: !ltr
     indicator: App.CheckIndicator {
         x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
@@ -25,10 +26,8 @@ T.CheckBox {
         Ripple {
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
-            width: 28*size1W
+            width: 42*size1W
             height: width
-
-            z: -1
             anchor: control
             pressed: control.pressed
             active: control.down || control.visualFocus || control.hovered
