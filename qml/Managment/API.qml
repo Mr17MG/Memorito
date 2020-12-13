@@ -3,6 +3,11 @@ import QtQuick 2.14
 QtObject {
     function getFriends(model)
     {
+        if(model.count > 0)
+        {
+            return model
+        }
+
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
@@ -40,6 +45,7 @@ QtObject {
                         if(response.code === 200){
                             model.append(response.result)
                         }
+                        return model
                     }
                     else {
                         if(response.code === 406)
@@ -199,6 +205,11 @@ QtObject {
     ///////////////////////////// Contexts /////////////////////////////////////
     function getContexts(model)
     {
+        if(model.count > 0)
+        {
+            return model
+        }
+
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
@@ -236,6 +247,7 @@ QtObject {
                         if(response.code === 200){
                             model.append(response.result)
                         }
+                        return model
                     }
                     else {
                         if(response.code === 406)
