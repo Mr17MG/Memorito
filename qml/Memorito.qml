@@ -44,6 +44,12 @@ Page {
     FirstColumn{id:firstColumn;anchors.right: parent.right;}
 
     ListModel{ id: stackPages }
+    ListModel{ id: friendModel}
+    ListModel{ id: contextModel}
+    ListModel{ id: somedayModel }
+    ListModel{ id: refrenceModel }
+    ListModel{ id: projectModel }
+
     property var pagesCanShowInThird : ["qrc:/Flow/Collect.qml"]
 
     Component.onCompleted: {
