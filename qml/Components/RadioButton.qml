@@ -17,9 +17,10 @@ T.RadioButton {
     padding: size1W*8
     topPadding: padding + size1W*6
     bottomPadding: padding + size1W*6
-
+    LayoutMirroring.enabled: !ltr
+    Material.accent: appStyle.primaryInt
+    font { family: appStyle.appFont; pixelSize: size1F*25;}
     indicator: App.RadioIndicator{
-        //width: size1W*23; height: size1W*23
         x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
         control: control
@@ -27,9 +28,9 @@ T.RadioButton {
         Ripple {
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
-            width: size1W*28; height: size1W*28
+            width: size1W*45
+            height: size1W*45
 
-            z: -1
             anchor: control
             pressed: control.pressed
             active: control.down || control.visualFocus || control.hovered
@@ -44,7 +45,8 @@ T.RadioButton {
         text: control.text
         font: control.font
         color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
-        elide: Text.ElideRight
+//        elide: Text.ElideRight
+        wrapMode: Text.WordWrap
         verticalAlignment: Text.AlignVCenter
     }
 }
