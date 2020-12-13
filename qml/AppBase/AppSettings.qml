@@ -64,6 +64,7 @@ Item {
             }
             App.ComboBox{
                 id:primaryCombo
+                hasClear: false
                 width: 260*size1W
                 height: 70*size1H
                 anchors.right: colorText.left
@@ -138,6 +139,7 @@ Item {
                 id:languageCombo
                 width: 260*size1W
                 height: 70*size1H
+                hasClear: false
                 anchors.right: languageText.left
                 anchors.rightMargin: 20*size1W
                 placeholderText: qsTr("زبان‌ها")
