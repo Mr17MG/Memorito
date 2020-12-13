@@ -47,5 +47,9 @@
         <file>Managment/API.qml</file>
         <file>Managment/Contexts.qml</file>
         <file>Profile.qml</file>
+        <file>Flow/CategoryApi.qml</file>
+        <file>Components/DateInput.qml</file>
+        <file>Components/DayOfWeekRow.qml</file>
+        <file>Flow/ProjectApi.qml</file>
     </qresource>
 </RCC>
