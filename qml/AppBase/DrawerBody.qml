@@ -176,6 +176,7 @@ Item{
             ListElement{
                 title:qsTr("پروژه‌ها")
                 iconSrc: "qrc:/project.svg"
+                pageSource: "qrc:/Flow/Projects.qml"
             }
             ListElement{
                 title:qsTr("مرجع")
