@@ -7,6 +7,9 @@
 #include <QSettings> // Require For settings
 #include "cpp/msysinfo.h" // Require For MSysInfo
 #include "cpp/msecurity.h" // Require For MSecurity
+#include "cpp/qcustomdate.h"// Require For QCustomDate
+#include "cpp/qdateconvertor.h"// Require For QDateConvertor
+#include "tools.h"
 
 int main(int argc, char *argv[])
 {
@@ -43,8 +46,14 @@ int main(int argc, char *argv[])
     //**************** Registry C++ To QML ****************//
     qmlRegisterType<MSysInfo>("MSysInfo", 1, 0, "SystemInfo");
     qmlRegisterType<MSecurity>("MSecurity", 1, 0, "MSecurity");
+    qmlRegisterType<QCustomDate>("ir.myco.date", 1 ,0, "CustomDate");
+    qmlRegisterType<QDateConvertor>("ir.myco.date", 1, 0, "DateConvertor");
     //******************************************************//
+//    Tools tools;
+//    QString m = tools.encodeToBase64("/home/mohammad/Pictures/memoritoIcon.svg");
+//    qDebug()<<tools.saveBase64asFile("mg","svg",m);
 
+    //////////////
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

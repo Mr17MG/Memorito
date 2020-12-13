@@ -19,11 +19,17 @@ SOURCES += \
         cpp/main.cpp \
         cpp/msecurity.cpp \
         cpp/msysinfo.cpp \
+        cpp/qcustomdate.cpp \
+        cpp/qdateconvertor.cpp \
+        cpp/tools.cpp \
         cpp/translator.cpp
 
 HEADERS += \
     cpp/msecurity.h \
     cpp/msysinfo.h \
+    cpp/qcustomdate.h \
+    cpp/qdateconvertor.h \
+    cpp/tools.h \
     cpp/translator.h
 
 
