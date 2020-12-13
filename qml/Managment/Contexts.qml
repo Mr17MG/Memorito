@@ -129,9 +129,7 @@ Item {
         }
 
         /***********************************************/
-        model: ListModel{
-            id: contextModel
-        }
+        model: contextModel
     }
 
     App.Button{
