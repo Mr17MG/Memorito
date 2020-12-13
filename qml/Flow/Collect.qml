@@ -104,7 +104,7 @@ Item{
                 TextArea.flickable: App.TextArea{
                     id:summaryInput
                     horizontalAlignment: ltr?Text.AlignLeft:Text.AlignRight
-                    rightPadding: 12*size1W
+                    rightPadding: 20*size1W
                     leftPadding: 12*size1W
                     topPadding: 20*size1H
                     bottomPadding: 20*size1H
@@ -114,6 +114,7 @@ Item{
                     Material.accent: appStyle.primaryColor
                     font{family: appStyle.appFont;pixelSize:  25*size1F;bold:false}
                     placeholderTextColor: getAppTheme()?"#ADffffff":"#8D000000"
+                    placeholderText: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس")
                     background: Rectangle{border.width: 2*size1W; border.color: summaryInput.focus? appStyle.primaryColor : getAppTheme()?"#ADffffff":"#8D000000";color: "transparent";radius: 15*size1W}
 
                 }
@@ -125,27 +126,6 @@ Item{
                     anchors.right: control.right
                     height: parent.height
                     width: hovered || pressed?18*size1W:8*size1W
-                }
-            }
-            Label {
-                id: controlPlaceHolder
-                text: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس")
-                color: summaryInput.focus || summaryInput.text!==""?appStyle.textColor: getAppTheme()?"#B3ffffff":"#B3000000"
-                anchors.top: control.top
-                anchors.topMargin: summaryInput.focus || summaryInput.text!==""?-10*size1H:15*size1H
-                anchors.right:  control.right
-                anchors.rightMargin: 20*size1W
-                font{family: appStyle.appFont;pixelSize:( summaryInput.focus || summaryInput.text!=""?20*size1F:25*size1F);bold:summaryInput.focus || summaryInput.text}
-                Behavior on anchors.topMargin { NumberAnimation{ duration: 160 } }
-                Rectangle{
-                    width: parent.width + 30*size1W
-                    anchors.right: parent.right
-                    anchors.rightMargin: -15*size1W
-                    height: parent.height
-                    z:-1
-                    color: getAppTheme()?"#2f2f2f":"#fafafa"
-                    visible: summaryInput.focus || summaryInput.text!==""
-                    radius: 15*size1W
                 }
             }
             Rectangle{
