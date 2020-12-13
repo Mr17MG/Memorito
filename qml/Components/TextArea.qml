@@ -8,6 +8,7 @@ import QtQuick.Controls.Material.impl 2.14
 T.TextArea {
     id: control
     property alias placeholder: placeholder
+    property bool areaInDialog: false
     implicitWidth: Math.max(contentWidth + leftPadding + rightPadding,
                             implicitBackgroundWidth + leftInset + rightInset,
                             placeholder.implicitWidth + leftPadding + rightPadding)
@@ -21,7 +22,6 @@ T.TextArea {
     placeholderTextColor: Material.hintTextColor
     cursorDelegate: CursorDelegate { }
     font{family: appStyle.appFont;pixelSize:20*size1F}
-    topPadding: 10*size1H
     Label {
         id: placeholder
         text: control.placeholderText
@@ -33,11 +33,17 @@ T.TextArea {
         Behavior on y {
             NumberAnimation{ duration: 160}
         }
+        Rectangle{
+            width: parent.width + 30*size1W
+            anchors.right: parent.right
+            anchors.rightMargin: -15*size1W
+            height: parent.height
+            z:-1
+            color:areaInDialog? (getAppTheme()?"#3f3f3f":"#ffffff")
+                              : (getAppTheme()?"#2f2f2f":"#fafafa")
+            visible: control.focus || control.text!==""
+            radius: 15*size1W
+        }
     }
-    background: Rectangle {
-        y: parent.height - height - control.bottomPadding / 2
-        implicitWidth: 140
-        height: control.activeFocus ? 2 : 1
-        color: control.activeFocus ? control.Material.accentColor : control.Material.hintTextColor
-    }
+
 }
