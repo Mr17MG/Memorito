@@ -496,7 +496,7 @@ QtObject {
 
                 }
                 catch(e) {
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, true)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainLoader,mainLoader.width, true)
                     mainLoader.source = currentUser?"qrc:/Memorito.qml":"qrc:/Account/AccountMain.qml"
                 }
             }
