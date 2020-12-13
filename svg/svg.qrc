@@ -35,5 +35,15 @@
         <file>friends.svg</file>
         <file>trash.svg</file>
         <file>done.svg</file>
+        <file>priorities/high.svg</file>
+        <file>priorities/higher.svg</file>
+        <file>priorities/low.svg</file>
+        <file>priorities/medium.svg</file>
+        <file>energies/high.svg</file>
+        <file>energies/higher.svg</file>
+        <file>energies/low.svg</file>
+        <file>energies/medium.svg</file>
+        <file>clock.svg</file>
+        <file>portfolio.svg</file>
     </qresource>
 </RCC>
