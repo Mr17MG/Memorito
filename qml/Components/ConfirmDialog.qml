@@ -13,7 +13,7 @@ Dialog{
     property var accepted
     signal acceptSignal
     width: size1W*480
-    height: size1H*330 + text.lineHeight
+    height: size1H*340 + text.lineHeight
     modal: true
     closePolicy: Dialog.NoAutoClose
     Shortcut {
@@ -59,7 +59,7 @@ Dialog{
         layoutDirection: ltr? Qt.LeftToRight : Qt.RightToLeft
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: size1H*10
+        anchors.bottomMargin: size1H*0
         spacing: size1W*30
 
         ConfirmDialogButton{
