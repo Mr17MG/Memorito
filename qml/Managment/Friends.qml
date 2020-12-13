@@ -149,9 +149,7 @@ Item {
         }
 
         /***********************************************/
-        model: ListModel{
-            id: friendModel
-        }
+        model: friendModel
     }
 
     App.Button{
