@@ -7,6 +7,7 @@ import QtQuick.Dialogs 1.2
 import "qrc:/Managment/" as Managment
 
 Item{
+    ListModel{id:attachModel}
     Flickable{
         id: mainFlick
         height: parent.height
@@ -55,7 +56,7 @@ Item{
                     leftMargin: 25*size1W
                 }
                 App.TextInput{
-                    id:usernameInput
+                    id:titleInput
                     placeholderText: qsTr("چی تو ذهنته؟")
                     width: parent.width
                     height: parent.height
@@ -67,9 +68,9 @@ Item{
                         id:usernameMoveAnimation
                         running: false
                         loops: 3
-                        NumberAnimation { target: usernameInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
-                        NumberAnimation { target: usernameInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
-                        NumberAnimation { target: usernameInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
+                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
+                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
+                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
                     }
                 }
             }
@@ -102,7 +103,7 @@ Item{
 
                 }
                 TextArea.flickable: App.TextArea{
-                    id:summaryInput
+                    id: detailInput
                     horizontalAlignment: ltr?Text.AlignLeft:Text.AlignRight
                     rightPadding: 20*size1W
                     leftPadding: 12*size1W
@@ -114,9 +115,8 @@ Item{
                     Material.accent: appStyle.primaryColor
                     font{family: appStyle.appFont;pixelSize:  25*size1F;bold:false}
                     placeholderTextColor: getAppTheme()?"#ADffffff":"#8D000000"
-                    placeholderText: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس")
-                    background: Rectangle{border.width: 2*size1W; border.color: summaryInput.focus? appStyle.primaryColor : getAppTheme()?"#ADffffff":"#8D000000";color: "transparent";radius: 15*size1W}
-
+                    placeholderText: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس") + " (" + qsTr("اختیاری") + ")"
+                    background: Rectangle{border.width: 2*size1W; border.color: detailInput.focus? appStyle.primaryColor : getAppTheme()?"#ADffffff":"#8D000000";color: "transparent";radius: 15*size1W}
                 }
 
                 ScrollBar.vertical: ScrollBar {
@@ -142,120 +142,127 @@ Item{
                 border.color: getAppTheme()?"#ADffffff":"#8D000000"
                 color: "transparent"
                 clip: true
-                GridView{
-                    id:grid
-                    anchors.fill: parent
-                    anchors.margins: 10*size1W
-                    cellWidth: width / (parseInt(width / parseInt(200*size1W))===0?1:(parseInt(width / parseInt(200*size1W))))
-                    cellHeight:  cellWidth + 20*size1H
-                    clip: true
-                    ScrollBar.vertical: ScrollBar {
-                        hoverEnabled: true
-                        active: hovered || pressed
-                        orientation: Qt.Vertical
-                        anchors.right: grid.right
-                        height: parent.height
-                        width: 15*size1W
+                Loader{
+                    anchors{
+                        fill: parent
+                        margins: 10*size1W
                     }
-                    onContentYChanged: {
-                        if(contentY<0 || contentHeight < grid.height)
-                            contentY = 0
-                        else if(contentY > (contentHeight-grid.height))
-                            contentY = contentHeight-grid.height
-                    }
-                    onContentXChanged: {
-                        if(contentX<0 || contentWidth < grid.width)
-                            contentX = 0
-                        else if(contentX > (contentWidth-grid.width))
-                            contentX = (contentWidth-grid.width)
-                    }
-                    delegate: Item{
-                        width: grid.cellWidth
-                        height: grid.cellHeight
-                        MouseArea{
-                            anchors.fill: parent
-                            cursorShape: Qt.WhatsThisCursor
-                            onClicked: {
-                                mtooltip.show(model.fileName+"."+model.fileExtension,1000)
-
-                            }
-                            onDoubleClicked: {
-                                Qt.openUrlExternally(model.fileSource)
-                            }
+                    active: attachModel.count>0
+                    sourceComponent: GridView{
+                        id:grid
+                        anchors.fill: parent
+                        anchors.margins: 10*size1W
+                        cellWidth: width / (parseInt(width / parseInt(200*size1W))===0?1:(parseInt(width / parseInt(200*size1W))))
+                        cellHeight:  cellWidth + 20*size1H
+                        clip: true
+                        ScrollBar.vertical: ScrollBar {
+                            hoverEnabled: true
+                            active: hovered || pressed
+                            orientation: Qt.Vertical
+                            anchors.right: grid.right
+                            height: parent.height
+                            width: 15*size1W
                         }
-                        Image{
-                            id:img
-                            source: (model.fileExtension === "jpg" || model.fileExtension === "png" || model.fileExtension === "svg")?model.fileSource:"qrc:/TaskFlow/files.svg"
-                            width: source === "qrc:/TaskFlow/files.svg"?40*size1W:parent.width - 20*size1W
-                            height: width
-                            sourceSize.width: width*2
-                            sourceSize.height: height*2
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            fillMode: Image.PreserveAspectFit
-                            clip: true
-                            Item{
-                                width: 140*size1W
-                                height: 70*size1H
-                                anchors.bottom: parent.bottom
-                                anchors.bottomMargin: 28*size1H
-                                anchors.left: parent.left
-                                anchors.leftMargin: 12*size1W
-                                visible: !(model.fileExtension === "jpg" || model.fileExtension === "png")
-                                Text {
-                                    text: model.fileExtension
-                                    color: "white"
-                                    font{family: appStyle.appFont;pixelSize: 30*size1F;bold:true}
-                                    anchors.fill: parent
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                }
-                            }
-                            ToolTip{ id: mtooltip }
-
+                        onContentYChanged: {
+                            if(contentY<0 || contentHeight < grid.height)
+                                contentY = 0
+                            else if(contentY > (contentHeight-grid.height))
+                                contentY = contentHeight-grid.height
                         }
-                        Text {
-                            anchors.bottom: parent.bottom
-                            color: appStyle.textColor
-                            font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
-                            text: model.fileName
-                            width: parent.width
-                            elide: Text.ElideRight
-                            horizontalAlignment: Text.AlignHCenter
-                            anchors.bottomMargin: 5*size1W
+                        onContentXChanged: {
+                            if(contentX<0 || contentWidth < grid.width)
+                                contentX = 0
+                            else if(contentX > (contentWidth-grid.width))
+                                contentX = (contentWidth-grid.width)
                         }
-                        Rectangle{
-                            width: 50*size1W
-                            height: width
-                            radius: width
-                            color: Material.color(Material.Red)
-                            anchors.right: parent.right
-                            anchors.verticalCenter: img.verticalCenter
-                            Image {
-                                id: removeIcon
-                                source: "qrc:/close.svg"
-                                width: 25*size1W
-                                height: width
-                                anchors.centerIn: parent
-                                sourceSize.width: width*2
-                                sourceSize.height: height*2
-                                visible: false
-                            }
-                            ColorOverlay{
-                                id:removeColor
-                                source: removeIcon
-                                anchors.fill: removeIcon
-                                color: "white"
-                            }
+                        delegate: Item{
+                            width: grid.cellWidth
+                            height: grid.cellHeight
                             MouseArea{
                                 anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
+                                cursorShape: Qt.WhatsThisCursor
                                 onClicked: {
-                                    attachModel.remove(index)
+                                    mtooltip.show(model.fileName+"."+model.fileExtension,1000)
+
+                                }
+                                onDoubleClicked: {
+                                    Qt.openUrlExternally(model.fileSource)
+                                }
+                            }
+                            Image{
+                                id:img
+                                source: (model.fileExtension === "jpg" || model.fileExtension === "png" || model.fileExtension === "svg"|| model.fileExtension === "jpeg")?model.fileSource:"qrc:/TaskFlow/files.svg"
+                                width: source === "qrc:/TaskFlow/files.svg"?40*size1W:parent.width - 20*size1W
+                                height: width
+                                sourceSize.width: width*2
+                                sourceSize.height: height*2
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                fillMode: Image.PreserveAspectFit
+                                clip: true
+                                Item{
+                                    width: 140*size1W
+                                    height: 70*size1H
+                                    anchors.bottom: parent.bottom
+                                    anchors.bottomMargin: 28*size1H
+                                    anchors.left: parent.left
+                                    anchors.leftMargin: 12*size1W
+                                    visible: !(model.fileExtension === "jpg" || model.fileExtension === "png" || model.fileExtension === "svg"|| model.fileExtension === "jpeg")
+                                    Text {
+                                        text: model.fileExtension
+                                        color: "white"
+                                        font{family: appStyle.appFont;pixelSize: 30*size1F;bold:true}
+                                        anchors.fill: parent
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
+                                ToolTip{ id: mtooltip }
+
+                            }
+                            Text {
+                                anchors.bottom: parent.bottom
+                                color: appStyle.textColor
+                                font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
+                                text: model.fileName
+                                width: parent.width
+                                elide: Text.ElideRight
+                                horizontalAlignment: Text.AlignHCenter
+                                anchors.bottomMargin: 5*size1W
+                            }
+                            Rectangle{
+                                width: 50*size1W
+                                height: width
+                                radius: width
+                                color: Material.color(Material.Red)
+                                anchors.right: parent.right
+                                anchors.verticalCenter: img.verticalCenter
+                                Image {
+                                    id: removeIcon
+                                    source: "qrc:/close.svg"
+                                    width: 25*size1W
+                                    height: width
+                                    anchors.centerIn: parent
+                                    sourceSize.width: width*2
+                                    sourceSize.height: height*2
+                                    visible: false
+                                }
+                                ColorOverlay{
+                                    id:removeColor
+                                    source: removeIcon
+                                    anchors.fill: removeIcon
+                                    color: "white"
+                                }
+                                MouseArea{
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        attachModel.remove(index)
+                                    }
                                 }
                             }
                         }
+                        model:attachModel
                     }
-                    model:ListModel{id:attachModel}
                 }
 
                 Loader{
@@ -276,18 +283,6 @@ Item{
                             anchors.bottom: parent.bottom
                             sourceSize.width:width*2
                             sourceSize.height:height*2
-                        }
-                        Text {
-                            id: dragText
-                            visible: attachModel.count === 0
-                            text: qsTr("فایلتو بکش و اینجا رها کن") +"\n"+ qsTr("یا از دکمه + انتخاب کن")
-                            font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
-                            color: appStyle.textColor
-                            anchors.left: dragImg.right
-                            anchors.right: parent.right
-                            wrapMode: Text.WordWrap
-                            horizontalAlignment: Text.AlignHCenter
-                            anchors.verticalCenter: parent.verticalCenter
                         }
                         DropArea{
                             anchors.fill: parent
@@ -320,37 +315,50 @@ Item{
                     anchors.fill: parent
                     sourceComponent: Item {
                         clip: true
-                        FileDialog{
-                            id:fileDialog
-                            selectMultiple: true
-                            title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
-                            nameFilters: [ "All files (*)" ]
-                            folder: shortcuts.pictures
-                            sidebarVisible: false
-                            onAccepted: {
-                                var files = fileDialog.fileUrls;
-                                for(var i=0;i<files.length;i++)
-                                {
-                                    attachModel.append(
-                                                {
-                                                    "fileSource":files[i],
-                                                    "fileName":files[i].split('/').pop().split('.')[0],
-                                                    "fileExtension":files[i].split('.').pop()
-                                                }
-                                                )
+                        Loader{
+                            id:fileLoader
+                            active: false
+                            sourceComponent: FileDialog{
+                                id:fileDialog
+                                selectMultiple: true
+                                title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
+                                nameFilters: [ "All files (*)" ]
+                                folder: shortcuts.pictures
+                                sidebarVisible: false
+                                onAccepted: {
+                                    var files = fileDialog.fileUrls;
+                                    for(var i=0;i<files.length;i++)
+                                    {
+                                        attachModel.append(
+                                                    {
+                                                        "fileSource":files[i],
+                                                        "fileName":files[i].split('/').pop().split('.')[0],
+                                                        "fileExtension":files[i].split('.').pop()
+                                                    }
+                                                    )
+                                    }
+                                    fileLoader.active = false
+                                }
+                                onRejected: {
+                                    fileLoader.active = false
                                 }
                             }
                         }
-
                         Text {
                             id: name
-                            text: qsTr("فایلتو با استفاده از دکمه + انتخاب کن")
-                            visible: !dargLoader.active && attachModel.count === 0
-                            anchors.centerIn: parent
-                            font{family: appStyle.appFont;pixelSize: 25*size1F;bold:false}
+                            text: !dargLoader.active?qsTr("فایلتو با استفاده از دکمه + انتخاب کن"): qsTr("فایلتو بکش و اینجا رها کن") +"\n"+ qsTr("یا از دکمه + انتخاب کن")
+                            visible: attachModel.count === 0?true:false
+                            anchors{
+                                left: parent.left
+                                right: parent.right
+                                leftMargin: !dargLoader.active?0:300*size1W
+                            }
+
+                            height: parent.height
+                            font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
                             color: appStyle.textColor
                             wrapMode: Text.WordWrap
-                            width: parent.width-15*size1W
+                            //                            width: parent.width-15*size1W
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }
@@ -359,24 +367,24 @@ Item{
                             width: 75*size1W
                             height: width
                             radius: width/2
-                            anchors.right: parent.right
-                            anchors.rightMargin: -15*size1W
-                            anchors.top: parent.top
-                            anchors.topMargin: -15*size1W
-                            MouseArea{
-                                id: mousePlus
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    fileDialog.open()
-                                }
+                            anchors{
+                                right: parent.right
+                                rightMargin: -15*size1W
+                                top: parent.top
+                                topMargin: -15*size1W
+                            }
+                            onClicked: {
+                                fileLoader.active = true
+                                fileLoader.item.open()
                             }
                             Image {
                                 id:plusIcon
-                                anchors.left: parent.left
-                                anchors.leftMargin: width/3
-                                anchors.bottom: parent.bottom
-                                anchors.bottomMargin: width/3
+                                anchors{
+                                    left: parent.left
+                                    leftMargin: width/3
+                                    bottom: parent.bottom
+                                    bottomMargin: width/3
+                                }
                                 width: parent.width/2
                                 height: width
                                 source: "qrc:/plus.svg"
@@ -405,7 +413,7 @@ Item{
             }
             App.Button{
                 id:submitBtn
-                width: enabled?370*size1W:350*size1W
+                width: 370*size1W
                 height: 70*size1H
                 anchors{
                     top: fileRect.bottom
@@ -419,6 +427,14 @@ Item{
                 enabled: !processBtn.checked
                 icon.source: "qrc:/check.svg"
                 icon.width: 20*size1W
+                onClicked: {
+                    let options =[]
+                    options["contextId"] = null
+                    options["priorityId"] = null
+                    options["energyId"] =null
+                    options["estimateTime"] = null
+                    thingsApi.prepareForAdd(options,2); // 2 is proccess list id
+                }
             }
             App.Button{
                 id: processBtn
@@ -528,10 +544,20 @@ Item{
     Managment.API{id: managmentApi}
     CategoryApi{ id: categoryApi}
     ProjectApi{ id: projectApi}
+    ThingsApi{ id: thingsApi}
 
     Component{
         id:secondRect
         Item{
+            function getOptions(){
+                let array =[]
+                array["contextId"] = contextInput.currentIndex === -1? null:contextModel.get(contextInput.currentIndex).id
+                array["priorityId"] = priorityInput.currentIndex === -1? null:priorityModel.get(priorityInput.currentIndex).Id
+                array["energyId"] = energyInput.currentIndex === -1? null:energyModel.get(energyInput.currentIndex).Id
+                array["estimateTime"] = estimateInput.text.trim() === ""? null :parseInt(estimateInput.text.trim())
+                return array;
+            }
+
             Flow{
                 anchors{
                     top: parent.top
@@ -569,7 +595,7 @@ Item{
                         }
                         font.pixelSize: size1F*28
                         textRole: "context_name"
-                        placeholderText: qsTr("محل انجام مورد نیاز را انتخاب کنید")
+                        placeholderText: qsTr("محل انجام") + " (" + qsTr("اختیاری") + ")"
                         currentIndex: -1
                         model: contextModel
                         Component.onCompleted: {
@@ -603,26 +629,27 @@ Item{
                         textRole: "Text"
                         iconRole: "iconSource"
                         font.pixelSize: size1F*28
-                        placeholderText: qsTr("اولویت خود را انتخاب کنید")
+                        placeholderText: qsTr("اولویت") + " (" + qsTr("اختیاری") + ")"
                         currentIndex: -1
                         model: ListModel{
+                            id: energyModel
                             ListElement{
-                                Id:0
+                                Id:1
                                 Text:qsTr("کم")
                                 iconSource: "qrc:/priorities/low.svg"
                             }
                             ListElement{
-                                Id:1
+                                Id:2
                                 Text:qsTr("متوسط")
                                 iconSource: "qrc:/priorities/medium.svg"
                             }
                             ListElement{
-                                Id:2
+                                Id:3
                                 Text:qsTr("زیاد")
                                 iconSource: "qrc:/priorities/high.svg"
                             }
                             ListElement{
-                                Id:3
+                                Id:4
                                 Text:qsTr("فوری")
                                 iconSource: "qrc:/priorities/higher.svg"
                             }
@@ -655,26 +682,27 @@ Item{
                         textRole: "Text"
                         iconRole: "iconSource"
                         font.pixelSize: size1F*28
-                        placeholderText: qsTr("سطح انرژی مورد نیاز را انتخاب کنید")
+                        placeholderText: qsTr("سطح انرژی") + " (" + qsTr("اختیاری") + ")"
                         currentIndex: -1
                         model: ListModel{
+                            id:priorityModel
                             ListElement{
-                                Id:0
+                                Id:1
                                 Text:qsTr("کم")
                                 iconSource: "qrc:/energies/low.svg"
                             }
                             ListElement{
-                                Id:1
+                                Id:2
                                 Text:qsTr("متوسط")
                                 iconSource: "qrc:/energies/medium.svg"
                             }
                             ListElement{
-                                Id:2
+                                Id:3
                                 Text:qsTr("زیاد")
                                 iconSource: "qrc:/energies/high.svg"
                             }
                             ListElement{
-                                Id:3
+                                Id:4
                                 Text:qsTr("خیلی زیاد")
                                 iconSource: "qrc:/energies/higher.svg"
                             }
@@ -696,14 +724,14 @@ Item{
                         font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
                     }
                     TextField{
-                        id:textField
+                        id: estimateInput
                         font{family: appStyle.appFont;pixelSize: 28*size1F}
                         selectByMouse: true
                         renderType:Text.NativeRendering
                         placeholderTextColor: appStyle.textColor
                         verticalAlignment: Text.AlignBottom
                         Material.accent: appStyle.primaryColor
-                        placeholderText: qsTr("تخمین مدت زمان (به دقیقه)")
+                        placeholderText: qsTr("تخمین به دقیقه")  + " (" + qsTr("اختیاری") + ")"
                         horizontalAlignment: Text.AlignHCenter
                         anchors{
                             right: estimateText.left
@@ -781,7 +809,7 @@ Item{
                                 id: somedayCategoryCombo
                                 textRole: "category_name"
                                 font.pixelSize: size1F*28
-                                placeholderText: qsTr("دسته بندی موردنظر را انتخاب کنید")
+                                placeholderText: qsTr("دسته بندی") + " (" + qsTr("اختیاری") + ")"
                                 currentIndex: -1
                                 visible: somedayModel.count!==0
                                 anchors{
@@ -815,6 +843,11 @@ Item{
                                 text: qsTr("بفرست به شاید یک روزی")
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    let options = getOptions()
+                                    let categoryId = somedayCategoryCombo.currentIndex !== -1 ? somedayModel.get(somedayCategoryCombo.currentIndex).id : null
+                                    thingsApi.prepareForAdd(options,9,categoryId); // 9 is proccess list id
+                                }
                             }
                         }
                     }
@@ -871,7 +904,7 @@ Item{
                                 id: refrenceCategoryCombo
                                 textRole: "category_name"
                                 font.pixelSize: size1F*28
-                                placeholderText: qsTr("دسته بندی موردنظر را انتخاب کنید")
+                                placeholderText: qsTr("دسته بندی")
                                 currentIndex: -1
                                 visible: refrenceModel.count!==0
                                 anchors{
@@ -905,6 +938,11 @@ Item{
                                 text: qsTr("بفرست به مرجع")
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    let options = getOptions()
+                                    let categoryId = refrenceCategoryCombo.currentIndex !== -1 ? refrenceModel.get(refrenceCategoryCombo.currentIndex).id : null
+                                    thingsApi.prepareForAdd(options,4,categoryId); // 4 is refrence list id
+                                }
                             }
                         }
                     }
@@ -957,6 +995,9 @@ Item{
                                 text: qsTr("بفرست به سطل آشغال")
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    thingsApi.prepareForAdd(7,categoryId); // 7 is trash list id
+                                }
                             }
                         }
                     }
@@ -1042,6 +1083,9 @@ Item{
                                 text: qsTr("بفرست به پروژه ها")
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    projectApi.addProject(titleInput.text.trim(),detailInput.text.trim(),projectModel)
+                                }
                             }
                         }
                     }
@@ -1126,6 +1170,11 @@ Item{
                                 text: qsTr("بفرست به پروژه")
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    let options = getOptions()
+                                    let projectId = projectCategoryCombo.currentIndex !== -1 ? projectModel.get(projectCategoryCombo.currentIndex).id : null
+                                    thingsApi.prepareForAdd(options,10,null,null,null,projectId); // 10 is project list id
+                                }
                             }
                         }
                     }
@@ -1230,6 +1279,20 @@ Item{
                                 text: qsTr("بفرست به لیست انتظار")
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    let options = getOptions()
+                                    if(friendCombo.currentIndex === -1)
+                                    {
+                                        if(friendModel.count >0)
+                                            usefulFunc.showLog(qsTr("لطفا دوست خودتو انتخاب کن"),true,null,600*size1W, ltr)
+                                        else
+                                            usefulFunc.showLog(qsTr("لطفااول دوستاتو اضافه کن بعد دوست خودتو انتخاب کن"),true,null,700*size1W, ltr)
+                                        return
+                                    }
+
+                                    let friendId = friendModel.get(friendCombo.currentIndex).id
+                                    thingsApi.prepareForAdd(options,5,null,null,friendId,null); // 5 is waiting list id
+                                }
                             }
                         }
                     }
@@ -1314,6 +1377,23 @@ Item{
 
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    let options = getOptions()
+                                    if( dateInput.selectedDate.toString() === "Invalid Date")
+                                    {
+                                        usefulFunc.showLog(qsTr("لطفا زمانی که میخوای این کار رو بکنی مشخص کن"),true,null,700*size1W, ltr)
+                                        return
+                                    }
+                                    if(!clockCheck.checked)
+                                    {
+                                        dateInput.selectedDate = new Date(dateInput.selectedDate.setHours(5));
+                                        dateInput.selectedDate = new Date(dateInput.selectedDate.setMinutes(17))
+                                        dateInput.selectedDate = new Date(dateInput.selectedDate.setSeconds(17))
+                                    }
+
+                                    let dueDate = usefulFunc.formatDate(dateInput.selectedDate,false)
+                                    thingsApi.prepareForAdd(options,6,null,dueDate,null,null); // 6 is calendar list id
+                                }
                             }
                         }
                     }
@@ -1367,6 +1447,10 @@ Item{
                                 text: qsTr("بفرست به عملیات بعدی")
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    let options = getOptions()
+                                    thingsApi.prepareForAdd(options,3,null,null,null,null); // 3 is next action list id
+                                }
                             }
                         }
                     }
@@ -1436,6 +1520,10 @@ Item{
                                 text: qsTr("بفرست به انجام شده ها")
                                 radius: 10*size1W
                                 leftPadding: 35*size1W
+                                onClicked: {
+                                    let options = getOptions()
+                                    thingsApi.prepareForAdd(options,8,null,null,null,null); // 8 is Done list id
+                                }
                             }
                         }
                     }

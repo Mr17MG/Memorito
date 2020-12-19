@@ -52,5 +52,6 @@
         <file>Components/DayOfWeekRow.qml</file>
         <file>Flow/ProjectApi.qml</file>
         <file>Flow/Projects.qml</file>
+        <file>Flow/ThingsApi.qml</file>
     </qresource>
 </RCC>
