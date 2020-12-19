@@ -11,6 +11,28 @@ QtObject {
             }
         return null
     }
+    function formatDate(date,timestamp)
+    {
+        let d = date,
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+        if (month.toString().length < 2) month = '0' + month;
+        if (day.toString().length < 2) day = '0' + day;
+        let hour = d.getHours(),
+        minute = d.getMinutes(),
+        second = d.getSeconds()
+        if (hour.toString().length < 2) hour = '0' + hour;
+        if (minute.toString().length < 2) minute = '0' + minute;
+        if (second.toString().length < 2) second = '0' + second;
+        let timezone = d.toString().substr(-5);
+        let resualt = [year, month, day].join('-')+"T"+[hour, minute, second].join(':');
+        resualt += timestamp?".000":"";
+        resualt += timezone.substr(0,3)+":"+timezone.substr(3);
+        return resualt;
+    }
+
     function findInModel(key,searchField,listModel){
         var personIndex = findListModel(listModel,function(model){return key===model[searchField]},false)
         return {index: personIndex,value:listModel.get(personIndex)};
