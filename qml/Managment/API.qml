@@ -203,6 +203,14 @@ QtObject {
     }
 
     ///////////////////////////// Contexts /////////////////////////////////////
+//    function myFunction(item, index) {
+//        console.log(index + ":" + item )
+//        for (let x in item) {
+//            console.log(x);
+//        } TODO: add code for remove null items
+//    }
+//   response.result.forEach(myFunction);
+
     function getContexts(model)
     {
         if(model.count > 0)
@@ -245,6 +253,7 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 200){
+
                             model.append(response.result)
                         }
                         return model
