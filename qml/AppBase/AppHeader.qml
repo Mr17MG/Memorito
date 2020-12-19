@@ -60,23 +60,14 @@ Loader{
         }
 
         Text{
-            anchors.verticalCenter: parent.verticalCenter
-            width: nRow===3 && secondRowTitle.visible ?parent.width/2:parent.width
-            anchors.right: parent.right
+            anchors{
+                right: parent.right
+                left : parent.left
+                verticalCenter: parent.verticalCenter
+            }
             horizontalAlignment: Text.AlignHCenter
+            elide: ltr?Text.ElideRight:Text.ElideLeft
             text: mainHeaderTitle
-            font{family: appStyle.appFont;pixelSize: 50*size1F;}
-            color: appStyle.textColor
-        }
-
-        Text{
-            id: secondRowTitle
-            anchors.verticalCenter: parent.verticalCenter
-            width: nRow===3?parent.width/2:parent.width
-            anchors.left: parent.left
-            visible: nRow ===3 && text !== ""
-            horizontalAlignment: Text.AlignHCenter
-            text: anotherHeaderTitle
             font{family: appStyle.appFont;pixelSize: 50*size1F;}
             color: appStyle.textColor
         }
