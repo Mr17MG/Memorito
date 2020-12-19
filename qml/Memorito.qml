@@ -46,9 +46,10 @@ Page {
     ListModel{ id: stackPages }
     ListModel{ id: friendModel}
     ListModel{ id: contextModel}
-    ListModel{ id: somedayModel }
-    ListModel{ id: refrenceModel }
-    ListModel{ id: projectModel }
+    ListModel{ id: somedayModel}
+    ListModel{ id: refrenceModel}
+    ListModel{ id: projectModel}
+    ListModel{ id: thingModel}
 
     property var pagesCanShowInThird : ["qrc:/Flow/Collect.qml"]
 
