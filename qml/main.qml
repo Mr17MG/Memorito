@@ -88,7 +88,8 @@ ApplicationWindow {
     /********************************************************************************/
     //////////////////////////////// Main App Loader /////////////////////////////////
 
-    property string domain: isDebug?"http://memorito.local"
+    property string domain: isDebug?Qt.platform.os === "android"?"http://192.168.0.117"
+                                                                :"http://memorito.local"
                                    :"https://memorito.ir"
 
     property var dataBase: LocalStorage.openDatabaseSync("Memorito_database","1.0","a GTD based Project",10000)
