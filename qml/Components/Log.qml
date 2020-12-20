@@ -12,20 +12,22 @@ Drawer {
     height: size1H*30 + text.height
     background: Rectangle{
         color: isError?"#F44336":"#8BC34A"
-        radius: size1W*20
+        radius: size1W*10
         border.width: 0
     }
     Timer{
         interval: 5000;running: root.visible;repeat: false
         onTriggered: root.visible=false
     }
-    MouseArea{anchors.fill: parent}
+    MouseArea{anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: { root.visible=false } }
     Image{
         id:close
-        anchors.right: parent?parent.right:undefined
-        anchors.rightMargin: size1W*20
-        anchors.verticalCenter: text.verticalCenter
-        width: size1W*20
+        anchors{
+            right: parent?parent.right:undefined
+            rightMargin: size1W*20
+            verticalCenter: text.verticalCenter
+        }
+        width: size1W*30
         height: width
         sourceSize.width: width*2
         sourceSize.height: height*2
@@ -33,24 +35,26 @@ Drawer {
         visible: false
     }
     ColorOverlay{
+        color: "white"
+        anchors.fill: close
+        source: close
         MouseArea{
-            anchors.fill: parent
-            anchors.top: parent?parent.top:undefined
-            anchors.topMargin: -10*size1H
-            anchors.bottom: parent?parent.bottom:undefined
-            anchors.bottomMargin: -10*size1H
-            anchors.left: parent?parent.left:undefined
-            anchors.leftMargin: -10*size1W
-            anchors.right: parent?parent.right:undefined
-            anchors.rightMargin: -10*size1W
             cursorShape:Qt.PointingHandCursor
+            anchors{
+                fill: parent
+                top: parent?parent.top:undefined
+                topMargin: -10*size1H
+                bottom: parent?parent.bottom:undefined
+                bottomMargin: -10*size1H
+                left: parent?parent.left:undefined
+                leftMargin: -10*size1W
+                right: parent?parent.right:undefined
+                rightMargin: -10*size1W
+            }
             onClicked: {
                 root.visible=false
             }
         }
-        color: "white"
-        anchors.fill: close
-        source: close
     }
 
     Text{
