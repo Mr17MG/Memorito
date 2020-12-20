@@ -18,37 +18,37 @@ Loader{
             height: parent.height
             initialItem: Rectangle{color: "transparent"}
             pushEnter: Transition {
-                     PropertyAnimation {
-                         property: "opacity"
-                         from: 0
-                         to:1
-                         duration: 100
-                     }
-                 }
-                 pushExit: Transition {
-                     PropertyAnimation {
-                         property: "opacity"
-                         from: 1
-                         to:0
-                         duration: 100
-                     }
-                 }
-                 popEnter: Transition {
-                     PropertyAnimation {
-                         property: "opacity"
-                         from: 0
-                         to:1
-                         duration: 100
-                     }
-                 }
-                 popExit: Transition {
-                     PropertyAnimation {
-                         property: "opacity"
-                         from: 1
-                         to:0
-                         duration: 100
-                     }
-                 }
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 0
+                    to:1
+                    duration: 100
+                }
+            }
+            pushExit: Transition {
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 1
+                    to:0
+                    duration: 100
+                }
+            }
+            popEnter: Transition {
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 0
+                    to:1
+                    duration: 100
+                }
+            }
+            popExit: Transition {
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 1
+                    to:0
+                    duration: 100
+                }
+            }
         }
 
         Loader{
