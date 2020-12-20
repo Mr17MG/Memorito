@@ -7,6 +7,7 @@ import "qrc:/AppBase/" as Base
 import "qrc:/Functions/" as F
 import QtQuick.LocalStorage 2.14 /*as SQLITE*/
 import "qrc:/Splash/" as Splash
+import MTools 1.0
 ApplicationWindow {
     id:rootWindow
 
@@ -57,7 +58,7 @@ ApplicationWindow {
     /********************************************************************************/
     ////////////////////////////// Application appStyle ////////////////////////////////
     Base.AppStyle{id:appStyle}
-
+    MTools{id:myTools}
     Material.theme: Number(appSetting.value("AppTheme",0))
     Material.onThemeChanged: {
         appSetting.setValue("AppTheme",Material.theme)
