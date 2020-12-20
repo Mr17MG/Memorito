@@ -46,12 +46,10 @@ int main(int argc, char *argv[])
     //**************** Registry C++ To QML ****************//
     qmlRegisterType<MSysInfo>("MSysInfo", 1, 0, "SystemInfo");
     qmlRegisterType<MSecurity>("MSecurity", 1, 0, "MSecurity");
-    qmlRegisterType<QCustomDate>("ir.myco.date", 1 ,0, "CustomDate");
-    qmlRegisterType<QDateConvertor>("ir.myco.date", 1, 0, "DateConvertor");
+    qmlRegisterType<QCustomDate>("MDate", 1 ,0, "CustomDate");
+    qmlRegisterType<QDateConvertor>("MDate", 1, 0, "DateConvertor");
+    qmlRegisterType<Tools>("MTools", 1, 0, "MTools");
     //******************************************************//
-//    Tools tools;
-//    QString m = tools.encodeToBase64("/home/mohammad/Pictures/memoritoIcon.svg");
-//    qDebug()<<tools.saveBase64asFile("mg","svg",m);
 
     //////////////
     const QUrl url(QStringLiteral("qrc:/main.qml"));
