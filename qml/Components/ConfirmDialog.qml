@@ -13,7 +13,7 @@ Dialog{
     property var accepted
     signal acceptSignal
     width: size1W*480
-    height: size1H*340 + text.lineHeight
+    height: size1H*280 + text.height
     modal: true
     closePolicy: Dialog.NoAutoClose
     Shortcut {
@@ -50,18 +50,23 @@ Dialog{
         color: appStyle.textColor
         font { family: appStyle.appFont; pixelSize: size1F*30 }
         horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
         width: parent.width
-        anchors.top: title.bottom
-        anchors.topMargin: size1H*25
-        wrapMode: Text.WordWrap
+        anchors{
+            top: title.bottom
+            topMargin: size1H*40
+        }
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
     Flow{
+        id:flow
         layoutDirection: ltr? Qt.LeftToRight : Qt.RightToLeft
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: size1H*0
+        anchors{
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+            bottomMargin: size1H*0
+        }
         spacing: size1W*30
-
         ConfirmDialogButton{
             id:acceptBtn
             title: qsTr("بلی")
