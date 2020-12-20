@@ -35,7 +35,7 @@
 ****************************************************************************/
 
 import QtQuick 2.11
-//import ir.myco.calendar 1.0
+//import ir.mrmg.calendar 1.0
 import Qt.labs.calendar 1.0
 DayOfWeekRow {
     id: control

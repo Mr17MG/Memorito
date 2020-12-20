@@ -2,7 +2,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
-import ir.myco.date 1.0
+import MDate 1.0
 import "./"
 import QtGraphicalEffects 1.14
 Item {
