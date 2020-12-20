@@ -156,6 +156,7 @@ Item{
             ListElement{
                 title:qsTr("پردازش نشده‌ها")
                 iconSrc: "qrc:/process.svg"
+                pageSource: "qrc:/Flow/Unprocessed.qml"
             }
             ListElement{
                 title:qsTr("عملیات بعدی")
