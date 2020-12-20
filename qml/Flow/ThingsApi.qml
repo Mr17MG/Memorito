@@ -18,7 +18,7 @@ QtObject {
         addThing(thingModel,title,detail,listId,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId,projectId)
     }
 
-    function getThings(model)
+    function getThings(model,listId)
     {
         if(model.count>0)
         {
@@ -28,7 +28,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId
+        let query = "user_id=" + currentUser.userId + "&list_id="+listId
         xhr.open("GET", domain+"/api/v1/things"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -99,7 +99,6 @@ QtObject {
                     list_id : listId
 
                 }, null, 1);
-        console.log(json)
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -120,8 +119,13 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            console.log(JSON.stringify(response.result))
+                            usefulFunc.showLog(" <b>'"+ title+" '</b>" +qsTr("با موفقیت افزوده شد"),false,null,700*size1W, ltr)
                             model.append(response.result)
+                            detailInput.clear()
+                            titleInput.clear()
+                            attachModel.clear()
+                            processBtn.checked = false
+
                         }
                     }
                     else {
@@ -158,7 +162,6 @@ QtObject {
                     category_id : categoryId,
                     project_id : projectId,
                     list_id : listId
-
                 }, null, 1);
 
         var xhr = new XMLHttpRequest();
@@ -241,4 +244,64 @@ QtObject {
             }
         }
     }
+
+
+    function addFiles(fileModel,filesCount,thingId)
+    {
+        let fileList= [];
+        for(let i = 0; i < filesCount; i++)
+        {
+            let base64 = myTools.encodeToBase64(String(fileModel.get(i).fileSource.replace("file://","")))
+            fileList[i] = {"base64_file" : base64 , "file_extension": fileModel.get(i).fileExtension ,"file_name" :fileModel.get(i).fileName}
+        }
+
+        let json = JSON.stringify(
+                {
+                    things_id: thingId,
+                    user_id: currentUser.userId,
+                    file_list: fileList
+                }, null, 1);
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("POST", domain+"/api/v1/files",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("در حال ارسال فایل ها");
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 201){
+                            usefulFunc.showLog(qsTr("فایل‌ها با موفقیت افزوده شد"),false,null,700*size1W, ltr)
+//                            let result = response.result
+//                            console.log(myTools.saveBase64asFile(result[0].file_name,result[0].file_extension,result[0].file))
+                        }
+                    }
+                    else {
+                        if(response.code === 406)
+                        {
+                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                        }
+                        else
+                            usefulFunc.showLog(response.message,true,mainColumn,mainColumn.width, ltr)
+                    }
+
+                }
+                catch(e) {
+                    console.log(e)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
+                }
+            }
+        }
+    }
+
 }
