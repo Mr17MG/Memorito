@@ -8,6 +8,7 @@ import "qrc:/Managment/" as Managment
 
 Item{
     ListModel{id:attachModel}
+
     Flickable{
         id: mainFlick
         height: parent.height
@@ -298,6 +299,7 @@ Item{
                                 for(var i=0;i<files.length;i++)
                                 {
                                     files[i] = files[i].trim()
+                                    // TODO: remove Repetitious Files
                                     attachModel.append(
                                                 {
                                                     "fileSource": files[i],
