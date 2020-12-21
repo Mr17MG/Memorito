@@ -297,7 +297,8 @@ QtObject {
 
                 }
                 catch(e) {
-                    console.log(e)
+                    console.log(xhr.responseText)
+                    console.error(e)
                     usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
                 }
             }

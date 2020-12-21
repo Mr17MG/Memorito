@@ -98,7 +98,7 @@ ComboBox {
             anchors{
                 left: parent.left
                 leftMargin: 55*size1W
-                right: iconImg.source!==""?iconImg.left:parent.right
+                right: iconImg.visible?iconImg.left:parent.right
             }
         }
         Rectangle{
@@ -115,6 +115,7 @@ ComboBox {
         }
         Image {
             id: iconImg
+            visible: source !== ""
             anchors{
                 verticalCenter: parent.verticalCenter
                 right: parent.right
@@ -140,6 +141,7 @@ ComboBox {
             anchors.fill: parent
             Image {
                 id: displayIconImg
+                visible: source !== ""
                 anchors{
                     verticalCenter: parent.verticalCenter
                     right: parent.right
@@ -157,7 +159,7 @@ ComboBox {
                 font: delegateItem.font
                 width: delegateItem.width
                 anchors{
-                    right: displayIconImg.left
+                    right: displayIconImg.visible?displayIconImg.left:parent.right
                     rightMargin: size1W*15
                     leftMargin: size1W*15
                     verticalCenter: parent.verticalCenter
