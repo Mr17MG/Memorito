@@ -295,11 +295,12 @@ Item{
                             }
                             onDropped: {
                                 dragItem.opacity = 1
-                                var files = drop.text.trim().split("\n");
-                                for(var i=0;i<files.length;i++)
+                                let files = drop.text.trim().split("\n");
+                                for(let i=0;i<files.length;i++)
                                 {
-                                    files[i] = files[i].trim()
-                                    // TODO: remove Repetitious Files
+                                    files[i] = decodeURIComponent(files[i].trim())
+                                    if(usefulFunc.findInModel(files[i],"fileSource",attachModel).index !== null)
+                                        continue
                                     attachModel.append(
                                                 {
                                                     "fileSource": files[i],
@@ -328,14 +329,18 @@ Item{
                                 folder: shortcuts.pictures
                                 sidebarVisible: false
                                 onAccepted: {
-                                    var files = fileDialog.fileUrls;
-                                    for(var i=0;i<files.length;i++)
+                                    let files = fileDialog.fileUrls;
+                                    for(let i=0;i<files.length;i++)
                                     {
+                                        let file = decodeURIComponent(files[i].trim())
+                                        if(usefulFunc.findInModel(file,"fileSource",attachModel).index !== null)
+                                            continue
+
                                         attachModel.append(
                                                     {
-                                                        "fileSource":files[i],
-                                                        "fileName":files[i].split('/').pop().split('.')[0],
-                                                        "fileExtension":files[i].split('.').pop()
+                                                        "fileSource":file,
+                                                        "fileName":file.split('/').pop().split('.')[0],
+                                                        "fileExtension":file.split('.').pop()
                                                     }
                                                     )
                                     }
