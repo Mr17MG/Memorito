@@ -2,6 +2,7 @@ import QtQuick 2.14 // Require For Listview
 import QtGraphicalEffects 1.14 // Require For ColorOverlay
 import "qrc:/Components/" as App // Require For App.Button
 import QtQuick.Controls.Material 2.14
+import QtQuick.Controls 2.14 // Require For ScrollBar
 
 Item{
     anchors.fill: parent
@@ -84,6 +85,15 @@ Item{
             topMargin : 10*size1H
             bottom: parent.bottom
         }
+        ScrollBar.vertical: ScrollBar {
+            hoverEnabled: true
+            visible: nRow !== 1
+            active: hovered || pressed
+            orientation: Qt.Vertical
+            anchors.right: listView.right
+            height: parent.height
+            width: hovered || pressed?18*size1W:8*size1W
+        }
 
         width:parent.width
         delegate: App.Button{
@@ -160,7 +170,8 @@ Item{
             }
             ListElement{
                 title:qsTr("عملیات بعدی")
-                iconSrc: "qrc:/process.svg"
+                iconSrc: "qrc:/nextAction.svg"
+                pageSource: "qrc:/Flow/NextAction.qml"
             }
             ListElement{
                 title:qsTr("لیست انتظار")
