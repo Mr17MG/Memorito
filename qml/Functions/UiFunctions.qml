@@ -46,7 +46,7 @@ QtObject {
                 return 1;
         }
         else {
-            if((rootWindow.width>window.width/1.75) || (rootWindow.width>1000))
+            if((rootWindow.width>window.width/1.75) || (rootWindow.width>900))
                 return 3;
             else if(rootWindow.width>window.width/3 || (rootWindow.width>450))
                 return 2;

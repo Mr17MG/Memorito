@@ -98,7 +98,7 @@ ComboBox {
             anchors{
                 left: parent.left
                 leftMargin: 55*size1W
-                right: iconImg.visible?iconImg.left:parent.right
+                right: parent.right
             }
         }
         Rectangle{
