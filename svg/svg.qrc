@@ -45,5 +45,8 @@
         <file>energies/medium.svg</file>
         <file>clock.svg</file>
         <file>portfolio.svg</file>
+        <file>unprocess.svg</file>
+        <file>nextAction.svg</file>
+        <file>todo.svg</file>
     </qresource>
 </RCC>
