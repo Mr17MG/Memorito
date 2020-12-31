@@ -9,7 +9,8 @@
 #include "cpp/msecurity.h" // Require For MSecurity
 #include "cpp/qcustomdate.h"// Require For QCustomDate
 #include "cpp/qdateconvertor.h"// Require For QDateConvertor
-#include "tools.h"
+#include "tools.h" // Require For Tools
+#include "memoritoenum.h"
 
 int main(int argc, char *argv[])
 {
@@ -49,6 +50,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<QCustomDate>("MDate", 1 ,0, "CustomDate");
     qmlRegisterType<QDateConvertor>("MDate", 1, 0, "DateConvertor");
     qmlRegisterType<Tools>("MTools", 1, 0, "MTools");
+    qmlRegisterType<MemoritoEnum>("MEnum", 1, 0, "Memorito");
     //******************************************************//
 
     //////////////

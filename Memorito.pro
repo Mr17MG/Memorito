@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         cpp/main.cpp \
+        cpp/memoritoenum.cpp \
         cpp/msecurity.cpp \
         cpp/msysinfo.cpp \
         cpp/qcustomdate.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
         cpp/translator.cpp
 
 HEADERS += \
+    cpp/memoritoenum.h \
     cpp/msecurity.h \
     cpp/msysinfo.h \
     cpp/qcustomdate.h \
