@@ -48,5 +48,56 @@
         <file>unprocess.svg</file>
         <file>nextAction.svg</file>
         <file>todo.svg</file>
+        <file>pack/aac.svg</file>
+        <file>pack/ace.svg</file>
+        <file>pack/ai.svg</file>
+        <file>pack/aut.svg</file>
+        <file>pack/avi.svg</file>
+        <file>pack/bin.svg</file>
+        <file>pack/bmp.svg</file>
+        <file>pack/cad.svg</file>
+        <file>pack/cdr.svg</file>
+        <file>pack/css.svg</file>
+        <file>pack/db.svg</file>
+        <file>pack/dmg.svg</file>
+        <file>pack/doc.svg</file>
+        <file>pack/docx.svg</file>
+        <file>pack/dwf.svg</file>
+        <file>pack/dwg.svg</file>
+        <file>pack/eps.svg</file>
+        <file>pack/exe.svg</file>
+        <file>pack/flac.svg</file>
+        <file>pack/gif.svg</file>
+        <file>pack/hlp.svg</file>
+        <file>pack/htm.svg</file>
+        <file>pack/html.svg</file>
+        <file>pack/ini.svg</file>
+        <file>pack/iso.svg</file>
+        <file>pack/java.svg</file>
+        <file>pack/jpg.svg</file>
+        <file>pack/js.svg</file>
+        <file>pack/mkv.svg</file>
+        <file>pack/mov.svg</file>
+        <file>pack/mp3.svg</file>
+        <file>pack/mp4.svg</file>
+        <file>pack/mpg.svg</file>
+        <file>pack/pdf.svg</file>
+        <file>pack/php.svg</file>
+        <file>pack/png.svg</file>
+        <file>pack/ppt.svg</file>
+        <file>pack/ps.svg</file>
+        <file>pack/psd.svg</file>
+        <file>pack/rar.svg</file>
+        <file>pack/rss.svg</file>
+        <file>pack/rtf.svg</file>
+        <file>pack/svg.svg</file>
+        <file>pack/swf.svg</file>
+        <file>pack/sys.svg</file>
+        <file>pack/tiff.svg</file>
+        <file>pack/txt.svg</file>
+        <file>pack/xls.svg</file>
+        <file>pack/xlsx.svg</file>
+        <file>pack/zip.svg</file>
+        <file>pack/unknown.svg</file>
     </qresource>
 </RCC>
