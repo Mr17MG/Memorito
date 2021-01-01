@@ -166,5 +166,34 @@ Item {
             }
         }
     }
+    Skin.Button{
+        id: logoutBtn
+        height: size1H*75
+        width: 300*size1W
+        anchors{
+            bottom: parent.bottom
+            bottomMargin: 20*size1H
+            right: parent.right
+            rightMargin: 30*size1W
+        }
+        flat: true
+        Material.background: appStyle.primaryInt
+        radius: size1W*20
+        text: qsTr("خروج از حساب")
+        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+        Material.foreground: isEditable? "white":appStyle.textColor
+        onClicked: {
+            usefulFunc.showConfirm(
+                        qsTr("خروج از حساب"),
+                        qsTr("آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟"),
+                        function()
+                        {
+                            mainLoader.source = "qrc:/Account/AccountMain.qml"
+                            currentUser = []
+                            userDbFunc.deleteUser(currentUser.userId)
+                        }
+                        )
+        }
+    }
 
 }
