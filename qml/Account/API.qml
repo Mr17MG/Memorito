@@ -206,6 +206,7 @@ QtObject {
                         if(response.code === 202){
                             mainLoader.source = "qrc:/Memorito.qml"
                             userDbFunc.addUser(response.result)
+                            currentUser = userDbFunc.getUserByUserId(users.get(0).userId)
                         }
                         else if(response.code === 200)
                         {
