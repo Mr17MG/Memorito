@@ -6,18 +6,36 @@ Drawer {
     id:root
     property alias text : text.text
     property bool isError: true
+    property var callAfterClose
+    property int index: 0
+    property int index2: 0
+    property int endTime : 5000
+    property int now: 1000
     modal: false
     closePolicy: Dialog.NoAutoClose
     width: 360*size1W
     height: size1H*30 + text.height
+    onClosed: {
+        callAfterClose()
+    }
+
+
     background: Rectangle{
         color: isError?"#F44336":"#8BC34A"
         radius: size1W*10
         border.width: 0
     }
     Timer{
-        interval: 5000;running: root.visible;repeat: false
-        onTriggered: root.visible=false
+        id:timer2
+        interval: 1000;running: root.visible;repeat: true
+        onTriggered: {
+            root.now += 1000
+        }
+    }
+    Timer{
+        id:timer
+        interval: endTime;running: root.visible;repeat: false
+        onTriggered: {root.visible=false}
     }
     MouseArea{anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: { root.visible=false } }
     Image{
@@ -62,11 +80,13 @@ Drawer {
         text: "محل نمایش خطا"
         color: "white"
         width: parent.width - close.width
-        anchors.right: close.left
-        anchors.rightMargin: size1W*10
-        anchors.left: parent.left
-        anchors.leftMargin: size1W*5
-        anchors.verticalCenter: parent?parent.verticalCenter:undefined
+        anchors{
+            right: close.left
+            rightMargin: size1W*10
+            left: parent.left
+            leftMargin: size1W*5
+            verticalCenter: parent?parent.verticalCenter:undefined
+        }
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
