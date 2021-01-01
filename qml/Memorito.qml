@@ -6,7 +6,6 @@ import QtQuick.Controls.Material 2.14 // // Require For Material Theme
 import "qrc:/AppBase" as Base
 import "qrc:/Functions" as F
 Page {
-
     property int nRow : uiFunctions.checkDisplayForNumberofRows(Screen)
     onNRowChanged: {
         if(nRow >= 2)
@@ -19,10 +18,16 @@ Page {
     property real firstColumnMaxWidth: nRow ==2?rootWindow.width*2.5/8:rootWindow.width*1.80/8
 
     onWidthChanged: {
-        if(rootWindow.width>Screen.width/3 && drawerLoader.active && drawerLoader.item.visible)
+        if( width=== (Qt.platform.os === "android" || Qt.platform.os === "ios"?width:appSetting.value("AppWidth" ,640)))
+            return
+
+        if(rootWindow.width>Screen.width/3  && drawerLoader.active )
         {
-            drawerLoader.item.close()
-            drawerLoader.item.modal=false
+            if(drawerLoader.item.visible)
+            {
+                drawerLoader.item.close()
+                drawerLoader.item.modal=false
+            }
         }
 
         if(!firstColumn.active)
@@ -44,14 +49,34 @@ Page {
     FirstColumn{id:firstColumn;anchors.right: parent.right;}
 
     ListModel{ id: stackPages }
-    ListModel{ id: friendModel}
-    ListModel{ id: contextModel}
-    ListModel{ id: somedayModel}
-    ListModel{ id: refrenceModel}
-    ListModel{ id: projectModel}
     ListModel{ id: thingModel}
+    ListModel{ id: nextActionModel}
+    ListModel{ id: waitingModel}
+    ListModel{ id: calendarModel}
+    ListModel{ id: somedayModel}
+    ListModel{ id: projectModel}
+    ListModel{ id: refrenceModel}
+    ListModel{ id: doneModel}
+    ListModel{ id: trashModel}
+    ListModel{ id: contextModel}
+    ListModel{ id: friendModel}
+    ListModel{ id: refrenceCategoryModel}
+    ListModel{ id: somedayCategoryModel}
+    ListModel{ id: projectCategoryModel}
 
-    property var pagesCanShowInThird : ["qrc:/Flow/Collect.qml"]
+    ListModel{id: energyModel
+        ListElement{ Id:1; Text:qsTr("کم"); iconSource: "qrc:/priorities/low.svg";}
+        ListElement{ Id:2; Text:qsTr("متوسط"); iconSource: "qrc:/priorities/medium.svg";}
+        ListElement{ Id:3; Text:qsTr("زیاد"); iconSource: "qrc:/priorities/high.svg";}
+        ListElement{ Id:4; Text:qsTr("فوری"); iconSource: "qrc:/priorities/higher.svg";}
+    }
+
+    ListModel{id:priorityModel
+        ListElement{ Id:1; Text:qsTr("کم"); iconSource: "qrc:/energies/low.svg";}
+        ListElement{ Id:2; Text:qsTr("متوسط"); iconSource: "qrc:/energies/medium.svg";}
+        ListElement{ Id:3; Text:qsTr("زیاد");  iconSource: "qrc:/energies/high.svg";}
+        ListElement{ Id:4; Text:qsTr("خیلی زیاد"); iconSource: "qrc:/energies/higher.svg";}
+    }
 
     Component.onCompleted: {
         stackPages.append({"page":"","title":qsTr("مموریتو")})
@@ -77,7 +102,7 @@ Page {
         sourceComponent: Drawer{
             Base.DrawerBody{}
             Overlay.modal: Rectangle {
-                color: getAppTheme()?"#aa606060":"#80000000"
+                color: appStyle.appTheme?"#aa606060":"#80000000"
             }
             y: header.height
             height: drawerLoader.height
@@ -85,13 +110,13 @@ Page {
             edge: ltr?Qt.LeftEdge:Qt.RightEdge
             dragMargin:0
             background:Rectangle{
-                color: getAppTheme()?"#424242":"#f5f5f5"
+                color: appStyle.appTheme?"#424242":"#f5f5f5"
                 LinearGradient {
                     anchors.fill: parent
                     start: Qt.point(ltr?0:drawerLoader.height, 0)
                     end: Qt.point(ltr?drawerLoader.height:0, 0)
                     gradient: Gradient {
-                        GradientStop {position: 0.0;color: getAppTheme()?"#30300":"#ffffff"}
+                        GradientStop {position: 0.0;color: appStyle.appTheme?"#30300":"#ffffff"}
                         GradientStop {position: 1.0;color: "transparent"}
                     }
                 }
