@@ -17,7 +17,9 @@ public:
         Trash,
         Done,
         Someday,
-        Project
+        Project,
+        Contexts,
+        Friends
     };
     Q_ENUM(Lists)
     explicit MemoritoEnum(QObject *parent = nullptr);
