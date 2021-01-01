@@ -64,7 +64,7 @@ QtObject {
         }
     }
 
-    function addProject(projectName,projectGoal,model)
+    function addProject(projectName,projectGoal,model,fromCollect=0,oldModel=null,modelIndex=null)
     {
         let json = JSON.stringify(
                 {
@@ -92,8 +92,21 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            console.log(JSON.stringify(response.result))
+                            usefulFunc.showLog(" <b>'"+qsTr("پروژه جدید با نام")+ " "+ projectName+" '</b>" +qsTr("با موفقیت افزوده شد"),false,null,700*size1W, ltr)
                             model.append(response.result)
+
+                            if(fromCollect === 1)
+                            {
+                                detailInput.clear()
+                                titleInput.clear()
+                                attachModel.clear()
+                                processBtn.checked = false
+                            }
+                            else if(fromCollect === 2)
+                            {
+                                thingsApi.deleteThing(oldModel.get(modelIndex).id, oldModel, modelIndex)
+                                usefulFunc.mainStackPop()
+                            }
                         }
                     }
                     else {
