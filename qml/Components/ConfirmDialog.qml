@@ -12,7 +12,9 @@ Dialog{
     property var canseled
     property var accepted
     signal acceptSignal
-    width: size1W*480
+    property real oneLineWidth
+    width: rootWindow.width/2<480*size1W ? 480*size1W:rootWindow.width/2>1000*size1W?1000*size1W:rootWindow.width/2
+
     height: size1H*280 + text.height
     modal: true
     closePolicy: Dialog.NoAutoClose
