@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.1
 Item {
     ProjectApi{id: projectApi}
     Component.onCompleted: {
-        projectApi.getProjects(projectModel)
+        projectApi.getProjects(projectCategoryModel)
     }
 
     GridView{
@@ -131,7 +131,7 @@ Item {
         }
 
         /***********************************************/
-        model: projectModel
+        model: projectCategoryModel
     }
 
     App.Button{
@@ -178,7 +178,7 @@ Item {
             id: addDialog
             property bool isAdd: true
             property alias projectName: projectName
-            property alias projectGoalArea: projectGoalArea
+            property alias projectGoalArea: flickTextArea
             property int projectId : -1
             property int modelIndex: -1
             parent: mainColumn
@@ -195,9 +195,9 @@ Item {
                 if(projectName.text.trim() !== "")
                 {
                     if(isAdd){
-                        projectApi.addProject(projectName.text.trim(),projectGoalArea.text.trim(),projectModel)
+                        projectApi.addProject(projectName.text.trim(),projectGoalArea.text.trim(),projectCategoryModel)
                     } else {
-                        projectApi.editProject(projectId,projectName.text.trim(),projectGoalArea.text.trim(),projectModel,modelIndex)
+                        projectApi.editProject(projectId,projectName.text.trim(),projectGoalArea.text.trim(),projectCategoryModel,modelIndex)
                     }
                     addDialog.close()
                 }
@@ -210,9 +210,9 @@ Item {
                 placeholderText: qsTr("نام پروژه")
                 anchors{
                     right: parent.right
-                    rightMargin: 40*size1W
+                    rightMargin: 25*size1W
                     left: parent.left
-                    leftMargin: 40*size1W
+                    leftMargin: 25*size1W
                     top: parent.top
                     topMargin: 30*size1W
                 }
@@ -223,65 +223,19 @@ Item {
                 filedInDialog: true
                 maximumLength: 50
             }
-
-            Flickable{
-                id: projectFlick
+            App.FlickTextArea{
+                id:flickTextArea
                 anchors{
                     top: projectName.bottom
-                    topMargin: 30*size1H
+                    topMargin: 25*size1H
                     right: parent.right
-                    rightMargin: 40*size1W
+                    rightMargin: 25*size1W
                     left: parent.left
-                    leftMargin: 40*size1W
+                    leftMargin: 25*size1W
                 }
-                width: parent.width
-                height: 230*size1H
-                clip: true
-                contentHeight: 220*size1H
-                contentWidth: parent.width - 40 *size1W
-                flickableDirection: Flickable.VerticalFlick
-                onContentYChanged: {
-                    if(contentY<0 || contentHeight < projectFlick.height)
-                        contentY = 0
-                    else if(contentY > (contentHeight - projectFlick.height))
-                        contentY = (contentHeight - projectFlick.height)
-                }
-                onContentXChanged: {
-                    if(contentX<0 || contentWidth < projectFlick.width)
-                        contentX = 0
-                    else if(contentX > (contentWidth-projectFlick.width))
-                        contentX = (contentWidth-projectFlick.width)
-                }
-
-                TextArea.flickable: App.TextArea{
-                    id:projectGoalArea
-                    placeholderText: qsTr("هدف پروژه") + " ("+qsTr("اختیاری")+")"
-                    horizontalAlignment: ltr?Text.AlignLeft:Text.AlignRight
-                    rightPadding: 20*size1W
-                    leftPadding: 20*size1W
-                    topPadding: 20*size1H
-                    bottomPadding: 10*size1H
-                    clip: true
-                    color: appStyle.textColor
-                    wrapMode: Text.WordWrap
-                    areaInDialog: true
-                    Material.accent: appStyle.primaryColor
-                    font{family: appStyle.appFont;pixelSize:  25*size1F;bold:false}
-                    placeholderTextColor: getAppTheme()?"#ADffffff":"#8D000000"
-                    background: Rectangle{border.width: 2*size1W; border.color: projectGoalArea.focus? appStyle.primaryColor : getAppTheme()?"#ADffffff":"#8D000000";color: "transparent";radius: 15*size1W}
-                    placeholder.anchors.rightMargin: 20*size1W
-                }
-
-                ScrollBar.vertical: ScrollBar {
-                    hoverEnabled: true
-                    active: hovered || pressed
-                    orientation: Qt.Vertical
-                    anchors.right: projectFlick.right
-                    height: parent.height
-                    width: hovered || pressed?18*size1W:8*size1W
-                }
+                placeholderText: qsTr("هدف پروژه") + " ("+qsTr("اختیاری")+")"
+                areaInDialog:true
             }
-
         }
     }
 
@@ -299,7 +253,7 @@ Item {
             dialogTitle: qsTr("حذف")
             dialogText: qsTr("آیا مایلید که") + " '" + projectName + "' " + qsTr("را حذف کنید؟")
             accepted: function() {
-                projectApi.deleteProject(projectId,projectModel,modelIndex)
+                projectApi.deleteProject(projectId,projectCategoryModel,modelIndex)
             }
         }
     }
