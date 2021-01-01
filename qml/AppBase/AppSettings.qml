@@ -33,7 +33,7 @@ Item {
                 id: themeSwitch
                 Material.accent: appStyle.primaryColor
                 Material.theme: Material.Light
-                checked: getAppTheme()?false:true
+                checked: appStyle.appTheme?false:true
                 onCheckedChanged: {
                     setAppTheme(checked?0:1)
                 }

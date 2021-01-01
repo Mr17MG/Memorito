@@ -744,7 +744,7 @@ Item {
                     anchors.centerIn: parent
                     width: timePicker.timeButtonsPaneSize + size1W*10
                     height: timePicker.timeButtonsPaneSize + 10*size1W
-                    color: getAppTheme() === Material.Light? Material.color(Material.Grey, Material.Shade300):Material.color(Material.Grey, Material.Shade700)
+                    color: appStyle.appTheme === Material.Light? Material.color(Material.Grey, Material.Shade300):Material.color(Material.Grey, Material.Shade700)
                     radius: width / 2
                 }
 

@@ -31,7 +31,7 @@ T.TextField {
     Label {
         id: controlPlaceHolder
         text: control.placeholderText
-        color: control.focus || control.text!==""?appStyle.textColor: getAppTheme()?"#B3ffffff":"#B3000000"
+        color: control.focus || control.text!==""?appStyle.textColor: appStyle.placeholderColor
         y: control.focus || control.text!==""?-10*size1H:height-10*size1H
         anchors.right:  control.right
         anchors.rightMargin: parent.padding + 10*size1W
@@ -45,8 +45,8 @@ T.TextField {
             anchors.rightMargin: -15*size1W
             height: parent.height
             z:-1
-            color:  filedInDialog?(getAppTheme()?"#3f3f3f":"#ffffff")
-                                 :(getAppTheme()?"#2f2f2f":"#fafafa")
+            color: filedInDialog?appStyle.dialogBackgroundColor
+                                 :appStyle.appBackgroundColor
             visible: control.focus || control.text!==""
             radius: 15*size1W
         }
@@ -54,7 +54,7 @@ T.TextField {
     Label {
         id: counterLabel
         text: control.length+" / "+control.maximumLength
-        color: getAppTheme()?"#B3ffffff":"#B3000000"
+        color: appStyle.placeholderColor
         y: control.height-15*size1H
         visible: hasCounter
         anchors{
@@ -68,15 +68,15 @@ T.TextField {
             anchors.rightMargin: -15*size1W
             height: parent.height
             z:-1
-            color: filedInDialog? ( getAppTheme()?"#3f3f3f":"#ffffff")
-                                : ( getAppTheme()?"#2f2f2f":"#fafafa")
+            color: filedInDialog? appStyle.dialogBackgroundColor
+                                : appStyle.appBackgroundColor
             radius: 15*size1W
         }
     }
     background: Rectangle {
         id: bgRect
         anchors.fill: parent
-        border.color: control.focus? appStyle.primaryColor : getAppTheme()?"#ADffffff":"#8D000000"
+        border.color: control.focus? appStyle.primaryColor : appStyle.borderColor
         radius: 15*size1W
         color: "transparent"
     }
