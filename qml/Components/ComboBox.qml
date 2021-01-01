@@ -24,6 +24,7 @@ ComboBox {
     property string placeholderIcon: ""
     property string displayIcon:  iconRole?"":""
     property bool hasClear: true
+    Material.accent: appStyle.primaryColor
 
     signal error();
     signal resetColor()
@@ -103,7 +104,8 @@ ComboBox {
         }
         Rectangle{
             id:bottomBorder
-            color: appStyle.primaryColor
+            color: control.activeFocus ? control.Material.accentColor
+                                       : (control.hovered ? control.Material.primaryTextColor : control.Material.hintTextColor)
             height: size1H*3;
             anchors{
                 right: parent.right
