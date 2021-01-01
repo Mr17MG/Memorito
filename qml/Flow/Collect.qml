@@ -2,17 +2,34 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
 import QtGraphicalEffects 1.14
+import QtQuick.Layouts 1.15
 import "qrc:/Components/" as App
-import QtQuick.Dialogs 1.2
 import "qrc:/Managment/" as Managment
+import MEnum 1.0
 
 Item{
+
     ListModel{id:attachModel}
+
+    ThingsApi{ id: thingsApi}
+
+    property bool isDual: prevPageModel?true:false
+    property var prevPageModel
+    property int modelIndex: -1
+    property var options: []
+    property int listId: -1
+
+    onPrevPageModelChanged: {
+        if(prevPageModel.has_files === 1)
+        {
+            thingsApi.getFiles(attachModel,prevPageModel.id)
+        }
+    }
 
     Flickable{
         id: mainFlick
         height: parent.height
-        width: nRow==3 && processBtn.checked?parent.width/2 : parent.width
+        width: nRow==3 && (listId === Memorito.Process || listId === Memorito.Collect) &&  isDual?parent.width/2 : parent.width
         clip:true
         contentHeight: item1.height
         anchors{
@@ -43,479 +60,120 @@ Item{
         Item{
             id:item1
             width: parent.width
-            height: titleItem.height+control.height+fileRect.height+processBtn.height + 100*size1H + processLoader.height
-            Item{
-                id: titleItem
-                width: parent.width
-                height: 100*size1H
+            height: mainFlow.height + (listId === Memorito.Process?50*size1H:100*size1H)
+            Flow{
+                id: mainFlow
+                spacing: 25*size1H
                 anchors{
                     top: parent.top
                     topMargin: 15*size1H
-                    left: parent.left
                     right: parent.right
                     rightMargin: 25*size1W
+                    left: parent.left
                     leftMargin: 25*size1W
                 }
-                App.TextInput{
-                    id:titleInput
-                    placeholderText: qsTr("چی تو ذهنته؟")
+
+                Item{
+                    id: titleItem
                     width: parent.width
-                    height: parent.height
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    inputMethodHints: Qt.ImhPreferLowercase
-                    font.bold:false
-                    maximumLength: 50
+                    height: 100*size1H
+                    App.TextInput{
+                        id:titleInput
+                        placeholderText: qsTr("چی تو ذهنته؟")
+                        text: prevPageModel?prevPageModel.title:""
+                        width: parent.width
+                        height: parent.height
+                        inputMethodHints: Qt.ImhPreferLowercase
+                        font.bold:false
+                        maximumLength: 50
+                        anchors{
+                            horizontalCenter: parent.horizontalCenter
+                        }
+                    }
                     SequentialAnimation {
-                        id:usernameMoveAnimation
+                        id:titleMoveAnimation
                         running: false
                         loops: 3
-                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
-                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
-                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
+                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: -10   ; duration: 50  }
+                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: 10    ; duration: 100 }
+                        NumberAnimation { target: titleInput; property: "anchors.horizontalCenterOffset"; to: 0     ; duration: 50  }
                     }
                 }
-            }
 
-            Flickable{
-                id: control
-                anchors{
-                    top: titleItem.bottom
-                    topMargin: 25*size1H
-                    right: parent.right
-                    rightMargin: 25*size1W
-                    left: parent.left
-                    leftMargin: 25*size1W
-                }
-                width: parent.width
-                height: 190*size1H
-                clip: true
-                flickableDirection: Flickable.VerticalFlick
-                onContentYChanged: {
-                    if(contentY<0 || contentHeight < control.height)
-                        contentY = 0
-                    else if(contentY > (contentHeight - control.height))
-                        contentY = (contentHeight - control.height)
-                }
-                onContentXChanged: {
-                    if(contentX<0 || contentWidth < control.width)
-                        contentX = 0
-                    else if(contentX > (contentWidth-control.width))
-                        contentX = (contentWidth-control.width)
-
-                }
-                TextArea.flickable: App.TextArea{
-                    id: detailInput
-                    horizontalAlignment: ltr?Text.AlignLeft:Text.AlignRight
-                    rightPadding: 20*size1W
-                    leftPadding: 12*size1W
-                    topPadding: 20*size1H
-                    bottomPadding: 20*size1H
-                    clip: true
-                    color: appStyle.textColor
-                    wrapMode: Text.WordWrap
-                    Material.accent: appStyle.primaryColor
-                    font{family: appStyle.appFont;pixelSize:  25*size1F;bold:false}
-                    placeholderTextColor: getAppTheme()?"#ADffffff":"#8D000000"
-                    placeholderText: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس") + " (" + qsTr("اختیاری") + ")"
-                    background: Rectangle{border.width: 2*size1W; border.color: detailInput.focus? appStyle.primaryColor : getAppTheme()?"#ADffffff":"#8D000000";color: "transparent";radius: 15*size1W}
+                App.FlickTextArea{
+                    id:flickTextArea
+                    placeholderText : qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس") + " (" + qsTr("اختیاری") + ")"
+                    text: prevPageModel?prevPageModel.detail?prevPageModel.detail:"":""
                 }
 
-                ScrollBar.vertical: ScrollBar {
-                    hoverEnabled: true
-                    active: hovered || pressed
-                    orientation: Qt.Vertical
-                    anchors.right: control.right
-                    height: parent.height
-                    width: hovered || pressed?18*size1W:8*size1W
-                }
-            }
-            Rectangle{
-                id: fileRect
-                anchors{
-                    top: control.bottom
-                    topMargin: 25*size1W
-                    horizontalCenter: parent.horizontalCenter
-                }
-                radius: 15*size1W
-                width: control.width
-                height: 450*size1W
-                border.width: 1*size1W
-                border.color: getAppTheme()?"#ADffffff":"#8D000000"
-                color: "transparent"
-                clip: true
-                Loader{
-                    anchors{
-                        fill: parent
-                        margins: 10*size1W
-                    }
-                    active: attachModel.count>0
-                    sourceComponent: GridView{
-                        id:grid
-                        anchors.fill: parent
-                        anchors.margins: 10*size1W
-                        cellWidth: width / (parseInt(width / parseInt(200*size1W))===0?1:(parseInt(width / parseInt(200*size1W))))
-                        cellHeight:  cellWidth + 20*size1H
-                        clip: true
-                        ScrollBar.vertical: ScrollBar {
-                            hoverEnabled: true
-                            active: hovered || pressed
-                            orientation: Qt.Vertical
-                            anchors.right: grid.right
-                            height: parent.height
-                            width: 15*size1W
-                        }
-                        onContentYChanged: {
-                            if(contentY<0 || contentHeight < grid.height)
-                                contentY = 0
-                            else if(contentY > (contentHeight-grid.height))
-                                contentY = contentHeight-grid.height
-                        }
-                        onContentXChanged: {
-                            if(contentX<0 || contentWidth < grid.width)
-                                contentX = 0
-                            else if(contentX > (contentWidth-grid.width))
-                                contentX = (contentWidth-grid.width)
-                        }
-                        delegate: Item{
-                            width: grid.cellWidth
-                            height: grid.cellHeight
-                            MouseArea{
-                                anchors.fill: parent
-                                cursorShape: Qt.WhatsThisCursor
-                                onClicked: {
-                                    mtooltip.show(model.fileName+"."+model.fileExtension,1000)
+                App.FilesSelection{
+                    id: fileRect
+                    width: flickTextArea.width
+                    height:
+                        listId === Memorito.Process?
+                            (mainFlick.height-titleItem.height-flickTextArea.height-125*size1H < 450*size1H ? 450*size1H
+                                                                                                            :(mainFlick.height-titleItem.height-flickTextArea.height-125*size1H))
+                          :450*size1W
 
-                                }
-                                onDoubleClicked: {
-                                    Qt.openUrlExternally(model.fileSource)
-                                }
-                            }
-                            Image{
-                                id:img
-                                source: (model.fileExtension === "jpg" || model.fileExtension === "png" || model.fileExtension === "svg"|| model.fileExtension === "jpeg")?model.fileSource:"qrc:/TaskFlow/files.svg"
-                                width: source === "qrc:/TaskFlow/files.svg"?40*size1W:parent.width - 20*size1W
-                                height: width
-                                sourceSize.width: width*2
-                                sourceSize.height: height*2
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                fillMode: Image.PreserveAspectFit
-                                clip: true
-                                Item{
-                                    width: 140*size1W
-                                    height: 70*size1H
-                                    anchors.bottom: parent.bottom
-                                    anchors.bottomMargin: 28*size1H
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 12*size1W
-                                    visible: !(model.fileExtension === "jpg" || model.fileExtension === "png" || model.fileExtension === "svg"|| model.fileExtension === "jpeg")
-                                    Text {
-                                        text: model.fileExtension
-                                        color: "white"
-                                        font{family: appStyle.appFont;pixelSize: 30*size1F;bold:true}
-                                        anchors.fill: parent
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                    }
-                                }
-                                ToolTip{ id: mtooltip }
-
-                            }
-                            Text {
-                                anchors.bottom: parent.bottom
-                                color: appStyle.textColor
-                                font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
-                                text: model.fileName
-                                width: parent.width
-                                elide: Text.ElideRight
-                                horizontalAlignment: Text.AlignHCenter
-                                anchors.bottomMargin: 5*size1W
-                            }
-                            Rectangle{
-                                width: 50*size1W
-                                height: width
-                                radius: width
-                                color: Material.color(Material.Red)
-                                anchors.right: parent.right
-                                anchors.verticalCenter: img.verticalCenter
-                                Image {
-                                    id: removeIcon
-                                    source: "qrc:/close.svg"
-                                    width: 25*size1W
-                                    height: width
-                                    anchors.centerIn: parent
-                                    sourceSize.width: width*2
-                                    sourceSize.height: height*2
-                                    visible: false
-                                }
-                                ColorOverlay{
-                                    id:removeColor
-                                    source: removeIcon
-                                    anchors.fill: removeIcon
-                                    color: "white"
-                                }
-                                MouseArea{
-                                    anchors.fill: parent
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: {
-                                        attachModel.remove(index)
-                                    }
-                                }
-                            }
-                        }
-                        model:attachModel
-                    }
+                    model: attachModel
                 }
 
                 Loader{
-                    id:dargLoader
-                    anchors.fill: parent
-                    active: !(Qt.platform.os ==="android" || Qt.platform.os ==="ios")
-                    asynchronous : true
-                    sourceComponent: Item{
-                        id:dragItem
-                        anchors.fill: parent
-                        Image {
-                            id: dragImg
-                            width: 300*size1W
-                            visible: attachModel.count === 0
-                            height: width
-                            source: dragItem.opacity === 1? "qrc:/TaskFlow/first-shot.svg" :"qrc:/TaskFlow/first-shot-drop.svg"
-                            anchors.left: parent.left
-                            anchors.bottom: parent.bottom
-                            sourceSize.width:width*2
-                            sourceSize.height:height*2
-                        }
-                        DropArea{
-                            anchors.fill: parent
-                            onEntered: {
-                                dragItem.opacity = 0.1
-                            }
-                            onExited: {
-                                dragItem.opacity = 1
-                            }
-                            onDropped: {
-                                dragItem.opacity = 1
-                                let files = drop.text.trim().split("\n");
-                                for(let i=0;i<files.length;i++)
-                                {
-                                    files[i] = decodeURIComponent(files[i].trim())
-                                    if(usefulFunc.findInModel(files[i],"fileSource",attachModel).index !== null)
-                                        continue
-                                    attachModel.append(
-                                                {
-                                                    "fileSource": files[i],
-                                                    "fileName": decodeURIComponent(files[i].split('/').pop().split('.')[0]),
-                                                    "fileExtension": files[i].split('.').pop()
-                                                }
-                                                )
-                                }
-                            }
-                        }
-                    }
+                    id: optionLoader
+                    width: flickTextArea.width
+                    active: listId !== Memorito.Collect && listId !== Memorito.Process
+                    height: active?600*size1H:0
+                    sourceComponent: optionsComponent
                 }
+
                 Loader{
-                    id:addLoader
-                    anchors.fill: parent
-                    sourceComponent: Item {
-                        clip: true
-                        Loader{
-                            id:fileLoader
-                            active: false
-                            sourceComponent: FileDialog{
-                                id:fileDialog
-                                selectMultiple: true
-                                title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
-                                nameFilters: [ "All files (*)" ]
-                                folder: shortcuts.pictures
-                                sidebarVisible: false
-                                onAccepted: {
-                                    let files = fileDialog.fileUrls;
-                                    for(let i=0;i<files.length;i++)
-                                    {
-                                        let file = decodeURIComponent(files[i].trim())
-                                        if(usefulFunc.findInModel(file,"fileSource",attachModel).index !== null)
-                                            continue
+                    id:collectLoader
+                    width: flickTextArea.width
+                    active: listId !== Memorito.Process
+                    height: active?(
+                                        (
+                                            listId === Memorito.Project  ||
+                                            listId === Memorito.Someday  ||
+                                            listId === Memorito.Waiting  ||
+                                            listId === Memorito.Calendar ||
+                                            listId === Memorito.Refrence
+                                            )
+                                        ?220*size1H
+                                        :110*size1H
+                                        )
+                                  :0
+                    sourceComponent:listId === Memorito.NextAction?
+                                        nextComponent :listId === Memorito.Someday?
+                                            somedayComponent :listId === Memorito.Refrence?
+                                                refrenceComponent : listId === Memorito.Waiting?
+                                                    friendComponent : listId === Memorito.Calendar?
+                                                        calendarComponent : listId === Memorito.Trash?
+                                                            trashComponent : listId === Memorito.Done?
+                                                                doComponent : listId === Memorito.Project?
+                                                                    projectComponent : collectComponent
+                }
 
-                                        attachModel.append(
-                                                    {
-                                                        "fileSource":file,
-                                                        "fileName":file.split('/').pop().split('.')[0],
-                                                        "fileExtension":file.split('.').pop()
-                                                    }
-                                                    )
-                                    }
-                                    fileLoader.active = false
-                                }
-                                onRejected: {
-                                    fileLoader.active = false
-                                }
-                            }
-                        }
-                        Text {
-                            id: name
-                            text: !dargLoader.active?qsTr("فایلتو با استفاده از دکمه + انتخاب کن"): qsTr("فایلتو بکش و اینجا رها کن") +"\n"+ qsTr("یا از دکمه + انتخاب کن")
-                            visible: attachModel.count === 0?true:false
-                            anchors{
-                                left: parent.left
-                                right: parent.right
-                                leftMargin: !dargLoader.active?0:300*size1W
-                            }
+                Loader{
+                    id: processLoader
+                    width: flickTextArea.width
+                    height: active?1900*size1W:0
+                    active: nRow <= 2 && (listId === Memorito.Process || listId === Memorito.Collect) && isDual
+                    sourceComponent: processComponent
+                    visible: active
+                }
+            } // end of Flow
 
-                            height: parent.height
-                            font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
-                            color: appStyle.textColor
-                            wrapMode: Text.WordWrap
-                            //                            width: parent.width-15*size1W
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                        App.Button{
-                            id: plusRect
-                            width: 75*size1W
-                            height: width
-                            radius: width/2
-                            anchors{
-                                right: parent.right
-                                rightMargin: -15*size1W
-                                top: parent.top
-                                topMargin: -15*size1W
-                            }
-                            onClicked: {
-                                fileLoader.active = true
-                                fileLoader.item.open()
-                            }
-                            Image {
-                                id:plusIcon
-                                anchors{
-                                    left: parent.left
-                                    leftMargin: width/3
-                                    bottom: parent.bottom
-                                    bottomMargin: width/3
-                                }
-                                width: parent.width/2
-                                height: width
-                                source: "qrc:/plus.svg"
-                                sourceSize.width: width*2
-                                sourceSize.height: height*2
-                                visible: false
-                            }
-                            DropShadow {
-                                anchors.fill: plusColor
-                                horizontalOffset: 3
-                                verticalOffset: 3
-                                radius: 8.0
-                                samples: 17
-                                color: "#80000000"
-                                source: plusColor
-                            }
-                            ColorOverlay{
-                                id:plusColor
-                                source: plusIcon
-                                anchors.fill: plusIcon
-                                color: "white"
-                            }
-                        }
-                    }
-                }
-            }
-            App.Button{
-                id:submitBtn
-                width: 370*size1W
-                height: 70*size1H
-                anchors{
-                    top: fileRect.bottom
-                    topMargin: 10*size1W
-                    right: parent.right
-                    rightMargin: 25*size1W
-                }
-                text: qsTr("بفرست به پردازش نشده ها")
-                radius: 15*size1W
-                leftPadding: 35*size1W
-                enabled: !processBtn.checked
-                icon.source: "qrc:/check.svg"
-                icon.width: 20*size1W
-                onClicked: {
-                    let options =[]
-                    options["contextId"] = null
-                    options["priorityId"] = null
-                    options["energyId"] =null
-                    options["estimateTime"] = null
-                    thingsApi.prepareForAdd(options,2); // 2 is proccess list id
-                }
-            }
-            App.Button{
-                id: processBtn
-                width: 210*size1W
-                height: 70*size1H
-                checkable: true
-                Material.accent: "transparent"
-                Material.primary: "transparent"
+        }// end of item1
+    }//end of Flickable
 
-                Material.background: checked ? appStyle.primaryInt :"transparent"
-                Material.foreground: checked ? "white" : appStyle.primaryInt
-                anchors{
-                    top: fileRect.bottom
-                    topMargin: 10*size1W
-                    left: parent.left
-                    leftMargin: 25*size1W
-                }
-                text: qsTr("پردازش")
-                radius: 10*size1W
-                leftPadding: ltr?0:35*size1W
-                rightPadding:ltr?35*size1W:0
-                Image {
-                    id: processIcon
-                    width: 20*size1W
-                    height: width
-                    source: "qrc:/arrow.svg"
-                    anchors{
-                        verticalCenter: parent.verticalCenter
-                        left: parent.left
-                        leftMargin: 30*size1W
-                    }
-                    sourceSize.width:width*2
-                    sourceSize.height:height*2
-                    visible: false
-                }
-                ColorOverlay{
-                    rotation: processBtn.checked ?nRow===3?270
-                                                          :180
-                    :nRow===3?90:0
-                    anchors.fill: processIcon
-                    source: processIcon
-                    color: processBtn.checked ? "white" : appStyle.primaryColor
-                }
-            }
-            Loader{
-                id: processLoader
-                width: parent.width
-                height: active?1500*size1W:0
-                active: nRow <= 2 && processBtn.checked
-                anchors{
-                    top: processBtn.bottom
-                    topMargin: 20*size1W
-                    left: parent.left
-                    right: parent.right
-                    leftMargin: 10*size1W
-                    rightMargin: 10*size1W
-                }
-                sourceComponent: secondRect
-            }
-        }
-    }
     Loader{
-        active: nRow === 3 && processBtn.checked
-        width: parent.width /2
+        active: nRow === 3 && (listId === Memorito.Process || listId === Memorito.Collect) && isDual
+        width: parent.width/2
         height: active?mainFlick.height:0
         asynchronous: true
-        anchors{
-            top: parent.top
-            topMargin: 20*size1W
-            left: parent.left
-            leftMargin: 10*size1W
-        }
         sourceComponent: Flickable{
             id: secondFlick
+            contentHeight: processLoader2.height
             flickableDirection: Flickable.VerticalFlick
             onContentYChanged: {
                 if(contentY<0 || contentHeight < secondFlick.height)
@@ -529,6 +187,7 @@ Item{
                 else if(contentX > (contentWidth-secondFlick.width))
                     contentX = (contentWidth-secondFlick.width)
             }
+
             ScrollBar.vertical: ScrollBar {
                 hoverEnabled: true
                 active: hovered || pressed
@@ -537,38 +196,30 @@ Item{
                 height: parent.height
                 width: hovered || pressed?18*size1W:8*size1W
             }
-            contentHeight: processLoader2.height
+
             Loader{
                 id: processLoader2
                 width: parent.width
-                height: 1700*size1H
+                height: 2000*size1H
+                anchors{
+                    top: parent.top
+                    topMargin: 15*size1H
+                    left: parent.left
+                    leftMargin: 10*size1W
+                }
                 active: true
                 asynchronous: true
-                sourceComponent: secondRect
+                sourceComponent: processComponent
             }
-        }
-    }
-    Managment.API{id: managmentApi}
-    CategoryApi{ id: categoryApi}
-    ProjectApi{ id: projectApi}
-    ThingsApi{ id: thingsApi}
+        }//end of Flickable
+    }//end of Loader
 
     Component{
-        id:secondRect
+        id:processComponent
         Item{
-            function getOptions(){
-                let array =[]
-                array["contextId"] = contextInput.currentIndex === -1? null:contextModel.get(contextInput.currentIndex).id
-                array["priorityId"] = priorityInput.currentIndex === -1? null:priorityModel.get(priorityInput.currentIndex).Id
-                array["energyId"] = energyInput.currentIndex === -1? null:energyModel.get(energyInput.currentIndex).Id
-                array["estimateTime"] = estimateInput.text.trim() === ""? null :parseInt(estimateInput.text.trim())
-                return array;
-            }
-
             Flow{
                 anchors{
                     top: parent.top
-                    topMargin: 20*size1H
                     right: parent.right
                     rightMargin: 15*size1W
                     bottom: parent.bottom
@@ -576,981 +227,1048 @@ Item{
                     left: parent.left
                     leftMargin: 15*size1W
                 }
+                spacing: 10*size1H
 
-                Item{
+                Loader{
+                    id: optionsLoader
                     width: parent.width
-                    height: 100*size1H
-                    Text {
-                        id: contextText
-                        text: qsTr("محل انجام") +":"
-                        width: 250*size1W
+                    height: 620*size1H
+                    sourceComponent: optionsComponent
+                }
+                /*********** انجام نشدنی‌ها*****************/
+                Text {
+                    id: actionText
+                    text: "⏺ "+qsTr("این چیز انجام شدنی نیست") +":"
+                    width: parent.width
+                    color: appStyle.textColor
+                    font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                }
+
+                App.RadioButton{
+                    id: somedayRadio
+                    text: qsTr("شاید یک روزی این را انجام دادم")
+                    width: parent.width
+                    rightPadding: 50*size1W
+                }
+                Loader{
+                    id: somedayLoader
+                    width: parent.width
+                    height: somedayRadio.checked?240*size1W:0
+                    active: height!==0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip:true
+                    sourceComponent: somedayComponent
+                }
+                /*********************************/
+
+                App.RadioButton{
+                    id: refrenceRadio
+                    text: qsTr("اطلاعات مفیدی است میخواهم بعدا به آن مراجعه کنم")
+                    width: parent.width
+                    rightPadding: 50*size1W
+                }
+                Loader{
+                    id: refrenceLoader
+                    width: parent.width
+                    height: refrenceRadio.checked?240*size1W:0
+                    active: height!==0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip:true
+                    sourceComponent: refrenceComponent
+                }
+                /*********************************/
+
+                App.RadioButton{
+                    id: trashRadio
+                    text: qsTr("اطلاعات به درد نخوری است میخواهم به سطل آشغال بیاندازم")
+                    width: parent.width
+                    rightPadding: 50*size1W
+                }
+                Loader{
+                    id: trashLoader
+                    width: parent.width
+                    height: trashRadio.checked?120*size1W:0
+                    active: height!==0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip:true
+                    sourceComponent: trashComponent
+                }
+                /*********************************/
+                /*********** انجام نشدنی‌ها*****************/
+
+
+                /*********** انجام شدنی‌ها*****************/
+                /*********************************/
+                Text {
+                    id: action2Text
+                    text: "⏺ "+qsTr("این چیز انجام شدنی است") +":"
+                    width: parent.width
+                    color: appStyle.textColor
+                    font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                }
+                /*********************************/
+
+                Text {
+                    id: action3Text
+                    text: "⏺ "+qsTr("این چیز با یک انجام یک عمل به پایان نمی‌رسد") +":"
+                    width: parent.width
+                    color: appStyle.textColor
+                    height: 50*size1H
+                    verticalAlignment: Text.AlignBottom
+                    font { family: appStyle.appFont; pixelSize: size1F*24;bold:true}
+                    rightPadding: 50*size1W
+                }
+                App.RadioButton{
+                    id: projectRadio
+                    text: qsTr("می‌خواهم یک پروژه جدید بسازم")
+                    width: parent.width
+                    rightPadding: 80*size1W
+                }
+                Loader{
+                    id: projectLoader
+                    active: height!==0
+                    width: parent.width
+                    height: projectRadio.checked?120*size1W:0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip:true
+                    sourceComponent: projectComponent
+                }
+                /*********************************/
+
+                App.RadioButton{
+                    id: projectCategoryRadio
+                    text: qsTr("می‌خواهم این عمل را به پروژه های قدیمی اضافه کنم")
+                    width: parent.width
+                    rightPadding: 80*size1W
+                }
+                Loader{
+                    id: projectCategoryLoader
+                    active: height!==0
+                    width: parent.width
+                    height: projectCategoryRadio.checked?240*size1W:0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip:true
+                    sourceComponent: projectCategoryComponent
+                }
+                /*********************************/
+
+                Text {
+                    id: action4Text
+                    text: "⏺ "+qsTr("این عمل بیشتر از ۵ دقیقه زمان نیاز دارد") +":"
+                    width: parent.width
+                    color: appStyle.textColor
+                    height: 50*size1H
+                    verticalAlignment: Text.AlignBottom
+                    font { family: appStyle.appFont; pixelSize: size1F*24;bold:true}
+                    rightPadding: 50*size1W
+                }
+                App.RadioButton{
+                    id: friendRadio
+                    text: qsTr("می‌خواهم این را شخص دیگری انجام دهد")
+                    width: parent.width
+                    rightPadding: 80*size1W
+                }
+                Loader{
+                    id: friendLoader
+                    active: height!==0
+                    width: parent.width
+                    height: friendRadio.checked?240*size1W:0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip: true
+                    sourceComponent: friendComponent
+                }
+                /*********************************/
+
+                App.RadioButton{
+                    id: calendarRadio
+                    text: qsTr("می‌خواهم این عمل را در زمان مشخصی انجام دهم")
+                    width: parent.width
+                    rightPadding: 80*size1W
+                }
+                Loader{
+                    id: calendarLoader
+                    active: height!==0
+                    width: parent.width
+                    height: calendarRadio.checked?220*size1W:0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip: true
+                    sourceComponent: calendarComponent
+                }
+                /*********************************/
+
+                App.RadioButton{
+                    id: nextRadio
+                    text: qsTr("می‌خواهم این عمل را در بعدا انجام دهم")
+                    width: parent.width
+                    rightPadding: 80*size1W
+                }
+
+                Loader{
+                    id: nextLoader
+                    active: height!==0
+                    width: parent.width
+                    height: nextRadio.checked?120*size1W:0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip: true
+                    sourceComponent: nextComponent
+                }
+                /*********************************/
+
+                Text {
+                    id: action5Text
+                    text: "⏺ "+qsTr("این عمل کمتر از ۵ دقیقه انجام می‌شود") +":"
+                    width: parent.width
+                    color: appStyle.textColor
+                    height: 50*size1H
+                    verticalAlignment: Text.AlignBottom
+                    font { family: appStyle.appFont; pixelSize: size1F*24;bold:true}
+                    rightPadding: 50*size1W
+                }
+
+                App.RadioButton{
+                    id: doRadio
+                    text: qsTr("می‌خواهم این عمل را در الان انجام دهم")
+                    width: parent.width
+                    rightPadding: 80*size1W
+                }
+                Loader{
+                    id: doLoader
+                    active: height!==0
+                    width: parent.width
+                    height: doRadio.checked?120*size1W:0
+                    Behavior on height { NumberAnimation{    duration: 200   } }
+                    clip: true
+                    sourceComponent: doComponent
+                }
+                /*********************************/
+                /*********** انجام شدنی‌ها*****************/
+            }
+        }
+    }
+
+    Component{
+        id: collectComponent
+        Rectangle{
+            radius: 15*size1W
+            border.width: 2*size1W
+            border.color: appStyle.borderColor
+            color: "transparent"
+            RowLayout{
+                anchors.fill: parent
+                layoutDirection: RowLayout.RightToLeft
+                App.Button{
+                    id:submitBtn
+                    text: qsTr("بفرست به پردازش نشده ها")
+
+                    Layout.fillWidth: true
+                    Layout.rightMargin: 25*size1W
+                    Layout.leftMargin: 25*size1W
+                    Layout.minimumWidth: processBtn.checked?170*size1W:370*size1W
+                    Layout.preferredWidth: 390*size1W
+                    Layout.maximumWidth: 400*size1W
+                    Layout.minimumHeight: 70*size1H
+                    Layout.maximumHeight: 70*size1H
+
+                    radius: 15*size1W
+                    leftPadding: 35*size1W
+                    enabled: !processBtn.checked
+                    icon.source: "qrc:/check.svg"
+                    icon.width: 20*size1W
+                    onClicked: {
+                        options["contextId"] = null
+                        options["priorityId"] = null
+                        options["energyId"] =null
+                        options["estimateTime"] = null
+                        thingsApi.prepareForAdd(thingModel,options,Memorito.Process,(attachModel.count>0?1:0));
+                    }
+                }// 2 is proccess list id
+
+                Item { Layout.fillWidth: true }
+
+                App.Button{
+                    id: processBtn
+                    text: qsTr("پردازش")
+
+                    Layout.leftMargin: 25*size1W
+                    Layout.rightMargin: 25*size1W
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 170*size1W
+                    Layout.maximumWidth: 210*size1W
+                    Layout.preferredWidth: 210*size1W
+                    Layout.minimumHeight: 70*size1H
+                    Layout.maximumHeight: 70*size1H
+
+                    checkable: true
+                    Material.accent: "transparent"
+                    Material.primary: "transparent"
+                    Material.background: checked ? appStyle.primaryInt :"transparent"
+                    Material.foreground: checked ? "white" : appStyle.primaryInt
+
+                    checked: isDual
+                    onCheckedChanged: {
+                        isDual = checked
+                    }
+
+                    radius: 10*size1W
+                    leftPadding: ltr?0:35*size1W
+                    rightPadding:ltr?35*size1W:0
+                    Image {
+                        id: processIcon
+                        width: 20*size1W
+                        height: width
+                        source: "qrc:/arrow.svg"
                         anchors{
-                            right: parent.right
+                            left: parent.left
+                            leftMargin: 30*size1W
                             verticalCenter: parent.verticalCenter
                         }
-                        color: appStyle.textColor
-                        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                        sourceSize{width:width*2;height:height*2}
+                        visible: false
                     }
-                    App.ComboBox{
-                        id: contextInput
-                        anchors{
-                            right: contextText.left
-                            rightMargin: 15*size1W
-                            left: parent.left
-                            bottom: contextText.bottom
-                            bottomMargin: -5*size1W
-                        }
-                        font.pixelSize: size1F*28
-                        textRole: "context_name"
-                        placeholderText: qsTr("محل انجام") + " (" + qsTr("اختیاری") + ")"
-                        currentIndex: -1
-                        model: contextModel
-                        Component.onCompleted: {
-                            managmentApi.getContexts(contextModel)
-                        }
+                    ColorOverlay{
+                        rotation: processBtn.checked ?(nRow===3?90
+                                                               :180)
+                                                     :(nRow===3?270:0)
+                        anchors.fill: processIcon
+                        source: processIcon
+                        color: processBtn.checked ? "white" : appStyle.primaryColor
                     }
                 }
-                Item{
-                    width: parent.width
-                    height: 100*size1H
-                    Text {
-                        id: priorityText
-                        text: qsTr("اولویت‌ها") +":"
-                        width: 250*size1W
-                        anchors{
-                            right: parent.right
-                            verticalCenter: parent.verticalCenter
-                        }
-                        color: appStyle.textColor
-                        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+            }
+
+        }
+    } //end of collectComponent
+
+    Component{
+        id:optionsComponent
+        Flow{
+            width: parent.width
+            property alias energyInput  :   energyInput
+            property alias contextInput :   contextInput
+            property alias priorityInput:   priorityInput
+            property alias estimateInput:   estimateInput
+            Managment.API{id: managmentApi}
+            spacing: 25*size1H
+            Rectangle{
+                width: parent.width
+                height: 130*size1H
+                radius: 15*size1W
+                border.width: 2*size1W
+                border.color: appStyle.borderColor
+                color: "transparent"
+                Text {
+                    id: contextText
+                    text: qsTr("محل انجام") +":"
+                    width: 250*size1W
+                    anchors{
+                        right: parent.right
+                        rightMargin: 15*size1W
+                        verticalCenter: parent.verticalCenter
                     }
-                    App.ComboBox{
-                        id:priorityInput
-                        anchors{
-                            right: priorityText.left
-                            rightMargin: 15*size1W
-                            left: parent.left
-                            bottom: priorityText.bottom
-                            bottomMargin: -5*size1W
-                        }
-                        textRole: "Text"
-                        iconRole: "iconSource"
-                        font.pixelSize: size1F*28
-                        placeholderText: qsTr("اولویت") + " (" + qsTr("اختیاری") + ")"
-                        currentIndex: -1
-                        model: ListModel{
-                            id: energyModel
-                            ListElement{
-                                Id:1
-                                Text:qsTr("کم")
-                                iconSource: "qrc:/priorities/low.svg"
-                            }
-                            ListElement{
-                                Id:2
-                                Text:qsTr("متوسط")
-                                iconSource: "qrc:/priorities/medium.svg"
-                            }
-                            ListElement{
-                                Id:3
-                                Text:qsTr("زیاد")
-                                iconSource: "qrc:/priorities/high.svg"
-                            }
-                            ListElement{
-                                Id:4
-                                Text:qsTr("فوری")
-                                iconSource: "qrc:/priorities/higher.svg"
-                            }
-                        }
+                    color: appStyle.textColor
+                    font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                }
+                App.ComboBox{
+                    id: contextInput
+                    anchors{
+                        right: contextText.left
+                        rightMargin: 15*size1W
+                        left: parent.left
+                        leftMargin: 15*size1W
+                        bottom: contextText.bottom
+                        bottomMargin: -20*size1W
+                    }
+                    font.pixelSize: size1F*28
+                    textRole: "context_name"
+                    placeholderText: qsTr("محل انجام") + " (" + qsTr("اختیاری") + ")"
+                    currentIndex: prevPageModel?contextModel.count>0?prevPageModel.context_id?usefulFunc.findInModel(prevPageModel.context_id,"id",contextModel).index:-1:-1:-1
+                    model: contextModel
+                    onCurrentIndexChanged: {
+                        options["contextId"]      = contextInput.currentIndex  === -1? null : contextModel.get (   contextInput.currentIndex    ).id
+                    }
+
+                    Component.onCompleted: {
+                        managmentApi.getContexts(contextModel)
                     }
                 }
-                Item{
-                    width: parent.width
-                    height: 100*size1H
-                    Text {
-                        id: energyText
-                        text: qsTr("سطح انرژی") +":"
-                        width: 250*size1W
-                        anchors{
-                            right: parent.right
-                            verticalCenter: parent.verticalCenter
-                        }
-                        color: appStyle.textColor
-                        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+            }
+            Rectangle{
+                width: parent.width
+                height: 130*size1H
+                radius: 15*size1W
+                border.width: 2*size1W
+                border.color: appStyle.borderColor
+                color: "transparent"
+                Text {
+                    id: priorityText
+                    text: qsTr("اولویت‌ها") +":"
+                    width: 250*size1W
+                    anchors{
+                        right: parent.right
+                        rightMargin: 15*size1W
+                        verticalCenter: parent.verticalCenter
                     }
-                    App.ComboBox{
-                        id: energyInput
-                        anchors{
-                            right: energyText.left
-                            rightMargin: 15*size1W
-                            left: parent.left
-                            bottom: energyText.bottom
-                            bottomMargin: -5*size1W
-                        }
-                        textRole: "Text"
-                        iconRole: "iconSource"
-                        font.pixelSize: size1F*28
-                        placeholderText: qsTr("سطح انرژی") + " (" + qsTr("اختیاری") + ")"
-                        currentIndex: -1
-                        model: ListModel{
-                            id:priorityModel
-                            ListElement{
-                                Id:1
-                                Text:qsTr("کم")
-                                iconSource: "qrc:/energies/low.svg"
-                            }
-                            ListElement{
-                                Id:2
-                                Text:qsTr("متوسط")
-                                iconSource: "qrc:/energies/medium.svg"
-                            }
-                            ListElement{
-                                Id:3
-                                Text:qsTr("زیاد")
-                                iconSource: "qrc:/energies/high.svg"
-                            }
-                            ListElement{
-                                Id:4
-                                Text:qsTr("خیلی زیاد")
-                                iconSource: "qrc:/energies/higher.svg"
-                            }
-                        }
+                    color: appStyle.textColor
+                    font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                }
+                App.ComboBox{
+                    id:priorityInput
+                    anchors{
+                        right: priorityText.left
+                        rightMargin: 15*size1W
+                        left: parent.left
+                        leftMargin: 15*size1W
+                        bottom: priorityText.bottom
+                        bottomMargin: -20*size1W
+                    }
+                    textRole: "Text"
+                    iconRole: "iconSource"
+                    font.pixelSize: size1F*28
+                    placeholderText: qsTr("اولویت") + " (" + qsTr("اختیاری") + ")"
+                    currentIndex: prevPageModel?prevPageModel.priority_id?usefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).index:-1:-1
+                    model: energyModel
+                    onCurrentIndexChanged: {
+                        options["energyId"] = energyInput.currentIndex === -1? null : energyModel.get( energyInput.currentIndex ).Id
                     }
                 }
-                Item{
-                    width: parent.width
-                    height: 100*size1H
-                    Text {
-                        id: estimateText
-                        text: qsTr("تخمین زمان انجام") +":"
-                        anchors{
-                            right: parent.right
-                            verticalCenter: parent.verticalCenter
-                        }
-                        width: 250*size1W
-                        color: appStyle.textColor
-                        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+            }
+            Rectangle{
+                width: parent.width
+                height: 130*size1H
+                radius: 15*size1W
+                border.width: 2*size1W
+                border.color: appStyle.borderColor
+                color: "transparent"
+                Text {
+                    id: energyText
+                    text: qsTr("سطح انرژی") +":"
+                    width: 250*size1W
+                    anchors{
+                        right: parent.right
+                        rightMargin: 15*size1W
+                        verticalCenter: parent.verticalCenter
                     }
-                    TextField{
-                        id: estimateInput
-                        font{family: appStyle.appFont;pixelSize: 28*size1F}
-                        selectByMouse: true
-                        renderType:Text.NativeRendering
-                        placeholderTextColor: appStyle.textColor
-                        verticalAlignment: Text.AlignBottom
-                        Material.accent: appStyle.primaryColor
-                        placeholderText: qsTr("تخمین به دقیقه")  + " (" + qsTr("اختیاری") + ")"
-                        horizontalAlignment: Text.AlignHCenter
-                        anchors{
-                            right: estimateText.left
-                            rightMargin: 15*size1W
-                            left: parent.left
-                            bottom: estimateText.bottom
-                            bottomMargin: -5*size1W
-                        }
+                    color: appStyle.textColor
+                    font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                }
+                App.ComboBox{
+                    id: energyInput
+                    anchors{
+                        right: energyText.left
+                        rightMargin: 15*size1W
+                        left: parent.left
+                        leftMargin: 15*size1W
+                        bottom: energyText.bottom
+                        bottomMargin: -20*size1W
+                    }
+                    textRole: "Text"
+                    iconRole: "iconSource"
+                    font.pixelSize: size1F*28
+                    placeholderText: qsTr("سطح انرژی") + " (" + qsTr("اختیاری") + ")"
+                    currentIndex: prevPageModel?prevPageModel.energy_id?usefulFunc.findInModel(prevPageModel.energy_id,"Id",energyModel).index:-1:-1
+                    model: priorityModel
+                    onCurrentIndexChanged: {
+                        options["priorityId"] = priorityInput.currentIndex === -1? null : priorityModel.get( priorityInput.currentIndex ).Id
                     }
                 }
-                Item{
-                    width: parent.width
-                    height: 100*size1H
-                    /*********** انجام نشدنی‌ها*****************/
-                    Text {
-                        id: actionText
-                        text: "⏺ "+qsTr("این چیز انجام شدنی نیست") +":"
-                        anchors{
-                            right: parent.right
-                            top: parent.top
-                            rightMargin: 20*size1W
-                        }
-                        width: 250*size1W
-                        color: appStyle.textColor
-                        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+            }
+            Rectangle{
+                width: parent.width
+                height: 130*size1H
+                radius: 15*size1W
+                border.width: 2*size1W
+                border.color: appStyle.borderColor
+                color: "transparent"
+                Text {
+                    id: estimateText
+                    text: qsTr("تخمین زمان انجام") +":"
+                    anchors{
+                        right: parent.right
+                        rightMargin: 15*size1W
+                        verticalCenter: parent.verticalCenter
                     }
+                    width: 250*size1W
+                    color: appStyle.textColor
+                    font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                }
+                TextField{
+                    id: estimateInput
+                    text: prevPageModel?prevPageModel.estimate_time?prevPageModel.estimate_time:"":""
+                    font{family: appStyle.appFont;pixelSize: 28*size1F}
+                    selectByMouse: true
+                    renderType:Text.NativeRendering
+                    placeholderTextColor: appStyle.textColor
+                    verticalAlignment: Text.AlignBottom
+                    Material.accent: appStyle.primaryColor
+                    placeholderText: qsTr("تخمین به دقیقه")  + " (" + qsTr("اختیاری") + ")"
+                    horizontalAlignment: Text.AlignHCenter
+                    validator: RegExpValidator{regExp: /[0123456789۰۱۲۳۴۵۶۷۸۹]{3}/ig;}
+                    anchors{
+                        right: estimateText.left
+                        rightMargin: 15*size1W
+                        left: parent.left
+                        bottom: estimateText.bottom
+                        leftMargin: 15*size1W
+                        bottomMargin: -20*size1W
+                    }
+                    onTextChanged: {
+                        if(text.match(/[۰۱۲۳۴۵۶۷۸۹]/ig))
+                            text = usefulFunc.faToEnNumber(text)
 
-                    App.RadioButton{
-                        id: somedayRadio
-                        anchors{
-                            top: actionText.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 20*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("شاید یک روزی این را انجام دادم")
+                        options["estimateTime"] = estimateInput.text.trim() === ""? null : parseInt(   estimateInput.text.trim()    )
                     }
-                    Loader{
-                        id: somedayLoader
-                        width: parent.width
-                        height: somedayRadio.checked?240*size1W:0
-                        active: height!==0
-                        anchors{
-                            top: somedayRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip:true
-                        sourceComponent: Rectangle {
-                            id: somedayItem
-                            anchors{
-                                fill: parent
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-                            Text {
-                                id: somedayCategoryText
-                                text: qsTr("دسته بندی") + ":"
-                                visible: somedayModel.count!==0
-                                anchors{
-                                    right: parent.right
-                                    rightMargin: 20*size1W
-                                    top: parent.top
-                                    topMargin: 50*size1W
-                                }
-                                font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-                                color: appStyle.textColor
-                            }
-                            App.ComboBox{
-                                id: somedayCategoryCombo
-                                textRole: "category_name"
-                                font.pixelSize: size1F*28
-                                placeholderText: qsTr("دسته بندی") + " (" + qsTr("اختیاری") + ")"
-                                currentIndex: -1
-                                visible: somedayModel.count!==0
-                                anchors{
-                                    top: parent.top
-                                    topMargin: 10*size1W
-                                    right: somedayCategoryText.left
-                                    rightMargin: 20*size1W
-                                    left: parent.left
-                                    leftMargin: 20*size1W
-                                }
-                                model: somedayModel
-                                Component.onCompleted: {
-                                    categoryApi.getCategories(somedayModel,9) // 9 = شاید یک روزی
-                                }
-                            }
+                }
+            }
 
-                            App.Button{
-                                id: somedayBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    top: somedayCategoryCombo.visible?somedayCategoryCombo.bottom:parent.top
-                                    topMargin: 25*size1W
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                text: qsTr("بفرست به شاید یک روزی")
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    let options = getOptions()
-                                    let categoryId = somedayCategoryCombo.currentIndex !== -1 ? somedayModel.get(somedayCategoryCombo.currentIndex).id : null
-                                    thingsApi.prepareForAdd(options,9,categoryId); // 9 is proccess list id
-                                }
-                            }
-                        }
-                    }
+        }
+    } // end of optionsComponent
 
 
-                    App.RadioButton{
-                        id: refrenceRadio
-                        anchors{
-                            top: somedayLoader.height!==0?somedayLoader.bottom:somedayRadio.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 20*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("اطلاعات مفیدی است میخواهم بعدا به آن مراجعه کنم")
-                    }
-                    Loader{
-                        id: refrenceLoader
-                        width: parent.width
-                        height: refrenceRadio.checked?240*size1W:0
-                        active: height!==0
-                        anchors{
-                            top: refrenceRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip:true
-                        sourceComponent: Rectangle {
-                            id: refrenceItem
-                            width: parent.width
-                            anchors{
-                                fill: parent
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-                            Text {
-                                id: refrenceCategoryText
-                                text: qsTr("دسته بندی") + ":"
-                                visible: refrenceModel.count!==0
-                                anchors{
-                                    right: parent.right
-                                    rightMargin: 20*size1W
-                                    top: parent.top
-                                    topMargin: 50*size1W
-                                }
-                                font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-                                color: appStyle.textColor
-                            }
-                            App.ComboBox{
-                                id: refrenceCategoryCombo
-                                textRole: "category_name"
-                                font.pixelSize: size1F*28
-                                placeholderText: qsTr("دسته بندی")
-                                currentIndex: -1
-                                visible: refrenceModel.count!==0
-                                anchors{
-                                    top: parent.top
-                                    topMargin: 10*size1W
-                                    right: refrenceCategoryText.left
-                                    rightMargin: 50*size1W
-                                    left: parent.left
-                                    leftMargin: 20*size1W
-                                }
-                                model: refrenceModel
-                                Component.onCompleted: {
-                                    categoryApi.getCategories(refrenceModel,4) // 4= مرجع
-                                }
-                            }
+    Component{
+        id:projectComponent
+        Rectangle {
+            id: projectItem
+            ProjectApi{ id: projectApi}
+            anchors{
+                fill: parent
+            }
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
 
-                            App.Button{
-                                id: refrenceBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    top: refrenceCategoryCombo.visible?refrenceCategoryCombo.bottom:parent.top
-                                    topMargin: 25*size1W
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                text: qsTr("بفرست به مرجع")
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    let options = getOptions()
-                                    let categoryId = refrenceCategoryCombo.currentIndex !== -1 ? refrenceModel.get(refrenceCategoryCombo.currentIndex).id : null
-                                    thingsApi.prepareForAdd(options,4,categoryId); // 4 is refrence list id
-                                }
-                            }
-                        }
-                    }
-
-                    App.RadioButton{
-                        id: trashRadio
-                        anchors{
-                            top: refrenceLoader.height!==0?refrenceLoader.bottom:refrenceRadio.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 20*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("اطلاعات به درد نخوری است میخواهم به سطل آشغال بیاندازم")
-                    }
-                    Loader{
-                        id: trashLoader
-                        width: parent.width
-                        height: trashRadio.checked?120*size1W:0
-                        active: height!==0
-                        anchors{
-                            top: trashRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip:true
-                        sourceComponent: Rectangle {
-                            id: trashItem
-                            anchors{
-                                fill: parent
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-                            App.Button{
-                                id: trashBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    centerIn: parent
-                                }
-                                text: qsTr("بفرست به سطل آشغال")
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    thingsApi.prepareForAdd(7,categoryId); // 7 is trash list id
-                                }
-                            }
-                        }
-                    }
-                    /*********** انجام نشدنی‌ها*****************/
-
-                    /*********** انجام شدنی‌ها*****************/
-                    /*********************************/
-                    Text {
-                        id: action2Text
-                        text: "⏺ "+qsTr("این چیز انجام شدنی است") +":"
-                        anchors{
-                            right: parent.right
-                            top: trashLoader.height!==0?trashLoader.bottom:trashRadio.bottom
-                            rightMargin: 20*size1W
-                        }
-                        width: 250*size1W
-                        color: appStyle.textColor
-                        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-                    }
-
-                    /*********************************/
-
-                    Text {
-                        id: action3Text
-                        text: "⏺ "+qsTr("این چیز با یک انجام یک عمل به پایان نمی‌رسد") +":"
-                        anchors{
-                            right: parent.right
-                            top: action2Text.bottom
-                            rightMargin: 50*size1W
-                        }
-                        width: 250*size1W
-                        color: appStyle.textColor
-                        height: 50*size1H
-                        verticalAlignment: Text.AlignBottom
-                        font { family: appStyle.appFont; pixelSize: size1F*24;bold:true}
-                    }
-                    App.RadioButton{
-                        id: projectRadio
-                        anchors{
-                            top: action3Text.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 60*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("می‌خواهم یک پروژه جدید بسازم")
-                    }
-                    Loader{
-                        id: projectLoader
-                        active: height!==0
-                        width: parent.width
-                        height: projectRadio.checked?120*size1W:0
-                        anchors{
-                            top: projectRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip:true
-                        sourceComponent: Rectangle {
-                            id: projectItem
-                            anchors{
-                                fill: projectLoader
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-
-                            App.Button{
-                                id: projectBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    centerIn: parent
-                                }
-                                text: qsTr("بفرست به پروژه ها")
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    projectApi.addProject(titleInput.text.trim(),detailInput.text.trim(),projectModel)
-                                }
-                            }
-                        }
-                    }
-                    App.RadioButton{
-                        id: projectCategoryRadio
-                        anchors{
-                            top: projectLoader.height!==0?projectLoader.bottom:projectRadio.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 60*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("می‌خواهم این عمل را به پروژه های قدیمی اضافه کنم")
-                    }
-                    Loader{
-                        id: projectCategoryLoader
-                        active: height!==0
-                        width: parent.width
-                        height: projectCategoryRadio.checked?240*size1W:0
-                        anchors{
-                            top: projectCategoryRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip:true
-                        sourceComponent: Rectangle {
-                            id: projectCategoryItem
-                            anchors{
-                                fill: projectCategoryLoader
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-                            Text {
-                                id: projectCategoryText
-                                text: qsTr("انتخاب پروژه") + ":"
-                                anchors{
-                                    right: parent.right
-                                    rightMargin: 20*size1W
-                                    top: parent.top
-                                    topMargin: 50*size1W
-                                }
-                                font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-                                color: appStyle.textColor
-                            }
-                            App.ComboBox{
-                                id: projectCategoryCombo
-                                textRole: "project_name"
-                                font.pixelSize: size1F*28
-                                placeholderText: qsTr("پروژه موردنظر را انتخاب کنید")
-                                currentIndex: -1
-                                anchors{
-                                    top: parent.top
-                                    topMargin: 10*size1W
-                                    right: projectCategoryText.left
-                                    rightMargin: 50*size1W
-                                    left: parent.left
-                                    leftMargin: 20*size1W
-                                }
-                                model: projectModel
-                                Component.onCompleted: {
-                                    projectApi.getProjects(projectModel)
-                                }
-                            }
-                            App.Button{
-                                id: projectCategoryBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    top: projectCategoryCombo.visible?projectCategoryCombo.bottom:parent.top
-                                    topMargin: 25*size1W
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                text: qsTr("بفرست به پروژه")
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    let options = getOptions()
-                                    let projectId = projectCategoryCombo.currentIndex !== -1 ? projectModel.get(projectCategoryCombo.currentIndex).id : null
-                                    thingsApi.prepareForAdd(options,10,null,null,null,projectId); // 10 is project list id
-                                }
-                            }
-                        }
-                    }
-
-                    /*********************************/
-
-                    Text {
-                        id: action4Text
-                        text: "⏺ "+qsTr("این عمل بیشتر از ۵ دقیقه زمان نیاز دارد") +":"
-                        anchors{
-                            right: parent.right
-                            top: projectCategoryLoader.height!==0?projectCategoryLoader.bottom:projectCategoryRadio.bottom
-                            rightMargin: 50*size1W
-                        }
-                        width: 250*size1W
-                        color: appStyle.textColor
-                        height: 50*size1H
-                        verticalAlignment: Text.AlignBottom
-                        font { family: appStyle.appFont; pixelSize: size1F*24;bold:true}
-                    }
-                    App.RadioButton{
-                        id: friendRadio
-                        anchors{
-                            top: action4Text.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 60*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("می‌خواهم این را شخص دیگری انجام دهد")
-                    }
-                    Loader{
-                        id: friendLoader
-                        active: height!==0
-                        width: parent.width
-                        height: friendRadio.checked?240*size1W:0
-                        anchors{
-                            top: friendRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip: true
-                        sourceComponent: Rectangle {
-                            id: friendItem
-                            anchors{
-                                fill: parent
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-                            Text {
-                                id: friendCategoryText
-                                text: qsTr("انتخاب دوست") + ":"
-                                visible: friendModel.count!==0
-                                anchors{
-                                    right: parent.right
-                                    rightMargin: 20*size1W
-                                    top: parent.top
-                                    topMargin: 50*size1W
-                                }
-                                font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-                                color: appStyle.textColor
-                            }
-                            App.ComboBox{
-                                id: friendCombo
-                                textRole: "friend_name"
-                                font.pixelSize: size1F*28
-                                placeholderText: qsTr("دوست موردنظر را انتخاب کنید")
-                                currentIndex: -1
-                                visible: friendModel.count!==0
-                                anchors{
-                                    top: parent.top
-                                    topMargin: 10*size1W
-                                    right: friendCategoryText.left
-                                    rightMargin: 50*size1W
-                                    left: parent.left
-                                    leftMargin: 20*size1W
-                                }
-                                model: friendModel
-                                Component.onCompleted: {
-                                    managmentApi.getFriends(friendModel)
-                                }
-                            }
-
-                            App.Button{
-                                id: friendBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    top: friendCombo.visible?friendCombo.bottom:parent.top
-                                    topMargin: 25*size1W
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                text: qsTr("بفرست به لیست انتظار")
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    let options = getOptions()
-                                    if(friendCombo.currentIndex === -1)
-                                    {
-                                        if(friendModel.count >0)
-                                            usefulFunc.showLog(qsTr("لطفا دوست خودتو انتخاب کن"),true,null,600*size1W, ltr)
-                                        else
-                                            usefulFunc.showLog(qsTr("لطفااول دوستاتو اضافه کن بعد دوست خودتو انتخاب کن"),true,null,700*size1W, ltr)
-                                        return
-                                    }
-
-                                    let friendId = friendModel.get(friendCombo.currentIndex).id
-                                    thingsApi.prepareForAdd(options,5,null,null,friendId,null); // 5 is waiting list id
-                                }
-                            }
-                        }
-                    }
-                    App.RadioButton{
-                        id: calendarRadio
-                        anchors{
-                            top: friendLoader.height!==0?friendLoader.bottom:friendRadio.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 60*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("می‌خواهم این عمل را در زمان مشخصی انجام دهم")
-                    }
-                    Loader{
-                        id: calendarLoader
-                        active: height!==0
-                        width: parent.width
-                        height: calendarRadio.checked?220*size1W:0
-                        anchors{
-                            top: calendarRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip: true
-                        sourceComponent: Rectangle {
-                            id: calendarItem
-                            anchors{
-                                fill: parent
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-                            Behavior on height {
-                                NumberAnimation{
-                                    duration: 200
-                                }
-                            }
-                            clip:true
-                            App.CheckBox{
-                                id:clockCheck
-                                anchors{
-                                    left: parent.left
-                                    leftMargin: 20*size1W
-                                    top: parent.top
-                                    topMargin: 20*size1W
-                                }
-                                text: qsTr("تعیین ساعت")
-                            }
-                            App.DateInput{
-                                id: dateInput
-                                placeholderText: qsTr("زمان مورد نظر را انتخاب نمایید")
-                                hasTime: clockCheck.checked
-                                minSelectedDate: new Date()
-                                anchors{
-                                    top: parent.top
-                                    right: clockCheck.left
-                                    rightMargin: 30*size1W
-                                    left: parent.left
-                                    leftMargin: 20*size1W
-                                }
-                            }
-
-                            App.Button{
-                                id: calendarBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    top: dateInput.bottom
-                                    topMargin: 20*size1W
-                                    horizontalCenter: parent.horizontalCenter
-                                }
-                                text: qsTr("بفرست به تقویم")
-
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    let options = getOptions()
-                                    if( dateInput.selectedDate.toString() === "Invalid Date")
-                                    {
-                                        usefulFunc.showLog(qsTr("لطفا زمانی که میخوای این کار رو بکنی مشخص کن"),true,null,700*size1W, ltr)
-                                        return
-                                    }
-                                    if(!clockCheck.checked)
-                                    {
-                                        dateInput.selectedDate = new Date(dateInput.selectedDate.setHours(5));
-                                        dateInput.selectedDate = new Date(dateInput.selectedDate.setMinutes(17))
-                                        dateInput.selectedDate = new Date(dateInput.selectedDate.setSeconds(17))
-                                    }
-
-                                    let dueDate = usefulFunc.formatDate(dateInput.selectedDate,false)
-                                    thingsApi.prepareForAdd(options,6,null,dueDate,null,null); // 6 is calendar list id
-                                }
-                            }
-                        }
-                    }
-
-                    App.RadioButton{
-                        id: nextRadio
-                        anchors{
-                            top: calendarLoader.height!==0?calendarLoader.bottom:calendarRadio.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 60*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("می‌خواهم این عمل را در بعدا انجام دهم")
-                    }
-
-                    Loader{
-                        id: nextLoader
-                        active: height!==0
-                        width: parent.width
-                        height: nextRadio.checked?120*size1W:0
-                        anchors{
-                            top: nextRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip: true
-                        sourceComponent:Rectangle {
-                            id: nextItem
-                            anchors{
-                                fill: parent
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-                            App.Button{
-                                id: nextBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    centerIn: parent
-                                }
-                                text: qsTr("بفرست به عملیات بعدی")
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    let options = getOptions()
-                                    thingsApi.prepareForAdd(options,3,null,null,null,null); // 3 is next action list id
-                                }
-                            }
-                        }
-                    }
-
-                    /*********************************/
-                    Text {
-                        id: action5Text
-                        text: "⏺ "+qsTr("این عمل کمتر از ۵ دقیقه انجام می‌شود") +":"
-                        anchors{
-                            right: parent.right
-                            top: nextLoader.height!==0?nextLoader.bottom:nextRadio.bottom
-                            rightMargin: 50*size1W
-                        }
-                        width: 250*size1W
-                        color: appStyle.textColor
-                        height: 50*size1H
-                        verticalAlignment: Text.AlignBottom
-                        font { family: appStyle.appFont; pixelSize: size1F*24;bold:true}
-                    }
-
-                    App.RadioButton{
-                        id: doRadio
-                        width: parent.width
-                        anchors{
-                            top: action5Text.bottom
-                            left: parent.left // Because LayoutMirroring.enabled === true
-                            leftMargin: 60*size1W
-                            right: parent.right
-                        }
-                        text: qsTr("می‌خواهم این عمل را در الان انجام دهم")
-                    }
-                    Loader{
-                        id: doLoader
-                        active: height!==0
-                        width: parent.width
-                        height: doRadio.checked?120*size1W:0
-                        anchors{
-                            top: doRadio.bottom
-                        }
-                        Behavior on height {
-                            NumberAnimation{
-                                duration: 200
-                            }
-                        }
-                        clip: true
-                        sourceComponent:Rectangle {
-                            id: doItem
-                            anchors{
-                                fill: parent
-                            }
-                            radius: 10*size1W
-                            color: "transparent"
-                            border.width: 3*size1W
-                            border.color: Material.hintTextColor
-                            App.Button{
-                                id: doBtn
-                                width: 410*size1W
-                                height: 70*size1H
-                                checkable: true
-                                Material.accent: "transparent"
-                                Material.primary: "transparent"
-                                Material.background: appStyle.primaryInt
-                                Material.foreground: "white"
-                                anchors{
-                                    centerIn: parent
-                                }
-                                text: qsTr("بفرست به انجام شده ها")
-                                radius: 10*size1W
-                                leftPadding: 35*size1W
-                                onClicked: {
-                                    let options = getOptions()
-                                    thingsApi.prepareForAdd(options,8,null,null,null,null); // 8 is Done list id
-                                }
-                            }
-                        }
-                    }
-                    /*********************************/
-
-                    /*********** انجام شدنی‌ها*****************/
+            App.Button{
+                id: projectBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    centerIn: parent
+                }
+                text: qsTr("ساخت پروژه جدید")
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+                    projectApi.addProject(titleInput.text.trim(),flickTextArea.text.trim(),projectModel,1)
                 }
             }
         }
     }
+
+
+    Component{
+        id:nextComponent
+        Rectangle {
+            id: nextItem
+            anchors{
+                fill: parent
+            }
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
+            App.Button{
+                id: nextBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    centerIn: parent
+                }
+                text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به عملیات بعدی")
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+                    if(prevPageModel)
+                        thingsApi.prepareForEdit(thingModel,nextActionModel,prevPageModel.id,options,Memorito.NextAction,(attachModel.count>0?1:0),null,null,null,null)
+                    else
+                        thingsApi.prepareForAdd(options,Memorito.NextAction,(attachModel.count>0?1:0),null,null,null,null);
+                }
+            }
+        }
+    }// 3 is next action list id
+
+    Component{
+        id:refrenceComponent
+        Rectangle {
+            id: refrenceItem
+            CategoryApi{ id: categoryApi}
+            width: parent.width
+            anchors{
+                fill: parent
+            }
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
+            Text {
+                id: refrenceCategoryText
+                text: qsTr("دسته بندی") + ":"
+                anchors{
+                    right: parent.right
+                    rightMargin: 20*size1W
+                    top: parent.top
+                    topMargin: 50*size1W
+                }
+                font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                color: appStyle.textColor
+            }
+            App.ComboBox{
+                id: refrenceCategoryCombo
+                textRole: "category_name"
+                font.pixelSize: size1F*28
+                placeholderText: qsTr("دسته بندی")
+                currentIndex: prevPageModel?
+                                  refrenceCategoryModel.count>0
+                                  ?prevPageModel.category_id
+                                    ?usefulFunc.findInModel(prevPageModel.category_id,"id",refrenceCategoryModel).index
+                                        :-1
+                :-1
+                :-1
+                anchors{
+                    top: parent.top
+                    topMargin: 10*size1W
+                    right: refrenceCategoryText.left
+                    rightMargin: currentIndex === -1?20*size1W:50*size1W
+                    left: parent.left
+                    leftMargin: 20*size1W
+                }
+                model: refrenceCategoryModel
+                Component.onCompleted: {
+                    categoryApi.getCategories(refrenceCategoryModel,Memorito.Refrence) // 4= مرجع
+                }
+            }
+
+            App.Button{
+                id: refrenceBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    top: refrenceCategoryCombo?refrenceCategoryCombo.visible?refrenceCategoryCombo.bottom:parent.top:undefined
+                    topMargin: 25*size1W
+                    horizontalCenter: parent.horizontalCenter
+                }
+                text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به مرجع")
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+
+                    let categoryId = refrenceCategoryCombo.currentIndex !== -1 ? refrenceCategoryModel.get(refrenceCategoryCombo.currentIndex).id : null
+                    if(prevPageModel)
+                        thingsApi.prepareForEdit(thingModel,refrenceModel,prevPageModel.id,options,Memorito.Refrence,(attachModel.count>0?1:0),categoryId);
+                    else
+                        thingsApi.prepareForAdd(refrenceModel,options,Memorito.Refrence,(attachModel.count>0?1:0),categoryId);
+                }
+            }
+        }
+    }// 4 is refrence list id
+
+    Component{
+        id:friendComponent
+        Rectangle {
+            id: friendItem
+            anchors{
+                fill: parent
+            }
+            Managment.API{id: managmentApi}
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
+            Text {
+                id: friendCategoryText
+                text: qsTr("انتخاب دوست") + ":"
+                visible: friendModel.count!==0
+                anchors{
+                    right: parent.right
+                    rightMargin: 20*size1W
+                    top: parent.top
+                    topMargin: 50*size1W
+                }
+                font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                color: appStyle.textColor
+            }
+            App.ComboBox{
+                id: friendCombo
+                textRole: "friend_name"
+                font.pixelSize: size1F*28
+                placeholderText: qsTr("دوست موردنظر را انتخاب کنید")
+                currentIndex: prevPageModel
+                              ?friendModel.count>0
+                                ?prevPageModel.friend_id
+                                  ?usefulFunc.findInModel(prevPageModel.friend_id,"id",friendModel).index
+                                  :-1
+                :-1
+                :-1
+                anchors{
+                    top: parent.top
+                    topMargin: 10*size1W
+                    right: friendCategoryText.left
+                    rightMargin: currentIndex === -1?20*size1W:50*size1W
+                    left: parent.left
+                    leftMargin: 20*size1W
+                }
+                model: friendModel
+                Component.onCompleted: {
+                    managmentApi.getFriends(friendModel)
+                }
+            }
+
+            App.Button{
+                id: friendBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    top: friendCombo.visible?friendCombo.bottom:parent.top
+                    topMargin: 25*size1W
+                    horizontalCenter: parent.horizontalCenter
+                }
+                text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به لیست انتظار")
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+
+                    if(friendCombo.currentIndex === -1)
+                    {
+                        if(friendModel.count >0)
+                            usefulFunc.showLog(qsTr("لطفا دوست خودتو انتخاب کن"),true,null,600*size1W, ltr)
+                        else
+                            usefulFunc.showLog(qsTr("لطفااول دوستاتو اضافه کن بعد دوست خودتو انتخاب کن"),true,null,700*size1W, ltr)
+                        return
+                    }
+
+                    let friendId = friendModel.get(friendCombo.currentIndex).id
+                    if(prevPageModel)
+                        thingsApi.prepareForEdit(thingModel,waitingModel,prevPageModel.id,options,Memorito.Waiting,(attachModel.count>0?1:0),null,null,friendId,null); // 5 is waiting list id
+                    else
+                        thingsApi.prepareForAdd(waitingModel,options,Memorito.Waiting,(attachModel.count>0?1:0),null,null,friendId,null);
+                }
+            }
+        }
+    }// 5 is waiting list id
+
+    Component{
+        id:calendarComponent
+        Rectangle {
+            id: calendarItem
+            anchors{
+                fill: parent
+            }
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
+            Behavior on height {
+                NumberAnimation{
+                    duration: 200
+                }
+            }
+            clip:true
+            property date dueDate: prevPageModel?prevPageModel.due_date?new Date(prevPageModel.due_date):"":""
+            App.CheckBox{
+                id:clockCheck
+                anchors{
+                    left: parent.left
+                    leftMargin: 20*size1W
+                    top: parent.top
+                    topMargin: 20*size1W
+                }
+                text: qsTr("تعیین ساعت")
+                checked: prevPageModel?prevPageModel.due_date?!(calendarItem.dueDate.getHours() === 5 && calendarItem.dueDate.getMinutes() === 17 && calendarItem.dueDate.getSeconds() === 17):false:false
+            }
+            App.DateInput{
+                id: dateInput
+                placeholderText: qsTr("زمان مورد نظر را انتخاب نمایید")
+                hasTime: clockCheck.checked
+                minSelectedDate: new Date()
+                selectedDate: calendarItem.dueDate
+                anchors{
+                    top: parent.top
+                    right: clockCheck.left
+                    rightMargin: 30*size1W
+                    left: parent.left
+                    leftMargin: 20*size1W
+                }
+            }
+
+            App.Button{
+                id: calendarBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    top: dateInput.bottom
+                    topMargin: 20*size1W
+                    horizontalCenter: parent.horizontalCenter
+                }
+                text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به تقویم")
+
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+
+                    if( dateInput.selectedDate.toString() === "Invalid Date")
+                    {
+                        usefulFunc.showLog(qsTr("لطفا زمانی که میخوای این کار رو بکنی مشخص کن"),true,null,700*size1W, ltr)
+                        return
+                    }
+                    if(!clockCheck.checked)
+                    {
+                        dateInput.selectedDate = new Date(dateInput.selectedDate.setHours(5));
+                        dateInput.selectedDate = new Date(dateInput.selectedDate.setMinutes(17))
+                        dateInput.selectedDate = new Date(dateInput.selectedDate.setSeconds(17))
+                    }
+
+                    let dueDate = usefulFunc.formatDate(dateInput.selectedDate,false)
+                    if(prevPageModel)
+                        thingsApi.prepareForEdit(thingModel,calendarModel,prevPageModel.id,options,Memorito.Calendar,(attachModel.count>0?1:0),null,dueDate,null,null)
+                    else
+                        thingsApi.prepareForAdd(calendarModel,options,Memorito.Calendar,(attachModel.count>0?1:0),null,dueDate,null,null);
+                }
+            }
+        }
+    }// 6 is calendar list id
+
+    Component{
+        id:trashComponent
+        Rectangle {
+            id: trashItem
+            anchors{
+                fill: parent
+            }
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
+            App.Button{
+                id: trashBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    centerIn: parent
+                }
+                text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به سطل آشغال")
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+                    if(prevPageModel)
+                        thingsApi.prepareForEdit(thingModel,trashModel,dprevPageModel.id,options,Memorito.Trash,(attachModel.count>0?1:0));
+                    else
+                        thingsApi.prepareForAdd(trashModel,options,Memorito.Trash,(attachModel.count>0?1:0));
+                }
+            }
+        }
+    }// 7 is trash list id
+
+    Component{
+        id: doComponent
+        Rectangle {
+            id: doItem
+            anchors{
+                fill: parent
+            }
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
+            App.Button{
+                id: doBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    centerIn: parent
+                }
+                text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به انجام شده ها")
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+                    if(prevPageModel)
+                        thingsApi.prepareForEdit(thingModel,doneModel,prevPageModel.id,options,Memorito.Done,(attachModel.count>0?1:0),null,null,null,null)
+                    else
+                        thingsApi.prepareForAdd(doneModel,options,Memorito.Done,(attachModel.count>0?1:0),null,null,null,null);
+                }
+            }
+        }
+    }// 8 is Done list id
+
+    Component{
+        id:somedayComponent
+        Rectangle {
+            id: somedayItem
+            CategoryApi{ id: categoryApi}
+            anchors{
+                fill: parent
+            }
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
+            Text {
+                id: somedayCategoryText
+                text: qsTr("دسته بندی") + ":"
+                anchors{
+                    right: parent.right
+                    rightMargin: 20*size1W
+                    top: parent.top
+                    topMargin: 50*size1W
+                }
+                font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                color: appStyle.textColor
+            }
+            App.ComboBox{
+                id: somedayCategoryCombo
+                textRole: "category_name"
+                font.pixelSize: size1F*28
+                placeholderText: qsTr("دسته بندی") + " (" + qsTr("اختیاری") + ")"
+                currentIndex: prevPageModel
+                              ?somedayCategoryModel.count>0
+                                ?prevPageModel.category_id
+                                  ?usefulFunc.findInModel(prevPageModel.category_id,"id",somedayCategoryModel).index
+                                  :-1
+                :-1:-1
+                anchors{
+                    top: parent.top
+                    topMargin: 10*size1W
+                    right: somedayCategoryText.left
+                    rightMargin: currentIndex === -1?20*size1W:50*size1W
+                    left: parent.left
+                    leftMargin: 20*size1W
+                }
+                model: somedayCategoryModel
+                Component.onCompleted: {
+                    categoryApi.getCategories(somedayCategoryModel,Memorito.Someday) // 9 = شاید یک روزی
+                }
+            }
+
+            App.Button{
+                id: somedayBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    top: somedayCategoryCombo?somedayCategoryCombo.visible?somedayCategoryCombo.bottom:parent.top:undefined
+                    topMargin: 25*size1W
+                    horizontalCenter: parent.horizontalCenter
+                }
+                text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به شاید یک روزی")
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+                    let categoryId = somedayCategoryCombo.currentIndex !== -1 ? somedayCategoryModel.get(somedayCategoryCombo.currentIndex).id : null
+                    if(prevPageModel)
+                        thingsApi.prepareForEdit(thingModel,somedayModel,prevPageModel.id,options,Memorito.Someday,(attachModel.count>0?1:0),categoryId); // 9 is someday list id
+                    else
+                        thingsApi.prepareForAdd(somedayModel,options,Memorito.Someday,(attachModel.count>0?1:0),categoryId);
+                }
+            }
+        }
+    }// 9 is someday list id
+
+    Component{
+        id: projectCategoryComponent
+        Rectangle {
+            id: projectCategoryItem
+            ProjectApi{ id: projectApi}
+            anchors{
+                fill: parent
+            }
+            radius: 10*size1W
+            color: "transparent"
+            border.width: 3*size1W
+            border.color: Material.hintTextColor
+            Text {
+                id: projectCategoryText
+                text: qsTr("انتخاب پروژه") + ":"
+                anchors{
+                    right: parent.right
+                    rightMargin: 20*size1W
+                    top: parent.top
+                    topMargin: 50*size1W
+                }
+                font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+                color: appStyle.textColor
+            }
+            App.ComboBox{
+                id: projectCategoryCombo
+                textRole: "project_name"
+                font.pixelSize: size1F*28
+                placeholderText: qsTr("پروژه موردنظر را انتخاب کنید")
+                currentIndex: prevPageModel?projectModel.count>0?prevPageModel.project_id?usefulFunc.findInModel(prevPageModel.project_id,"id",projectModel).index:-1:-1:-1
+                anchors{
+                    top: parent.top
+                    topMargin: 10*size1W
+                    right: projectCategoryText.left
+                    rightMargin: currentIndex === -1?20*size1W:50*size1W
+                    left: parent.left
+                    leftMargin: 20*size1W
+                }
+                model: projectModel
+                Component.onCompleted: {
+                    projectApi.getProjects(projectModel)
+                }
+            }
+            App.Button{
+                id: projectCategoryBtn
+                width: 410*size1W
+                height: 70*size1H
+                checkable: true
+                Material.accent: "transparent"
+                Material.primary: "transparent"
+                Material.background: appStyle.primaryInt
+                Material.foreground: "white"
+                anchors{
+                    top: projectCategoryCombo.visible?projectCategoryCombo.bottom:parent.top
+                    topMargin: 25*size1W
+                    horizontalCenter: parent.horizontalCenter
+                }
+                text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به پروژه")
+                radius: 10*size1W
+                leftPadding: 35*size1W
+                onClicked: {
+                    let projectId = projectCategoryCombo.currentIndex !== -1 ? projectModel.get(projectCategoryCombo.currentIndex).id : null
+                    if(prevPageModel)
+                        thingsApi.prepareForEdit(thingModel,projectModel,prevPageModel.id,options,Memorito.Project,(attachModel.count>0?1:0),null,null,null,projectId)
+                    else
+                        thingsApi.prepareForAdd(options,Memorito.Project,(attachModel.count>0?1:0),null,null,null,projectId);
+                }
+            }
+        }
+    }// 10 is project list id
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
