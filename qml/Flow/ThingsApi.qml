@@ -1,21 +1,38 @@
-import QtQuick 2.14
+﻿import QtQuick 2.14
 
 QtObject {
-    function prepareForAdd(options,listId,categoryId=null,dueDate=null,friendId=null,projectId=null)
+    function prepareForAdd(model,options,listId,hasFiles,categoryId=null,dueDate=null,friendId=null,projectId=null)
+    {
+        if(titleInput.text.trim() === "")
+        {
+            usefulFunc.showLog(qsTr("لطفا قسمت 'چی تو دهنته؟' رو پر کن"),true,null,600*size1W, ltr)
+            titleMoveAnimation.start()
+            return
+        }
+
+        let title = titleInput.text.trim()
+        let detail = flickTextArea.text.trim()
+
+        if(dueDate !==null)
+            dueDate = encodeURIComponent(dueDate)
+
+        addThing(model,title,detail,listId,hasFiles,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId,projectId)
+    }
+
+    function prepareForEdit(model,newModel,thingId,options,listId,hasFiles,categoryId=null,dueDate=null,friendId=null,projectId=null)
     {
         if(titleInput.text.trim() === "")
         {
             usefulFunc.showLog(qsTr("لطفا قسمت 'چی تو دهنته؟' رو پر کن"),true,null,600*size1W, ltr)
             return
         }
-
         let title = titleInput.text.trim()
-        let detail = detailInput.text.trim()
+        let detail = flickTextArea.text.trim()
 
         if(dueDate !==null)
             dueDate = encodeURIComponent(dueDate)
 
-        addThing(thingModel,title,detail,listId,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId,projectId)
+        editThing(thingId,modelIndex,model,newModel,title,detail,listId,hasFiles,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId,projectId)
     }
 
     function getThings(model,listId)
@@ -81,13 +98,15 @@ QtObject {
         }
     }
 
-    function addThing(model,title,detail,listId=null,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null,projectId=null)
+    function addThing(model,title,detail,listId=null,hasFiles,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null,projectId=null)
     {
         let json = JSON.stringify(
                 {
                     title : title,
                     user_id: currentUser.userId,
                     detail : detail,
+                    list_id : listId,
+                    has_files: parseInt(hasFiles),
                     priority_id : priorityId,
                     estimate_time : estimateTime,
                     context_id : contextId,
@@ -95,8 +114,7 @@ QtObject {
                     due_date : dueDate,
                     friend_id : friendId,
                     category_id : categoryId,
-                    project_id : projectId,
-                    list_id : listId
+                    project_id : projectId
 
                 }, null, 1);
 
@@ -121,10 +139,11 @@ QtObject {
                         if(response.code === 201){
                             usefulFunc.showLog(" <b>'"+ title+" '</b>" +qsTr("با موفقیت افزوده شد"),false,null,700*size1W, ltr)
                             model.append(response.result)
-                            detailInput.clear()
+                            flickTextArea.detailInput.clear()
                             titleInput.clear()
-                            attachModel.clear()
-                            processBtn.checked = false
+                            if(hasFiles)
+                                addFiles(attachModel,attachModel.count,response.result.id)
+                            isDual = false
 
                         }
                     }
@@ -146,13 +165,14 @@ QtObject {
         }
     }
 
-    function editThing(title,detail,priorityId,estimateTime,contextId,energyId,dueDate,friendId,categoryId,projectId,listId,model,modelIndex)
+    function editThing(thingId,modelIndex,model,newModel,title,detail,listId=null,hasFiles,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null,projectId=null)
     {
         let json = JSON.stringify(
                 {
                     title : title,
                     user_id: currentUser.userId,
                     detail : detail,
+                    has_files: parseInt(hasFiles),
                     priority_id : priorityId,
                     estimate_time : estimateTime,
                     context_id : contextId,
@@ -183,7 +203,10 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 200){
-//                            model.set(modelIndex,{"thing_name":thingName,"thing_goal":thingGoal})
+                            model.remove(modelIndex,1)
+                            newModel.append(response.result)
+                            usefulFunc.showLog(" <b>'"+ title+" '</b>" +qsTr("با موفقیت بروزرسانی شد"),false,null,700*size1W, ltr)
+                            usefulFunc.mainStackPop()
                         }
                     }
                     else {
@@ -251,8 +274,9 @@ QtObject {
         let fileList= [];
         for(let i = 0; i < filesCount; i++)
         {
-            let base64 = myTools.encodeToBase64(String(fileModel.get(i).fileSource.replace("file://","")))
-            fileList[i] = {"base64_file" : base64 , "file_extension": fileModel.get(i).fileExtension ,"file_name" :fileModel.get(i).fileName}
+            let file = fileModel.get(i)
+            let base64 = myTools.encodeToBase64(String(file.file_source.replace("file://","")))
+            fileList[i] = {"base64_file" : base64 , "file_extension": file.file_extension ,"file_name" :file.file_name}
         }
 
         let json = JSON.stringify(
@@ -282,8 +306,7 @@ QtObject {
                     {
                         if(response.code === 201){
                             usefulFunc.showLog(qsTr("فایل‌ها با موفقیت افزوده شد"),false,null,700*size1W, ltr)
-//                            let result = response.result
-//                            console.log(myTools.saveBase64asFile(result[0].file_name,result[0].file_extension,result[0].file))
+                            fileModel.clear()
                         }
                     }
                     else {
@@ -300,6 +323,76 @@ QtObject {
                     console.log(xhr.responseText)
                     console.error(e)
                     usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
+                }
+            }
+        }
+    }
+
+    function getFiles(model,thingId)
+    {
+        if(model.count>0)
+        {
+            return model
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        let query = "user_id=" + currentUser.userId + "&things_id="+thingId
+        xhr.open("GET", domain+"/api/v1/files"+"?"+query,true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(null);
+        var busyDialog = usefulFunc.showBusy("",
+                                             function()
+                                             {
+                                                 usefulFunc.showConfirm(
+                                                             qsTr("لغو"),
+                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
+                                                             function()
+                                                             {
+                                                                 xhr.abort()
+                                                             }
+                                                             )
+                                             }
+                                             );
+        xhr.onabort =function(){
+            busyDialog.close()
+        }
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200){
+                            for(let i=0;i<response.result.length;i++)
+                            {
+                                let file=response.result[i]
+                                if(myTools.checkFileExist(file["file_name"],file["file_extension"]))
+                                    file["file_source"] = "file://"+myTools.getSaveDirectory()+file["file_name"]+"."+file["file_extension"]
+                                else file["file_source"] = "";
+                                model.append(file)
+                            }
+                        }
+                    }
+                    else {
+                        if(response.code === 406)
+                        {
+                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                        }
+                        else
+                            usefulFunc.showLog(response.message,true,mainColumn,mainColumn.width, ltr)
+                        return null
+                    }
+                }
+                catch(e) {
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
+                    return null
                 }
             }
         }
