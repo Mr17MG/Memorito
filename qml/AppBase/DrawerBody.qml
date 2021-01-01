@@ -3,6 +3,7 @@ import QtGraphicalEffects 1.14 // Require For ColorOverlay
 import "qrc:/Components/" as App // Require For App.Button
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls 2.14 // Require For ScrollBar
+import MEnum 1.0
 
 Item{
     anchors.fill: parent
@@ -107,7 +108,7 @@ Item{
                     drawerLoader.item.close()
                 if(pageSource)
                 {
-                    usefulFunc.mainStackPush(pageSource,title)
+                    usefulFunc.mainStackPush(model.pageSource,model.title,{listId:model.listId,title:title})
                 }
             }
             Image {
@@ -131,7 +132,7 @@ Item{
                 id:iconColor
                 anchors.fill: icon
                 source:icon
-                color:stackPages.get(stackPages.count-1).page === pageSource?appStyle.primaryColor
+                color:stackPages.get(stackPages.count-1).title === title?appStyle.primaryColor
                                                                             :appStyle.textColor
 
             }
@@ -162,55 +163,73 @@ Item{
                 title: qsTr("جمع‌آوری")
                 pageSource :"qrc:/Flow/Collect.qml"
                 iconSrc: "qrc:/collect.svg"
+                listId: Memorito.Collect
             }
             ListElement{
                 title:qsTr("پردازش نشده‌ها")
                 iconSrc: "qrc:/process.svg"
-                pageSource: "qrc:/Flow/Unprocessed.qml"
+                pageSource: "qrc:/Flow/NextAction.qml"
+                listId: Memorito.Process
             }
             ListElement{
                 title:qsTr("عملیات بعدی")
                 iconSrc: "qrc:/nextAction.svg"
                 pageSource: "qrc:/Flow/NextAction.qml"
+                listId: Memorito.NextAction
             }
             ListElement{
                 title:qsTr("لیست انتظار")
                 iconSrc: "qrc:/waiting.svg"
+                pageSource: "qrc:/Flow/NextAction.qml"
+                listId: Memorito.Waiting
             }
             ListElement{
                 title:qsTr("تقویم")
                 iconSrc: "qrc:/calendar.svg"
+                pageSource: "qrc:/Flow/NextAction.qml"
+                listId: Memorito.Calendar
+            }
+            ListElement{
+                title:qsTr("مرجع")
+                iconSrc: "qrc:/refrence.svg"
+                pageSource: "qrc:/Flow/NextAction.qml"
+                listId: Memorito.Refrence
             }
             ListElement{
                 title:qsTr("شاید یک‌روزی")
                 iconSrc: "qrc:/someday.svg"
+                pageSource: "qrc:/Flow/NextAction.qml"
+                listId: Memorito.Someday
             }
             ListElement{
                 title:qsTr("پروژه‌ها")
                 iconSrc: "qrc:/project.svg"
                 pageSource: "qrc:/Flow/Projects.qml"
-            }
-            ListElement{
-                title:qsTr("مرجع")
-                iconSrc: "qrc:/refrence.svg"
+                listId: Memorito.Project
             }
             ListElement{
                 title:qsTr("انجام شده‌ها")
                 iconSrc: "qrc:/done.svg"
+                pageSource: "qrc:/Flow/NextAction.qml"
+                listId: Memorito.Done
             }
             ListElement{
                 title:qsTr("سطل زباله")
                 iconSrc: "qrc:/trash.svg"
+                pageSource: "qrc:/Flow/NextAction.qml"
+                listId: Memorito.Trash
             }
             ListElement{
                 title:qsTr("محل‌های انجام")
                 pageSource:"qrc:/Managment/Contexts.qml"
                 iconSrc: "qrc:/contexts.svg"
+                listId: Memorito.Contexts
             }
             ListElement{
                 title:qsTr("دوستان")
                 iconSrc: "qrc:/friends.svg"
                 pageSource: "qrc:/Managment/Friends.qml"
+                listId: Memorito.Friends
             }
             ListElement{
                 title: qsTr("تنظیمات")
