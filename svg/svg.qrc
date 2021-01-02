@@ -99,5 +99,6 @@
         <file>pack/xlsx.svg</file>
         <file>pack/zip.svg</file>
         <file>pack/unknown.svg</file>
+        <file>garbage.svg</file>
     </qresource>
 </RCC>
