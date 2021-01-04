@@ -10,8 +10,10 @@ Item {
         users.append(userDbFunc.getUsers())
         if(users.count > 0)
         {
-            currentUser = userDbFunc.getUserByUserId(users.get(0).userId)
-            api.validateToken(currentUser.authToken,currentUser.userId)
+            currentUser = userDbFunc.getUserByUserId(users.get(0).id)
+            let token = currentUser.authToken?currentUser.authToken:"-1"
+            let userId = currentUser.id?currentUser.id:-1
+            api.validateToken(token,userId)
         }
         else{
             mainLoader.source = "qrc:/Account/AccountMain.qml"
