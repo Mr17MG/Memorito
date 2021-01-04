@@ -11,7 +11,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId
+        let query = "user_id=" + currentUser.id
         xhr.open("GET", domain+"/api/v1/friends"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -69,7 +69,7 @@ QtObject {
     {
         let json = JSON.stringify(
                 {
-                    user_id: currentUser.userId,
+                    user_id: currentUser.id,
                     friend_name: friendName
                 }, null, 1);
 
@@ -117,7 +117,7 @@ QtObject {
     {
         let json = JSON.stringify(
                 {
-                    user_id: currentUser.userId,
+                    user_id: currentUser.id,
                     friend_name: friendName
                 }, null, 1);
 
@@ -165,7 +165,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId
+        let query = "user_id=" + currentUser.id
         xhr.open("DELETE", domain+"/api/v1/friends/"+friendId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -221,7 +221,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId
+        let query = "user_id=" + currentUser.id
         xhr.open("GET", domain+"/api/v1/contexts"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -280,7 +280,7 @@ QtObject {
     {
         let json = JSON.stringify(
                 {
-                    user_id: currentUser.userId,
+                    user_id: currentUser.id,
                     context_name: contextName
                 }, null, 1);
 
@@ -328,7 +328,7 @@ QtObject {
     {
         let json = JSON.stringify(
                 {
-                    user_id: currentUser.userId,
+                    user_id: currentUser.id,
                     context_name: contextName
                 }, null, 1);
 
@@ -376,7 +376,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId
+        let query = "user_id=" + currentUser.id
         xhr.open("DELETE", domain+"/api/v1/contexts/"+contextId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);

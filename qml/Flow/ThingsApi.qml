@@ -1,7 +1,7 @@
 ﻿import QtQuick 2.14
 
 QtObject {
-    function prepareForAdd(model,options,listId,hasFiles,categoryId=null,dueDate=null,friendId=null,projectId=null)
+    function prepareForAdd(model,options,listId,hasFiles,categoryId=null,dueDate=null,friendId=null)
     {
         if(titleInput.text.trim() === "")
         {
@@ -16,10 +16,10 @@ QtObject {
         if(dueDate !==null)
             dueDate = encodeURIComponent(dueDate)
 
-        addThing(model,title,detail,listId,hasFiles,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId,projectId)
+        addThing(model,title,detail,listId,hasFiles,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId)
     }
 
-    function prepareForEdit(model,newModel,thingId,options,listId,hasFiles,categoryId=null,dueDate=null,friendId=null,projectId=null)
+    function prepareForEdit(model,newModel,thingId,options,listId,hasFiles,categoryId=null,dueDate=null,friendId=null)
     {
         if(titleInput.text.trim() === "")
         {
@@ -32,10 +32,10 @@ QtObject {
         if(dueDate !==null)
             dueDate = encodeURIComponent(dueDate)
 
-        editThing(thingId,modelIndex,model,newModel,title,detail,listId,hasFiles,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId,projectId)
+        editThing(thingId,modelIndex,model,newModel,title,detail,listId,hasFiles,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId)
     }
 
-    function getThings(model,listId)
+    function getThings(model,listId,categoryId)
     {
         if(model.count>0)
         {
@@ -45,7 +45,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId + "&list_id="+listId
+        let query = "user_id=" + currentUser.id + "&list_id="+listId + (categoryId === -1 ?"":"&category_id="+categoryId)
         xhr.open("GET", domain+"/api/v1/things"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -98,12 +98,12 @@ QtObject {
         }
     }
 
-    function addThing(model,title,detail,listId=null,hasFiles,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null,projectId=null)
+    function addThing(model,title,detail,listId=null,hasFiles,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null)
     {
         let json = JSON.stringify(
                 {
                     title : title,
-                    user_id: currentUser.userId,
+                    user_id: currentUser.id,
                     detail : detail,
                     list_id : listId,
                     has_files: parseInt(hasFiles),
@@ -113,9 +113,7 @@ QtObject {
                     energy_id : energyId,
                     due_date : dueDate,
                     friend_id : friendId,
-                    category_id : categoryId,
-                    project_id : projectId
-
+                    category_id : categoryId
                 }, null, 1);
 
         var xhr = new XMLHttpRequest();
@@ -165,12 +163,12 @@ QtObject {
         }
     }
 
-    function editThing(thingId,modelIndex,model,newModel,title,detail,listId=null,hasFiles,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null,projectId=null)
+    function editThing(thingId,modelIndex,model,newModel,title,detail,listId=null,hasFiles,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null)
     {
         let json = JSON.stringify(
                 {
                     title : title,
-                    user_id: currentUser.userId,
+                    user_id: currentUser.id,
                     detail : detail,
                     has_files: parseInt(hasFiles),
                     priority_id : priorityId,
@@ -180,7 +178,6 @@ QtObject {
                     due_date : dueDate,
                     friend_id : friendId,
                     category_id : categoryId,
-                    project_id : projectId,
                     list_id : listId
                 }, null, 1);
 
@@ -231,7 +228,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId
+        let query = "user_id=" + currentUser.id
         xhr.open("DELETE", domain+"/api/v1/things/"+thingId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -282,7 +279,7 @@ QtObject {
         let json = JSON.stringify(
                 {
                     things_id: thingId,
-                    user_id: currentUser.userId,
+                    user_id: currentUser.id,
                     file_list: fileList
                 }, null, 1);
 
@@ -338,7 +335,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId + "&things_id="+thingId
+        let query = "user_id=" + currentUser.id + "&things_id="+thingId
         xhr.open("GET", domain+"/api/v1/files"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
