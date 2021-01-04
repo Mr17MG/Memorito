@@ -97,7 +97,8 @@ Item {
             anchors.rightMargin: -15*size1W
             height: parent.height
             z:-1
-            color: appStyle.appBackgroundColor
+            color: item.areaInDialog? appStyle.dialogBackgroundColor
+                                    : appStyle.appBackgroundColor
             visible: detailInput.focus || detailInput.text!==""
             radius: 15*size1W
         }
