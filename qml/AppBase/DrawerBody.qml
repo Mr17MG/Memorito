@@ -12,7 +12,7 @@ Item{
 
     Text {
         id: userNameText
-        text: "@"+currentUser.username
+        text: "@"+(currentUser.username??"")
         color: appStyle.textColor
         font{family: appStyle.appFont;pixelSize: 25*size1F;bold:false}
         horizontalAlignment: Text.AlignHCenter
@@ -108,7 +108,7 @@ Item{
                     drawerLoader.item.close()
                 if(pageSource)
                 {
-                    usefulFunc.mainStackPush(model.pageSource,model.title,{listId:model.listId,title:title})
+                    usefulFunc.mainStackPush(model.pageSource,model.title,{listId:model.listId,pageTitle:title})
                 }
             }
             Image {
@@ -192,13 +192,13 @@ Item{
             ListElement{
                 title:qsTr("مرجع")
                 iconSrc: "qrc:/refrence.svg"
-                pageSource: "qrc:/Flow/NextAction.qml"
+                pageSource: "qrc:/Flow/Projects.qml"
                 listId: Memorito.Refrence
             }
             ListElement{
                 title:qsTr("شاید یک‌روزی")
                 iconSrc: "qrc:/someday.svg"
-                pageSource: "qrc:/Flow/NextAction.qml"
+                pageSource: "qrc:/Flow/Projects.qml"
                 listId: Memorito.Someday
             }
             ListElement{

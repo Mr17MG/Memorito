@@ -126,8 +126,10 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 202){
-                            mainLoader.source = "qrc:/Memorito.qml"
                             userDbFunc.addUser(response.result)
+                            users.append(userDbFunc.getUsers())
+                            mainLoader.source = "qrc:/Memorito.qml"
+                            currentUser = userDbFunc.getUserByUserId(users.get(0).id)
                         }
                     }
                     else {
@@ -204,9 +206,10 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 202){
-                            mainLoader.source = "qrc:/Memorito.qml"
                             userDbFunc.addUser(response.result)
-                            currentUser = userDbFunc.getUserByUserId(users.get(0).userId)
+                            users.append(userDbFunc.getUsers())
+                            mainLoader.source = "qrc:/Memorito.qml"
+                            currentUser = userDbFunc.getUserByUserId(users.get(0).id)
                         }
                         else if(response.code === 200)
                         {
@@ -358,8 +361,10 @@ QtObject {
                     {
                         if(response.code === 200)
                         {
-                            mainLoader.source = "qrc:/Memorito.qml"
                             userDbFunc.addUser(response.result)
+                            users.append(userDbFunc.getUsers())
+                            mainLoader.source = "qrc:/Memorito.qml"
+                            currentUser = userDbFunc.getUserByUserId(users.get(0).id)
                         }
                     }
                     else {
@@ -487,8 +492,8 @@ QtObject {
                     else {
                         if(response.code === 403)
                         {
-                            mainLoader.source = "qrc:/Account/AccountMain.qml"
                             userDbFunc.deleteUser(userId)
+                            mainLoader.source = "qrc:/Account/AccountMain.qml"
                         }
 
                         else
