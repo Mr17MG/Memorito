@@ -18,12 +18,14 @@ Item{
     property int modelIndex: -1
     property var options: []
     property int listId: -1
+    property int categoryId: -1
 
     onPrevPageModelChanged: {
-        if(prevPageModel.has_files === 1)
-        {
-            thingsApi.getFiles(attachModel,prevPageModel.id)
-        }
+        if(prevPageModel)
+            if(prevPageModel.has_files === 1)
+            {
+                thingsApi.getFiles(attachModel,prevPageModel.id)
+            }
     }
 
     Flickable{
@@ -150,7 +152,7 @@ Item{
                                                         calendarComponent : listId === Memorito.Trash?
                                                             trashComponent : listId === Memorito.Done?
                                                                 doComponent : listId === Memorito.Project?
-                                                                    projectComponent : collectComponent
+                                                                    projectCategoryComponent : collectComponent
                 }
 
                 Loader{
@@ -171,6 +173,12 @@ Item{
         width: parent.width/2
         height: active?mainFlick.height:0
         asynchronous: true
+        anchors{
+            top: parent.top
+            topMargin: 15*size1H
+            left: parent.left
+            leftMargin: 25*size1W
+        }
         sourceComponent: Flickable{
             id: secondFlick
             contentHeight: processLoader2.height
@@ -201,12 +209,6 @@ Item{
                 id: processLoader2
                 width: parent.width
                 height: 2000*size1H
-                anchors{
-                    top: parent.top
-                    topMargin: 15*size1H
-                    left: parent.left
-                    leftMargin: 10*size1W
-                }
                 active: true
                 asynchronous: true
                 sourceComponent: processComponent
@@ -626,9 +628,9 @@ Item{
                     font.pixelSize: size1F*28
                     placeholderText: qsTr("اولویت") + " (" + qsTr("اختیاری") + ")"
                     currentIndex: prevPageModel?prevPageModel.priority_id?usefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).index:-1:-1
-                    model: energyModel
+                    model: priorityModel
                     onCurrentIndexChanged: {
-                        options["energyId"] = energyInput.currentIndex === -1? null : energyModel.get( energyInput.currentIndex ).Id
+                        options["priorityId"] = priorityInput.currentIndex === -1? null : priorityModel.get( priorityInput.currentIndex ).Id
                     }
                 }
             }
@@ -665,10 +667,10 @@ Item{
                     iconRole: "iconSource"
                     font.pixelSize: size1F*28
                     placeholderText: qsTr("سطح انرژی") + " (" + qsTr("اختیاری") + ")"
+                    model: energyModel
                     currentIndex: prevPageModel?prevPageModel.energy_id?usefulFunc.findInModel(prevPageModel.energy_id,"Id",energyModel).index:-1:-1
-                    model: priorityModel
                     onCurrentIndexChanged: {
-                        options["priorityId"] = priorityInput.currentIndex === -1? null : priorityModel.get( priorityInput.currentIndex ).Id
+                        options["energyId"] = energyInput.currentIndex === -1? null : energyModel.get( energyInput.currentIndex ).Id
                     }
                 }
             }
@@ -728,7 +730,7 @@ Item{
         id:projectComponent
         Rectangle {
             id: projectItem
-            ProjectApi{ id: projectApi}
+            CategoryApi{ id: categoryApi}
             anchors{
                 fill: parent
             }
@@ -753,7 +755,10 @@ Item{
                 radius: 10*size1W
                 leftPadding: 35*size1W
                 onClicked: {
-                    projectApi.addProject(titleInput.text.trim(),flickTextArea.text.trim(),projectModel,1)
+                    if(listId === Memorito.Process)
+                        categoryApi.addCategory(titleInput.text.trim(),flickTextArea.text.trim(),Memorito.Project,projectCategoryModel,2,thingModel,modelIndex)
+                    else
+                        categoryApi.addCategory(titleInput.text.trim(),flickTextArea.text.trim(),Memorito.Project,projectCategoryModel,1)
                 }
             }
         }
@@ -830,7 +835,7 @@ Item{
                                   refrenceCategoryModel.count>0
                                   ?prevPageModel.category_id
                                     ?usefulFunc.findInModel(prevPageModel.category_id,"id",refrenceCategoryModel).index
-                                        :-1
+                                    :-1
                 :-1
                 :-1
                 anchors{
@@ -1204,7 +1209,7 @@ Item{
         id: projectCategoryComponent
         Rectangle {
             id: projectCategoryItem
-            ProjectApi{ id: projectApi}
+            CategoryApi{ id: categoryApi}
             anchors{
                 fill: parent
             }
@@ -1226,10 +1231,12 @@ Item{
             }
             App.ComboBox{
                 id: projectCategoryCombo
-                textRole: "project_name"
+                textRole: "category_name"
                 font.pixelSize: size1F*28
                 placeholderText: qsTr("پروژه موردنظر را انتخاب کنید")
-                currentIndex: prevPageModel?projectModel.count>0?prevPageModel.project_id?usefulFunc.findInModel(prevPageModel.project_id,"id",projectModel).index:-1:-1:-1
+                currentIndex: prevPageModel?
+                                  projectCategoryModel.count>0?prevPageModel.category_id?usefulFunc.findInModel(prevPageModel.category_id,"id",projectCategoryModel).index:-1:-1
+                :categoryId !== -1?usefulFunc.findInModel(categoryId,"id",projectCategoryModel).index:-1
                 anchors{
                     top: parent.top
                     topMargin: 10*size1W
@@ -1238,9 +1245,9 @@ Item{
                     left: parent.left
                     leftMargin: 20*size1W
                 }
-                model: projectModel
+                model: projectCategoryModel
                 Component.onCompleted: {
-                    projectApi.getProjects(projectModel)
+                    categoryApi.getCategories(projectCategoryModel,Memorito.Project)
                 }
             }
             App.Button{
@@ -1261,11 +1268,16 @@ Item{
                 radius: 10*size1W
                 leftPadding: 35*size1W
                 onClicked: {
-                    let projectId = projectCategoryCombo.currentIndex !== -1 ? projectModel.get(projectCategoryCombo.currentIndex).id : null
+                    if(projectCategoryCombo.currentIndex === -1)
+                    {
+                        usefulFunc.showLog(qsTr("لطفا پروژه موردنظر را انتخاب کن"),true,null,600*size1W, ltr)
+                        return
+                    }
+                    let projectId = projectCategoryCombo.currentIndex !== -1 ? projectCategoryModel.get(projectCategoryCombo.currentIndex).id : null
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,projectModel,prevPageModel.id,options,Memorito.Project,(attachModel.count>0?1:0),null,null,null,projectId)
+                        thingsApi.prepareForEdit(thingModel,projectModel,prevPageModel.id,options,Memorito.Project,(attachModel.count>0?1:0),projectId,null,null)
                     else
-                        thingsApi.prepareForAdd(options,Memorito.Project,(attachModel.count>0?1:0),null,null,null,projectId);
+                        thingsApi.prepareForAdd(projectModel,options,Memorito.Project,(attachModel.count>0?1:0),projectId);
                 }
             }
         }
