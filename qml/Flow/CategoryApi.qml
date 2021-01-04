@@ -12,7 +12,7 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.userId + "&list_id=" + listId
+        let query = "user_id=" + currentUser.id + "&list_id=" + listId
         xhr.open("GET", domain+"/api/v1/categories"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -60,6 +60,160 @@ QtObject {
                 catch(e) {
                     usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
                     return null
+                }
+            }
+        }
+    }
+
+    function addCategory(categoryName,categoryDetail,listId,model,fromCollect=0,oldModel=null,modelIndex=null)
+    {
+        let json = JSON.stringify(
+                {
+                    user_id: currentUser.id,
+                    list_id : listId,
+                    category_name: categoryName,
+                    category_detail: categoryDetail
+                }, null, 1);
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("POST", domain+"/api/v1/categories",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("");
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 201){
+                            usefulFunc.showLog(" <b>'"+qsTr("پروژه جدید با نام")+ " "+ categoryName+" '</b>" +qsTr("با موفقیت افزوده شد"),false,null,700*size1W, ltr)
+                            model.append(response.result)
+
+                            if(fromCollect === 1)
+                            {
+                                flickTextArea.detailInput.clear()
+                                titleInput.clear()
+                                attachModel.clear()
+                                processBtn.checked = false
+                            }
+                            else if(fromCollect === 2)
+                            {
+                                thingsApi.deleteThing(oldModel.get(modelIndex).id, oldModel, modelIndex)
+                                usefulFunc.mainStackPop()
+                            }
+                        }
+                    }
+                    else {
+                        if(response.code === 406)
+                        {
+                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                        }
+                        else
+                            usefulFunc.showLog(response.message,true,mainColumn,mainColumn.width, ltr)
+                    }
+
+                }
+                catch(e) {
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
+                }
+            }
+        }
+    }
+
+    function editCategory(categoryId,categoryName,categoryDetail,listId,model,modelIndex)
+    {
+        let json = JSON.stringify(
+                {
+                    user_id: currentUser.id,
+                    list_id : listId,
+                    category_name: categoryName,
+                    category_detail: categoryDetail
+                }, null, 1);
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("PATCH", domain+"/api/v1/categories/"+categoryId,true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        var busyDialog = usefulFunc.showBusy("");
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200){
+                            model.set(modelIndex,{"category_name":categoryName,"category_detail":categoryDetail})
+                        }
+                    }
+                    else {
+                        if(response.code === 406)
+                        {
+                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                        }
+                        else
+                            usefulFunc.showLog(response.message,true,mainColumn,mainColumn.width, ltr)
+                    }
+
+                }
+                catch(e) {
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
+                }
+            }
+        }
+    }
+
+    function deleteCategory(categoryId,model,modelIndex)
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        let query = "user_id=" + currentUser.id
+        xhr.open("DELETE", domain+"/api/v1/categories/"+categoryId+"?"+query,true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(null);
+        var busyDialog = usefulFunc.showBusy("");
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200){
+                            model.remove(modelIndex)
+                        }
+                    }
+                    else {
+                        if(response.code === 406)
+                        {
+                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                        }
+                        else
+                            usefulFunc.showLog(response.message,true,mainColumn,mainColumn.width, ltr)
+                    }
+
+                }
+                catch(e) {
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
                 }
             }
         }
