@@ -88,7 +88,7 @@ Rectangle{
                         ]
                         Image {
                             id: unprocessImg
-                            source: parent.extensions.indexOf(model.file_extension)!== -1?"qrc:/pack/"+model.file_extension+".svg":"qrc:/pack/unknown.svg"
+                            source: parent.extensions.indexOf(model.file_extension.toLowerCase())!== -1?"qrc:/pack/"+(model.file_extension.toLowerCase())+".svg":"qrc:/pack/unknown.svg"
                             width: 70*size1W
                             height: width
                             sourceSize.width: width*2
@@ -102,7 +102,7 @@ Rectangle{
                         Image {
                             id: sourceImg
                             /*source:  initial in visible: */
-                            visible: (source = model.file_extension.match(/svg|png|jpg|gif|jpeg/g)?model.file_source:"") !==""
+                            visible: (source = model.file_extension.toLowerCase().match(/svg|png|jpg|gif|jpeg/g)?model.file_source:"") !==""
                             width: 70*size1W
                             height: width
                             sourceSize.width: width*2
@@ -141,14 +141,14 @@ Rectangle{
                         App.Button{
                             id:deleteBtn
                             width: (parent.parent.width/2) - 20*size1W
-                            text: fullRect.opacity === 0.3?qsTr("بازگرداندن"):qsTr("حذف")
+                            text: fullRect.opacity === 0.8?qsTr("بازگرداندن"):qsTr("حذف")
                             Material.background: Material.Red
                             onClicked: {
                                 if(model.file)
                                 {
                                     if(deleteBtn.text === qsTr("بازگرداندن"))
                                         fullRect.opacity = 1
-                                    else fullRect.opacity = 0.3
+                                    else fullRect.opacity = 0.8
                                 }
                                 else
                                 backRect.model.remove(index)
@@ -160,7 +160,7 @@ Rectangle{
                             width: (parent.parent.width/2)- 20*size1W
                             text: qsTr("باز کردن")
                             visible: !downloadBtn.visible
-                            Material.background: Material.BlueGrey
+                            Material.background: Material.LightBlue
                             onClicked: {
                                 Qt.openUrlExternally(model.file_source)
                             }
@@ -207,8 +207,8 @@ Rectangle{
             DropArea{
                 anchors.fill: parent
                 onEntered: {
-                    dragItem.opacity = 0.3
-                    addLoader.item.addText.opacity = 0.3
+                    dragItem.opacity = 0.7
+                    addLoader.item.addText.opacity = 07
                 }
                 onExited: {
                     dragItem.opacity = 1
@@ -219,14 +219,25 @@ Rectangle{
                     let files = drop.text.trim().split("\n");
                     for(let i=0;i<files.length;i++)
                     {
-                        files[i] = decodeURIComponent(files[i].trim())
-                        if(usefulFunc.findInModel(files[i],"file_source",backRect.model).index !== null)
+                        let file = myTools.getFileInfo(decodeURIComponent((files[i].trim())))
+                        if(usefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
+                        {
+                            usefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true,null,900*size1W, ltr)
                             continue
+                        }
+
+                        if(file.file_size > 10485760) // Bigger than 10 Megabyte
+                        {
+                            usefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true,null,900*size1W, ltr)
+                            continue
+                        }
+
+
                         backRect.model.append(
                                     {
-                                        "file_source": files[i],
-                                        "file_name": decodeURIComponent(files[i].split('/').pop().split('.')).replace(files[i].split('.').pop(),"").slice(0, -1),
-                                        "file_extension": files[i].split('.').pop()
+                                        "file_source":"file://"+file.file_source,
+                                        "file_name":file.file_name,
+                                        "file_extension":file.file_extension
                                     }
                                     )
                     }
@@ -260,6 +271,12 @@ Rectangle{
                                 usefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true,null,900*size1W, ltr)
                                 continue
                             }
+                            if(file.file_size > 10485760) // Bigger than 10 Megabyte
+                            {
+                                usefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true,null,900*size1W, ltr)
+                                continue
+                            }
+
 
                             backRect.model.append(
                                         {
