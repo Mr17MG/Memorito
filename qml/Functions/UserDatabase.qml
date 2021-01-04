@@ -12,8 +12,8 @@ QtObject {
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 var row = {
+                                    "localId":result.rows.item(i).local_id,
                                     "id":result.rows.item(i).id,
-                                    "userId":result.rows.item(i).user_id,
                                     "username":result.rows.item(i).username,
                                     "email":result.rows.item(i).email,
                                     "hashedPassword":result.rows.item(i).hashed_password,
@@ -25,8 +25,8 @@ QtObject {
                         catch(e)
                         {
                             tx.executeSql("CREATE TABLE IF NOT EXISTS Users(
-                                                                            id INTEGER PRIMARY KEY AUTOINCREMENT ,
-                                                                            user_id INTEGER DEFAULT -1 ,
+                                                                            local_id INTEGER PRIMARY KEY AUTOINCREMENT ,
+                                                                            id INTEGER DEFAULT -1 ,
                                                                             username TEXT ,
                                                                             email TEXT ,
                                                                             hashed_password TEXT ,
@@ -47,17 +47,18 @@ QtObject {
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Users WHERE user_id=?",[id])
-                            if(result.rows.length>0)
-                            var row = {
-                                "id":result.rows.item(0).id,
-                                "userId":result.rows.item(0).user_id,
-                                "username":result.rows.item(0).username,
-                                "email":result.rows.item(0).email,
-                                "hashedPassword":result.rows.item(0).hashed_password,
-                                "authToken":result.rows.item(0).auth_token
+                            var result = tx.executeSql("SELECT * FROM Users WHERE id=?",[id])
+                            if(result.rows.length>0){
+                                var row = {
+                                    "localId":result.rows.item(0).local_id,
+                                    "id":result.rows.item(0).id,
+                                    "username":result.rows.item(0).username,
+                                    "email":result.rows.item(0).email,
+                                    "hashedPassword":result.rows.item(0).hashed_password,
+                                    "authToken":result.rows.item(0).auth_token
+                                }
+                                response = row
                             }
-                            response = row
                         }
                         catch(e)
                         {
@@ -76,9 +77,9 @@ QtObject {
                         try
                         {
                             var result = tx.executeSql(
-                                        "INSERT INTO Users( user_id, username, email, hashed_password, auth_token)
+                                        "INSERT INTO Users( id, username, email, hashed_password, auth_token)
                                                                     VALUES(?,?,?,?,?)",
-                                        [user.user_id, user.username, user.email, user.hashed_password, user.auth_token]
+                                        [user.id, user.username, user.email, user.hashed_password, user.auth_token]
                                         )
                         }
                         catch(e)
@@ -97,8 +98,8 @@ QtObject {
                         try
                         {
                             var result = tx.executeSql(
-                                        "UPATE Users SET user_id=?, username=?, email=?, hashed_password=?, auth_token=? WHERE id=?",
-                                        [user.user_id, user.username, user.email, user.hashed_password, user.auth_token, user.id]
+                                        "UPATE Users SET id=?, username=?, email=?, hashed_password=?, auth_token=? WHERE local_id=?",
+                                        [user.id, user.username, user.email, user.hashed_password, user.auth_token, user.localId]
                                         )
                         }
                         catch(e)
@@ -109,14 +110,14 @@ QtObject {
                     )
     }
 
-    function deleteUser(userId)
+    function deleteUser(localId)
     {
         dataBase.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql( "DELETE FROM Users WHERE user_id=?", [userId] )
+                            var result = tx.executeSql( "DELETE FROM Users WHERE local_id=?", [localId] )
                         }
                         catch(e)
                         {
