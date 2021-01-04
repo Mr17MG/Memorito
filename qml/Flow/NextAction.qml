@@ -12,18 +12,20 @@ import MDate 1.0
 Item {
     ThingsApi{id: thingApi}
     Managment.API{ id: managmentApi }
+    property string pageTitle: ""
     property int listId: -1
-    property string title: ""
+    property int categoryId: -1
     Component.onCompleted: {
         thingApi.getThings(listId === Memorito.NextAction?
                                nextActionModel :listId === Memorito.Someday?
-                                   somedayModel :listId === Memorito.Refrence?
+                                   somedayModel :listId === Memorito.Project?
+                                   projectModel :listId === Memorito.Refrence?
                                        refrenceModel : listId === Memorito.Waiting?
                                            waitingModel : listId === Memorito.Calendar?
                                                calendarModel : listId === Memorito.Trash?
                                                    trashModel : listId === Memorito.Done?
                                                        doneModel : thingModel
-                           ,listId)
+                           ,listId,categoryId)
         if(listId === Memorito.Waiting)
         {
             managmentApi.getFriends(friendModel)
@@ -59,7 +61,7 @@ Item {
         }
         width: parent.width
         layoutDirection:Qt.RightToLeft
-        cellHeight: listId === Memorito.Process? 240*size1W:370*size1W
+        cellHeight: listId === Memorito.Process? 240*size1W:400*size1W
         cellWidth: width / (parseInt(width / parseInt(500*size1W))===0?1:(parseInt(width / parseInt(500*size1W))))
 
         /***********************************************/
@@ -133,7 +135,7 @@ Item {
 
                 Text{
                     id: thingText
-                    text: title
+                    text: model.title
                     font{family: appStyle.appFont;pixelSize:  25*size1F;bold:true}
                     color: "white"
                     anchors{
@@ -150,25 +152,27 @@ Item {
             }
             Text{
                 id: detailText
-                text: qsTr("توضیحات") + ": " + (detail?detail:qsTr("توضیحاتی ثبت نشده است"))
-                font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false;italic: true}
+                text: qsTr("توضیحات") + ": <b>" + (model.detail? model.detail : qsTr("توضیحاتی ثبت نشده است")) +"</b>"
+                font{family: appStyle.appFont;pixelSize:  23*size1F;}
                 anchors{
                     top:  topRect.bottom
-                    topMargin: 20*size1W
+                    topMargin: 15*size1W
                     right: parent.right
                     rightMargin: 20*size1W
                     left: parent.left
+                    leftMargin: 20*size1W
                 }
                 wrapMode: Text.WordWrap
                 maximumLineCount: 3
+                height: 115*size1W
                 elide: ltr?Text.ElideLeft:Text.ElideRight
+
             }
             Loader{
                 active: listId !== Memorito.Process
                 visible: active
                 anchors{
                     top: detailText.bottom
-                    topMargin: 20*size1W
                     bottom: moreDetailText.top
                     right: parent.right
                     rightMargin: 20*size1W
@@ -180,60 +184,179 @@ Item {
                     width: parent.width
                     height: parent.height
                     layoutDirection: "RightToLeft"
-                    Text {
-                        id: priorityText
-                        text: qsTr("اولویت") +":<b> " + (model.priority_id?usefulFunc.findInModel(model.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است")) + "</b>"
+                    Item{
                         width: parent.width /2
-                        elide: ltr?Text.ElideLeft:Text.ElideRight
-                        font{family: appStyle.appFont;pixelSize:  20*size1F;bold:false}
+                        height: 50*size1H
+                        Image {
+                            id: priorityImg
+                            source: model.priority_id?usefulFunc.findInModel(model.priority_id,"Id",priorityModel).value.iconSource:"qrc:/priorities/none.svg"
+                            width: 40*size1W
+                            height: width
+                            sourceSize.width:width*2
+                            sourceSize.height:height*2
+                            anchors{
+                                verticalCenter: parent.verticalCenter
+                                right: parent.right
+                            }
+                        }
+                        Text {
+                            id: priorityText
+                            anchors{
+                                verticalCenter: priorityImg.verticalCenter
+                                right: priorityImg.left
+                                rightMargin: 10*size1W
+                            }
+                            text: qsTr("اولویت") +":    <b> " + (model.priority_id?usefulFunc.findInModel(model.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است")) + "</b>"
+                            elide: ltr?Text.ElideLeft:Text.ElideRight
+                            font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
+                        }
                     }
-                    Text {
-                        id: energyText
-                        text: qsTr("سطح انرژی") +":<b> " + (model.energy_id?usefulFunc.findInModel(model.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده است")) + "</b>"
+                    Item{
                         width: parent.width /2
-                        elide: ltr?Text.ElideLeft:Text.ElideRight
-                        font{family: appStyle.appFont;pixelSize:  20*size1F;bold:false}
+                        height: 50*size1H
+                        Image {
+                            id: energyImg
+                            source: model.energy_id?usefulFunc.findInModel(model.energy_id,"Id",energyModel).value.iconSource:"qrc:/energies/none.svg"
+                            width: 40*size1W
+                            height: width
+                            sourceSize.width:width*2
+                            sourceSize.height:height*2
+                            anchors{
+                                verticalCenter: parent.verticalCenter
+                                right: parent.right
+                            }
+                        }
+                        Text {
+                            id: energyText
+                            anchors{
+                                verticalCenter: energyImg.verticalCenter
+                                right: energyImg.left
+                                rightMargin: 10*size1W
+                            }
+                            text: qsTr("سطح انرژی") +":<b> " + (model.energy_id?usefulFunc.findInModel(model.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده است")) + "</b>"
+                            elide: ltr?Text.ElideLeft:Text.ElideRight
+                            font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
+                        }
                     }
-                    Text {
-                        id: contextText
-                        text: qsTr("محل انجام") +":<b> " + (model.context_id?contextModel.count>0?usefulFunc.findInModel(model.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده است")) + "</b>"
+                    Item{
                         width: parent.width /2
-                        elide: ltr?Text.ElideLeft:Text.ElideRight
+                        height: 50*size1H
+                        Image {
+                            id: contextImg
+                            source: "qrc:/map.svg"
+                            width: 40*size1W
+                            height: width
+                            sourceSize.width:width*2
+                            sourceSize.height:height*2
+                            anchors{
+                                verticalCenter: parent.verticalCenter
+                                right: parent.right
+                            }
+                        }
+                        Text {
+                            id: contextText
+                            anchors{
+                                verticalCenter: contextImg.verticalCenter
+                                right: contextImg.left
+                                rightMargin: 10*size1W
+                            }
+                            text: qsTr("محل انجام") +":<b> " + (model.context_id?contextModel.count>0?usefulFunc.findInModel(model.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده است")) + "</b>"
+                            font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
+                            elide: ltr?Text.ElideLeft:Text.ElideRight
+                        }
                     }
-                    Text {
-                        id: estimateText
-                        text: qsTr("تخمین زمانی") +":<b> " + (model.estimate_time?model.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده است")) + "</b> "
+                    Item{
                         width: parent.width /2
-                        font{family: appStyle.appFont;pixelSize:  20*size1F;bold:false}
-                        elide: ltr?Text.ElideLeft:Text.ElideRight
+                        height: 50*size1H
+                        Image {
+                            id: estimateImg
+                            source:"qrc:/cock-colorful.svg"
+                            width: 40*size1W
+                            height: width
+                            sourceSize.width:width*2
+                            sourceSize.height:height*2
+                            anchors{
+                                verticalCenter: parent.verticalCenter
+                                right: parent.right
+                            }
+                        }
+                        Text {
+                            id: estimateText
+                            anchors{
+                                verticalCenter: estimateImg.verticalCenter
+                                right: estimateImg.left
+                                rightMargin: 10*size1W
+                            }
+                            text: qsTr("تخمین زمانی") +":<b> " + (model.estimate_time?model.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده است")) + "</b> "
+                            font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
+                            elide: ltr?Text.ElideLeft:Text.ElideRight
+                        }
                     }
                     Loader{
                         active: listId === Memorito.Waiting
                         width: parent.width /2
                         visible: active
-                        height: 30*size1H
-                        sourceComponent: Text {
-                            text:qsTr("فرد انجام دهنده") +":<b> " + (model.friend_id?friendModel.count>0?usefulFunc.findInModel(model.friend_id,"id",friendModel).value.friend_name
-                                                                                                        :""
-                                                                     :qsTr("ثبت نشده است")) + "</b>"
+                        height: 50*size1H
+                        sourceComponent: Item{
                             anchors.fill: parent
-                            font{family: appStyle.appFont;pixelSize:  20*size1F;bold:false}
-                            elide: ltr?Text.ElideLeft:Text.ElideRight
+                            Image {
+                                id: friendImg
+                                source:"qrc:/friends-colorful.svg"
+                                width: 40*size1W
+                                height: width
+                                sourceSize.width:width*2
+                                sourceSize.height:height*2
+                                anchors{
+                                    verticalCenter: parent.verticalCenter
+                                    right: parent.right
+                                }
+                            }
+                            Text {
+                                text:qsTr("فرد انجام دهنده") +":<b> " + (model.friend_id?friendModel.count>0?usefulFunc.findInModel(model.friend_id,"id",friendModel).value.friend_name
+                                                                                                            :""
+                                                                         :qsTr("ثبت نشده است")) + "</b>"
+                                anchors{
+                                    verticalCenter: friendImg.verticalCenter
+                                    right: friendImg.left
+                                    rightMargin: 10*size1W
+                                }
+                                font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
+                                elide: ltr?Text.ElideLeft:Text.ElideRight
+                            }
                         }
                     }
                     Loader{
                         active: listId === Memorito.Calendar
                         width: parent.width
-                        height: 30*size1H
+                        height: 50*size1H
                         visible: active
-                        sourceComponent: Text {
-                            DateConvertor{id:dateConverter}
-                            property date dueDate: model.due_date
-                            text:qsTr("زمان مشخص شده") +":<b> " + (dueDate?dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth(),dueDate.getDate())
-                                                                          :qsTr("ثبت نشده است")) + "</b>"
+                        sourceComponent: Item{
                             anchors.fill: parent
-                            font{family: appStyle.appFont;pixelSize:  20*size1F;bold:false}
-                            elide: ltr?Text.ElideLeft:Text.ElideRight
+                            Image {
+                                id: dateImg
+                                source:"qrc:/calendar-colorful.svg"
+                                width: 40*size1W
+                                height: width
+                                sourceSize.width:width*2
+                                sourceSize.height:height*2
+                                anchors{
+                                    verticalCenter: parent.verticalCenter
+                                    right: parent.right
+                                }
+                            }
+                            Text {
+                                DateConvertor{id:dateConverter}
+                                property date dueDate: model.due_date
+                                text:qsTr("زمان مشخص شده") +":<b> " + (dueDate?dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth(),dueDate.getDate())
+                                                                              :qsTr("ثبت نشده است")) + "</b>"
+                                anchors{
+                                    verticalCenter: dateImg.verticalCenter
+                                    right: dateImg.left
+                                    rightMargin: 10*size1W
+                                }
+                                font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
+                                elide: ltr?Text.ElideLeft:Text.ElideRight
+                            }
                         }
                     }
                 }
@@ -268,7 +391,8 @@ Item {
         /***********************************************/
         model: listId === Memorito.NextAction?
                    nextActionModel :listId === Memorito.Someday?
-                       somedayModel :listId === Memorito.Refrence?
+                       somedayModel :listId === Memorito.Project?
+                       projectModel :listId === Memorito.Refrence?
                            refrenceModel : listId === Memorito.Waiting?
                                waitingModel : listId === Memorito.Calendar?
                                    calendarModel : listId === Memorito.Trash?
@@ -277,7 +401,7 @@ Item {
     }
 
     App.Button{
-        text: qsTr("افزودن چیز به") +" "+ (title)
+        text: qsTr("افزودن چیز به") +" "+ (pageTitle)
         anchors{
             left: parent.left
             leftMargin: 20*size1W
@@ -288,7 +412,7 @@ Item {
         leftPadding: 35*size1W
         rightPadding: 35*size1W
         onClicked: {
-            usefulFunc.mainStackPush("qrc:/Flow/Collect.qml",qsTr("پردازش"),{listId:listId})
+            usefulFunc.mainStackPush("qrc:/Flow/Collect.qml",qsTr("پردازش"),{listId:listId,categoryId:categoryId})
 
         }
         icon.width: 30*size1W
