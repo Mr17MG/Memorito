@@ -2,12 +2,28 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
 import "qrc:/Components/" as App
-import QtGraphicalEffects 1.1
+import QtGraphicalEffects 1.14
+import MEnum 1.0
 
 Item {
-    ProjectApi{id: projectApi}
+    CategoryApi{id: categoryApi}
+    property int listId : -1
     Component.onCompleted: {
-        projectApi.getProjects(projectCategoryModel)
+        if(listId === Memorito.Project)
+        {
+            projectModel.clear()
+            categoryApi.getCategories(projectCategoryModel,Memorito.Project)
+        }
+        else if(listId === Memorito.Refrence)
+        {
+            refrenceModel.clear()
+            categoryApi.getCategories(refrenceCategoryModel,Memorito.Refrence)
+        }
+        else if(listId === Memorito.Someday)
+        {
+            somedayModel.clear()
+            categoryApi.getCategories(somedayCategoryModel,Memorito.Someday)
+        }
     }
 
     GridView{
@@ -46,9 +62,18 @@ Item {
             width: control.cellWidth - 10*size1W
             height:  control.cellHeight - 10*size1H
             color: Material.color(appStyle.primaryInt,Material.Shade50)
+            MouseArea{
+                anchors.fill: parent
+                cursorShape: Qt.OpenHandCursor
+                onClicked: {
+                    usefulFunc.mainStackPush("qrc:/Flow/NextAction.qml",(listId === Memorito.Project?qsTr("پروژه"):listId === Memorito.Someday?qsTr("شاید یک‌روزی"):listId === Memorito.Refrence?qsTr("مرجع"):"") +": "+
+                                             model.category_name,{listId:listId,categoryId:model.id,pageTitle:model.category_name})
+                }
+            }
+
             Text{
-                id: projectText
-                text: project_name
+                id: categoryText
+                text: category_name
                 font{family: appStyle.appFont;pixelSize:  25*size1F;bold:true}
                 anchors{
                     top:  parent.top
@@ -60,10 +85,10 @@ Item {
                 wrapMode: Text.WordWrap
             }
             Text{
-                text: qsTr("هدف پروژه") + ": " + project_goal
-                font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
+                text: (listId ===Memorito.Project?qsTr("هدف پروژه"):qsTr("توضیحات"))  + ": <b>" +(listId ===Memorito.Project?qsTr("هدفی"):qsTr("توضیحاتی")) +" "+ (model.category_detail?? qsTr("ثبت نشده است")) +"</b>"
+                font{family: appStyle.appFont;pixelSize:  23*size1F;}
                 anchors{
-                    top:  projectText.bottom
+                    top:  categoryText.bottom
                     topMargin: 10*size1W
                     right: parent.right
                     rightMargin: 20*size1W
@@ -87,7 +112,13 @@ Item {
                     topMargin: 20*size1W
                 }
                 MouseArea{
-                    anchors.fill: parent
+                    anchors{
+                        fill: parent
+                        topMargin: -10*size1H
+                        bottomMargin: -10*size1H
+                        rightMargin: -10*size1W
+                        leftMargin: -10*size1W
+                    }
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
                         menuLoader.active = true
@@ -107,11 +138,11 @@ Item {
                         onTriggered: {
                             menuLoader.active = false
                             dialogLoader.active = true
-                            dialogLoader.item.projectId = id
+                            dialogLoader.item.categoryId = id
                             dialogLoader.item.isAdd = false
                             dialogLoader.item.modelIndex = model.index
-                            dialogLoader.item.projectName.text = project_name
-                            dialogLoader.item.projectGoalArea.text =  project_goal
+                            dialogLoader.item.categoryName.text = category_name
+                            dialogLoader.item.categoryDetailArea.text =  category_detail
                             dialogLoader.item.open()
                         }
                     }
@@ -120,8 +151,8 @@ Item {
                         onTriggered: {
                             menuLoader.active = false
                             deleteLoader.active = true
-                            deleteLoader.item.projectName = project_name
-                            deleteLoader.item.projectId = id
+                            deleteLoader.item.categoryName = category_name
+                            deleteLoader.item.categoryId = id
                             deleteLoader.item.modelIndex = model.index
                             deleteLoader.item.open()
                         }
@@ -131,11 +162,11 @@ Item {
         }
 
         /***********************************************/
-        model: projectCategoryModel
+        model: listId === Memorito.Project?projectCategoryModel:listId === Memorito.Someday?somedayCategoryModel:listId === Memorito.Refrence?refrenceCategoryModel:[]
     }
 
     App.Button{
-        text: qsTr("افزودن پروژه")
+        text: listId === Memorito.Project?qsTr("افزودن پروژه"):qsTr("افزودن دسته‌بندی")
         anchors{
             left: parent.left
             leftMargin: 20*size1W
@@ -177,9 +208,9 @@ Item {
         sourceComponent: App.Dialog{
             id: addDialog
             property bool isAdd: true
-            property alias projectName: projectName
-            property alias projectGoalArea: flickTextArea
-            property int projectId : -1
+            property alias categoryName: categoryName
+            property alias categoryDetailArea: flickTextArea
+            property int categoryId : -1
             property int modelIndex: -1
             parent: mainColumn
             width: 600*size1W
@@ -192,12 +223,12 @@ Item {
             hasTitle: true
             buttonTitle: isAdd?qsTr("اضافه کن"):qsTr("تغییرش بده")
             dialogButton.onClicked:{
-                if(projectName.text.trim() !== "")
+                if(categoryName.text.trim() !== "")
                 {
                     if(isAdd){
-                        projectApi.addProject(projectName.text.trim(),projectGoalArea.text.trim(),projectCategoryModel)
+                        categoryApi.addCategory(categoryName.text.trim(),categoryDetailArea.text.trim(),listId,projectCategoryModel)
                     } else {
-                        projectApi.editProject(projectId,projectName.text.trim(),projectGoalArea.text.trim(),projectCategoryModel,modelIndex)
+                        categoryApi.editCategory(categoryId,categoryName.text.trim(),categoryDetailArea.text.trim(),listId,projectCategoryModel,modelIndex)
                     }
                     addDialog.close()
                 }
@@ -206,8 +237,8 @@ Item {
                 }
             }
             App.TextInput{
-                id: projectName
-                placeholderText: qsTr("نام پروژه")
+                id: categoryName
+                placeholderText: (listId ===Memorito.Project?qsTr("نام پروژه"):qsTr("نام دسته‌بندی"))
                 anchors{
                     right: parent.right
                     rightMargin: 25*size1W
@@ -217,8 +248,8 @@ Item {
                     topMargin: 30*size1W
                 }
                 EnterKey.type: Qt.EnterKeyGo
-                Keys.onReturnPressed: projectGoalArea.focus = true
-                Keys.onEnterPressed: projectGoalArea.focus = true
+                Keys.onReturnPressed: categoryDetailArea.focus = true
+                Keys.onEnterPressed: categoryDetailArea.focus = true
                 height: 100*size1H
                 filedInDialog: true
                 maximumLength: 50
@@ -226,15 +257,15 @@ Item {
             App.FlickTextArea{
                 id:flickTextArea
                 anchors{
-                    top: projectName.bottom
+                    top: categoryName.bottom
                     topMargin: 25*size1H
                     right: parent.right
                     rightMargin: 25*size1W
                     left: parent.left
                     leftMargin: 25*size1W
                 }
-                placeholderText: qsTr("هدف پروژه") + " ("+qsTr("اختیاری")+")"
-                areaInDialog:true
+                placeholderText: (listId ===Memorito.Project?qsTr("هدف پروژه"):qsTr("توضیحات دسته‌بندی")) + " ("+qsTr("اختیاری")+")"
+                areaInDialog : true
             }
         }
     }
@@ -247,13 +278,13 @@ Item {
             onClosed: {
                 deleteLoader.active = false
             }
-            property string projectName: ""
-            property int projectId: -1
+            property string categoryName: ""
+            property int categoryId: -1
             property int modelIndex: -1
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " '" + projectName + "' " + qsTr("را حذف کنید؟")
+            dialogText: qsTr("آیا مایلید که") + " '" + categoryName + "' " + qsTr("را حذف کنید؟")
             accepted: function() {
-                projectApi.deleteProject(projectId,projectCategoryModel,modelIndex)
+                categoryApi.deleteCategory(categoryId,projectCategoryModel,modelIndex)
             }
         }
     }
