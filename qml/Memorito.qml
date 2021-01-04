@@ -64,14 +64,14 @@ Page {
     ListModel{ id: somedayCategoryModel}
     ListModel{ id: projectCategoryModel}
 
-    ListModel{id: energyModel
+    ListModel{id: priorityModel
         ListElement{ Id:1; Text:qsTr("کم"); iconSource: "qrc:/priorities/low.svg";}
         ListElement{ Id:2; Text:qsTr("متوسط"); iconSource: "qrc:/priorities/medium.svg";}
         ListElement{ Id:3; Text:qsTr("زیاد"); iconSource: "qrc:/priorities/high.svg";}
         ListElement{ Id:4; Text:qsTr("فوری"); iconSource: "qrc:/priorities/higher.svg";}
     }
 
-    ListModel{id:priorityModel
+    ListModel{id: energyModel
         ListElement{ Id:1; Text:qsTr("کم"); iconSource: "qrc:/energies/low.svg";}
         ListElement{ Id:2; Text:qsTr("متوسط"); iconSource: "qrc:/energies/medium.svg";}
         ListElement{ Id:3; Text:qsTr("زیاد");  iconSource: "qrc:/energies/high.svg";}
