@@ -49,7 +49,6 @@
         <file>Flow/CategoryApi.qml</file>
         <file>Components/DateInput.qml</file>
         <file>Components/DayOfWeekRow.qml</file>
-        <file>Flow/ProjectApi.qml</file>
         <file>Flow/Projects.qml</file>
         <file>Flow/ThingsApi.qml</file>
         <file>Flow/NextAction.qml</file>
