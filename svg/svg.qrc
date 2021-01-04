@@ -100,5 +100,11 @@
         <file>pack/zip.svg</file>
         <file>pack/unknown.svg</file>
         <file>garbage.svg</file>
+        <file>calendar-colorful.svg</file>
+        <file>cock-colorful.svg</file>
+        <file>friends-colorful.svg</file>
+        <file>map.svg</file>
+        <file>priorities/none.svg</file>
+        <file>energies/none.svg</file>
     </qresource>
 </RCC>
