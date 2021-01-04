@@ -11,6 +11,7 @@ Item {
     property color placeholderColor         : appTheme ?   "#B3FFFFFF" :   "#B3000000"
     property color appBackgroundColor       : appTheme ?   "#2F2F2F"   :   "#FAFAFA"
     property color dialogBackgroundColor    : appTheme ?   "#3F3F3F"   :   "#FFFFFF"
+
     property bool languageChanged: false
 
     property int primaryInt : appSetting.value("AppColor",5)
