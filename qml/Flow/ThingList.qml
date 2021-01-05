@@ -417,6 +417,5 @@ Item {
         }
         icon.width: 30*size1W
         icon.source:"qrc:/plus.svg"
-        icon.color: appStyle.textOnPrimaryColor
     }
 }

@@ -177,11 +177,10 @@ Item {
             rightMargin: 30*size1W
         }
         flat: !isEditable
-//        Material.background: isEditable? appStyle.primaryInt:"transparent"
+        enabled: isEditable
         radius: size1W*20
         text: qsTr("خروج از حساب")
         font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-        Material.foreground: isEditable? appStyle.textOnPrimaryColor:appStyle.textColor
         onClicked: {
             usefulFunc.showConfirm(
                         qsTr("خروج از حساب"),
