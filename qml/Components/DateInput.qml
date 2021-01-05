@@ -14,7 +14,7 @@ Item {
     property alias date: date
     property color textOnPrimary: "white"
     property string placeholderText: ""
-    property color placeholderColor : Material.color(appStyle.primaryInt)
+    property color placeholderColor : appStyle.textColor//Material.color(appStyle.primaryInt)
     property alias datePicker: datePickerRoot
     property alias selectedDate: datePickerRoot.selectedDate
     property alias minSelectedDate: datePickerRoot.minSelectedDate
@@ -63,7 +63,7 @@ Item {
         id: customDate
     }
     Rectangle{
-        color:bottomBorderColorChanged?bottomBorderColor:Material.color(appStyle.primaryInt);
+        color:bottomBorderColorChanged?bottomBorderColor: datePickerRoot.visible || selectedDate.getTime()? Material.color(appStyle.primaryInt) : appStyle.borderColor;
         height: size1H*2
         width: parent.width
         y: parent.height - size1H*2
