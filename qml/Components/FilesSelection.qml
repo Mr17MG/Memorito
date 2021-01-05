@@ -353,7 +353,7 @@ Rectangle{
                     id:plusColor
                     source: plusIcon
                     anchors.fill: plusIcon
-                    color: "white"
+                    color: appStyle.textOnPrimaryColor
                 }
             }
         }

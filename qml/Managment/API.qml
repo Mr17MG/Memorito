@@ -92,7 +92,6 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            console.log(JSON.stringify(response.result))
                             model.append(response.result)
                         }
                     }
@@ -303,7 +302,6 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            console.log(JSON.stringify(response.result))
                             model.append(response.result)
                         }
                     }

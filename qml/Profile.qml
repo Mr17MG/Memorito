@@ -142,7 +142,7 @@ Item {
         radius: size1W*20
         text: isEditable?qsTr("بروزرسانی اطلاعات"):qsTr("ویرایش اطلاعات")
         font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-        Material.foreground: isEditable? "white":appStyle.textColor
+        Material.foreground: isEditable? appStyle.textOnPrimaryColor:appStyle.textColor
         onClicked: {
             usernameInput.focus = false
             if(!modified)
@@ -176,12 +176,12 @@ Item {
             right: parent.right
             rightMargin: 30*size1W
         }
-        flat: true
-        Material.background: appStyle.primaryInt
+        flat: !isEditable
+//        Material.background: isEditable? appStyle.primaryInt:"transparent"
         radius: size1W*20
         text: qsTr("خروج از حساب")
         font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-        Material.foreground: isEditable? "white":appStyle.textColor
+        Material.foreground: isEditable? appStyle.textOnPrimaryColor:appStyle.textColor
         onClicked: {
             usefulFunc.showConfirm(
                         qsTr("خروج از حساب"),

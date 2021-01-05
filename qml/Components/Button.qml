@@ -15,7 +15,7 @@ T.Button {
     property string borderColor: "transparent"
     property color disableColor: Material.hintTextColor
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
+                            contentItem.implicitWidth + leftPadding + rightPadding + 10*size1W)
     implicitHeight: Math.max(background ? background.implicitHeight : 0,
                              contentItem.implicitHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
@@ -32,8 +32,8 @@ T.Button {
 
     Material.elevation: flat ? control.down || control.hovered ? 2 : 0
     : control.down ? 8 : 2
-    Material.background: flat ? "transparent" : appStyle.primaryInt
-    Material.foreground: flat?appStyle.textColor:"White"
+    Material.background: flat ? "transparent"       : appStyle.primaryInt
+    Material.foreground: flat ? appStyle.textColor  : appStyle.textOnPrimaryColor
     font.capitalization: Font.MixedCase
     font.family: appStyle.appFont
     contentItem: IconLabel {
