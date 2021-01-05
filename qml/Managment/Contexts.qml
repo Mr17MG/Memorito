@@ -141,33 +141,17 @@ Item {
             bottomMargin: 20*size1W
         }
         radius: 20*size1W
-        width: 275*size1W
         leftPadding: 35*size1W
+        rightPadding: 35*size1W
         onClicked: {
             dialogLoader.active = true
             dialogLoader.item.isAdd = true
             dialogLoader.item.open()
         }
 
-        Image {
-            id:submitIcon
-            width: 30*size1W
-            height: width
-            source: "qrc:/plus.svg"
-            anchors{
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-                leftMargin: 30*size1W
-            }
-            sourceSize.width:width*2
-            sourceSize.height:height*2
-            visible: false
-        }
-        ColorOverlay{
-            anchors.fill: submitIcon
-            source: submitIcon
-            color: "white"
-        }
+        icon.width: 30*size1W
+        icon.source:"qrc:/plus.svg"
+        icon.color: appStyle.textOnPrimaryColor
     }
     Loader{
         id: dialogLoader
