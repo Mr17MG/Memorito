@@ -78,7 +78,7 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
                 onClicked: {
-                    usefulFunc.mainStackPush("qrc:/Flow/Collect.qml",qsTr("پردازش"),{prevPageModel:model,modelIndex:model.index,listId:listId})
+                    usefulFunc.mainStackPush("qrc:/Flow/AddEditThing.qml",qsTr("پردازش"),{prevPageModel:model,modelIndex:model.index,listId:listId})
                 }
             }
             Ripple {
@@ -130,14 +130,14 @@ Item {
                 ColorOverlay{
                     anchors.fill: unprocessImg
                     source: unprocessImg
-                    color: "white"
+                    color: appStyle.textOnPrimaryColor
                 }
 
                 Text{
                     id: thingText
                     text: model.title
                     font{family: appStyle.appFont;pixelSize:  25*size1F;bold:true}
-                    color: "white"
+                    color: appStyle.textOnPrimaryColor
                     anchors{
                         top:  parent.top
                         bottom: parent.bottom
@@ -412,11 +412,11 @@ Item {
         leftPadding: 35*size1W
         rightPadding: 35*size1W
         onClicked: {
-            usefulFunc.mainStackPush("qrc:/Flow/Collect.qml",qsTr("پردازش"),{listId:listId,categoryId:categoryId})
+            usefulFunc.mainStackPush("qrc:/Flow/AddEditThing.qml",qsTr("پردازش"),{listId:listId,categoryId:categoryId})
 
         }
         icon.width: 30*size1W
         icon.source:"qrc:/plus.svg"
-        icon.color: "white"
+        icon.color: appStyle.textOnPrimaryColor
     }
 }

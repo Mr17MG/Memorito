@@ -747,7 +747,7 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
                     centerIn: parent
                 }
@@ -784,13 +784,14 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
                     centerIn: parent
                 }
                 text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به عملیات بعدی")
                 radius: 10*size1W
                 leftPadding: 35*size1W
+                rightPadding: 35*size1W
                 onClicked: {
                     if(prevPageModel)
                         thingsApi.prepareForEdit(thingModel,nextActionModel,prevPageModel.id,options,Memorito.NextAction,(attachModel.count>0?1:0),null,null,null,null)
@@ -860,7 +861,7 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
                     top: refrenceCategoryCombo?refrenceCategoryCombo.visible?refrenceCategoryCombo.bottom:parent.top:undefined
                     topMargin: 25*size1W
@@ -869,6 +870,7 @@ Item{
                 text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به مرجع")
                 radius: 10*size1W
                 leftPadding: 35*size1W
+                rightPadding: 35*size1W
                 onClicked: {
 
                     let categoryId = refrenceCategoryCombo.currentIndex !== -1 ? refrenceCategoryModel.get(refrenceCategoryCombo.currentIndex).id : null
@@ -940,15 +942,16 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
-                    top: friendCombo.visible?friendCombo.bottom:parent.top
+                    top: friendCombo?friendCombo.visible?friendCombo.bottom:parent.top:undefined
                     topMargin: 25*size1W
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به لیست انتظار")
                 radius: 10*size1W
                 leftPadding: 35*size1W
+                rightPadding: 35*size1W
                 onClicked: {
 
                     if(friendCombo.currentIndex === -1)
@@ -1022,7 +1025,7 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
                     top: dateInput.bottom
                     topMargin: 20*size1W
@@ -1075,13 +1078,14 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
                     centerIn: parent
                 }
                 text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به سطل آشغال")
                 radius: 10*size1W
                 leftPadding: 35*size1W
+                rightPadding: 35*size1W
                 onClicked: {
                     if(prevPageModel)
                         thingsApi.prepareForEdit(thingModel,trashModel,dprevPageModel.id,options,Memorito.Trash,(attachModel.count>0?1:0));
@@ -1111,13 +1115,14 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
                     centerIn: parent
                 }
                 text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به انجام شده ها")
                 radius: 10*size1W
                 leftPadding: 35*size1W
+                rightPadding: 35*size1W
                 onClicked: {
                     if(prevPageModel)
                         thingsApi.prepareForEdit(thingModel,doneModel,prevPageModel.id,options,Memorito.Done,(attachModel.count>0?1:0),null,null,null,null)
@@ -1185,7 +1190,7 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
                     top: somedayCategoryCombo?somedayCategoryCombo.visible?somedayCategoryCombo.bottom:parent.top:undefined
                     topMargin: 25*size1W
@@ -1194,6 +1199,7 @@ Item{
                 text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به شاید یک روزی")
                 radius: 10*size1W
                 leftPadding: 35*size1W
+                rightPadding: 35*size1W
                 onClicked: {
                     let categoryId = somedayCategoryCombo.currentIndex !== -1 ? somedayCategoryModel.get(somedayCategoryCombo.currentIndex).id : null
                     if(prevPageModel)
@@ -1258,7 +1264,7 @@ Item{
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: appStyle.primaryInt
-                Material.foreground: "white"
+
                 anchors{
                     top: projectCategoryCombo.visible?projectCategoryCombo.bottom:parent.top
                     topMargin: 25*size1W
@@ -1267,6 +1273,7 @@ Item{
                 text: prevPageModel && listId != Memorito.Process?qsTr("بروزرسانی"):qsTr("بفرست به پروژه")
                 radius: 10*size1W
                 leftPadding: 35*size1W
+                rightPadding: 35*size1W
                 onClicked: {
                     if(projectCategoryCombo.currentIndex === -1)
                     {

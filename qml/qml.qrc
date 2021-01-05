@@ -39,7 +39,7 @@
         <file>Components/BusyDialog.qml</file>
         <file>Functions/UserDatabase.qml</file>
         <file>Splash/SplashLoader.qml</file>
-        <file>Flow/Collect.qml</file>
+        <file>Flow/AddEditThing.qml</file>
         <file>Managment/Friends.qml</file>
         <file>Components/Menu.qml</file>
         <file>Components/MenuItem.qml</file>
@@ -49,9 +49,9 @@
         <file>Flow/CategoryApi.qml</file>
         <file>Components/DateInput.qml</file>
         <file>Components/DayOfWeekRow.qml</file>
-        <file>Flow/Projects.qml</file>
+        <file>Flow/CategoriesList.qml</file>
         <file>Flow/ThingsApi.qml</file>
-        <file>Flow/NextAction.qml</file>
+        <file>Flow/ThingList.qml</file>
         <file>Components/FlickTextArea.qml</file>
         <file>Components/FilesSelection.qml</file>
     </qresource>

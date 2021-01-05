@@ -161,62 +161,62 @@ Item{
             id:modelList
             ListElement{
                 title: qsTr("جمع‌آوری")
-                pageSource :"qrc:/Flow/Collect.qml"
+                pageSource :"qrc:/Flow/AddEditThing.qml"
                 iconSrc: "qrc:/collect.svg"
                 listId: Memorito.Collect
             }
             ListElement{
                 title:qsTr("پردازش نشده‌ها")
                 iconSrc: "qrc:/process.svg"
-                pageSource: "qrc:/Flow/NextAction.qml"
+                pageSource: "qrc:/Flow/ThingList.qml"
                 listId: Memorito.Process
             }
             ListElement{
                 title:qsTr("عملیات بعدی")
                 iconSrc: "qrc:/nextAction.svg"
-                pageSource: "qrc:/Flow/NextAction.qml"
+                pageSource: "qrc:/Flow/ThingList.qml"
                 listId: Memorito.NextAction
             }
             ListElement{
                 title:qsTr("لیست انتظار")
                 iconSrc: "qrc:/waiting.svg"
-                pageSource: "qrc:/Flow/NextAction.qml"
+                pageSource: "qrc:/Flow/ThingList.qml"
                 listId: Memorito.Waiting
             }
             ListElement{
                 title:qsTr("تقویم")
                 iconSrc: "qrc:/calendar.svg"
-                pageSource: "qrc:/Flow/NextAction.qml"
+                pageSource: "qrc:/Flow/ThingList.qml"
                 listId: Memorito.Calendar
             }
             ListElement{
                 title:qsTr("مرجع")
                 iconSrc: "qrc:/refrence.svg"
-                pageSource: "qrc:/Flow/Projects.qml"
+                pageSource: "qrc:/Flow/CategoriesList.qml"
                 listId: Memorito.Refrence
             }
             ListElement{
                 title:qsTr("شاید یک‌روزی")
                 iconSrc: "qrc:/someday.svg"
-                pageSource: "qrc:/Flow/Projects.qml"
+                pageSource: "qrc:/Flow/CategoriesList.qml"
                 listId: Memorito.Someday
             }
             ListElement{
                 title:qsTr("پروژه‌ها")
                 iconSrc: "qrc:/project.svg"
-                pageSource: "qrc:/Flow/Projects.qml"
+                pageSource: "qrc:/Flow/CategoriesList.qml"
                 listId: Memorito.Project
             }
             ListElement{
                 title:qsTr("انجام شده‌ها")
                 iconSrc: "qrc:/done.svg"
-                pageSource: "qrc:/Flow/NextAction.qml"
+                pageSource: "qrc:/Flow/ThingList.qml"
                 listId: Memorito.Done
             }
             ListElement{
                 title:qsTr("سطل زباله")
                 iconSrc: "qrc:/trash.svg"
-                pageSource: "qrc:/Flow/NextAction.qml"
+                pageSource: "qrc:/Flow/ThingList.qml"
                 listId: Memorito.Trash
             }
             ListElement{
