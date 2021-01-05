@@ -40,13 +40,6 @@ Page {
     }
 
     F.UsefulFunctions{id:usefulFunc}
-    //Header
-    property string mainHeaderTitle: qsTr("مموریتو")
-    property string anotherHeaderTitle: ""
-    Base.AppHeader{id:header}
-
-
-    FirstColumn{id:firstColumn;anchors.right: parent.right;}
 
     ListModel{ id: stackPages }
     ListModel{ id: thingModel}
@@ -82,6 +75,13 @@ Page {
         stackPages.append({"page":"","title":qsTr("مموریتو")})
     }
 
+    //Header
+    property string mainHeaderTitle: qsTr("مموریتو")
+    property string anotherHeaderTitle: ""
+    Base.AppHeader{id:header}
+
+    FirstColumn{id:firstColumn;anchors.right: parent.right;}
+
     MainColumn{
         id:mainColumn
         height: parent.height - header.height
@@ -113,10 +113,10 @@ Page {
                 color: appStyle.appTheme?"#424242":"#f5f5f5"
                 LinearGradient {
                     anchors.fill: parent
-                    start: Qt.point(ltr?0:drawerLoader.height, 0)
-                    end: Qt.point(ltr?drawerLoader.height:0, 0)
+                    start: Qt.point(ltr?0:drawerLoader.width, 0)
+                    end: Qt.point(ltr?drawerLoader.width:0, 0)
                     gradient: Gradient {
-                        GradientStop {position: 0.0;color: appStyle.appTheme?"#30300":"#ffffff"}
+                        GradientStop {position: 0.0;color: appStyle.appTheme?"#202020":"#ffffff"}
                         GradientStop {position: 1.0;color: "transparent"}
                     }
                 }

@@ -105,13 +105,6 @@ Loader{
                 color: appStyle.primaryColor
             }
         }
-        PropertyAnimation{
-            id:resizeAnim
-            duration: 150
-            to : firstColumn.width === firstColumnMinSize?firstColumnMaxWidth: firstColumnMinSize
-            target: firstColumn
-            properties: "width"
-        }
         App.Button{
             flat: true
             width:  90*size1W

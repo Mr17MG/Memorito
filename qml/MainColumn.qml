@@ -4,19 +4,32 @@ import QtGraphicalEffects 1.14 // Require For ColorOverlay
 
 Loader{
     id:mainColumn
-    active: nRow>=1
+    active: true
+    asynchronous: true
     width: nRow===1?rootWindow.width
                    :rootWindow.width-firstColumn.width
     height: parent.height
     sourceComponent: Item {
         clip: true
         property alias mainStackView: mainStackView
+        Rectangle{
+            id: disconnectRect
+            width: parent.width
+            height: 100*size1W
+            color: "yellow"
+            visible: false
+        }
+
         StackView{
             id:mainStackView
-            anchors.right: resizerLoader.active?resizerLoader.left:parent.right
-            anchors.left: parent.left
-            height: parent.height
-            initialItem: Rectangle{color: "transparent"}
+            anchors{
+                right: resizerLoader.active?resizerLoader.left:parent.right
+                left: parent.left
+                top: disconnectRect.visible?disconnectRect.bottom:parent.top
+                bottom: parent.bottom
+            }
+            clip: true
+            initialItem: Item{}
         }
 
         Loader{

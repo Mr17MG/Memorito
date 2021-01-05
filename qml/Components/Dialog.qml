@@ -9,6 +9,9 @@ Dialog {
     height: size1H*185
     modal: true
     padding: 0
+    Overlay.modal: Rectangle {
+        color: appStyle.appTheme?"#aa606060":"#80000000"
+    }
     x: -parent.x + (parent.parent===null?0:(parent.parent.width- width)/2)
     y: -parent.y + (parent.parent===null?0:(parent.parent.height- height)/2)
     property string dialogTitle: qsTr("انصراف")
