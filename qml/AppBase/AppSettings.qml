@@ -123,6 +123,45 @@ Item {
             }
         }
 
+        Item {
+            id: textColorItem
+            width: parent.width
+            height: 90*size1H
+            Text{
+                id: textColorText
+                text: qsTr("رنگ نوشته در رنگ اصلی") + " :"
+                font{family: appStyle.appFont;pixelSize: 35*size1F;bold:false}
+                verticalAlignment: Text.AlignBottom
+                color: appStyle.textColor
+                height: primaryCombo.height
+                anchors.right: parent.right
+                anchors.leftMargin: 10*size1W
+                anchors.bottom: textColorCombo.bottom
+            }
+            App.ComboBox{
+                id:textColorCombo
+                hasClear: false
+                width: 260*size1W
+                height: 70*size1H
+                anchors.right: textColorText.left
+                anchors.rightMargin: 20*size1W
+                placeholderText: qsTr("رنگ‌ها")
+                currentIndex : appStyle.textOnPrimaryInt
+                font{family: appStyle.appFont;pixelSize: 35*size1F}
+                model: [
+                    qsTr("سفید"),
+                    qsTr("مشکی")
+                ]
+                onCurrentIndexChanged: {
+                    if(currentIndex!==-1 && !appStyle.languageChanged) // Need For Do Not change Color When Language Changed
+                    {
+                        appStyle.textOnPrimaryInt = currentIndex
+                    }
+                }
+            }
+        }
+
+
         Item{
             width: parent.width
             height: 90*size1H
@@ -169,6 +208,15 @@ Item {
                         code: 89
                     }
                 }
+            }
+        }
+        SpinBox {
+            value: 100
+            from: 1
+            to: 200
+            editable: true
+            onValueChanged: {
+                setSizes(value/100)
             }
         }
     }

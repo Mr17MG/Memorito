@@ -67,6 +67,12 @@ ApplicationWindow {
     }
 
     Material.primary: appStyle.primaryColor
+    function setSizes(scale)
+    {
+//        size1W= size1W*scale
+//        size1H= size1H*scale
+        size1F= uiFunctions.getFontSize(1,Screen)*scale
+    }
 
     function setAppTheme(index)
     {
