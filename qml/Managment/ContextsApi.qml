@@ -1,17 +1,10 @@
 import QtQuick 2.14
 
 QtObject {
-
-    function getFriendsChanges()
+    function getContexts(model)
     {
-
-    }
-
-    function getFriends(model)
-    {
-        let valuesFriends = getFriendsLocalDatabase() // get Friends from local database
-        if(valuesFriends.length >0){
-            model.append(valuesFriends)
+        if(model.count > 0)
+        {
             return model
         }
 
@@ -19,7 +12,7 @@ QtObject {
         xhr.withCredentials = true;
         xhr.responseType = 'json';
         let query = "user_id=" + currentUser.id
-        xhr.open("GET", domain+"/api/v1/friends"+"?"+query,true);
+        xhr.open("GET", domain+"/api/v1/contexts"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
         var busyDialog = usefulFunc.showBusy("",
@@ -50,8 +43,8 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 200){
+
                             model.append(response.result)
-                            insertFriends(response.result)
                         }
                         return model
                     }
@@ -73,18 +66,18 @@ QtObject {
         }
     }
 
-    function addFriend(friendName,model)
+    function addContext(contextName,model)
     {
         let json = JSON.stringify(
                 {
                     user_id: currentUser.id,
-                    friend_name: friendName
+                    context_name: contextName
                 }, null, 1);
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/friends",true);
+        xhr.open("POST", domain+"/api/v1/contexts",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = usefulFunc.showBusy("");
@@ -101,7 +94,6 @@ QtObject {
                     {
                         if(response.code === 201){
                             model.append(response.result)
-                            insertFriends(Array(response.result))
                         }
                     }
                     else {
@@ -121,18 +113,18 @@ QtObject {
         }
     }
 
-    function editFriend(friendId,friendName,model,modelIndex)
+    function editContext(contextId,contextName,model,modelIndex)
     {
         let json = JSON.stringify(
                 {
                     user_id: currentUser.id,
-                    friend_name: friendName
+                    context_name: contextName
                 }, null, 1);
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("PATCH", domain+"/api/v1/friends/"+friendId,true);
+        xhr.open("PATCH", domain+"/api/v1/contexts/"+contextId,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = usefulFunc.showBusy("");
@@ -148,8 +140,7 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            model.set(modelIndex,{"friend_name":response.result.friend_name})
-                            updateFriends(response.result)
+                            model.set(modelIndex,{"context_name":contextName})
                         }
                     }
                     else {
@@ -169,13 +160,13 @@ QtObject {
         }
     }
 
-    function deleteFriend(friendId,model,modelIndex)
+    function deleteContext(contextId,model,modelIndex)
     {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
         let query = "user_id=" + currentUser.id
-        xhr.open("DELETE", domain+"/api/v1/friends/"+friendId+"?"+query,true);
+        xhr.open("DELETE", domain+"/api/v1/contexts/"+contextId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
         var busyDialog = usefulFunc.showBusy("");
@@ -192,7 +183,6 @@ QtObject {
                     {
                         if(response.code === 200){
                             model.remove(modelIndex)
-                            deleteFriendLocalDatabase(friendId)
                         }
                     }
                     else {
@@ -211,100 +201,4 @@ QtObject {
             }
         }
     }
-
-    /****************** Local Database Function Table:Friends  **************************/
-
-    function getFriendsLocalDatabase()
-    {
-        let valuesFriends=[]
-        dataBase.transaction(
-                    function(tx)
-                    {
-                        try
-                        {
-                            var result = tx.executeSql("SELECT * FROM Friends ORDER By id ASC")
-                            for(var i=0;i<result.rows.length;i++)
-                            {
-                                valuesFriends.push(result.rows.item(i))
-                            }
-                        }
-                        catch(e)
-                        {
-
-                        }
-                    })
-        return valuesFriends
-    }
-
-
-    function insertFriends(values)
-    {
-        let mapValues = values.map(item => [ item.id,   String(item.friend_name),   item.user_id,   String(item.register_date), String(item.modified_date) ] )
-        let finalString = ""
-        for(let i=0;i<mapValues.length;i++)
-        {
-            for(let j=0;j<mapValues[i].length;j++)
-            {
-                mapValues[i][j] = typeof mapValues[i][j] === "string"?'"'+ (mapValues[i][j]==="null"?"":mapValues[i][j]) + '"':mapValues[i][j]
-            }
-            finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
-        }
-
-        dataBase.transaction(
-                    function(tx)
-                    {
-                        try
-                        {
-                            var result = tx.executeSql("INSERT INTO Friends(id,friend_name,user_id,register_date,modified_date) VALUES "+ finalString)
-                        }
-                        catch(e)
-                        {
-                            console.error(e)
-                        }
-                    }//end of  function
-                    ) // end of transaction
-    } // end of insert function
-
-
-    function updateFriends(values)
-    {
-        let array = []
-        array[0]= values.friend_name
-        array[1]= values.user_id
-        array[2]= values.register_date
-        array[3]= values.modified_date
-        array[4]= values.id
-
-        dataBase.transaction(
-                    function(tx)
-                    {
-                        try
-                        {
-                            var result = tx.executeSql("UPDATE Friends SET friend_name = ?,user_id= ? ,register_date = ?,modified_date = ?  WHERE id=?",array)
-                        }
-                        catch(e)
-                        {
-                            console.error(e)
-                        }
-                    }//end of  function
-                    ) // end of transaction
-    } // end of update function
-
-
-    function deleteFriendLocalDatabase(id)
-    {
-        dataBase.transaction(
-                    function(tx)
-                    {
-                        try
-                        {
-                            var result = tx.executeSql("DELETE FROM Friends WHERE id = ?",id)
-                        }
-                        catch(e)
-                        {
-                            console.error(e)
-                        }
-                    }//end of  function
-                    ) // end of transaction
-    }// end of delete function
 }

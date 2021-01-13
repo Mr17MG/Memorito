@@ -11,7 +11,8 @@ import MDate 1.0
 
 Item {
     ThingsApi{id: thingApi}
-    Managment.API{ id: managmentApi }
+    Managment.FriendsAPI { id: friendsApi  }
+    Managment.ContextsApi{ id: contextsApi }
     property string pageTitle: ""
     property int listId: -1
     property int categoryId: -1
@@ -28,10 +29,10 @@ Item {
                            ,listId,categoryId)
         if(listId === Memorito.Waiting)
         {
-            managmentApi.getFriends(friendModel)
+            friendsApi.getFriends(friendModel)
         }
 
-        managmentApi.getContexts(contextModel)
+        contextsApi.getContexts(contextModel)
     }
 
     GridView{

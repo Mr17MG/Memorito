@@ -5,7 +5,7 @@ import "qrc:/Components/" as App
 import QtGraphicalEffects 1.1
 
 Item {
-    API{id:api}
+    ContextsApi{id:api}
     Component.onCompleted: {
         api.getContexts(contextModel)
     }

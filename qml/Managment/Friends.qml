@@ -5,7 +5,7 @@ import "qrc:/Components/" as App
 import QtGraphicalEffects 1.1
 
 Item {
-    API{id:api}
+    FriendsAPI{id:api}
     Component.onCompleted: {
         api.getFriends(friendModel)
     }

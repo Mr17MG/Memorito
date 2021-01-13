@@ -549,7 +549,7 @@ Item{
             property alias contextInput :   contextInput
             property alias priorityInput:   priorityInput
             property alias estimateInput:   estimateInput
-            Managment.API{id: managmentApi}
+            Managment.ContextsApi{id: contextsApi}
             spacing: 25*size1H
             Rectangle{
                 width: parent.width
@@ -590,7 +590,7 @@ Item{
                     }
 
                     Component.onCompleted: {
-                        managmentApi.getContexts(contextModel)
+                        contextsApi.getContexts(contextModel)
                     }
                 }
             }
@@ -890,7 +890,7 @@ Item{
             anchors{
                 fill: parent
             }
-            Managment.API{id: managmentApi}
+            Managment.FriendsAPI{id: friendsApi}
             radius: 10*size1W
             color: "transparent"
             border.width: 3*size1W
@@ -930,7 +930,7 @@ Item{
                 }
                 model: friendModel
                 Component.onCompleted: {
-                    managmentApi.getFriends(friendModel)
+                    friendsApi.getFriends(friendModel)
                 }
             }
 
