@@ -1,5 +1,5 @@
 import QtQuick 2.14 // Require For Loader
-import QtQuick.Controls 2.14
+import QtQuick.Controls 2.14 // Require For Stackview
 import QtGraphicalEffects 1.14 // Require For ColorOverlay
 
 Loader{
@@ -7,7 +7,7 @@ Loader{
     active: true
     asynchronous: true
     width: nRow===1?rootWindow.width
-                   :rootWindow.width-firstColumn.width
+                   :rootWindow.width-staticDrawer.width
     height: parent.height
     sourceComponent: Item {
         clip: true
@@ -29,12 +29,22 @@ Loader{
                 bottom: parent.bottom
             }
             clip: true
-            initialItem: Item{}
+            initialItem: Item{function popOut(object){console.log("i am worked")}}
+            function callInItemFunction(object)
+            {
+                if(typeof currentItem.popOut === "function"){
+                    return currentItem.popOut(object)
+                }
+                else console.log("no function in this page")
+            }
+            onPopExitChanged: {
+                console.log("hi")
+            }
         }
 
         Loader{
             id: resizerLoader
-            active: ltr && firstColumn.active
+            active: ltr && staticDrawer.active
             width: 10*size1W
             height: parent.height
             anchors.right: parent.right
@@ -53,21 +63,21 @@ Loader{
                     drag.axis: Drag.XAxis
                     cursorShape: Qt.SizeHorCursor
                     onClicked: {
-                        if(firstColumn.width === firstColumnMaxWidth)
-                            firstColumn.width = firstColumnMinSize
-                        else if(firstColumn.width >= firstColumnMinSize)
-                            firstColumn.width = firstColumnMaxWidth
+                        if(staticDrawer.width === staticDrawerMaxWidth)
+                            staticDrawer.width = staticDrawerMinSize
+                        else if(staticDrawer.width >= staticDrawerMinSize)
+                            staticDrawer.width = staticDrawerMaxWidth
                     }
 
                     onMouseXChanged: {
                         if( drag.active )
                         {
-                            if ((firstColumn.width + (mouseX)) >= firstColumnMinSize && (firstColumn.width + (mouseX)) <= firstColumnMaxWidth)
-                                firstColumn.width = firstColumn.width + (mouseX)
-                            else if(firstColumn.width + (mouseX) < firstColumnMinSize )
-                                firstColumn.width = firstColumnMinSize
-                            else if((firstColumn.width + (mouseX)) > firstColumnMaxWidth)
-                                firstColumn.width = firstColumnMaxWidth
+                            if ((staticDrawer.width + (mouseX)) >= staticDrawerMinSize && (staticDrawer.width + (mouseX)) <= staticDrawerMaxWidth)
+                                staticDrawer.width = staticDrawer.width + (mouseX)
+                            else if(staticDrawer.width + (mouseX) < staticDrawerMinSize )
+                                staticDrawer.width = staticDrawerMinSize
+                            else if((staticDrawer.width + (mouseX)) > staticDrawerMaxWidth)
+                                staticDrawer.width = staticDrawerMaxWidth
                         }
                     }
                 }

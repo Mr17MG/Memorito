@@ -7,7 +7,7 @@ import MEnum 1.0
 
 Item{
     anchors.fill: parent
-    anchors.leftMargin: firstColumn.active && resizerLoader.active?resizerLoader.width:0
+    anchors.leftMargin: staticDrawer.active && resizerLoader.active?resizerLoader.width:0
     clip: true
 
     Text {
@@ -99,7 +99,7 @@ Item{
         width:parent.width
         delegate: App.Button{
             id: listDelegate
-            property bool state1: firstColumn.width <= (firstColumnMaxWidth*2/3) && drawerLoader.active === false
+            property bool state1: staticDrawer.width <= (staticDrawerMaxWidth*2/3) && drawerLoader.active === false
             width: listView.width
             height: listDelegate.state1 ? 120*size1H : 100*size1H
             flat:true

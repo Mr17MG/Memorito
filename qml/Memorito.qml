@@ -9,13 +9,13 @@ Page {
     property int nRow : uiFunctions.checkDisplayForNumberofRows(Screen)
     onNRowChanged: {
         if(nRow >= 2)
-            firstColumn.active = true
+            staticDrawer.active = true
         else
-            firstColumn.active = false
+            staticDrawer.active = false
     }
 
-    property real firstColumnMinSize: 140*size1W
-    property real firstColumnMaxWidth: nRow ==2?rootWindow.width*2.5/8:rootWindow.width*1.80/8
+    property real staticDrawerMinSize: 140*size1W
+    property real staticDrawerMaxWidth: nRow ==2?rootWindow.width*2.5/8:rootWindow.width*1.80/8
 
     onWidthChanged: {
         if( width=== (Qt.platform.os === "android" || Qt.platform.os === "ios"?width:appSetting.value("AppWidth" ,640)))
@@ -30,16 +30,17 @@ Page {
             }
         }
 
-        if(!firstColumn.active)
-            firstColumn.width = 0
-        else if(firstColumn.width  < firstColumnMinSize )
-            firstColumn.width = firstColumnMinSize
-        else if(firstColumn.width > firstColumnMaxWidth)
-            firstColumn.width = firstColumnMaxWidth
-        appSetting.setValue("firstColumnWidth",firstColumn.width)
+        if(!staticDrawer.active)
+            staticDrawer.width = 0
+        else if(staticDrawer.width  < staticDrawerMinSize )
+            staticDrawer.width = staticDrawerMinSize
+        else if(staticDrawer.width > staticDrawerMaxWidth)
+            staticDrawer.width = staticDrawerMaxWidth
+        appSetting.setValue("staticDrawerWidth",staticDrawer.width)
     }
 
     F.UsefulFunctions{id:usefulFunc}
+    Base.API{id: baseApi}
 
     ListModel{ id: stackPages }
     ListModel{ id: thingModel}
@@ -73,22 +74,22 @@ Page {
 
     Component.onCompleted: {
         stackPages.append({"page":"","title":qsTr("مموریتو")})
+        baseApi.makeLocalTables()
+        baseApi.getLastChanges()
     }
 
     //Header
     property string mainHeaderTitle: qsTr("مموریتو")
-    property string anotherHeaderTitle: ""
     Base.AppHeader{id:header}
 
-    FirstColumn{id:firstColumn;anchors.right: parent.right;}
+    StaticDrawer{id:staticDrawer;anchors.right: parent.right;}
 
     MainColumn{
         id:mainColumn
         height: parent.height - header.height
         anchors.top: header.bottom
-        anchors.right: firstColumn.active?firstColumn.left:parent.right
+        anchors.right: staticDrawer.active?staticDrawer.left:parent.right
         anchors.left: parent.left
-
     }
 
 

@@ -5,12 +5,12 @@ import "qrc:/Components/" as App // Require for Button
 Loader{
     id:headerRect
     anchors.left: parent.left
-    anchors.right: firstColumn.active?firstColumn.left:parent.right
+    anchors.right: staticDrawer.active?staticDrawer.left:parent.right
     height: 100*size1H
     sourceComponent:Item{
         Loader{
             id: resizerLoader
-            active: ltr && firstColumn.active
+            active: ltr && staticDrawer.active
             width: 10*size1W
             height: parent.height
             anchors.right: parent.right
@@ -28,26 +28,26 @@ Loader{
                     drag.axis: Drag.XAxis
                     cursorShape: Qt.SizeHorCursor
                     onClicked: {
-                        if(firstColumn.width === firstColumnMaxWidth)
-                            firstColumn.width = firstColumnMinSize
-                        else if(firstColumn.width >= firstColumnMinSize)
-                            firstColumn.width = firstColumnMaxWidth
-                        appSetting.setValue("firstColumnWidth",firstColumn.width)
+                        if(staticDrawer.width === staticDrawerMaxWidth)
+                            staticDrawer.width = staticDrawerMinSize
+                        else if(staticDrawer.width >= staticDrawerMinSize)
+                            staticDrawer.width = staticDrawerMaxWidth
+                        appSetting.setValue("staticDrawerWidth",staticDrawer.width)
                     }
 
                     onMouseXChanged: {
                         if( drag.active )
                         {
-                            if ((firstColumn.width + (mouseX)) >= firstColumnMinSize && (firstColumn.width + (mouseX)) <= firstColumnMaxWidth)
-                                firstColumn.width = firstColumn.width + (mouseX)
-                            else if(firstColumn.width + (mouseX) < firstColumnMinSize )
-                                firstColumn.width = firstColumnMinSize
-                            else if((firstColumn.width + (mouseX)) > firstColumnMaxWidth)
-                                firstColumn.width = firstColumnMaxWidth
+                            if ((staticDrawer.width + (mouseX)) >= staticDrawerMinSize && (staticDrawer.width + (mouseX)) <= staticDrawerMaxWidth)
+                                staticDrawer.width = staticDrawer.width + (mouseX)
+                            else if(staticDrawer.width + (mouseX) < staticDrawerMinSize )
+                                staticDrawer.width = staticDrawerMinSize
+                            else if((staticDrawer.width + (mouseX)) > staticDrawerMaxWidth)
+                                staticDrawer.width = staticDrawerMaxWidth
                         }
                     }
                     onReleased: {
-                        appSetting.setValue("firstColumnWidth",firstColumn.width)
+                        appSetting.setValue("staticDrawerWidth",staticDrawer.width)
                     }
                 }
             }
@@ -92,7 +92,7 @@ Loader{
                 height: width
                 source: drawerLoader.active && drawerLoader.status === Loader.Ready?
                             (drawerLoader.item.visible?"qrc:/close.svg":"qrc:/menu.svg")
-                          :(firstColumn.width !== firstColumnMinSize?"qrc:/close.svg":"qrc:/menu.svg")
+                          :(staticDrawer.width !== staticDrawerMinSize?"qrc:/close.svg":"qrc:/menu.svg")
                 sourceSize.width: width*2
                 sourceSize.height: height*2
                 visible: false
