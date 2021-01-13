@@ -1,8 +1,9 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.0
-import "qrc:/Components/" as Skin
+//import "qrc:/Components/" as App
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls 2.12
+import "qrc:/Components/" as App
 
 Item {
     property bool isEditable: false
@@ -74,7 +75,7 @@ Item {
             NumberAnimation { target: usernameItem; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
         }
 
-        Skin.TextField{
+        App.TextField{
             id:usernameInput
             width: parent.width
             height: 100*size1H
@@ -109,7 +110,7 @@ Item {
             NumberAnimation { target: emailItem; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
             NumberAnimation { target: emailItem; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
         }
-        Skin.TextField{
+        App.TextField{
             id:emailInput
             width: parent.width
             height: 100*size1H
@@ -128,7 +129,7 @@ Item {
             }
         }
     }
-    Skin.Button{
+    App.Button{
         id: edit
         height: size1H*75
         width: usernameItem.width
@@ -166,7 +167,7 @@ Item {
             }
         }
     }
-    Skin.Button{
+    App.Button{
         id: logoutBtn
         height: size1H*75
         width: 300*size1W

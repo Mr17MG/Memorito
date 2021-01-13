@@ -203,6 +203,8 @@ QtObject {
                             model.remove(modelIndex,1)
                             newModel.append(response.result)
                             usefulFunc.showLog(" <b>'"+ title+" '</b>" +qsTr("با موفقیت بروزرسانی شد"),false,null,700*size1W, ltr)
+                            if(hasFiles)
+                                addFiles(attachModel,attachModel.count,response.result.id)
                             usefulFunc.mainStackPop()
                         }
                     }
@@ -317,7 +319,7 @@ QtObject {
 
                 }
                 catch(e) {
-                    console.log(xhr.responseText)
+//                    console.log(xhr.responseText)
                     console.error(e)
                     usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainColumn,mainColumn.width, ltr)
                 }
