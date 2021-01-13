@@ -147,12 +147,12 @@ QtObject {
         }
     }
 
-    function mainStackPop()
+    function mainStackPop(object)
     {
         let prevPage = stackPages.get(stackPages.count-2)
         mainHeaderTitle = prevPage.title
         stackPages.remove(stackPages.count-1)
         mainColumn.item.mainStackView.pop()
-
+        mainColumn.item.mainStackView.callInItemFunction(object)
     }
 }
