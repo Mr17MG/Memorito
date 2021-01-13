@@ -20,39 +20,41 @@
         <file>Components/TextInput.qml</file>
         <file>Components/ListView.qml</file>
         <file>Components/BusyIndicator.qml</file>
+        <file>Components/BusyDialog.qml</file>
+        <file>Components/Menu.qml</file>
+        <file>Components/MenuItem.qml</file>
+        <file>Components/DateInput.qml</file>
+        <file>Components/DayOfWeekRow.qml</file>
+        <file>Components/FlickTextArea.qml</file>
+        <file>Components/FilesSelection.qml</file>
         <file>Memorito.qml</file>
-        <file>FirstColumn.qml</file>
+        <file>StaticDrawer.qml</file>
         <file>MainColumn.qml</file>
+        <file>Profile.qml</file>
         <file>AppBase/AppHeader.qml</file>
         <file>AppBase/AppSettings.qml</file>
         <file>AppBase/AppStyle.qml</file>
         <file>AppBase/DrawerBody.qml</file>
         <file>Functions/UiFunctions.qml</file>
         <file>Functions/UsefulFunctions.qml</file>
+        <file>Account/API.qml</file>
+        <file>Account/Authentication.qml</file>
         <file>Account/AccountMain.qml</file>
         <file>Account/SignIn.qml</file>
         <file>Account/SignUp.qml</file>
         <file>Splash/MainSplash.qml</file>
         <file>Splash/SplashItem.qml</file>
-        <file>Account/Authentication.qml</file>
-        <file>Account/API.qml</file>
-        <file>Components/BusyDialog.qml</file>
-        <file>Functions/UserDatabase.qml</file>
         <file>Splash/SplashLoader.qml</file>
-        <file>Flow/AddEditThing.qml</file>
+        <file>Functions/UserDatabase.qml</file>
+        <file>Managment/FriendsAPI.qml</file>
         <file>Managment/Friends.qml</file>
-        <file>Components/Menu.qml</file>
-        <file>Components/MenuItem.qml</file>
-        <file>Managment/API.qml</file>
         <file>Managment/Contexts.qml</file>
-        <file>Profile.qml</file>
+        <file>Flow/AddEditThing.qml</file>
         <file>Flow/CategoryApi.qml</file>
-        <file>Components/DateInput.qml</file>
-        <file>Components/DayOfWeekRow.qml</file>
         <file>Flow/CategoriesList.qml</file>
         <file>Flow/ThingsApi.qml</file>
         <file>Flow/ThingList.qml</file>
-        <file>Components/FlickTextArea.qml</file>
-        <file>Components/FilesSelection.qml</file>
+        <file>AppBase/API.qml</file>
+        <file>Managment/ContextsApi.qml</file>
     </qresource>
 </RCC>
