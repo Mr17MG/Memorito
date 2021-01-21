@@ -6,39 +6,49 @@ import QtGraphicalEffects 1.14
 import MEnum 1.0
 
 Item {
-    CategoryApi{id: categoryApi}
     property int listId : -1
+    CategoriesApi{id: categoriesApi}
     Component.onCompleted: {
         if(listId === Memorito.Project)
         {
             projectModel.clear()
-            categoryApi.getCategories(projectCategoryModel,Memorito.Project)
+            categoriesApi.getCategories(projectCategoryModel,Memorito.Project)
         }
         else if(listId === Memorito.Refrence)
         {
             refrenceModel.clear()
-            categoryApi.getCategories(refrenceCategoryModel,Memorito.Refrence)
+            categoriesApi.getCategories(refrenceCategoryModel,Memorito.Refrence)
         }
         else if(listId === Memorito.Someday)
         {
             somedayModel.clear()
-            categoryApi.getCategories(somedayCategoryModel,Memorito.Someday)
+            categoriesApi.getCategories(somedayCategoryModel,Memorito.Someday)
         }
     }
 
     GridView{
-        id: control
+        id: gridView
+        property real lastContentY: 0
         onContentYChanged: {
-            if(contentY<0 || contentHeight < control.height)
+            if(contentY<0 || contentHeight < gridView.height)
                 contentY = 0
-            else if(contentY > (contentHeight - control.height))
-                contentY = (contentHeight - control.height)
+            else if(contentY > (contentHeight - gridView.height))
+            {
+                contentY = (contentHeight - gridView.height)
+                lastContentY = contentY-1
+            }
+            /************* Move Add Button to Down or Up *******************/
+            if(contentY > lastContentY)
+                addBtn.anchors.bottomMargin = -60*size1H
+            else addBtn.anchors.bottomMargin = 20*size1H
+
+            lastContentY = contentY
         }
         onContentXChanged: {
-            if(contentX<0 || contentWidth < control.width)
+            if(contentX<0 || contentWidth < gridView.width)
                 contentX = 0
-            else if(contentX > (contentWidth-control.width))
-                contentX = (contentWidth-control.width)
+            else if(contentX > (contentWidth-gridView.width))
+                contentX = (contentWidth-gridView.width)
 
         }
         anchors{
@@ -59,14 +69,14 @@ Item {
         /***********************************************/
         delegate: Rectangle {
             radius: 15*size1W
-            width: control.cellWidth - 10*size1W
-            height:  control.cellHeight - 10*size1H
+            width: gridView.cellWidth - 10*size1W
+            height:  gridView.cellHeight - 10*size1H
             color: Material.color(appStyle.primaryInt,Material.Shade50)
             MouseArea{
                 anchors.fill: parent
                 cursorShape: Qt.OpenHandCursor
                 onClicked: {
-                    usefulFunc.mainStackPush("qrc:/Flow/ThingList.qml",(listId === Memorito.Project?qsTr("پروژه"):listId === Memorito.Someday?qsTr("شاید یک‌روزی"):listId === Memorito.Refrence?qsTr("مرجع"):"") +": "+
+                    usefulFunc.mainStackPush("qrc:/ThingList.qml",(listId === Memorito.Project?qsTr("پروژه"):listId === Memorito.Someday?qsTr("شاید یک‌روزی"):listId === Memorito.Refrence?qsTr("مرجع"):"") +": "+
                                              model.category_name,{listId:listId,categoryId:model.id,pageTitle:model.category_name})
                 }
             }
@@ -85,7 +95,7 @@ Item {
                 wrapMode: Text.WordWrap
             }
             Text{
-                text: (listId ===Memorito.Project?qsTr("هدف پروژه"):qsTr("توضیحات"))  + ": <b>" +(listId ===Memorito.Project?qsTr("هدفی"):qsTr("توضیحاتی")) +" "+ (model.category_detail?? qsTr("ثبت نشده است")) +"</b>"
+                text: (listId ===Memorito.Project?qsTr("هدف پروژه"):qsTr("توضیحات"))  + ": <b>" +((model.category_detail??(listId ===Memorito.Project?qsTr("هدفی"):qsTr("توضیحاتی")) +" "+ qsTr("ثبت نشده است"))) +"</b>"
                 font{family: appStyle.appFont;pixelSize:  23*size1F;}
                 anchors{
                     top:  categoryText.bottom
@@ -166,6 +176,7 @@ Item {
     }
 
     App.Button{
+        id:addBtn
         text: listId === Memorito.Project?qsTr("افزودن پروژه"):qsTr("افزودن دسته‌بندی")
         anchors{
             left: parent.left
@@ -173,6 +184,8 @@ Item {
             bottom: parent.bottom
             bottomMargin: 20*size1W
         }
+        Behavior on anchors.bottomMargin { NumberAnimation{ duration: 200 } }
+
         radius: 20*size1W
         leftPadding: 35*size1W
         rightPadding: 35*size1W
@@ -194,7 +207,7 @@ Item {
             property alias categoryDetailArea: flickTextArea
             property int categoryId : -1
             property int modelIndex: -1
-            parent: mainColumn
+            parent: mainPage
             width: 600*size1W
             height: 570*size1H
             onClosed: {
@@ -208,9 +221,9 @@ Item {
                 if(categoryName.text.trim() !== "")
                 {
                     if(isAdd){
-                        categoryApi.addCategory(categoryName.text.trim(),categoryDetailArea.text.trim(),listId,projectCategoryModel)
+                        categoriesApi.addCategory(categoryName.text.trim(),categoryDetailArea.text.trim(),listId,projectCategoryModel)
                     } else {
-                        categoryApi.editCategory(categoryId,categoryName.text.trim(),categoryDetailArea.text.trim(),listId,projectCategoryModel,modelIndex)
+                        categoriesApi.editCategory(categoryId,categoryName.text.trim(),categoryDetailArea.text.trim(),listId,projectCategoryModel,modelIndex)
                     }
                     addDialog.close()
                 }
@@ -256,7 +269,7 @@ Item {
         id: deleteLoader
         active: false
         sourceComponent: App.ConfirmDialog{
-            parent: mainColumn
+            parent: mainPage
             onClosed: {
                 deleteLoader.active = false
             }
@@ -266,7 +279,7 @@ Item {
             dialogTitle: qsTr("حذف")
             dialogText: qsTr("آیا مایلید که") + " '" + categoryName + "' " + qsTr("را حذف کنید؟")
             accepted: function() {
-                categoryApi.deleteCategory(categoryId,projectCategoryModel,modelIndex)
+                categoriesApi.deleteCategory(categoryId,gridView.model,modelIndex)
             }
         }
     }

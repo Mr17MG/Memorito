@@ -5,27 +5,27 @@ import "qrc:/Components/" as App
 import QtGraphicalEffects 1.1
 
 Item {
-    ContextsApi{id:api}
+    FriendsAPI{id:api}
     Component.onCompleted: {
-        api.getContexts(contextModel)
+        api.getFriends(friendModel)
     }
 
     GridView{
-        id: control
+        id: gridView
 
         onContentYChanged: {
-            if(contentY<0 || contentHeight < control.height)
+            if(contentY<0 || contentHeight < gridView.height)
                 contentY = 0
-            else if(contentY > (contentHeight - control.height))
-                contentY = (contentHeight - control.height)
+            else if(contentY > (contentHeight - gridView.height))
+                contentY = (contentHeight - gridView.height)
         }
         onContentXChanged: {
-            if(contentX<0 || contentWidth < control.width)
+            if(contentX<0 || contentWidth < gridView.width)
                 contentX = 0
-            else if(contentX > (contentWidth-control.width))
-                contentX = (contentWidth-control.width)
-        }
+            else if(contentX > (contentWidth-gridView.width))
+                contentX = (contentWidth-gridView.width)
 
+        }
         anchors{
             top: parent.top
             topMargin: 15*size1H
@@ -44,28 +44,48 @@ Item {
         /***********************************************/
         delegate: Rectangle {
             radius: 15*size1W
-            width: control.cellWidth - 10*size1W
-            height:  control.cellHeight - 10*size1H
+            width: gridView.cellWidth - 10*size1W
+            height:  gridView.cellHeight - 10*size1H
             color: Material.color(appStyle.primaryInt,Material.Shade50)
+            Rectangle{
+                id: friendRect
+                height: 100*size1H
+                width: height
+                radius: width
+                border.color: Material.color(appStyle.primaryInt,Material.Shade800)
+                border.width: 3*size1W
+                color: Material.color(appStyle.primaryInt,Material.Shade50)
+                anchors{
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: 10*size1W
+                }
                 Image {
-                    id: contextImage
-                    source: "qrc:/context.svg"
-                    width: height
-                    height: 100*size1H
+                    id: friendImage
+                    source: "qrc:/user.svg"
+                    anchors.fill: parent
                     sourceSize.width: width*2
                     sourceSize.height: height*2
-                    anchors{
-                        verticalCenter: parent.verticalCenter
-                        right: parent.right
-                        rightMargin: 10*size1W
+                    anchors.margins: friendRect.border.width
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Rectangle {
+                            x: friendRect.x
+                            y: friendRect.y
+                            width: friendRect.width
+                            height: friendRect.height
+                            radius: friendRect.radius
+                        }
                     }
+                }
             }
 
+
             Text{
-                text: context_name
+                text: friend_name
                 font{family: appStyle.appFont;pixelSize:  25*size1F;bold:false}
                 anchors{
-                    right: contextImage.left
+                    right: friendRect.left
                     rightMargin: 20*size1W
                     verticalCenter: parent.verticalCenter
                     left: menuImg.right
@@ -106,10 +126,10 @@ Item {
                         onTriggered: {
                             menuLoader.active = false
                             dialogLoader.active = true
-                            dialogLoader.item.contextId = id
+                            dialogLoader.item.friendId = id
                             dialogLoader.item.isAdd = false
                             dialogLoader.item.modelIndex = model.index
-                            dialogLoader.item.contextName.text = context_name
+                            dialogLoader.item.friendName.text = friend_name
                             dialogLoader.item.open()
                         }
                     }
@@ -118,8 +138,8 @@ Item {
                         onTriggered: {
                             menuLoader.active = false
                             deleteLoader.active = true
-                            deleteLoader.item.contextName = context_name
-                            deleteLoader.item.contextId = id
+                            deleteLoader.item.friendName = friend_name
+                            deleteLoader.item.friendId = id
                             deleteLoader.item.modelIndex = model.index
                             deleteLoader.item.open()
                         }
@@ -129,11 +149,11 @@ Item {
         }
 
         /***********************************************/
-        model: contextModel
+        model: friendModel
     }
 
     App.Button{
-        text: qsTr("افزودن زمینه")
+        text: qsTr("افزودن دوست")
         anchors{
             left: parent.left
             leftMargin: 20*size1W
@@ -158,10 +178,10 @@ Item {
         sourceComponent: App.Dialog{
             id: addDialog
             property bool isAdd: true
-            property alias contextName: contextName
-            property int contextId : -1
+            property alias friendName: friendName
+            property int friendId : -1
             property int modelIndex: -1
-            parent: mainColumn
+            parent: mainPage
             width: 600*size1W
             height: 300*size1H
             onClosed: {
@@ -172,22 +192,22 @@ Item {
             hasTitle: true
             buttonTitle: isAdd?qsTr("اضافه کن"):qsTr("تغییرش بده")
             dialogButton.onClicked:{
-                if(contextName.text.trim() !== "")
+                if(friendName.text.trim() !== "")
                 {
                     if(isAdd){
-                        api.addContext(contextName.text.trim(),contextModel)
+                        api.addFriend(friendName.text.trim(),friendModel)
                     } else {
-                        api.editContext(contextId,contextName.text.trim(),contextModel,modelIndex)
+                        api.editFriend(friendId,friendName.text.trim(),friendModel,modelIndex)
                     }
                     addDialog.close()
                 }
                 else {
-                    usefulFunc.showLog(qsTr("لطفا نام زمینه موردنظر خود را وارد نمایید"),true,null,400*size1W, ltr)
+                    usefulFunc.showLog(qsTr("لطفا نام دوست خود را وارد نمایید"),true,null,400*size1W, ltr)
                 }
             }
             App.TextField{
-                id: contextName
-                placeholderText: qsTr("نام زمینه")
+                id: friendName
+                placeholderText: qsTr("نام دوست شما")
                 anchors{
                     right: parent.right
                     rightMargin: 40*size1W
@@ -209,17 +229,17 @@ Item {
         id: deleteLoader
         active: false
         sourceComponent: App.ConfirmDialog{
-            parent: mainColumn
+            parent: mainPage
             onClosed: {
                 deleteLoader.active = false
             }
-            property string contextName: ""
-            property int contextId: -1
+            property string friendName: ""
+            property int friendId: -1
             property int modelIndex: -1
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " " + contextName + " " + qsTr("را حذف کنید؟")
+            dialogText: qsTr("آیا مایلید که") + " " + friendName + " " + qsTr("را حذف کنید؟")
             accepted: function() {
-                api.deleteContext(contextId,contextModel,modelIndex)
+                api.deleteFriend(friendId,friendModel,modelIndex)
             }
         }
     }

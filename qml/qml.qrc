@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
         <file>Components/Button.qml</file>
         <file>Components/CheckBox.qml</file>
         <file>Components/CheckIndicator.qml</file>
@@ -13,7 +12,6 @@
         <file>Components/PageIndicator.qml</file>
         <file>Components/RadioButton.qml</file>
         <file>Components/RadioIndicator.qml</file>
-        <file>Components/SlideDelegate.qml</file>
         <file>Components/Switch.qml</file>
         <file>Components/SwitchIndicator.qml</file>
         <file>Components/TextField.qml</file>
@@ -27,17 +25,12 @@
         <file>Components/DayOfWeekRow.qml</file>
         <file>Components/FlickTextArea.qml</file>
         <file>Components/FilesSelection.qml</file>
-        <file>Memorito.qml</file>
-        <file>StaticDrawer.qml</file>
-        <file>MainColumn.qml</file>
-        <file>Profile.qml</file>
         <file>AppBase/AppHeader.qml</file>
         <file>AppBase/AppSettings.qml</file>
         <file>AppBase/AppStyle.qml</file>
         <file>AppBase/DrawerBody.qml</file>
         <file>Functions/UiFunctions.qml</file>
         <file>Functions/UsefulFunctions.qml</file>
-        <file>Account/API.qml</file>
         <file>Account/Authentication.qml</file>
         <file>Account/AccountMain.qml</file>
         <file>Account/SignIn.qml</file>
@@ -45,16 +38,23 @@
         <file>Splash/MainSplash.qml</file>
         <file>Splash/SplashItem.qml</file>
         <file>Splash/SplashLoader.qml</file>
-        <file>Functions/UserDatabase.qml</file>
-        <file>Managment/FriendsAPI.qml</file>
-        <file>Managment/Friends.qml</file>
-        <file>Managment/Contexts.qml</file>
-        <file>Flow/AddEditThing.qml</file>
-        <file>Flow/CategoryApi.qml</file>
-        <file>Flow/CategoriesList.qml</file>
-        <file>Flow/ThingsApi.qml</file>
-        <file>Flow/ThingList.qml</file>
-        <file>AppBase/API.qml</file>
-        <file>Managment/ContextsApi.qml</file>
+        <file>StartPage.qml</file>
+        <file>StartMemorito.qml</file>
+        <file>MainPage.qml</file>
+        <file>StaticDrawer.qml</file>
+        <file>UserAPI.qml</file>
+        <file>InitLocalDatabase.qml</file>
+        <file>Friends.qml</file>
+        <file>FriendsAPI.qml</file>
+        <file>Contexts.qml</file>
+        <file>ContextsApi.qml</file>
+        <file>AddEditThing.qml</file>
+        <file>CategoriesApi.qml</file>
+        <file>CategoriesList.qml</file>
+        <file>ThingsApi.qml</file>
+        <file>ThingList.qml</file>
+        <file>Profile.qml</file>
+        <file>FilesApi.qml</file>
+        <file>ThingsDetail.qml</file>
     </qresource>
 </RCC>

@@ -4,7 +4,6 @@ import QtQuick.Controls.Material 2.14
 import QtGraphicalEffects 1.14
 import QtQuick.Layouts 1.15
 import "qrc:/Components/" as App
-import "qrc:/Managment/" as Managment
 import MEnum 1.0
 
 Item{
@@ -24,7 +23,7 @@ Item{
         if(prevPageModel)
             if(prevPageModel.has_files === 1)
             {
-                thingsApi.getFiles(attachModel,prevPageModel.id)
+                filesApi.getFiles(attachModel,prevPageModel.id)
             }
     }
 
@@ -131,7 +130,7 @@ Item{
                 Loader{
                     id:collectLoader
                     width: flickTextArea.width
-                    active: listId !== Memorito.Process
+//                    active: listId !== Memorito.Process
                     height: active?(
                                         (
                                             listId === Memorito.Project  ||
@@ -481,7 +480,11 @@ Item{
                         options["priorityId"] = null
                         options["energyId"] =null
                         options["estimateTime"] = null
-                        thingsApi.prepareForAdd(thingModel,options,Memorito.Process,(attachModel.count>0?1:0));
+                        if(listId === Memorito.Collect)
+                            thingsApi.prepareForAdd(thingModel,options,Memorito.Process,(attachModel.count>0?1:0));
+                        else
+                            thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,thingModel,prevPageModel.id,options,Memorito.Process,(attachModel.count>0?1:0));
+
                     }
                 }// 2 is proccess list id
 
@@ -549,7 +552,7 @@ Item{
             property alias contextInput :   contextInput
             property alias priorityInput:   priorityInput
             property alias estimateInput:   estimateInput
-            Managment.ContextsApi{id: contextsApi}
+            ContextsApi{id: contextsApi}
             spacing: 25*size1H
             Rectangle{
                 width: parent.width
@@ -730,7 +733,7 @@ Item{
         id:projectComponent
         Rectangle {
             id: projectItem
-            CategoryApi{ id: categoryApi}
+            CategoriesApi{ id: categoryApi}
             anchors{
                 fill: parent
             }
@@ -794,9 +797,9 @@ Item{
                 rightPadding: 35*size1W
                 onClicked: {
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,nextActionModel,prevPageModel.id,options,Memorito.NextAction,(attachModel.count>0?1:0),null,null,null,null)
+                        thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,nextActionModel,prevPageModel.id,options,Memorito.NextAction,(attachModel.count>0?1:0),null,null,null,null)
                     else
-                        thingsApi.prepareForAdd(options,Memorito.NextAction,(attachModel.count>0?1:0),null,null,null,null);
+                        thingsApi.prepareForAdd(nextActionModel,options,Memorito.NextAction,(attachModel.count>0?1:0),null,null,null,null);
                 }
             }
         }
@@ -806,7 +809,7 @@ Item{
         id:refrenceComponent
         Rectangle {
             id: refrenceItem
-            CategoryApi{ id: categoryApi}
+            CategoriesApi{ id: categoryApi}
             width: parent.width
             anchors{
                 fill: parent
@@ -875,7 +878,7 @@ Item{
 
                     let categoryId = refrenceCategoryCombo.currentIndex !== -1 ? refrenceCategoryModel.get(refrenceCategoryCombo.currentIndex).id : null
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,refrenceModel,prevPageModel.id,options,Memorito.Refrence,(attachModel.count>0?1:0),categoryId);
+                        thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,refrenceModel,prevPageModel.id,options,Memorito.Refrence,(attachModel.count>0?1:0),categoryId);
                     else
                         thingsApi.prepareForAdd(refrenceModel,options,Memorito.Refrence,(attachModel.count>0?1:0),categoryId);
                 }
@@ -890,7 +893,7 @@ Item{
             anchors{
                 fill: parent
             }
-            Managment.FriendsAPI{id: friendsApi}
+            FriendsAPI{id: friendsApi}
             radius: 10*size1W
             color: "transparent"
             border.width: 3*size1W
@@ -965,7 +968,7 @@ Item{
 
                     let friendId = friendModel.get(friendCombo.currentIndex).id
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,waitingModel,prevPageModel.id,options,Memorito.Waiting,(attachModel.count>0?1:0),null,null,friendId,null); // 5 is waiting list id
+                        thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,waitingModel,prevPageModel.id,options,Memorito.Waiting,(attachModel.count>0?1:0),null,null,friendId,null); // 5 is waiting list id
                     else
                         thingsApi.prepareForAdd(waitingModel,options,Memorito.Waiting,(attachModel.count>0?1:0),null,null,friendId,null);
                 }
@@ -1051,7 +1054,7 @@ Item{
 
                     let dueDate = usefulFunc.formatDate(dateInput.selectedDate,false)
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,calendarModel,prevPageModel.id,options,Memorito.Calendar,(attachModel.count>0?1:0),null,dueDate,null,null)
+                        thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,calendarModel,prevPageModel.id,options,Memorito.Calendar,(attachModel.count>0?1:0),null,dueDate,null,null)
                     else
                         thingsApi.prepareForAdd(calendarModel,options,Memorito.Calendar,(attachModel.count>0?1:0),null,dueDate,null,null);
                 }
@@ -1088,7 +1091,7 @@ Item{
                 rightPadding: 35*size1W
                 onClicked: {
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,trashModel,dprevPageModel.id,options,Memorito.Trash,(attachModel.count>0?1:0));
+                        thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,trashModel,prevPageModel.id,options,Memorito.Trash,(attachModel.count>0?1:0));
                     else
                         thingsApi.prepareForAdd(trashModel,options,Memorito.Trash,(attachModel.count>0?1:0));
                 }
@@ -1125,7 +1128,7 @@ Item{
                 rightPadding: 35*size1W
                 onClicked: {
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,doneModel,prevPageModel.id,options,Memorito.Done,(attachModel.count>0?1:0),null,null,null,null)
+                        thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,doneModel,prevPageModel.id,options,Memorito.Done,(attachModel.count>0?1:0),null,null,null,null)
                     else
                         thingsApi.prepareForAdd(doneModel,options,Memorito.Done,(attachModel.count>0?1:0),null,null,null,null);
                 }
@@ -1137,7 +1140,7 @@ Item{
         id:somedayComponent
         Rectangle {
             id: somedayItem
-            CategoryApi{ id: categoryApi}
+            CategoriesApi{ id: categoryApi}
             anchors{
                 fill: parent
             }
@@ -1203,7 +1206,7 @@ Item{
                 onClicked: {
                     let categoryId = somedayCategoryCombo.currentIndex !== -1 ? somedayCategoryModel.get(somedayCategoryCombo.currentIndex).id : null
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,somedayModel,prevPageModel.id,options,Memorito.Someday,(attachModel.count>0?1:0),categoryId); // 9 is someday list id
+                        thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,somedayModel,prevPageModel.id,options,Memorito.Someday,(attachModel.count>0?1:0),categoryId); // 9 is someday list id
                     else
                         thingsApi.prepareForAdd(somedayModel,options,Memorito.Someday,(attachModel.count>0?1:0),categoryId);
                 }
@@ -1215,7 +1218,7 @@ Item{
         id: projectCategoryComponent
         Rectangle {
             id: projectCategoryItem
-            CategoryApi{ id: categoryApi}
+            CategoriesApi{ id: categoryApi}
             anchors{
                 fill: parent
             }
@@ -1282,7 +1285,7 @@ Item{
                     }
                     let projectId = projectCategoryCombo.currentIndex !== -1 ? projectCategoryModel.get(projectCategoryCombo.currentIndex).id : null
                     if(prevPageModel)
-                        thingsApi.prepareForEdit(thingModel,projectModel,prevPageModel.id,options,Memorito.Project,(attachModel.count>0?1:0),projectId,null,null)
+                        thingsApi.prepareForEdit(listId===Memorito.Process?thingModel:null,projectModel,prevPageModel.id,options,Memorito.Project,(attachModel.count>0?1:0),projectId,null,null)
                     else
                         thingsApi.prepareForAdd(projectModel,options,Memorito.Project,(attachModel.count>0?1:0),projectId);
                 }
