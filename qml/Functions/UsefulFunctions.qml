@@ -55,8 +55,8 @@ QtObject {
 
     function findInModel(key,searchField,listModel)
     {
-        var personIndex = findListModel(listModel,function(model){return key===model[searchField]},false)
-        return {index: personIndex,value:listModel.get(personIndex)};
+        var index = findListModel(listModel,function(model){return key===model[searchField]},false)
+        return {index: index,value:listModel.get(index)};
     }
 
     function showLog(message,isError,parent,width,isLeftEdge)
@@ -142,8 +142,18 @@ QtObject {
         if(page !== stackPages.get(stackPages.count-1).page || title !== stackPages.get(stackPages.count-1).title)
         {
             mainHeaderTitle = title
-            stackPages.append({"page":page,"title":title})
-            mainColumn.item.mainStackView.push(page,data)
+
+            let result = findListModel(stackPages,function(model){return page===model["page"] && title===model["title"]},false)
+            if(result)
+            {
+                stackPages.append({"page":page,"title":title})
+                stackPages.remove(result,stackPages.count-result-1)
+                mainPage.item.mainStackView.pop(mainPage.item.mainStackView.get(result))
+            }
+            else{
+                stackPages.append({"page":page,"title":title})
+                mainPage.item.mainStackView.push(page,data)
+            }
         }
     }
 
@@ -152,7 +162,7 @@ QtObject {
         let prevPage = stackPages.get(stackPages.count-2)
         mainHeaderTitle = prevPage.title
         stackPages.remove(stackPages.count-1)
-        mainColumn.item.mainStackView.pop()
-        mainColumn.item.mainStackView.callInItemFunction(object)
+        mainPage.item.mainStackView.pop()
+        mainPage.item.mainStackView.callInItemFunction(object)
     }
 }
