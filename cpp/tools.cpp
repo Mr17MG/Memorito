@@ -3,8 +3,8 @@
 Tools::Tools(QObject *parent) : QObject(parent)
 {
     saveDir = (QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+QDir::separator()+"Memorito Data"+QDir::separator());
-
 }
+
 
 QString Tools::saveBase64asFile(QString fileName, QString fileExtensions, QString base64data)
 {

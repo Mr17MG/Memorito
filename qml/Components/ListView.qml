@@ -1,6 +1,6 @@
 import QtQuick 2.14
 import QtQuick.Controls.Material 2.14
-import "./" as App
+import "qrc:/Components" as App
 
 ListView {
     property bool isEmpty:!model.count

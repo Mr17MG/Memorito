@@ -1,26 +1,29 @@
 import QtQuick 2.14
 import QtGraphicalEffects 1.14 // Require for DropShadow
 import QtQuick.Controls.Material 2.14 // // Require For Material Theme
-import "qrc:/Account/" as Account
-import MSysInfo 1.0 // For SystemInfo
-
+import "../"
 Item {
-    SystemInfo{id:sysInfo}
+    InitLocalDatabase   {   id: localDB     }
     Component.onCompleted: {
-        users.append(userDbFunc.getUsers())
+        users.append(userApi.getUsers())
         if(users.count > 0)
         {
-            currentUser = userDbFunc.getUserByUserId(users.get(0).id)
+            currentUser = userApi.getUserByUserId(users.get(0).id)
             let token = currentUser.authToken?currentUser.authToken:"-1"
             let userId = currentUser.id?currentUser.id:-1
-            api.validateToken(token,userId)
+            if(token ==="-1" || userId === -1)
+            {
+                mainLoader.source = "qrc:/Account/AccountMain.qml"
+            }
+            else
+                userApi.validateToken(token,userId)
+
         }
         else{
             mainLoader.source = "qrc:/Account/AccountMain.qml"
         }
 
     }
-    Account.API{ id: api }
 
     Image {
         id:iconLogo

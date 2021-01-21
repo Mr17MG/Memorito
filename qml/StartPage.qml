@@ -1,13 +1,16 @@
-import QtQuick 2.14 // Require For MouseArea and other
-import QtQuick.Window 2.14 // Require For Screen
-import QtQuick.Controls 2.14 // Require For Drawer and other
-import QtQuick.Controls.Material 2.14 // // Require For Material Theme
-import Qt.labs.settings 1.1 // Require For appSettings
-import "qrc:/AppBase/" as Base
-import "qrc:/Functions/" as F
-import QtQuick.LocalStorage 2.14 /*as SQLITE*/
-import "qrc:/Splash/" as Splash
-import MTools 1.0
+import QtQuick 2.14                       // Require For MouseArea and other
+import QtQuick.Window 2.14                // Require For Screen
+import QtQuick.Controls 2.14              // Require For Drawer and other
+import QtQuick.Controls.Material 2.14     // Require For Material Theme
+import QtQuick.LocalStorage 2.14          // Require For LocalStorage.openDatabaseSync
+import Qt.labs.settings 1.1               // Require For appSettings
+import MTools 1.0                         // Require For myTools
+import MSysInfo 1.0                       // Require For SystemInfo
+import MSecurity 1.0                      // Require For MSecurity
+import "qrc:/Functions/" as F             // Require For UiFunctions
+import "qrc:/Splash/" as Splash           // Require For SplashLoader
+import "qrc:/AppBase/" as Base            // Require For AppStyle
+
 
 ApplicationWindow {
     id:rootWindow
@@ -57,16 +60,20 @@ ApplicationWindow {
         size1H= uiFunctions.getHeightSize(1,Screen)
         size1F= uiFunctions.getFontSize(1,Screen)
     }
+
     /********************************************************************************/
     ////////////////////////////// Application appStyle ////////////////////////////////
+
     Base.AppStyle{id:appStyle}
     MTools{id:myTools}
+
     Material.theme: Number(appSetting.value("AppTheme",0))
+    Material.primary: appStyle.primaryColor
     Material.onThemeChanged: {
         appSetting.setValue("AppTheme",Material.theme)
     }
 
-    Material.primary: appStyle.primaryColor
+
     function setSizes(scale)
     {
 //        size1W= size1W*scale
@@ -88,11 +95,15 @@ ApplicationWindow {
     /********************************************************************************/
     ////////////////////////////// useful Component ////////////////////////////////
 
-    F.UiFunctions { id: uiFunctions }
-    F.UsefulFunctions{ id: usefulFunc }
-    F.UserDatabase{ id: userDbFunc }
+    UserAPI             {   id: userApi      }
+    Settings            {   id: appSetting   }
+    MSecurity           {   id: security     }
+    SystemInfo          {   id: sysInfo      }
+    F.UiFunctions       {   id: uiFunctions  }
+    F.UsefulFunctions   {   id: usefulFunc   }
 
-    Settings{ id: appSetting }
+    ListModel{ id: users }
+    property var currentUser
 
     /********************************************************************************/
     //////////////////////////////// Main App Loader /////////////////////////////////
@@ -100,10 +111,8 @@ ApplicationWindow {
     property string domain: isDebug?Qt.platform.os === "android"?"http://192.168.0.117"
                                                                 :"http://memorito.local"
                                    :"https://memorito.ir"
-
     property var dataBase: LocalStorage.openDatabaseSync("Memorito_database","1.0","a GTD based Project",10000)
-    ListModel{ id: users }
-    property var currentUser
+
 
     Loader{
         id:mainLoader

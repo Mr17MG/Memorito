@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 import MDate 1.0
-import "./"
+import "qrc:/Components"
 import QtGraphicalEffects 1.14
 Item {
 

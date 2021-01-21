@@ -188,7 +188,6 @@ Item {
                         qsTr("آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟"),
                         function()
                         {
-                            userDbFunc.deleteUser(currentUser.localId)
                             mainLoader.source = "qrc:/Account/AccountMain.qml"
                             currentUser = []
                         }

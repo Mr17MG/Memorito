@@ -147,11 +147,16 @@ Rectangle{
                                 if(model.file)
                                 {
                                     if(deleteBtn.text === qsTr("بازگرداندن"))
+                                    {
+                                        model.deleted = 1
                                         fullRect.opacity = 1
-                                    else fullRect.opacity = 0.8
+                                    }
+                                    else {
+                                        model.deleted = 0
+                                        fullRect.opacity = 0.8
+                                    }
                                 }
-                                else
-                                backRect.model.remove(index)
+                                else backRect.model.remove(index)
                             }
 
                         }
@@ -195,7 +200,7 @@ Rectangle{
                 width: 300*size1W
                 visible: backRect.model.count === 0
                 height: width
-                source: dragItem.opacity === 1? "qrc:/TaskFlow/first-shot.svg" :"qrc:/TaskFlow/first-shot-drop.svg"
+                source: dragItem.opacity === 1? "qrc:/first-shot.svg" :"qrc:/first-shot-drop.svg"
                 anchors{
                     right: parent.right
                     bottom: parent.bottom

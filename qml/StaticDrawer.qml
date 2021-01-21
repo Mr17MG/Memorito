@@ -1,5 +1,5 @@
-import QtQuick 2.14 // Reqiure For Loader
-import "qrc:/AppBase" as Base // Require For DrawerBody
+import QtQuick 2.14            // Reqiure For Loader
+import "qrc:/AppBase" as Base  // Require For DrawerBody
 
 Loader{
     id:staticDrawer

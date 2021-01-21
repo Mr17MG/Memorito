@@ -2,7 +2,7 @@ import QtQuick 2.14
 import QtQuick.Templates 2.14 as T
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
-import "./" as App
+import "qrc:/Components" as App
 
 T.CheckBox {
     id: control

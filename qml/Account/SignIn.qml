@@ -163,7 +163,7 @@ Item{
                         usefulFunc.showLog(qsTr("لطفا رمزعبور خود را وارد نمایید"),true,authLoader,authLoader.width,false)
                         return
                     }
-                    api.signIn(usernameInput.text,passwordInput.text)
+                    userApi.signIn(usernameInput.text,passwordInput.text)
                 }
             }
             Item{
@@ -193,7 +193,7 @@ Item{
                             usefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader,authLoader.width,false)
                             return
                         }
-                        api.forgetPass(usernameInput.text)
+                        userApi.forgetPass(usernameInput.text)
                     }
                 }
             }

@@ -3,11 +3,11 @@ import QtQuick.Controls 2.14 // Require For Stackview
 import QtGraphicalEffects 1.14 // Require For ColorOverlay
 
 Loader{
-    id:mainColumn
+    id:mainPage
     active: true
     asynchronous: true
     width: nRow===1?rootWindow.width
-                   :rootWindow.width-staticDrawer.width
+                   :rootWindow.width - staticDrawer.width
     height: parent.height
     sourceComponent: Item {
         clip: true
@@ -29,16 +29,17 @@ Loader{
                 bottom: parent.bottom
             }
             clip: true
-            initialItem: Item{function popOut(object){console.log("i am worked")}}
+            initialItem: Item{}
+
             function callInItemFunction(object)
             {
                 if(typeof currentItem.popOut === "function"){
                     return currentItem.popOut(object)
                 }
-                else console.log("no function in this page")
-            }
-            onPopExitChanged: {
-                console.log("hi")
+                else
+                {
+                    console.log("no function in this page")
+                }
             }
         }
 

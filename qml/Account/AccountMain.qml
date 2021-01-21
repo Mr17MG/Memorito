@@ -3,12 +3,15 @@ import QtQuick.Controls 2.14 // require for stackview
 import QtQuick.Controls.Material 2.14 // Require For Material.color
 import "qrc:/Components" as App
 import QtQuick.Window 2.14 // Require for Window
-import MSysInfo 1.0 // For SystemInfo
-import MSecurity 1.0 // For MSecurity
-
+import ".."
 Item {
     id:item1
     property bool isSignIn: true
+    InitLocalDatabase   {   id: localDB     }
+    Component.onCompleted: {
+        localDB.dropAallLocalTables()
+        localDB.makeLocalTables()
+    }
     onIsSignInChanged: {
         if(isSignIn)
         {
@@ -20,9 +23,6 @@ Item {
 
         }
     }
-
-    API{id:api}
-
     Shortcut {
         sequences: ["Esc", "Back"]
         onActivated: {
@@ -32,9 +32,6 @@ Item {
                 usefulFunc.showConfirm( qsTr("خروج؟") , qsTr("آیا مایلید از نرم‌افزار خارج شوید؟"), function(){Qt.quit()} )
         }
     }
-
-    SystemInfo{id:sysInfo}
-    MSecurity{id:security}
 
     function checkSplit(window)
     {
@@ -51,7 +48,7 @@ Item {
                 return false;
         }
     }
-
+    UserAPI{id:userApi}
     Loader{
         id: authLoader
         x: splashLoader.active?(splashLoader.active?isSignIn == !ltr ? width : 0:0):0

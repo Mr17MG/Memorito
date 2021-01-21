@@ -2,7 +2,7 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
 import "qrc:/Components" as App
-import QtGraphicalEffects 1.1
+import QtGraphicalEffects 1.14
 Dialog {
     id: dialog
     width: size1W*310

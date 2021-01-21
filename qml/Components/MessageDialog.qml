@@ -1,7 +1,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
-import "./" as App
+import "qrc:/Components" as App
 
 App.Dialog {
     id: messageDialog

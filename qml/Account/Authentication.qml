@@ -1,13 +1,13 @@
 import QtQuick 2.14 // Rquire For Item
 import "qrc:/Components" as App // Require for App.Button and ...
 import QtQuick.Controls.Material 2.14 // Require for Material.foreground
-
+import "../"
 Item {
     property string email: ""
     property int waitingSecond: defaultWaintingTime
     property int defaultWaintingTime: 180
     property bool isReset: false
-
+    UserAPI{ id:userApi }
     function secondToMMSS(second)
     {
         var MM = 0
@@ -156,7 +156,7 @@ Item {
                 radius: 20*size1W
                 onClicked: {
                     if(!isReset)
-                        api.validateOTP(email,otpInput.text)
+                        userApi.validateOTP(email,otpInput.text)
                     else {
                         if(passLoader.item.passInput.text === "" )
                         {
@@ -172,7 +172,7 @@ Item {
                             usefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true,authLoader,authLoader.width,true)
                             return
                         }
-                        api.resetPass(email, otpInput.text, passLoader.item.passInput.text)
+                        userApi.resetPass(email, otpInput.text, passLoader.item.passInput.text)
                     }
                 }
             }
@@ -205,7 +205,7 @@ Item {
                         if(waitingSecond === defaultWaintingTime){
                             otpInput.clear()
                             waiterTime.start()
-                            api.resendOTP(email)
+                            userApi.resendOTP(email)
                         }
 
                     }
