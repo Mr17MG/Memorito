@@ -6,13 +6,19 @@ import QtQuick.Controls 2.14 // Require For ScrollBar
 import MEnum 1.0
 
 Item{
-    anchors.fill: parent
-    anchors.leftMargin: staticDrawer.active && resizerLoader.active?resizerLoader.width:0
-    clip: true
+    anchors{
+        fill: parent
+        leftMargin: staticDrawer?staticDrawer.active?resizerLoader.active?resizerLoader.width:0:0:0
+    }
 
     Text {
         id: userNameText
-        text: "@"+(currentUser.username??"")
+        text: {
+            try{
+                    return "@"+(currentUser.username??"")
+            }
+            catch(e){}
+        }
         color: appStyle.textColor
         font{family: appStyle.appFont;pixelSize: 25*size1F;bold:false}
         horizontalAlignment: Text.AlignHCenter
@@ -127,15 +133,19 @@ Item{
                                  ?(parent.width-width)/2 // Center in parent
                                  :20*size1W
                 }
+
+                Behavior on anchors.rightMargin {
+                    NumberAnimation{duration: 200}
+                }
             }
             ColorOverlay{
                 id:iconColor
                 anchors.fill: icon
                 source:icon
-                color:stackPages.get(stackPages.count-1).title === title?appStyle.primaryColor
-                                                                            :appStyle.textColor
-
+                color: stackPages.get(stackPages.count-1).title === title?appStyle.primaryColor
+                                                                         :appStyle.textColor
             }
+
             Text {
                 id: titleText
                 text: title
@@ -155,80 +165,84 @@ Item{
                     left: parent.left
                     leftMargin: nRow === 2 ? 10*size1W : 0
                 }
+                Behavior on anchors.rightMargin {
+                    NumberAnimation{duration: 200}
+                }
             }
-        }
+        } // end of delegate
+
         model: ListModel{
             id:modelList
             ListElement{
                 title: qsTr("جمع‌آوری")
-                pageSource :"qrc:/Flow/AddEditThing.qml"
+                pageSource :"qrc:/AddEditThing.qml"
                 iconSrc: "qrc:/collect.svg"
                 listId: Memorito.Collect
             }
             ListElement{
                 title:qsTr("پردازش نشده‌ها")
                 iconSrc: "qrc:/process.svg"
-                pageSource: "qrc:/Flow/ThingList.qml"
+                pageSource: "qrc:/ThingList.qml"
                 listId: Memorito.Process
             }
             ListElement{
                 title:qsTr("عملیات بعدی")
                 iconSrc: "qrc:/nextAction.svg"
-                pageSource: "qrc:/Flow/ThingList.qml"
+                pageSource: "qrc:/ThingList.qml"
                 listId: Memorito.NextAction
             }
             ListElement{
                 title:qsTr("لیست انتظار")
                 iconSrc: "qrc:/waiting.svg"
-                pageSource: "qrc:/Flow/ThingList.qml"
+                pageSource: "qrc:/ThingList.qml"
                 listId: Memorito.Waiting
             }
             ListElement{
                 title:qsTr("تقویم")
                 iconSrc: "qrc:/calendar.svg"
-                pageSource: "qrc:/Flow/ThingList.qml"
+                pageSource: "qrc:/ThingList.qml"
                 listId: Memorito.Calendar
             }
             ListElement{
                 title:qsTr("مرجع")
                 iconSrc: "qrc:/refrence.svg"
-                pageSource: "qrc:/Flow/CategoriesList.qml"
+                pageSource: "qrc:/CategoriesList.qml"
                 listId: Memorito.Refrence
             }
             ListElement{
                 title:qsTr("شاید یک‌روزی")
                 iconSrc: "qrc:/someday.svg"
-                pageSource: "qrc:/Flow/CategoriesList.qml"
+                pageSource: "qrc:/CategoriesList.qml"
                 listId: Memorito.Someday
             }
             ListElement{
                 title:qsTr("پروژه‌ها")
                 iconSrc: "qrc:/project.svg"
-                pageSource: "qrc:/Flow/CategoriesList.qml"
+                pageSource: "qrc:/CategoriesList.qml"
                 listId: Memorito.Project
             }
             ListElement{
                 title:qsTr("انجام شده‌ها")
                 iconSrc: "qrc:/done.svg"
-                pageSource: "qrc:/Flow/ThingList.qml"
+                pageSource: "qrc:/ThingList.qml"
                 listId: Memorito.Done
             }
             ListElement{
                 title:qsTr("سطل زباله")
                 iconSrc: "qrc:/trash.svg"
-                pageSource: "qrc:/Flow/ThingList.qml"
+                pageSource: "qrc:/ThingList.qml"
                 listId: Memorito.Trash
             }
             ListElement{
                 title:qsTr("محل‌های انجام")
-                pageSource:"qrc:/Managment/Contexts.qml"
+                pageSource:"qrc:/Contexts.qml"
                 iconSrc: "qrc:/contexts.svg"
                 listId: Memorito.Contexts
             }
             ListElement{
                 title:qsTr("دوستان")
                 iconSrc: "qrc:/friends.svg"
-                pageSource: "qrc:/Managment/Friends.qml"
+                pageSource: "qrc:/Friends.qml"
                 listId: Memorito.Friends
             }
             ListElement{
