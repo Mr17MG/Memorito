@@ -106,12 +106,13 @@ Loader{
             }
         }
         App.Button{
+            id: backButton
             flat: true
             width:  90*size1W
             height: width
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            visible: mainColumn.item.mainStackView.depth > 1
+            visible: mainPage.item.mainStackView.depth > 1
             onClicked: {
                  usefulFunc.mainStackPop()
             }
@@ -131,6 +132,15 @@ Loader{
                 source: backIcon
                 anchors.fill: backIcon
                 color: appStyle.primaryColor
+            }
+        }
+        Shortcut {
+            sequences: ["Esc", "Back"]
+            onActivated: {
+                if(backButton.visible)
+                    backButton.clicked(Qt.RightButton)
+                else
+                    usefulFunc.showConfirm( qsTr("خروج؟") , qsTr("آیا مایلید از نرم‌افزار خارج شوید؟"), function(){Qt.quit()} )
             }
         }
     }
