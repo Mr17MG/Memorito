@@ -114,7 +114,10 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                                     }
                                     else if( item.changes_type === 2 )
                                     {
-                                        updateThings(item)
+                                        if(!getThingById(item.id))
+                                            insertArray.push(item)
+                                        else
+                                            updateThings(item)
                                     }
                                     nChangeId.push(item.change_id)
                                 }
@@ -437,9 +440,10 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                         if(response.code === 200){
                             if(local_id === null)
                             {
-                                model.remove(modelIndex)
+//                                model.remove(modelIndex)
                                 deleteThingLocalDatabase(thingId)
-                                localDB.insertDeviceChanges([{"table_id":4,   "record_id":response.result.id,    "changes_type":3,  "user_id":currentUser.id}])
+                                localDB.insertDeviceChanges([{"table_id":4,   "record_id":thingId,    "changes_type":3,  "user_id":currentUser.id}])
+                                usefulFunc.mainStackPop()
                             }
                             else{
                                 localDB.deleteFromLocalChanges(change_id)
@@ -489,7 +493,25 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         return valuesThings
     }
 
+    function getThingById(id)
+    {
+        let valuesLogs = {}
+        dataBase.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Things WHERE id=?",id)
+                            if(result.rows.length)
+                                valuesLogs = result.rows.item(0)
+                        }
+                        catch(e)
+                        {
 
+                        }
+                    })
+        return valuesLogs
+    }
     function insertThings(values,local_id = null)
     {
         let mapValues = values.map(item => [ item.id, String(item.title), String(item.detail)??"", item.list_id ?? 0, item.is_done??0, item.has_files??0,item.context_id??0,

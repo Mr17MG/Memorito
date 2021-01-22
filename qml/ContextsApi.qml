@@ -112,7 +112,10 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                                     }
                                     else if( item.changes_type === 2 )
                                     {
-                                        updateContexts(item)
+                                        if(!getContextById(item.id))
+                                            insertArray.push(item)
+                                        else
+                                            updateContexts(item)
                                     }
                                     nChangeId.push(item.change_id)
                                 }
@@ -405,6 +408,26 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         }
                     })
         return valuesContexts
+    }
+
+    function getContextById(id)
+    {
+        let valuesLogs = {}
+        dataBase.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Contexts WHERE id=?",id)
+                            if(result.rows.length)
+                                valuesLogs = result.rows.item(0)
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesLogs
     }
 
 

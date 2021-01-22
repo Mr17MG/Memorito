@@ -111,7 +111,10 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                                     }
                                     else if( item.changes_type === 2 )
                                     {
-                                        updateCategories(item)
+                                        if(!getCategoryById(item.id))
+                                            insertArray.push(item)
+                                        else
+                                            updateCategories(item)
                                     }
                                     nChangeId.push(item.change_id)
                                 }
@@ -416,6 +419,26 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                         }
                     })
         return valuesCategories
+    }
+
+    function getCategoryById(id)
+    {
+        let valuesLogs = {}
+        dataBase.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Categories WHERE id=?",id)
+                            if(result.rows.length)
+                                valuesLogs = result.rows.item(0)
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesLogs
     }
 
 

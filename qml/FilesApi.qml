@@ -111,7 +111,10 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                                     }
                                     else if( item.changes_type === 2 )
                                     {
-                                        updateFiles(item)
+                                        if(!getFileById(item.id))
+                                            insertArray.push(item)
+                                        else
+                                            updateFiles(item)
                                     }
                                     nChangeId.push(item.change_id)
                                 }
@@ -352,6 +355,25 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                         }
                     })
         return valuesFiles
+    }
+    function getFileById(id)
+    {
+        let valuesLogs = {}
+        dataBase.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Files WHERE id=?",id)
+                            if(result.rows.length)
+                                valuesLogs = result.rows.item(0)
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesLogs
     }
 
 

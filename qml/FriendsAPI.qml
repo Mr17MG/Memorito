@@ -112,7 +112,10 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                                     }
                                     else if( item.changes_type === 2 )
                                     {
-                                        updateFriends(item)
+                                        if(!getFriendById(item.id))
+                                            insertArray.push(item)
+                                        else
+                                            updateFriends(item)
                                     }
                                     nChangeId.push(item.change_id)
                                 }
@@ -403,6 +406,26 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                         }
                     })
         return valuesFriends
+    }
+
+    function getFriendById(id)
+    {
+        let valuesLogs = {}
+        dataBase.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Friends WHERE id=?",id)
+                            if(result.rows.length)
+                                valuesLogs = result.rows.item(0)
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesLogs
     }
 
 
