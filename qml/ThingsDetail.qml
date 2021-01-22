@@ -10,6 +10,25 @@ Item {
     property int listId: -1
     property int modelIndex: -1
     DateConvertor{id:dateConverter}
+
+    Loader{
+        id: deleteLoader
+        active: false
+        sourceComponent: App.ConfirmDialog{
+            parent: mainPage
+            onClosed: {
+                deleteLoader.active = false
+            }
+            property string thingName: ""
+            property int thingId: -1
+            property int modelIndex: -1
+            dialogTitle: qsTr("حذف")
+            dialogText: qsTr("آیا مایلید که") + " '" + thingName + "' " + qsTr("را حذف کنید؟")
+            accepted: function() {
+                thingsApi.deleteThing(thingId,null,null)
+            }
+        }
+    }
     Rectangle{
         anchors{
             top: parent.top
@@ -75,7 +94,7 @@ Item {
                         leftMargin: 20*size1W
                     }
                     text: !prevPageModel?"":prevPageModel.title??""
-                    font{family: appStyle.appFont;pixelSize:  35*size1F;bold:true}
+                                                                  font{family: appStyle.appFont;pixelSize:  35*size1F;bold:true}
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
@@ -115,7 +134,7 @@ Item {
                         leftMargin: 30*size1W
                     }
                     text: !prevPageModel?"":prevPageModel.detail ?? ""
-                                                  font{family: appStyle.appFont;pixelSize:  25*size1F;}
+                                                                    font{family: appStyle.appFont;pixelSize:  25*size1F;}
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     horizontalAlignment: Text.AlignJustify
                     lineHeightMode: Text.FixedHeight
@@ -137,24 +156,24 @@ Item {
                         width: parent.width/2 > 350*size1W?parent.width/2-20*size1W:350*size1W
                         property date registerDate: !prevPageModel?"":prevPageModel.register_date?new Date(prevPageModel.register_date):""
                         text: !prevPageModel?"":prevPageModel.register_date?qsTr("ثبت شده در")+": <b> "
-                                                           +
-                                                          registerDate.getHours()+":"+registerDate.getMinutes()+":"+registerDate.getSeconds()
-                                                          +"  "+
-                                                          String(dateConverter.toJalali(registerDate.getFullYear(),registerDate.getMonth(),registerDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
-                                                          +"</b>"
-                                                        :""
+                                                                             +
+                                                                             registerDate.getHours()+":"+registerDate.getMinutes()+":"+registerDate.getSeconds()
+                                                                             +"  "+
+                                                                             String(dateConverter.toJalali(registerDate.getFullYear(),registerDate.getMonth(),registerDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
+                                                                             +"</b>"
+                                                                           :""
                         font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
                     }
                     Text {
                         width: parent.width/2 > 350*size1W?parent.width/2:350*size1W
                         property date modifiedDate: !prevPageModel?"":prevPageModel.modified_date?new Date(prevPageModel.modified_date):""
                         text:!prevPageModel?"":prevPageModel.modified_date?qsTr("ویرایش شده در")+": <b> "
-                                                          +
-                                                          modifiedDate.getHours()+":"+modifiedDate.getMinutes()+":"+modifiedDate.getSeconds()
-                                                          +"  "+
-                                                          String(dateConverter.toJalali(modifiedDate.getFullYear(),modifiedDate.getMonth(),modifiedDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
-                                                          +"</b>"
-                                                        :""
+                                                                            +
+                                                                            modifiedDate.getHours()+":"+modifiedDate.getMinutes()+":"+modifiedDate.getSeconds()
+                                                                            +"  "+
+                                                                            String(dateConverter.toJalali(modifiedDate.getFullYear(),modifiedDate.getMonth(),modifiedDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
+                                                                            +"</b>"
+                                                                          :""
                         font{family: appStyle.appFont;pixelSize:  23*size1F;bold:false}
                     }
                 }
@@ -303,8 +322,8 @@ Item {
                             }
                             Text {
                                 text:!prevPageModel?"":qsTr("فرد انجام دهنده") +":<b> " + (prevPageModel.friend_id?friendModel.count>0?usefulFunc.findInModel(prevPageModel.friend_id,"id",friendModel).value.friend_name
-                                                                                                                    :""
-                                                                         :qsTr("ثبت نشده است")) + "</b>"
+                                                                                                                                      :""
+                                                                                           :qsTr("ثبت نشده است")) + "</b>"
                                 anchors{
                                     verticalCenter: friendImg.verticalCenter
                                     right: friendImg.left
@@ -338,16 +357,16 @@ Item {
                             Text {
                                 property date dueDate:  !prevPageModel?"":prevPageModel.due_date?new Date(prevPageModel.due_date):""
                                 text: !prevPageModel?"":qsTr("زمان مشخص شده") +":<b> "
-                                      + (
-                                          (
-                                              dueDate.getHours()===17 && dueDate.getMinutes() === 17 && dueDate.getSeconds() === 17
-                                              ?"":dueDate.getHours()+":"+dueDate.getMinutes()+":"+dueDate.getSeconds()+"  ")
-                                          +
-                                          (
-                                              dueDate?String(dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth(),dueDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
-                                                     :qsTr("ثبت نشده است"))
-                                          )
-                                      +"</b>"
+                                                      + (
+                                                          (
+                                                              dueDate.getHours()===17 && dueDate.getMinutes() === 17 && dueDate.getSeconds() === 17
+                                                              ?"":dueDate.getHours()+":"+dueDate.getMinutes()+":"+dueDate.getSeconds()+"  ")
+                                                          +
+                                                          (
+                                                              dueDate?String(dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth(),dueDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
+                                                                     :qsTr("ثبت نشده است"))
+                                                          )
+                                                      +"</b>"
 
                                 anchors{
                                     verticalCenter: dateImg.verticalCenter
@@ -378,7 +397,11 @@ Item {
                         text: qsTr("حذف")
                         Material.background: Material.Red
                         onClicked: {
-
+                            deleteLoader.active = true
+                            deleteLoader.item.thingName = prevPageModel.title
+                            deleteLoader.item.thingId = prevPageModel.id
+                            deleteLoader.item.modelIndex = modelIndex
+                            deleteLoader.item.open()
                         }
 
                     }

@@ -9,6 +9,7 @@ QtObject{
         makeLocalContextsTable()
         makeLocalFriendsTable()
         makeLocalFilesTable()
+        makeLocalLogsTable()
         makeServerChangesTable()
         makeLocalChangesTable()
         makeChangesOnThisDeviceTable()
@@ -248,6 +249,37 @@ QtObject{
                     )// end of transaction
     }//end of function
 
+    function makeLocalLogsTable()
+    {
+
+        dataBase.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            let query ='
+    CREATE TABLE IF NOT EXISTS "Logs" (
+    "local_id"	INTEGER NOT NULL UNIQUE,
+    "id"	INTEGER,
+    "log_text"	TEXT,
+    "register_date"	TEXT,
+    "modified_date"	TEXT,
+    "type_id"	INTEGER,
+    "row_id"	INTEGER,
+    "user_id"	INTEGER,
+    PRIMARY KEY("local_id" AUTOINCREMENT)
+);'
+                            var result = tx.executeSql(query)
+                        } // end of try
+                        catch(e)
+                        {
+                            console.error(e)
+                        }
+                    }// end of function
+                    )// end of transaction
+    }//end of function
+
+
     function makeLocalChangesTable()
     {
         dataBase.transaction(
@@ -359,6 +391,8 @@ QtObject{
                 filesApi.getFilesChanges()
                 filesApi.syncFilesChanges()
                 userApi.getUsersChanges()
+                logsApi.getLogsChanges()
+                logsApi.syncLogsChanges()
             }
         }
     }

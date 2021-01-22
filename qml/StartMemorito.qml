@@ -47,6 +47,7 @@ Page {
     CategoriesApi       {   id: categoryApi }
     InitLocalDatabase   {   id: localDB     }
     UserAPI             {   id: userApi     }
+    LogsApi             {   id: logsApi     }
     F.UsefulFunctions   {   id: usefulFunc  }
 
     ListModel { id: doneModel             ;dynamicRoles: true  }

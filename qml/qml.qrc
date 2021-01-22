@@ -56,5 +56,6 @@
         <file>Profile.qml</file>
         <file>FilesApi.qml</file>
         <file>ThingsDetail.qml</file>
+        <file>LogsApi.qml</file>
     </qresource>
 </RCC>
