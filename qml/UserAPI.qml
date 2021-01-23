@@ -1,4 +1,5 @@
 import QtQuick 2.14
+import MEnum 1.0
 
 QtObject {
     function getUsersChanges()
@@ -9,7 +10,7 @@ QtObject {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = 6 AND changes_type =2 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type =2 AND user_id = ? GROUP BY record_id",[Memorito.CHUsers ,currentUser.id])
                             if(result.rows.length > 0)
                             {
                                 getUser(result.rows.item(0).record_id)
@@ -48,7 +49,7 @@ QtObject {
                                         {
                                             try
                                             {
-                                                var result = tx.executeSql("DELETE FROM ServerChanges WHERE table_id = 6")
+                                                var result = tx.executeSql("DELETE FROM ServerChanges WHERE table_id = ?")
                                             }
                                             catch(e)
                                             {
@@ -70,8 +71,6 @@ QtObject {
         }
     }
 
-
-//        property var xhr: new XMLHttpRequest()
     function signUp(username,email,password)
     {
         let json = JSON.stringify(

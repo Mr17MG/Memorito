@@ -1,4 +1,5 @@
 import QtQuick 2.14
+import MEnum 1.0
 
 QtObject {
     function getCategoriesChanges()
@@ -9,7 +10,7 @@ QtObject {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = 1 AND changes_type !=3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHCategories ,currentUser.id])
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -22,7 +23,7 @@ QtObject {
                             list = []
                             let ids =[]
 
-                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = 1 AND changes_type = 3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type = 3 AND user_id = ? GROUP BY record_id",[Memorito.CHCategories ,currentUser.id])
                             if(result.rows.length > 0)
                             {
                                 for(let j=0;j<result.rows.length;j++)
@@ -190,17 +191,15 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                         }
                     }
                     else {
-                        if(response.code === 406)
-                        {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
-                        }
+                        if(response.code === 401)
+                            usefulFunc.showUnauthorizedError()
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                         return null
                     }
                 }
                 catch(e) {
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                     return null
                 }
             }
@@ -238,7 +237,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            usefulFunc.showLog(" <b>'"+qsTr("پروژه جدید با نام")+ " "+ categoryName+" '</b>" +qsTr("با موفقیت افزوده شد"),false,null,700*size1W, ltr)
+                            usefulFunc.showLog(" <b>'"+qsTr("پروژه جدید با نام")+ " "+ categoryName+" '</b>" +qsTr("با موفقیت افزوده شد"),false,700*size1W)
                             if(local_id !== null)
                             {
                                 updateCategories(response.result,local_id)
@@ -247,7 +246,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                             else{
                                 model.append(response.result)
                                 insertCategories(Array(response.result))
-                                localDB.insertDeviceChanges([{"table_id":1,   "record_id":response.result.id,    "changes_type":1,  "user_id":currentUser.id}])
+
                                 if(fromCollect === 1)
                                 {
                                     flickTextArea.detailInput.clear()
@@ -265,19 +264,19 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                         }
                     }
                     else if(local_id === null) {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
 
                 }
                 catch(e) {
                     let id = insertCategories([{"id":-1, "category_name":categoryName, "category_detail":categoryDetail,"list_id":listId,"user_id":currentUser.id,"register_date" : "", "modified_date":"" }])
                     localDB.insertLocalChanges([ {"table_id":1,   "record_id":id,    "changes_type":1,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }
@@ -318,7 +317,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                             {
                                 model.set(modelIndex,response.result)
                                 updateCategories(response.result)
-                                localDB.insertDeviceChanges([{"table_id":1,   "record_id":response.result.id,    "changes_type":2,  "user_id":currentUser.id}])
+
                             }
                             else {
                                 updateCategories(response.result,local_id)
@@ -326,12 +325,12 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                         }
                     }
                     else if(local_id === null) {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
 
                 }
@@ -339,7 +338,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     model.set(modelIndex,{"category_name":categoryName})
                     updateCategories( {"id":categoryId,"category_name":categoryName, "category_detail":categoryDetail,"list_id":listId,"user_id": currentUser.id, "register_date":"","modified_date":""},local_id)
                     localDB.insertLocalChanges([ {"table_id":1,   "record_id":categoryId,    "changes_type":2,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }
@@ -372,25 +371,25 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                             if(local_id === null)
                             {
                                 model.remove(modelIndex)
-                                localDB.insertDeviceChanges([{"table_id":1,   "record_id":categoryId,    "changes_type":3,  "user_id":currentUser.id}])
+
                             }
                             deleteCategoryLocalDatabase(categoryId)
                         }
                     }
                     else if(local_id === null){
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
 
                 }
                 catch(e) {
                     deleteCategoryLocalDatabase(categoryId)
                     localDB.insertLocalChanges([ {"table_id":3,   "record_id":categoryId,    "changes_type":3,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }

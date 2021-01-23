@@ -1,7 +1,7 @@
 import QtQuick 2.14
+import MEnum 1.0
 
 QtObject {
-
     function getContextsChanges()
     {
         dataBase.transaction(
@@ -10,7 +10,7 @@ QtObject {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = 2 AND changes_type !=3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHContexts ,currentUser.id])
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -23,7 +23,7 @@ QtObject {
                             list = []
                             let ids =[]
 
-                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = 2 AND changes_type  =3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type  =3 AND user_id = ? GROUP BY record_id",[Memorito.CHContexts ,currentUser.id])
                             if(result.rows.length > 0)
                             {
                                 for(let j=0;j<result.rows.length;j++)
@@ -193,17 +193,17 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         return model
                     }
                     else {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                         return null
                     }
                 }
                 catch(e) {
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                     return null
                 }
             }
@@ -243,7 +243,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                             {
                                 model.append(response.result)
                                 insertContexts(Array(response.result))
-                                localDB.insertDeviceChanges([{"table_id":2,   "record_id":response.result.id,    "changes_type":1,  "user_id":currentUser.id}])
+                                
                             }
                             else{
                                 updateContexts(response.result,local_id)
@@ -253,19 +253,19 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     }
                     else if(local_id === null)
                     {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
 
                 }
                 catch(e) {
                     let id = insertContexts([{"id":-1, "context_name":contextName, "user_id":currentUser.id,"register_date" : "", "modified_date":"" }])
                     localDB.insertLocalChanges([ {"table_id":2,   "record_id":id,    "changes_type":1,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }
@@ -302,7 +302,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         if(response.code === 200){
                             if(local_id === null)        {
                                 model.set(modelIndex,{"context_name":contextName})
-                                localDB.insertDeviceChanges([{"table_id":2,   "record_id":response.result.id,    "changes_type":2,  "user_id":currentUser.id}])
+                                
                                 updateContexts(response.result)
                             }
                             else {
@@ -312,12 +312,12 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         }
                     }
                     else if(local_id === null) {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
 
                 }
@@ -325,7 +325,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     model.set(modelIndex,{"context_name":contextName})
                     updateContexts( {"id":contextId,"context_name":contextName, "user_id": currentUser.id ,"register_date":"", "modified_date":"" },local_id)
                     localDB.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":2,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }
@@ -360,7 +360,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                             {
                                 model.remove(modelIndex)
                                 deleteContextLocalDatabase(contextId)
-                                localDB.insertDeviceChanges([{"table_id":2,   "record_id":contextId,    "changes_type":3,  "user_id":currentUser.id}])
+                                
                             }
                             else{
                                 localDB.deleteFromLocalChanges(change_id)
@@ -368,19 +368,19 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         }
                     }
                     else {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
 
                 }
                 catch(e) {
                     deleteContextLocalDatabase(contextId)
                     localDB.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":3,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }

@@ -18,7 +18,7 @@ Drawer {
     onClosed: {
         callAfterClose()
     }
-
+    edge: !ltr ? Qt.LeftEdge : Qt.RightEdge
 
     background: Rectangle{
         color: isError?"#F44336":"#8BC34A"

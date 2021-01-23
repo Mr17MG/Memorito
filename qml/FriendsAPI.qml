@@ -1,4 +1,5 @@
 import QtQuick 2.14
+import MEnum 1.0
 
 QtObject {
 
@@ -10,7 +11,7 @@ QtObject {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = 3 AND changes_type !=3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHFriends ,currentUser.id])
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -23,7 +24,7 @@ QtObject {
                             list = []
                             let ids =[]
 
-                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = 3 AND changes_type  =3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type  =3 AND user_id = ? GROUP BY record_id",[Memorito.CHFriends ,currentUser.id])
                             if(result.rows.length > 0)
                             {
                                 for(let j=0;j<result.rows.length;j++)
@@ -192,17 +193,17 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                         return model
                     }
                     else {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                         return null
                     }
                 }
                 catch(e) {
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                     return null
                 }
             }
@@ -246,25 +247,25 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                             else
                             {
                                 model.append(response.result)
-                                localDB.insertDeviceChanges([{"table_id":3,   "record_id":response.result.id,    "changes_type":1,  "user_id":currentUser.id}])
+                                
                                 insertFriends(Array(response.result))
                             }
                         }
                     }
                     else if(local_id === null)
                     {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
                 }
                 catch(e) {
                     let id = insertFriends([{"id":-1, "friend_name":friendName, "user_id":currentUser.id,"register_date" : "", "modified_date":"" }])
                     localDB.insertLocalChanges([ {"table_id":3,   "record_id":id,    "changes_type":1,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }
@@ -303,7 +304,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                             {
                                 model.set(modelIndex,{"friend_name":response.result.friend_name})
                                 updateFriends(response.result)
-                                localDB.insertDeviceChanges([{"table_id":3,   "record_id":response.result.id,    "changes_type":2,  "user_id":currentUser.id}])
+                                
                             }
                             else {
                                 updateFriends(response.result,local_id)
@@ -312,19 +313,19 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                         }
                     }
                     else if(local_id === null) {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
                 }
                 catch(e) {
                     model.set(modelIndex,{"friend_name":friendName})
                     updateFriends( {"id":friendId,"friend_name":friendName,"user_id": currentUser.id, "register_date":"","modified_date":""},local_id)
                     localDB.insertLocalChanges([ {"table_id":3,   "record_id":friendId,    "changes_type":2,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }
@@ -358,7 +359,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                             {
                                 model.remove(modelIndex)
                                 deleteFriendLocalDatabase(friendId)
-                                localDB.insertDeviceChanges([{"table_id":3,   "record_id":response.result.id,    "changes_type":3,  "user_id":currentUser.id}])
+                                
                             }
                             else{
                                 localDB.deleteFromLocalChanges(change_id)
@@ -366,19 +367,19 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                         }
                     }
                     else if(local_id === null) {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            usefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
                     }
 
                 }
                 catch(e) {
                     deleteFriendLocalDatabase(friendId)
                     localDB.insertLocalChanges([ {"table_id":3,   "record_id":friendId,    "changes_type":3,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
                 }
             }
         }

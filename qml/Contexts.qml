@@ -182,7 +182,7 @@ Item {
                     addDialog.close()
                 }
                 else {
-                    usefulFunc.showLog(qsTr("لطفا نام زمینه موردنظر خود را وارد نمایید"),true,null,400*size1W, ltr)
+                    usefulFunc.showLog(qsTr("لطفا نام زمینه موردنظر خود را وارد نمایید"),true,400*size1W)
                 }
             }
             App.TextField{

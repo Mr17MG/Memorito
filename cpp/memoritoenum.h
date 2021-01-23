@@ -21,7 +21,25 @@ public:
         Contexts,
         Friends
     };
+    enum TablesId{
+        CHCategories = 1,
+        CHContexts,
+        CHFriends,
+        CHThings,
+        CHFiles,
+        CHUsers,
+        CHLogs
+    };
+    enum ChageType{
+        Insert = 1,
+        Update,
+        Delete
+    };
+
     Q_ENUM(Lists)
+    Q_ENUM(TablesId)
+    Q_ENUM(ChageType)
+
     explicit MemoritoEnum(QObject *parent = nullptr);
 
 signals:
