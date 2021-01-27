@@ -2,25 +2,25 @@ import QtQuick 2.14 // require for Item
 import QtQuick.Controls 2.14 // require for Swipwiew
 import QtQuick.Controls.Material 2.14 //Require for Material.color
 import QtGraphicalEffects 1.14
-import "qrc:/Components" as App
-
+import Components 1.0
+import Global 1.0
 Item {
     LayoutMirroring.enabled: false
     LayoutMirroring.childrenInherit: true
     Rectangle{
         anchors.fill: parent
-        color: Material.color(appStyle.primaryInt,Material.Shade400)
+        color: Material.color(AppStyle.primaryInt,Material.Shade400)
     }
-    App.Button{
+    AppButton{
         id:languageBtn
         flat: true
-        radius: 20*size1W
+        radius: 20*AppStyle.size1W
         anchors.top: parent.top
         width: parent.width
         text: qsTr("English Version")
         visible: splashLoader.active === false
         onClicked: {
-            if(!ltr)
+            if(!AppStyle.ltr)
                 translator.updateLanguage(31)
             else translator.updateLanguage(89)
         }
@@ -59,13 +59,13 @@ Item {
         count: view.count
         currentIndex: view.currentIndex
         anchors.bottom:  parent.bottom
-        anchors.bottomMargin: size1H*40
+        anchors.bottomMargin: AppStyle.size1H*40
         anchors.horizontalCenter: parent.horizontalCenter
         delegate: Rectangle {
-            width: size1W*9
-            height: size1H*9
+            width: AppStyle.size1W*9
+            height: AppStyle.size1H*9
             radius: width
-            color: appStyle.textColor
+            color: AppStyle.textColor
             opacity: index === pageIndicator.currentIndex ?1 : 0.30
             MouseArea{
                 anchors.fill: parent
@@ -81,30 +81,30 @@ Item {
             }
         }
     }
-    App.Button{
+    AppButton{
         id:backBtn
-        width: size1W*160
-        height: size1W*60
+        width: AppStyle.size1W*160
+        height: AppStyle.size1W*60
         anchors.left: parent.left
-        anchors.leftMargin: size1W*25
+        anchors.leftMargin: AppStyle.size1W*25
         anchors.verticalCenter: pageIndicator.verticalCenter
         flat: (Qt.platform.os !== "android" && Qt.platform.os !== "ios" && splashLoader.active !== false)
-        Material.background: flat?"transparent":Material.color(appStyle.primaryInt,Material.Shade900)
-        radius: 20*size1W
+        Material.background: flat?"transparent":Material.color(AppStyle.primaryInt,Material.Shade900)
+        radius: 20*AppStyle.size1W
         text:  (view.currentIndex === 0 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))?
                    qsTr("رد شدن"):qsTr("قبلی")
-        rightPadding:  prevBtn.source.toString() === "qrc:/skip.svg"?40*size1W:0
-        leftPadding:   prevBtn.source.toString() === "qrc:/skip.svg"?0:5*size1W
-        font.bold: ltr
+        rightPadding:  prevBtn.source.toString() === "qrc:/skip.svg"?40*AppStyle.size1W:0
+        leftPadding:   prevBtn.source.toString() === "qrc:/skip.svg"?0:5*AppStyle.size1W
+        font.bold: AppStyle.ltr
         Image {
             id:prevBtn
             LayoutMirroring.enabled: prevBtn.source.toString() === "qrc:/skip.svg"
             source: (view.currentIndex === 0 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))?
                         "qrc:/skip.svg":"qrc:/next.svg"
             anchors.left: parent.left
-            anchors.leftMargin: 25*size1W
+            anchors.leftMargin: 25*AppStyle.size1W
             anchors.verticalCenter: parent.verticalCenter
-            width: 25*size1W
+            width: 25*AppStyle.size1W
             height: width
             visible: false
         }
@@ -112,7 +112,7 @@ Item {
             rotation: prevBtn.source.toString() === "qrc:/skip.svg"?0:180
             source: prevBtn
             anchors.fill: prevBtn
-            color: backBtn.flat?appStyle.textColor:"white"
+            color: backBtn.flat?AppStyle.textColor:"white"
         }
         onClicked: {
             if(autoMoveTimer.running)
@@ -124,35 +124,35 @@ Item {
             else view.currentIndex= (view.currentIndex-1)%view.count<0?(view.currentIndex-1)%view.count+view.count:(view.currentIndex-1)%view.count;
         }
     }
-    App.Button{
+    AppButton{
         id:forwardBtn
-        width: size1W*160
-        height: size1W*60
+        width: AppStyle.size1W*160
+        height: AppStyle.size1W*60
         anchors.verticalCenter: pageIndicator.verticalCenter
         anchors.right: parent.right
         flat: (Qt.platform.os !== "android" && Qt.platform.os !== "ios" && splashLoader.active !== false)
-        Material.background: flat?"transparent":Material.color(appStyle.primaryInt,Material.Shade900)
-        radius: 15*size1W
-        anchors.rightMargin: size1W*30
-        rightPadding: 25*size1W
+        Material.background: flat?"transparent":Material.color(AppStyle.primaryInt,Material.Shade900)
+        radius: 15*AppStyle.size1W
+        anchors.rightMargin: AppStyle.size1W*30
+        rightPadding: 25*AppStyle.size1W
         text: (view.currentIndex === view.count-1 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))?
                   qsTr("اتمام"):qsTr("بعدی")
-        font.bold: ltr
+        font.bold: AppStyle.ltr
         Image {
             id:nextBtn
             source: (view.currentIndex === view.count-1 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))?
                         "qrc:/check.svg":"qrc:/next.svg"
             anchors.right: parent.right
-            anchors.rightMargin: 30*size1W
+            anchors.rightMargin: 30*AppStyle.size1W
             anchors.verticalCenter: parent.verticalCenter
-            width: 25*size1W
+            width: 25*AppStyle.size1W
             height: width
             visible: false
         }
         ColorOverlay{
             source: nextBtn
             anchors.fill: nextBtn
-            color: forwardBtn.flat?appStyle.textColor:"white"
+            color: forwardBtn.flat?AppStyle.textColor:"white"
         }
 
         onClicked: {

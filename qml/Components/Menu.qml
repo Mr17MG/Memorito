@@ -7,7 +7,10 @@ import QtQuick.Window 2.14
 
 T.Menu {
     id: control
-
+    onVisibleChanged: {
+        if(!visible)
+            destroy()
+    }
     Material.elevation: 8
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
@@ -16,7 +19,7 @@ T.Menu {
                              contentHeight + topPadding + bottomPadding)
 
     margins: 0
-    verticalPadding: 8*size1H
+    verticalPadding: 8*AppStyle.size1H
 
     transformOrigin: !cascade ? Item.Top : (mirrored ? Item.TopRight : Item.TopLeft)
 
@@ -48,10 +51,10 @@ T.Menu {
     }
 
     background: Rectangle {
-        implicitWidth: 200*size1W
+        implicitWidth: 200*AppStyle.size1W
         implicitHeight: control.Material.menuItemHeight
 
-        radius: 3*size1W
+        radius: 3*AppStyle.size1W
         color: control.Material.dialogColor
 
         layer.enabled: control.Material.elevation > 0

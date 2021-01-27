@@ -1,16 +1,22 @@
+pragma Singleton
 import QtQuick 2.14
-import MEnum 1.0
+import QtQuick.LocalStorage 2.14
+import MSysInfo 1.0
+import MSecurity 1.0
 
 QtObject {
+    property var sysInfo : MSysInfo{}
+    property var security: MSecurity{}
+
     function getUsersChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type =2 AND user_id = ? GROUP BY record_id",[Memorito.CHUsers ,currentUser.id])
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type =2 AND user_id = ? GROUP BY record_id",[Memorito.CHUsers ,User.id])
                             if(result.rows.length > 0)
                             {
                                 getUser(result.rows.item(0).record_id)
@@ -42,14 +48,14 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            response.result.localId = currentUser.localId
+                            response.result.localId = User.localId
                             updateUser(response.result)
-                            dataBase.transaction(
+                            Database.connection.transaction(
                                         function(tx)
                                         {
                                             try
                                             {
-                                                var result = tx.executeSql("DELETE FROM ServerChanges WHERE table_id = ?")
+                                                var result = tx.executeSql("DELETE FROM ServerChanges WHERE table_id = ?",Memorito.CHUsers)
                                             }
                                             catch(e)
                                             {
@@ -95,10 +101,10 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/account/signup",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -133,21 +139,21 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                usefulFunc.showLog(qsTr("نام کاربری که انتخاب کرده اید، توسط شخص دیگری استفاده شده است. لطفا نام کاربری دیگری انتخاب نمایید."),true,authLoader,authLoader.width, true)
+                                UsefulFunc.showLog(qsTr("نام کاربری که انتخاب کرده اید، توسط شخص دیگری استفاده شده است. لطفا نام کاربری دیگری انتخاب نمایید."),true,authLoader,authLoader.width, true)
                             }
                             else if(response.message.includes("email"))
                             {
-                                usefulFunc.showLog(qsTr("حسابی با ایمیلی که وارد کرده‌اید، وجود دارید در صورتی که از ایمیل خود مطمئن هستید از بخش ورود به حساب، وارد حساب خود شوید."),true,authLoader,authLoader.width, true)
+                                UsefulFunc.showLog(qsTr("حسابی با ایمیلی که وارد کرده‌اید، وجود دارید در صورتی که از ایمیل خود مطمئن هستید از بخش ورود به حساب، وارد حساب خود شوید."),true,authLoader,authLoader.width, true)
                             }
                         }
                         else
-                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, true)
+                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, true)
                     }
 
                 }
                 catch(e) {
                     console.error(e);console.log(xhr.responseText)
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, true)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, true)
                 }
             }
         }
@@ -168,10 +174,10 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/account/validate-otp",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -197,29 +203,29 @@ QtObject {
                     {
                         if(response.code === 202){                           
                             addUser(response.result)
-                            users.append(getUsers())
-                            mainLoader.source = "qrc:/StartMemorito.qml"
-                            currentUser = getUserByUserId(users.get(0).id)
+                            User.users.append(getUsers())
+                            UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
+                            User.set(getUserByUserId(User.users.get(0).id))
                         }
                     }
                     else {
                         if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("ایمیل شما توسط شخص دیگری ثبت گردید لطفا مجدد امتحان نمایید."),true,authLoader,authLoader.width, true)
+                            UsefulFunc.showLog(qsTr("ایمیل شما توسط شخص دیگری ثبت گردید لطفا مجدد امتحان نمایید."),true,authLoader,authLoader.width, true)
                         }
                         else if(response.code === 403)
                         {
-                            usefulFunc.showLog(qsTr("کد تائیدی که ارسال کرده اید، اشتباه است لطفا مجدد ارسال نمایید"),true,authLoader,authLoader.width, true)
+                            UsefulFunc.showLog(qsTr("کد تائیدی که ارسال کرده اید، اشتباه است لطفا مجدد ارسال نمایید"),true,authLoader,authLoader.width, true)
                         }
 
                         else
-                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, true)
+                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, true)
                     }
 
                 }
                 catch(e) {
                     console.error(e);console.log(xhr.responseText)
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, true)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, true)
                 }
             }
         }
@@ -248,10 +254,10 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/account/signin",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -278,9 +284,9 @@ QtObject {
                     {
                         if(response.code === 202){
                             addUser(response.result)
-                            users.append(getUsers())
-                            mainLoader.source = "qrc:/StartMemorito.qml"
-                            currentUser = getUserByUserId(users.get(0).id)
+                            User.users.append(getUsers())
+                            UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
+                            User.set(getUserByUserId(User.users.get(0).id))
                         }
                         else if(response.code === 200)
                         {
@@ -292,21 +298,21 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                usefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
                             }
                             else if (response.message.includes("password"))
                             {
-                                usefulFunc.showLog(qsTr("رمزعبور وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("رمزعبور وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
                             }
                         }
                         else
-                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
                     }
 
                 }
                 catch(e) {
                     console.error(e);console.log(xhr.responseText)
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
                 }
             }
         }
@@ -334,10 +340,10 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/password/forget-pass",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -372,17 +378,17 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                usefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
                             }
                         }
                         else
-                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
                     }
 
                 }
                 catch(e) {
                     console.error(e);console.log(xhr.responseText)
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
                 }
             }
         }
@@ -404,10 +410,10 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/password/reset-pass",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -435,9 +441,9 @@ QtObject {
                         if(response.code === 200)
                         {
                             addUser(response.result)
-                            users.append(getUsers())
-                            mainLoader.source = "qrc:/StartMemorito.qml"
-                            currentUser = getUserByUserId(users.get(0).id)
+                            User.users.append(getUsers())
+                            UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
+                            User.set(getUserByUserId(User.users.get(0).id))
                         }
                     }
                     else {
@@ -445,25 +451,25 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                usefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
                             }
                         }
                         else if(response.code === 403)
                         {
                             if(response.message.includes("OTP"))
                             {
-                                usefulFunc.showLog(qsTr("کد تائید وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("کد تائید وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
                             }
                         }
 
                         else
-                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
                     }
 
                 }
                 catch(e) {
                     console.error(e);console.log(xhr.responseText)
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
                 }
             }
         }
@@ -483,10 +489,10 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/password/resend-otp",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -513,7 +519,7 @@ QtObject {
                     {
                         if(response.code === 200)
                         {
-                            usefulFunc.showLog(qsTr("کد تایید مجدد به ایمیل شما ارسال شد."),false,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(qsTr("کد تایید مجدد به ایمیل شما ارسال شد."),false,authLoader,authLoader.width, false)
                         }
                     }
                     else {
@@ -521,17 +527,17 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                usefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
                             }
                         }
                         else
-                            usefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
                     }
 
                 }
                 catch(e) {
                     console.error(e);console.log(xhr.responseText)
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
                 }
             }
         }
@@ -561,26 +567,26 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            mainLoader.source = "qrc:/StartMemorito.qml"
+                            UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
                         }
                     }
                     else {
                         if(response.code === 403)
                         {
                             deleteUser(userId)
-                            localDB.dropAallLocalTables()
-                            mainLoader.source = "qrc:/Account/AccountMain.qml"
+                            LocalDatabase.dropAallLocalTables()
+                            UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
                         }
 
                         else
-                            usefulFunc.showLog(response.message,true,rootWindow,rootWindow, true)
+                            UsefulFunc.showLog(response.message,true,rootWindow,rootWindow, true)
                     }
 
                 }
                 catch(e) {
                     console.error(e);console.log(xhr.responseText)
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainLoader,mainLoader.width, true)
-                    mainLoader.source = currentUser?"qrc:/StartMemorito.qml":"qrc:/Account/AccountMain.qml"
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,UsefulFunc.mainLoader,UsefulFunc.mainLoader.width, true)
+                    UsefulFunc.mainLoader.source = User.isSet?"qrc:/StartMemorito.qml":"qrc:/Account/AccountMain.qml"
                 }
             }
         }
@@ -591,7 +597,7 @@ QtObject {
 
     function getUsers(){
         var response =[]
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -619,14 +625,14 @@ QtObject {
 
     function getUserByUserId(id){
         var response
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             var result = tx.executeSql("SELECT * FROM Users WHERE id=?",[id])
                             if(result.rows.length>0){
-                                var row = {
+                                response = {
                                     "localId":result.rows.item(0).local_id,
                                     "id":result.rows.item(0).id,
                                     "username":result.rows.item(0).username,
@@ -634,7 +640,6 @@ QtObject {
                                     "hashedPassword":result.rows.item(0).hashed_password,
                                     "authToken":result.rows.item(0).auth_token
                                 }
-                                response = row
                             }
                         }
                         catch(e)
@@ -648,7 +653,7 @@ QtObject {
 
     function addUser(user)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -669,7 +674,7 @@ QtObject {
 
     function updateUser(user)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -678,7 +683,7 @@ QtObject {
                                         "UPDATE Users SET id=?, username=?, email=?, hashed_password=? WHERE local_id=?",
                                         [user.id??0, user.username??"", user.email??"", user.hashed_password??"", user.localId??0]
                                         )
-                            currentUser = getUserByUserId(user.id)
+                            User.set(getUserByUserId(user.id))
                         }
                         catch(e)
                         {
@@ -690,7 +695,7 @@ QtObject {
 
     function deleteUser(localId)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try

@@ -1,16 +1,18 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
-import "qrc:/Components" as App
 import QtGraphicalEffects 1.14
+import Components 1.0
+import Global 1.0
+
 Dialog {
     id: dialog
-    width: size1W*310
-    height: size1H*185
+    width: AppStyle.size1W*310
+    height: AppStyle.size1H*185
     modal: true
     padding: 0
     Overlay.modal: Rectangle {
-        color: appStyle.appTheme?"#aa606060":"#80000000"
+        color: AppStyle.appTheme?"#aa606060":"#80000000"
     }
     x: -parent.x + (parent.parent===null?0:(parent.parent.width- width)/2)
     y: -parent.y + (parent.parent===null?0:(parent.parent.height- height)/2)
@@ -19,9 +21,9 @@ Dialog {
     property bool hasButton: false
     property bool hasTitle: false
     property bool hasCloseIcon: false
-    property int btnRightPadding: size1W*25
-    property int btnIconRightPadding: ltr?15*size1W:size1W*30
-    property int btnWidth: size1W*300
+    property int btnRightPadding: AppStyle.size1W*25
+    property int btnIconRightPadding: AppStyle.ltr?15*AppStyle.size1W:AppStyle.size1W*30
+    property int btnWidth: AppStyle.size1W*300
     property string iconSource: "qrc:/check.svg"
     property alias dialogButton: dialogButton
     property alias buttonIcon: buttonIcon
@@ -35,7 +37,7 @@ Dialog {
     }
     Image {
         id: close
-        width: size1W*20
+        width: AppStyle.size1W*20
         height: width
         source: "qrc:/close.svg"
         sourceSize.width: width*2
@@ -43,9 +45,9 @@ Dialog {
         visible: false
         anchors{
             right: parent.right
-            rightMargin: size1W*20
+            rightMargin: AppStyle.size1W*20
             top: parent.top
-            topMargin: -parent.y + size1W*15
+            topMargin: -parent.y + AppStyle.size1W*15
 
         }
     }
@@ -54,14 +56,14 @@ Dialog {
         visible: hasCloseIcon
         anchors.fill: close
         source: close
-        color: appStyle.textColor
+        color: AppStyle.textColor
         MouseArea{
             anchors{
                 fill: parent
-                rightMargin: -size1W*10
-                leftMargin: -size1W*10
-                bottomMargin: -size1W*10
-                topMargin: -size1W*10
+                rightMargin: -AppStyle.size1W*10
+                leftMargin: -AppStyle.size1W*10
+                bottomMargin: -AppStyle.size1W*10
+                topMargin: -AppStyle.size1W*10
             }
             cursorShape:Qt.PointingHandCursor
             onClicked: dialog.close()
@@ -71,19 +73,19 @@ Dialog {
     Text {
         visible: hasTitle
         text: dialogTitle
-        color: appStyle.textColor
+        color: AppStyle.textColor
         anchors{
             verticalCenter: close.verticalCenter
             right: close.left
-            rightMargin: size1W*10
+            rightMargin: AppStyle.size1W*10
         }
-        font { family: appStyle.appFont; pixelSize: size1F*25 }
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*25 }
         MouseArea{
             anchors{
-                rightMargin: -size1W*10
-                leftMargin: -size1W*10
-                bottomMargin: -size1W*10
-                topMargin: -size1W*10
+                rightMargin: -AppStyle.size1W*10
+                leftMargin: -AppStyle.size1W*10
+                bottomMargin: -AppStyle.size1W*10
+                topMargin: -AppStyle.size1W*10
                 fill: parent
             }
             cursorShape:Qt.PointingHandCursor
@@ -91,7 +93,7 @@ Dialog {
         }
     }
 
-    App.Button{
+    AppButton{
         id: dialogButton
         visible: hasButton
         text: buttonTitle
@@ -99,15 +101,15 @@ Dialog {
         width: btnWidth
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: size1H*35
-        font { family: appStyle.appFont; pixelSize: size1F*30 }
-        Material.background: appStyle.primaryColor
+        anchors.bottomMargin: AppStyle.size1H*35
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30 }
+        Material.background: AppStyle.primaryColor
         Material.foreground: "white"
-        radius: 30*size1W
+        radius: 30*AppStyle.size1W
         Image {
             id: buttonIcon
             source: iconSource
-            width: size1W*40
+            width: AppStyle.size1W*40
             height: width
             sourceSize.width: width*2
             sourceSize.height: height*2

@@ -1,29 +1,26 @@
-import QtQuick 2.12
-import QtGraphicalEffects 1.0
-//import "qrc:/Components/" as App
-import QtQuick.Controls.Material 2.12
-import QtQuick.Controls 2.12
-import "qrc:/Components/" as App
+import QtQuick 2.14
+import QtGraphicalEffects 1.14
+import QtQuick.Controls.Material 2.14
+import QtQuick.Controls 2.14
+import Components 1.0
+import Global 1.0
 
 Item {
     property bool isEditable: false
     property bool modified: false
-    function popOut(args){
-        profilePicture.source = args
-    }
 
     Rectangle{
         id: root
-        width: 250*size1W
+        width: 250*AppStyle.size1W
         height: width
         radius: width
         anchors{
             horizontalCenter: parent.horizontalCenter
             top: parent.top
-            topMargin: 15*size1H
+            topMargin: 15*AppStyle.size1H
         }
-        border.color: Material.color(appStyle.primaryInt)
-        border.width: 5*size1W
+        border.color: Material.color(AppStyle.primaryInt)
+        border.width: 5*AppStyle.size1W
 
         Image {
             id: profileImage
@@ -59,10 +56,10 @@ Item {
     Item{
         id:usernameItem
         width: parent.width/3*2
-        height: 100*size1H
+        height: 100*AppStyle.size1H
         anchors{
             top: root.bottom
-            topMargin: 20*size1H
+            topMargin: 20*AppStyle.size1H
             horizontalCenter: parent.horizontalCenter
         }
 
@@ -75,21 +72,21 @@ Item {
             NumberAnimation { target: usernameItem; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
         }
 
-        App.TextField{
+        AppTextField{
             id:usernameInput
             width: parent.width
-            height: 100*size1H
+            height: 100*AppStyle.size1H
             enabled: isEditable
             anchors.bottom: parent.bottom
             inputMethodHints: Qt.ImhPreferLowercase
             placeholderText: qsTr("نام کاربری")
-            text: currentUser.username
+            text: User.username
             validator: RegExpValidator{regExp: /[A-Za-z0-9_.]{50}/}
             EnterKey.type: Qt.EnterKeyNext
             Keys.onEnterPressed:  emailInput.forceActiveFocus()
             Keys.onReturnPressed:  emailInput.forceActiveFocus()
             onEditingFinished: {
-                if(modified===false && text.trim()!==currentUser.username)
+                if(modified===false && text.trim()!==User.username)
                     modified=true
             }
         }
@@ -97,7 +94,7 @@ Item {
     Item{
         id:emailItem
         width: parent.width/3*2
-        height: 100*size1H
+        height: 100*AppStyle.size1H
         anchors{
             top: usernameItem.bottom
             horizontalCenter: parent.horizontalCenter
@@ -110,40 +107,40 @@ Item {
             NumberAnimation { target: emailItem; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
             NumberAnimation { target: emailItem; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
         }
-        App.TextField{
+        AppTextField{
             id:emailInput
             width: parent.width
-            height: 100*size1H
+            height: 100*AppStyle.size1H
             enabled: isEditable
             anchors.bottom: parent.bottom
             inputMethodHints: Qt.ImhEmailCharactersOnly
             placeholderText: qsTr("ایمیل")
-            text: currentUser.email
+            text: User.email
             validator: RegExpValidator{regExp: /[A-Za-z0-9_]*/}
             EnterKey.type: Qt.EnterKeyGo
             Keys.onEnterPressed:  edit.forceActiveFocus()
             Keys.onReturnPressed:  edit.forceActiveFocus()
             onEditingFinished: {
-                if(modified===false && text.trim()!==currentUser.email)
+                if(modified===false && text.trim()!==User.email)
                     modified=true
             }
         }
     }
-    App.Button{
+    AppButton{
         id: edit
-        height: size1H*75
+        height: AppStyle.size1H*75
         width: usernameItem.width
         anchors{
             top: emailItem.bottom
-            topMargin: size1H*20
+            topMargin: AppStyle.size1H*20
             horizontalCenter: parent.horizontalCenter
         }
         flat: true
-        Material.background: isEditable? appStyle.primaryInt:"transparent"
-        radius: size1W*20
+        Material.background: isEditable? AppStyle.primaryInt:"transparent"
+        radius: AppStyle.size1W*20
         text: isEditable?qsTr("بروزرسانی اطلاعات"):qsTr("ویرایش اطلاعات")
-        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
-        Material.foreground: isEditable? appStyle.textOnPrimaryColor:appStyle.textColor
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
+        Material.foreground: isEditable? AppStyle.textOnPrimaryColor:AppStyle.textColor
         onClicked: {
             usernameInput.focus = false
             if(!modified)
@@ -154,7 +151,7 @@ Item {
 
             if(usernameInput.text.trim()==="" || emailInput.text.trim()==="")
             {
-                usefulFunc.showLog(qsTr("اطلاعات وارد شده صحیح نمی‌باشد."),true)
+                UsefulFunc.showLog(qsTr("اطلاعات وارد شده صحیح نمی‌باشد."),true)
                 if(usernameInput.text.trim()==="")
                     usernameMoveAnimation.start()
                 if(emailInput.text.trim()==="")
@@ -167,29 +164,30 @@ Item {
             }
         }
     }
-    App.Button{
+    AppButton{
         id: logoutBtn
-        height: size1H*75
-        width: 300*size1W
+        height: AppStyle.size1H*75
+        width: 300*AppStyle.size1W
         anchors{
             bottom: parent.bottom
-            bottomMargin: 20*size1H
+            bottomMargin: 20*AppStyle.size1H
             right: parent.right
-            rightMargin: 30*size1W
+            rightMargin: 30*AppStyle.size1W
         }
         flat: !isEditable
         enabled: isEditable
-        radius: size1W*20
+        radius: AppStyle.size1W*20
         text: qsTr("خروج از حساب")
-        font { family: appStyle.appFont; pixelSize: size1F*30;bold:true}
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
         onClicked: {
-            usefulFunc.showConfirm(
+            UsefulFunc.showConfirm(
                         qsTr("خروج از حساب"),
                         qsTr("آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟"),
                         function()
                         {
-                            mainLoader.source = "qrc:/Account/AccountMain.qml"
-                            currentUser = []
+                            UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
+                            SettingDriver.setValue("last_date","")
+                            User.clear()
                         }
                         )
         }

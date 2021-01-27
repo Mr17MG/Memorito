@@ -1,6 +1,8 @@
+pragma Singleton
 import QtQuick 2.14 // Require For QtObject
 
 QtObject {
+
     function getHeightMargin(window)
     {
         var heightRatio = 1366/window.height;
@@ -46,9 +48,9 @@ QtObject {
                 return 1;
         }
         else {
-            if((rootWindow.width>window.width/1.75) || (rootWindow.width>900))
+            if((UsefulFunc.rootWindow.width>window.width/1.75) || (UsefulFunc.rootWindow.width>900))
                 return 3;
-            else if(rootWindow.width>window.width/3 || (rootWindow.width>450))
+            else if(UsefulFunc.rootWindow.width>window.width/3 || (UsefulFunc.rootWindow.width>450))
                 return 2;
             else
                 return 1;

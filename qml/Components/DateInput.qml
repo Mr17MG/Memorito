@@ -2,19 +2,20 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
-import MDate 1.0
-import "qrc:/Components"
 import QtGraphicalEffects 1.14
+import QCustomDate 1.0
+import Global 1.0
+
 Item {
 
     id: item1
-    property bool isShamsi: !ltr
+    property bool isShamsi: !AppStyle.ltr
     property bool hasTime: false
     property bool justTime: false
     property alias date: date
     property color textOnPrimary: "white"
     property string placeholderText: ""
-    property color placeholderColor : appStyle.textColor//Material.color(appStyle.primaryInt)
+    property color placeholderColor : AppStyle.textColor//Material.color(AppStyle.primaryInt)
     property alias datePicker: datePickerRoot
     property alias selectedDate: datePickerRoot.selectedDate
     property alias minSelectedDate: datePickerRoot.minSelectedDate
@@ -29,8 +30,8 @@ Item {
         tmpSelectedDate = '';
         selectedDate = '';
     }
-    width: 250*size1W
-    height: 80*size1W
+    width: 250*AppStyle.size1W
+    height: 80*AppStyle.size1W
     Text {
         id: date
         text: !datePicker.selectedDate.getTime()?placeholderText : justTime?(("0"+datePickerRoot.selectedDate.getHours()).slice(-2)+":"+("0"+datePickerRoot.selectedDate.getMinutes()).slice(-2)):
@@ -39,7 +40,7 @@ Item {
                                                                              (hasTime?" "+("0"+datePickerRoot.selectedDate.getHours()).slice(-2)+":"+("0"+datePickerRoot.selectedDate.getMinutes()).slice(-2):"");
         anchors.verticalCenter: parent.verticalCenter
         horizontalAlignment: Text.AlignHCenter
-        font { family: appStyle.appFont; pixelSize: size1F*28;}
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*28;}
         color: placeholderColor
         width: parent.width
         MouseArea{
@@ -59,14 +60,14 @@ Item {
             }
         }
     }
-    CustomDate{
-        id: customDate
-    }
+
+    QCustomDate{ id: customDate }
+
     Rectangle{
-        color:bottomBorderColorChanged?bottomBorderColor: datePickerRoot.visible || selectedDate.getTime()? Material.color(appStyle.primaryInt) : appStyle.borderColor;
-        height: size1H*2
+        color:bottomBorderColorChanged?bottomBorderColor: datePickerRoot.visible || selectedDate.getTime()? Material.color(AppStyle.primaryInt) : AppStyle.borderColor;
+        height: AppStyle.size1H*2
         width: parent.width
-        y: parent.height - size1H*2
+        y: parent.height - AppStyle.size1H*2
     }
     Popup {
         id: datePickerRoot
@@ -80,8 +81,8 @@ Item {
         property string displayPersianMonth: customDate.monthName()
         property int displayPersianYear: customDate.year
         property int displayPersianDayMonth: customDate.day
-        property int calendarWidth: size1W*620
-        property int calendarHeight: size1H*810
+        property int calendarWidth: AppStyle.size1W*620
+        property int calendarHeight: AppStyle.size1H*810
         property bool isOK: false
         property bool selectTime: false;
         property var asolutePosition: getAbsolutePosition(date)
@@ -120,50 +121,50 @@ Item {
                 background: Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: Material.color(appStyle.primaryInt)
+                    color: Material.color(AppStyle.primaryInt)
                 }
                 RowLayout{
                     Layout.rowSpan: 2
                     ColumnLayout {
-                        spacing: size1W*6
+                        spacing: AppStyle.size1W*6
                         Label {
-                            topPadding: size1H*24
-                            leftPadding: size1W*48
-                            rightPadding: size1W*48
-                            font.pixelSize: size1F*28
+                            topPadding: AppStyle.size1H*24
+                            leftPadding: AppStyle.size1W*48
+                            rightPadding: AppStyle.size1W*48
+                            font.pixelSize: AppStyle.size1F*28
                             text: getShamsiYear(datePicker.selectedDate,Qt.locale("fa_IR"))
                             color: textOnPrimary
-                            font.family: appStyle.appFont
+                            font.family: AppStyle.appFont
                             opacity: 0.9
                         }
                         Label {
-                            leftPadding: size1W*48
-                            rightPadding: size1W*48
-                            bottomPadding: size1H*24
-                            font.pixelSize: size1F*30
-                            font.family: appStyle.appFont
+                            leftPadding: AppStyle.size1W*48
+                            rightPadding: AppStyle.size1W*48
+                            bottomPadding: AppStyle.size1H*24
+                            font.pixelSize: AppStyle.size1F*30
+                            font.family: AppStyle.appFont
                             text: dayName(Qt.formatDate(datePickerRoot.selectedDate, "ddd")) +", "+getShamsiDay(datePicker.selectedDate,Qt.locale("fa_IR"))+". "+getShamsiDate(datePicker.selectedDate,Qt.locale("fa_IR")).monthName()
                             color: textOnPrimary
                         }
                     }
                     ColumnLayout {
-                        spacing: size1W*6
+                        spacing: AppStyle.size1W*6
                         Label {
-                            topPadding: size1H*24
-                            leftPadding: size1W*48
-                            rightPadding: size1W*48
-                            font.pixelSize: size1F*28
+                            topPadding: AppStyle.size1H*24
+                            leftPadding: AppStyle.size1W*48
+                            rightPadding: AppStyle.size1W*48
+                            font.pixelSize: AppStyle.size1F*28
                             text: getShamsiYear(datePicker.selectedDate,Qt.locale("en_US"))
                             color: textOnPrimary
-                            font.family: appStyle.appFont
+                            font.family: AppStyle.appFont
                             opacity: 0.9
                         }
                         Label {
-                            leftPadding: size1W*48
-                            rightPadding: size1W*48
-                            bottomPadding: size1H*24
-                            font.pixelSize: size1F*30
-                            font.family: appStyle.appFont
+                            leftPadding: AppStyle.size1W*48
+                            rightPadding: AppStyle.size1W*48
+                            bottomPadding: AppStyle.size1H*24
+                            font.pixelSize: AppStyle.size1F*30
+                            font.family: AppStyle.appFont
                             text: Qt.formatDate(datePickerRoot.selectedDate, "ddd") +", "+getShamsiDay(datePicker.selectedDate,Qt.locale("en_US"))+". "+getShamsiDate(datePicker.selectedDate,Qt.locale("en_US")).monthName()
                             color: textOnPrimary
                         }
@@ -175,29 +176,29 @@ Item {
 
             ColumnLayout {
                 id: title
-                Layout.minimumHeight: size1H*55
+                Layout.minimumHeight: AppStyle.size1H*55
                 Layout.columnSpan: 2
                 Layout.column: 1
                 Layout.row: 1
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                spacing: size1W*6
+                spacing: AppStyle.size1W*6
                 layoutDirection: isShamsi?Qt.RightToLeft:Qt.LeftToRight
-                CustomDate{
-                    locale:getLocale()
+                QCustomDate{
                     id: customDateNavigation
                     date: datePickerRoot.selectedDate
+                    locale:getLocale()
                 }
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    spacing: size1W*12
+                    spacing: AppStyle.size1W*12
                     Button {
                         Layout.fillWidth: true
-                        Layout.preferredWidth: size1W
+                        Layout.preferredWidth: AppStyle.size1W
                         text: ">"
                         flat: true
-                        font.pixelSize: size1F*60
+                        font.pixelSize: AppStyle.size1F*60
                         onClicked: {
                             var prevMonth = customDate.prevMonth();
                             if(maxSelectedDate && prevMonth <= minSelectedDate.setHours(0,0,0,0))
@@ -210,19 +211,19 @@ Item {
                     }
                     Label {
                         Layout.fillWidth: true
-                        Layout.preferredWidth: size1W*3
+                        Layout.preferredWidth: AppStyle.size1W*3
                         text: getShamsiDate(datePicker.selectedDate,getLocale()).monthName() + " " + getShamsiYear(datePicker.selectedDate,getLocale());
-                        font.family: appStyle.appFont
+                        font.family: AppStyle.appFont
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: size1F*36
+                        font.pixelSize: AppStyle.size1F*36
                     }
                     Button {
                         Layout.fillWidth: true
-                        Layout.preferredWidth: size1W
+                        Layout.preferredWidth: AppStyle.size1W
                         text:"<"
                         flat: true
-                        font.pixelSize: size1F*60
+                        font.pixelSize: AppStyle.size1F*60
                         onClicked: {
                             var nextMonth = customDate.nextMonth();
                             if(maxSelectedDate && nextMonth > maxSelectedDate.setHours(23,59,59,0))
@@ -244,16 +245,16 @@ Item {
                 hoverEnabled: true
                 Layout.column: 2
                 Layout.row: 2
-                rightPadding: size1W*30
-                leftPadding: size1W*30
+                rightPadding: AppStyle.size1W*30
+                leftPadding: AppStyle.size1W*30
                 Layout.fillWidth: true
                 font.bold: true
-                font.pixelSize: size1F*26
-                font.family: appStyle.appFont
+                font.pixelSize: AppStyle.size1F*26
+                font.family: AppStyle.appFont
                 delegate: Label {
                     text: model.narrowName
                     font: dayOfWeekRow.font
-                    color: Material.color(appStyle.primaryInt)
+                    color: Material.color(AppStyle.primaryInt)
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -269,7 +270,7 @@ Item {
                 Layout.fillHeight: true
                 rightPadding: isShamsi?24:0
                 leftPadding: isShamsi?0:24
-                font.family: appStyle.appFont
+                font.family: AppStyle.appFont
                 font.bold: false
                 month: datePickerRoot.displayMonth
                 year: datePickerRoot.displayYear
@@ -292,9 +293,9 @@ Item {
             //                Layout.row: 3
             //                Layout.fillHeight: true
             //                Layout.fillWidth: true
-            //                rightPadding: size1W*24
-            //                leftPadding: size1W*24
-            //                topPadding: size1W*5
+            //                rightPadding: AppStyle.size1W*24
+            //                leftPadding: AppStyle.size1W*24
+            //                topPadding: AppStyle.size1W*5
             //                month: datePickerRoot.displayMonth
             //                year: datePickerRoot.displayYear
             //                day: (datePicker.selectedDate.getTime()?datePicker.selectedDate:new Date()).getDate()
@@ -311,18 +312,18 @@ Item {
             //                    font.bold: model.today? true: false
             //                    opacity: month === monthGrid.month ?isInRange(model.date)? 1 : 0.5 : 0
             //                    color: pressed || selected ? textOnPrimary : model.today ? Material.accent : Material.foreground
-            //                    minimumPointSize: size1W*8
-            //                    font.pixelSize: size1F*14
+            //                    minimumPointSize: AppStyle.size1W*8
+            //                    font.pixelSize: AppStyle.size1F*14
             //                    fontSizeMode: Text.Fit
             //                    horizontalAlignment: Text.AlignHCenter
             //                    verticalAlignment: Text.AlignVCenter
-            //                    font.family: appStyle.appFont
+            //                    font.family: AppStyle.appFont
             //                    background: Rectangle {
             //                        anchors.centerIn: parent
             //                        width: Math.min(parent.width, parent.height) * 1.2
             //                        height: width
             //                        radius: width / 2
-            //                        color: Material.color(appStyle.primaryInt)
+            //                        color: Material.color(AppStyle.primaryInt)
             //                        visible: pressed || parent.selected
             //                    }
             //                    // WORKAROUND !! see onClicked()
@@ -342,14 +343,14 @@ Item {
                 Layout.row: 3
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                rightPadding: size1W*30
-                leftPadding: size1W*30
-                topPadding: size1W*10
+                rightPadding: AppStyle.size1W*30
+                leftPadding: AppStyle.size1W*30
+                topPadding: AppStyle.size1W*10
                 property var monthModel: customDate.monthDays(isShamsi);
                 Repeater{
                     model: parent.monthModel;
                     delegate: Label {
-                        width: (monthgridflow.width-size1W*65)/7
+                        width: (monthgridflow.width-AppStyle.size1W*65)/7
                         height: width*4/5
                         id: dayLabel1
                         property int day: getShamsiDay(datePickerRoot.selectedDate,getLocale());
@@ -358,18 +359,18 @@ Item {
                         font.bold: modelData.today? true: false
                         opacity: modelData.day === 0 ? 0 : isInRange(modelData.date)?1:0.5;
                         color:  control.pressed || selected ? textOnPrimary : model.today ? Material.accent : Material.foreground
-                        minimumPointSize: size1W*16
-                        font.pixelSize: size1F*28
+                        minimumPointSize: AppStyle.size1W*16
+                        font.pixelSize: AppStyle.size1F*28
                         fontSizeMode: Text.Fit
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        font.family: appStyle.appFont
+                        font.family: AppStyle.appFont
                         background: Rectangle {
                             anchors.centerIn: parent
                             width: Math.min(parent.width, parent.height) * 1.2
                             height: width
                             radius: width / 2
-                            color: Material.color(appStyle.primaryInt)
+                            color: Material.color(AppStyle.primaryInt)
                             visible: control.pressed || parent.selected
                         }
                         // WORKAROUND !! see onClicked()
@@ -390,17 +391,17 @@ Item {
                 id: footer
                 Layout.column: 2
                 Layout.row: 4
-                Layout.minimumHeight: size1W*40
+                Layout.minimumHeight: AppStyle.size1W*40
                 Layout.fillWidth: true
                 RowLayout {
-                    layoutDirection: ltr?Qt.RightToLeft:Qt.LeftToRight
+                    layoutDirection: AppStyle.ltr?Qt.RightToLeft:Qt.LeftToRight
                     Button {
                         id:okButton
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredWidth: 3
-                        font.family: appStyle.appFont
-                        font.pixelSize: size1F*28
+                        font.family: AppStyle.appFont
+                        font.pixelSize: AppStyle.size1F*28
                         text: qsTr("تایید")
                         flat: true
                         onClicked: {
@@ -418,8 +419,8 @@ Item {
                         Layout.preferredWidth: 3
                         text: qsTr("امروز")
                         flat: true
-                        font.family: appStyle.appFont
-                        font.pixelSize: size1F*28
+                        font.family: AppStyle.appFont
+                        font.pixelSize: AppStyle.size1F*28
                         onClicked: {
                             datePickerRoot.selectedDate = new Date()
                             datePickerRoot.displayMonth = getShamsiMonth(datePickerRoot.selectedDate,getLocale())-1
@@ -432,8 +433,8 @@ Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredWidth: 3
-                        font.family: appStyle.appFont
-                        font.pixelSize: size1F*28
+                        font.family: AppStyle.appFont
+                        font.pixelSize: AppStyle.size1F*28
                         text: qsTr("انصراف")
                         flat: true
                         onClicked: {
@@ -473,8 +474,8 @@ Item {
 
             property bool isOK: false
 
-            property int timeButtonsPaneSize: Math.min(timePicker.implicitHeight, timePicker.implicitWidth) - size1W*40
-            property int innerButtonsPaneSize: timeButtonsPaneSize - size1W*70
+            property int timeButtonsPaneSize: Math.min(timePicker.implicitHeight, timePicker.implicitWidth) - AppStyle.size1W*40
+            property int innerButtonsPaneSize: timeButtonsPaneSize - AppStyle.size1W*70
 
             // c1: circle 1 (outside) 1-12
             // c2: circle 2 (inside) 13-00
@@ -655,9 +656,9 @@ Item {
                 id: headerPane
                 padding: 0
                 implicitWidth:  parent.width
-                implicitHeight: size1H*100
+                implicitHeight: AppStyle.size1H*100
                 background: Rectangle {
-                    color: Material.color(appStyle.primaryInt)
+                    color: Material.color(AppStyle.primaryInt)
                 }
 
                 GridLayout {
@@ -677,10 +678,10 @@ Item {
                         checkable: true
                         contentItem: Label {
                             text: timePicker.hrsDisplay
-                            font.pixelSize: size1F*40
+                            font.pixelSize: AppStyle.size1F*40
                             font.bold: false
                             fontSizeMode: Text.Fit
-                            font.family: appStyle.appFont
+                            font.family: AppStyle.appFont
                             opacity: hrsButton.checked ? 1.0 : 0.6
                             color: textOnPrimary
                             elide: Text.ElideRight
@@ -695,10 +696,10 @@ Item {
                     Label {
                         text: ":"
                         Layout.alignment: Text.AlignHCenter
-                        font.pixelSize: size1F*40
+                        font.pixelSize: AppStyle.size1F*40
                         font.bold: true
                         fontSizeMode: Text.Fit
-                        font.family: appStyle.appFont
+                        font.family: AppStyle.appFont
                         opacity: 0.6
                         color: textOnPrimary
                     }
@@ -711,9 +712,9 @@ Item {
                         checkable: true
                         contentItem: Label {
                             text: timePicker.minutesDisplay
-                            font.pixelSize: size1F*40
+                            font.pixelSize: AppStyle.size1F*40
                             font.bold: false
-                            font.family: appStyle.appFont
+                            font.family: AppStyle.appFont
                             fontSizeMode: Text.Fit
                             opacity: minutesButton.checked ? 1.0 : 0.6
                             color: textOnPrimary
@@ -742,23 +743,23 @@ Item {
 
                 Rectangle {
                     anchors.centerIn: parent
-                    width: timePicker.timeButtonsPaneSize + size1W*10
-                    height: timePicker.timeButtonsPaneSize + 10*size1W
-                    color: appStyle.appTheme === Material.Light? Material.color(Material.Grey, Material.Shade300):Material.color(Material.Grey, Material.Shade700)
+                    width: timePicker.timeButtonsPaneSize + AppStyle.size1W*10
+                    height: timePicker.timeButtonsPaneSize + 10*AppStyle.size1W
+                    color: AppStyle.appTheme === Material.Light? Material.color(Material.Grey, Material.Shade300):Material.color(Material.Grey, Material.Shade700)
                     radius: width / 2
                 }
 
                 Button {
                     text: qsTr("اکنون")
-                    font.family: appStyle.appFont
-                    font.pixelSize: size1F*28
+                    font.family: AppStyle.appFont
+                    font.pixelSize: AppStyle.size1F*28
                     anchors{
                         left: parent.left
-                        leftMargin: size1W*20
+                        leftMargin: AppStyle.size1W*20
                         top: parent.top
-                        topMargin: 20*size1H
+                        topMargin: 20*AppStyle.size1H
                     }
-                    width: 125*size1W
+                    width: 125*AppStyle.size1W
                     flat: true
                     onClicked: {
                         timePicker.setDisplay(Qt.formatTime(new Date(),"HH:mm"), timePicker.onlyQuartersAllowed, timePicker.useWorkTimes)
@@ -771,7 +772,7 @@ Item {
                     Image {
                         id: buttonIcon
                         source: "qrc:/"+(timePicker.useWorkTimes? "clock.svg" : "portfolio.svg");
-                        width: size1W*40
+                        width: AppStyle.size1W*40
                         height: width
                         sourceSize.width: width*2
                         sourceSize.height: height*2
@@ -783,15 +784,15 @@ Item {
                     ColorOverlay{
                         source:buttonIcon
                         anchors.fill:buttonIcon
-                        color: appStyle.textColor
+                        color: AppStyle.textColor
                     }
 
-                    width: size1W*80
+                    width: AppStyle.size1W*80
                     anchors{
                         right: parent.right
-                        rightMargin: size1W*20
+                        rightMargin: AppStyle.size1W*20
                         top: parent.top
-                        topMargin: size1H*20
+                        topMargin: AppStyle.size1H*20
                     }
                     onClicked: {
                         timePicker.useWorkTimes = !timePicker.useWorkTimes
@@ -802,13 +803,13 @@ Item {
                     visible: timePicker.pickMinutes
                     text: timePicker.onlyQuartersAllowed? "05" : "15"
                     flat: true
-                    font.family: appStyle.appFont
-                    font.pixelSize: size1F*32
+                    font.family: AppStyle.appFont
+                    font.pixelSize: AppStyle.size1F*32
                     anchors{
                         right: parent.right
                         top: parent.top
-                        rightMargin: size1W*20
-                        topMargin: 20*size1H
+                        rightMargin: AppStyle.size1W*20
+                        topMargin: 20*AppStyle.size1H
                     }
                     onClicked: {
                         timePicker.onlyQuartersAllowed = !timePicker.onlyQuartersAllowed
@@ -836,12 +837,12 @@ Item {
                             focusPolicy: Qt.NoFocus
                             text: timePicker.useWorkTimes? modelData.n : modelData.c2
                             font.bold: true
-                            font.family: appStyle.appFont
-                            font.pixelSize: size1F*50
-                            x: timePicker.innerButtonsPaneSize / 2 - width / 2 + 0*size1W
-                            y: timePicker.innerButtonsPaneSize / 2 - height / 2 + 7*size1W
-                            width: size1W*60
-                            height: size1W*60
+                            font.family: AppStyle.appFont
+                            font.pixelSize: AppStyle.size1F*50
+                            x: timePicker.innerButtonsPaneSize / 2 - width / 2 + 0*AppStyle.size1W
+                            y: timePicker.innerButtonsPaneSize / 2 - height / 2 + 7*AppStyle.size1W
+                            width: AppStyle.size1W*60
+                            height: AppStyle.size1W*60
                             checked: index == timePicker.innerButtonIndex
                             checkable: true
 
@@ -878,7 +879,7 @@ Item {
                                 font: innerButton.font
                                 fontSizeMode: Text.Fit
                                 opacity: innerButton.checked ? 1.0 : enabled || innerButton.highlighted ? 1.0 : 0.6
-                                color: innerButton.checked || innerButton.highlighted ? textOnPrimary : appStyle.textColor
+                                color: innerButton.checked || innerButton.highlighted ? textOnPrimary : AppStyle.textColor
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 elide: Text.ElideRight
@@ -886,7 +887,7 @@ Item {
                             } // content Label
 
                             background: Rectangle {
-                                color: innerButton.checked ? Material.color(appStyle.primaryInt) : "transparent"
+                                color: innerButton.checked ? Material.color(AppStyle.primaryInt) : "transparent"
                                 radius: width / 2
                             }
                         } // inner button
@@ -902,12 +903,12 @@ Item {
                         focusPolicy: Qt.NoFocus
                         text: timePicker.pickMinutes? modelData.m : timePicker.useWorkTimes? modelData.d : modelData.c1
                         font.bold: checked || timePicker.pickMinutes && timePicker.onlyQuartersAllowed
-                        font.pixelSize: size1F*50
-                        font.family: appStyle.appFont
-                        x: (timePicker.timeButtonsPaneSize / 2)  + width / 2 - 40*size1W
-                        y: timePicker.timeButtonsPaneSize / 2   + height / 2 - 5*size1W
-                        width: size1W*60
-                        height: size1W*60
+                        font.pixelSize: AppStyle.size1F*50
+                        font.family: AppStyle.appFont
+                        x: (timePicker.timeButtonsPaneSize / 2)  + width / 2 - 40*AppStyle.size1W
+                        y: timePicker.timeButtonsPaneSize / 2   + height / 2 - 5*AppStyle.size1W
+                        width: AppStyle.size1W*60
+                        height: AppStyle.size1W*60
                         checked: index == timePicker.outerButtonIndex
                         checkable: true
                         enabled: timePicker.pickMinutes && timePicker.onlyQuartersAllowed? modelData.q : true
@@ -949,7 +950,7 @@ Item {
                             font: outerButton.font
                             fontSizeMode: Text.Fit
                             opacity: enabled || outerButton.highlighted || outerButton.checked ? 1 : 0.3
-                            color: outerButton.checked || outerButton.highlighted ? textOnPrimary : appStyle.textColor
+                            color: outerButton.checked || outerButton.highlighted ? textOnPrimary : AppStyle.textColor
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
@@ -957,7 +958,7 @@ Item {
                         } // outer content label
 
                         background: Rectangle {
-                            color: outerButton.checked ? Material.color(appStyle.primaryInt) : "transparent"
+                            color: outerButton.checked ? Material.color(AppStyle.primaryInt) : "transparent"
                             radius: width / 2
                         }
                     } // outer button
@@ -968,12 +969,12 @@ Item {
                     // line to outer buttons
                     visible: timePicker.outerButtonIndex >= 0
                     x: parent.width/2
-                    y: timePicker.innerButtonsPaneSize / 2 - size1W*143
-                    width: size1W*5
-                    height: timePicker.timeButtonsPaneSize / 2 - size1W*60
+                    y: timePicker.innerButtonsPaneSize / 2 - AppStyle.size1W*143
+                    width: AppStyle.size1W*5
+                    height: timePicker.timeButtonsPaneSize / 2 - AppStyle.size1W*60
                     transformOrigin: Item.Bottom
                     rotation: outerButtonGroup.checkedButton? outerButtonGroup.checkedButton.angle : 0
-                    color: Material.color(appStyle.primaryInt)
+                    color: Material.color(AppStyle.primaryInt)
                     antialiasing: true
                 } // line to outer buttons
 
@@ -981,21 +982,21 @@ Item {
                     // line to inner buttons
                     visible: timePicker.innerButtonIndex >= 0 && !timePicker.pickMinutes
                     x: parent.width/2
-                    y: innerButtonsPane.height/2 -size1W*79
-                    width: size1W *5
-                    height: timePicker.innerButtonsPaneSize / 2 - size1W*90
+                    y: innerButtonsPane.height/2 -AppStyle.size1W*79
+                    width: AppStyle.size1W *5
+                    height: timePicker.innerButtonsPaneSize / 2 - AppStyle.size1W*90
                     transformOrigin: Item.Bottom
                     rotation: innerButtonGroup.checkedButton? innerButtonGroup.checkedButton.angle : 0
-                    color: Material.color(appStyle.primaryInt)
+                    color: Material.color(AppStyle.primaryInt)
                     antialiasing: true
                 } // line to outer buttons
 
                 Rectangle {
                     // centerpoint
                     anchors.centerIn: parent
-                    width: size1W*10
-                    height: size1W*10
-                    color: Material.color(appStyle.primaryInt)
+                    width: AppStyle.size1W*10
+                    height: AppStyle.size1W*10
+                    color: Material.color(AppStyle.primaryInt)
                     radius: width / 2
                 }
 
@@ -1010,7 +1011,7 @@ Item {
                 }
 
                 implicitWidth: parent.width
-                implicitHeight: size1W*40
+                implicitHeight: AppStyle.size1W*40
                 background: Rectangle { color: "transparent" }
                 ColumnLayout {
                     anchors{
@@ -1025,8 +1026,8 @@ Item {
                             Layout.preferredWidth: 1
                             text: qsTr("انصراف")
                             flat: true
-                            font.family: appStyle.appFont
-                            font.pixelSize: size1F*28
+                            font.family: AppStyle.appFont
+                            font.pixelSize: AppStyle.size1F*28
                             onClicked: {
                                 if(justTime)
                                     datePickerRoot.close()
@@ -1042,8 +1043,8 @@ Item {
                             Layout.preferredWidth: 1
                             text: qsTr("تائید")
                             flat: true
-                            font.family: appStyle.appFont
-                            font.pixelSize: size1F*28
+                            font.family: AppStyle.appFont
+                            font.pixelSize: AppStyle.size1F*28
                             onClicked: {
                                 var a = datePickerRoot.selectedDate.setHours(timePicker.hrsDisplay,timePicker.minutesDisplay,0,0);
                                 datePickerRoot.selectedDate = new Date(a);

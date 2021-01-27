@@ -1,21 +1,27 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
+import Global 1.0
 
 Dialog{
     id:dialog
     property string dialogText: ""
     property string dialogTitle: ""
-    property string dialogButtonColor: appStyle.primaryColor
+    property string dialogButtonColor: AppStyle.primaryColor
     property alias acceptBtn: acceptBtn
     property alias canselBtn: canselBtn
     property var canseled
     property var accepted
     signal acceptSignal
     property real oneLineWidth
-    width: rootWindow.width/2<480*size1W ? 480*size1W:rootWindow.width/2>1000*size1W?1000*size1W:rootWindow.width/2
+    onVisibleChanged: {
+        if(!visible && typeof destroy === "function")
+            destroy()
+    }
 
-    height: size1H*280 + text.height
+    width: rootWindow.width/2<480*AppStyle.size1W ? 480*AppStyle.size1W:rootWindow.width/2>1000*AppStyle.size1W?1000*AppStyle.size1W:rootWindow.width/2
+
+    height: AppStyle.size1H*280 + text.height
     modal: true
     closePolicy: Dialog.NoAutoClose
     Shortcut {
@@ -30,45 +36,45 @@ Dialog{
     Text {
         id: title
         text: dialogTitle
-        color: appStyle.textColor
-        font { family: appStyle.appFont; pixelSize: size1F*32;bold: true }
+        color: AppStyle.textColor
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*32;bold: true }
         anchors.top: parent.top
-        anchors.topMargin: size1H*10
+        anchors.topMargin: AppStyle.size1H*10
         anchors.left: parent.left
         anchors.right: parent.right
         horizontalAlignment: Text.AlignHCenter
         Rectangle{
             color: "#ccc"
-            height: 2*size1H
+            height: 2*AppStyle.size1H
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: -size1H*5
-            width: parent.width - size1W*40
+            anchors.bottomMargin: -AppStyle.size1H*5
+            width: parent.width - AppStyle.size1W*40
         }
     }
     Text {
         id: text
         text: dialogText
-        color: appStyle.textColor
-        font { family: appStyle.appFont; pixelSize: size1F*30 }
+        color: AppStyle.textColor
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30 }
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         width: parent.width
         anchors{
             top: title.bottom
-            topMargin: size1H*40
+            topMargin: AppStyle.size1H*40
         }
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
     Flow{
         id:flow
-        layoutDirection: ltr? Qt.LeftToRight : Qt.RightToLeft
+        layoutDirection: AppStyle.ltr? Qt.LeftToRight : Qt.RightToLeft
         anchors{
             horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
-            bottomMargin: size1H*0
+            bottomMargin: AppStyle.size1H*0
         }
-        spacing: size1W*30
+        spacing: AppStyle.size1W*30
         ConfirmDialogButton{
             id:acceptBtn
             title: qsTr("بلی")
@@ -89,7 +95,7 @@ Dialog{
                     canseled()
                 dialog.close()
             }
-            buttonTextColor: appStyle.textColor
+            buttonTextColor: AppStyle.textColor
         }
     }
 }

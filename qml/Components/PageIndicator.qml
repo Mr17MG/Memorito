@@ -10,14 +10,14 @@ T.PageIndicator {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
 
-    padding: 6*size1W
-    spacing: 6*size1W
+    padding: 6*AppStyle.size1W
+    spacing: 6*AppStyle.size1W
 
     delegate: Rectangle {
-        implicitWidth: 8*size1W
-        implicitHeight: 8*size1H
+        implicitWidth: 8*AppStyle.size1W
+        implicitHeight: 8*AppStyle.size1H
 
-        radius: width / 2*size1W
+        radius: width / 2*AppStyle.size1W
         color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
 
         opacity: index === currentIndex ? 0.95 : pressed ? 0.7 : 0.45

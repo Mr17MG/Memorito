@@ -1,16 +1,17 @@
 import QtQuick 2.14
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
+import Global 1.0
 
 Rectangle {
     id: indicatorItem
-    implicitWidth: 38*size1W
-    implicitHeight: 38*size1W
+    implicitWidth: 38*AppStyle.size1W
+    implicitHeight: 38*AppStyle.size1W
     color: "transparent"
     border.color: !control.enabled ? control.Material.hintTextColor
         : checkState !== Qt.Unchecked ? control.Material.accentColor : control.Material.secondaryTextColor
-    border.width: checkState !== Qt.Unchecked ? width : 5*size1W
-    radius: 5*size1W
+    border.width: checkState !== Qt.Unchecked ? width : 5*AppStyle.size1W
+    radius: 5*AppStyle.size1W
 
     property Item control
     property int checkState: control.checkState
@@ -34,8 +35,8 @@ Rectangle {
         id: checkImage
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-        width: 30*size1W
-        height: 30*size1W
+        width: 30*AppStyle.size1W
+        height: width
         source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/check.png"
         fillMode: Image.PreserveAspectFit
         sourceSize.width: width*2
@@ -47,8 +48,8 @@ Rectangle {
     Rectangle {
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-        width: 24*size1W
-        height: 3*size1W
+        width: 24*AppStyle.size1W
+        height: 3*AppStyle.size1W
 
         scale: checkState === Qt.PartiallyChecked ? 1 : 0
         Behavior on scale { NumberAnimation { duration: 100 } }

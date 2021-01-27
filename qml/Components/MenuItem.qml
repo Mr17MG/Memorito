@@ -4,6 +4,7 @@ import QtQuick.Controls 2.14
 import QtQuick.Controls.impl 2.14
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
+import Global 1.0
 
 T.MenuItem {
     id: control
@@ -14,12 +15,12 @@ T.MenuItem {
                              implicitContentHeight + topPadding + bottomPadding,
                              implicitIndicatorHeight + topPadding + bottomPadding)
 
-    padding: 16*size1W
+    padding: 16*AppStyle.size1W
     verticalPadding: Material.menuItemVerticalPadding
-    spacing: 16*size1W
+    spacing: 16*AppStyle.size1W
 
-    icon.width: 24*size1W
-    icon.height: 24*size1W
+    icon.width: 24*AppStyle.size1W
+    icon.height: 24*AppStyle.size1W
     icon.color: enabled ? Material.foreground : Material.hintTextColor
 
     indicator: CheckIndicator {
@@ -49,7 +50,7 @@ T.MenuItem {
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display
-        alignment: ltr?Qt.AlignLeft:Qt.AlignRight
+        alignment: AppStyle.ltr?Qt.AlignLeft:Qt.AlignRight
 
         icon: control.icon
         text: control.text
@@ -58,7 +59,7 @@ T.MenuItem {
     }
 
     background: Rectangle {
-        implicitWidth: 200*size1W
+        implicitWidth: 200*AppStyle.size1W
         implicitHeight: control.Material.menuItemHeight
         color: control.highlighted ? control.Material.listHighlightColor : "transparent"
 

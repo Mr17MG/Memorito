@@ -1,6 +1,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.14
+import Global 1.0
 
 Drawer {
     id:root
@@ -11,18 +12,27 @@ Drawer {
     property int index2: 0
     property int endTime : 5000
     property int now: 1000
+    onVisibleChanged: {
+        if(!visible && typeof destroy === "function")
+            destroy()
+    }
     modal: false
     closePolicy: Dialog.NoAutoClose
-    width: 360*size1W
-    height: size1H*30 + text.height
+    width: 360*AppStyle.size1W
+    height: AppStyle.size1H*30 + text.height
     onClosed: {
+        if(typeof callAfterClose === "function")
         callAfterClose()
     }
-    edge: !ltr ? Qt.LeftEdge : Qt.RightEdge
+    edge: !AppStyle.ltr ? Qt.LeftEdge : Qt.RightEdge
+    Behavior on y{
+        enabled: visible
+        NumberAnimation{duration: 160}
+    }
 
     background: Rectangle{
         color: isError?"#F44336":"#8BC34A"
-        radius: size1W*10
+        radius: AppStyle.size1W*10
         border.width: 0
     }
     Timer{
@@ -42,10 +52,10 @@ Drawer {
         id:close
         anchors{
             right: parent?parent.right:undefined
-            rightMargin: size1W*20
+            rightMargin: AppStyle.size1W*20
             verticalCenter: text.verticalCenter
         }
-        width: size1W*30
+        width: AppStyle.size1W*30
         height: width
         sourceSize.width: width*2
         sourceSize.height: height*2
@@ -61,13 +71,13 @@ Drawer {
             anchors{
                 fill: parent
                 top: parent?parent.top:undefined
-                topMargin: -10*size1H
+                topMargin: -10*AppStyle.size1H
                 bottom: parent?parent.bottom:undefined
-                bottomMargin: -10*size1H
+                bottomMargin: -10*AppStyle.size1H
                 left: parent?parent.left:undefined
-                leftMargin: -10*size1W
+                leftMargin: -10*AppStyle.size1W
                 right: parent?parent.right:undefined
-                rightMargin: -10*size1W
+                rightMargin: -10*AppStyle.size1W
             }
             onClicked: {
                 root.visible=false
@@ -82,14 +92,14 @@ Drawer {
         width: parent.width - close.width
         anchors{
             right: close.left
-            rightMargin: size1W*10
-            left: parent.left
-            leftMargin: size1W*5
+            rightMargin: AppStyle.size1W*10
+            left: parent?parent.left:undefined
+            leftMargin: AppStyle.size1W*5
             verticalCenter: parent?parent.verticalCenter:undefined
         }
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
-        font { family: appStyle.appFont; pixelSize: size1F*30;bold:false }
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:false }
     }
 }

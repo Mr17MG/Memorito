@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
-
+import Global 1.0
 
 Item {
     property string pageSource: ""
@@ -11,40 +11,40 @@ Item {
     property string buttonColor: ""
     property string buttonTextColor: "white"
     property bool buttonEnabled: true
-    property int radius‌Btn: size1H*15
-    property int fontSize: size1F*25
+    property int radius‌Btn: AppStyle.size1H*15
+    property int fontSize: AppStyle.size1F*25
     property alias icon: itemImage
-    width: size1W*200
-    height: size1H*80
+    width: AppStyle.size1W*200
+    height: AppStyle.size1H*80
     signal buttonClicked
     Rectangle{
         id:root
         width: parent.width
         height: parent.height
         radius: radius‌Btn
-        border.color: flat?appStyle.textColor:"transparent"
-        border.width: size1W
+        border.color: flat?AppStyle.textColor:"transparent"
+        border.width: AppStyle.size1W
         color: flat?"transparent":(buttonEnabled?buttonColor:"#cbcbcb")
         Text {
             id: name
             text: title
-            font { family: appStyle.appFont; pixelSize: fontSize;bold: true }
+            font { family: AppStyle.appFont; pixelSize: fontSize;bold: true }
             color: buttonEnabled?buttonTextColor:"#ebebeb"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: iconSource?size1W*5:0
+            anchors.horizontalCenterOffset: iconSource?AppStyle.size1W*5:0
         }
         Image {
             id: itemImage
             source:iconSource
             visible: iconSource?true:false
-            width: size1W*10
-            height: iconSource?size1H*12:0
+            width: AppStyle.size1W*10
+            height: iconSource?AppStyle.size1H*12:0
             sourceSize.width: width*2
             sourceSize.height: height*2
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: -size1W*22
+            anchors.horizontalCenterOffset: -AppStyle.size1W*22
         }
     }
     MouseArea{

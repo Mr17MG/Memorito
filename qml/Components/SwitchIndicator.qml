@@ -1,11 +1,12 @@
 import QtQuick 2.14
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
+import Global 1.0
 
 Item {
     id: indicator
-    implicitWidth: 38*size1W
-    implicitHeight: 32*size1H
+    implicitWidth: 38*AppStyle.size1W
+    implicitHeight: 32*AppStyle.size1H
 
     property Item control
     property alias handle: handle
@@ -14,7 +15,7 @@ Item {
 
     Rectangle {
         width: parent.width
-        height: size1H*25
+        height: AppStyle.size1H*25
         radius: height / 2
         y: (parent.height - height ) / 2
         color: control.enabled ? (control.checked ? control.Material.switchCheckedTrackColor : control.Material.switchUncheckedTrackColor)
@@ -25,8 +26,8 @@ Item {
         id: handle
         x: Math.max(0, Math.min(parent.width - width, control.visualPosition * parent.width - (width / 2)))
         y: (parent.height - height) / 2
-        width: size1W*30
-        height: size1H*30
+        width: AppStyle.size1W*30
+        height: AppStyle.size1H*30
         radius: width / 2
         color: control.enabled ? (control.checked ? control.Material.switchCheckedHandleColor : control.Material.switchUncheckedHandleColor)
                                : control.Material.switchDisabledHandleColor

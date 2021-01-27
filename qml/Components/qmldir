@@ -1,0 +1,33 @@
+module Components
+AppBusyDialog               1.0      BusyDialog.qml
+AppBusyIndicator            1.0      BusyIndicator.qml
+AppButton                   1.0      Button.qml
+AppCheckBox                 1.0      CheckBox.qml
+AppCheckIndicator           1.0      CheckIndicator.qml
+AppComboBox                 1.0      ComboBox.qml
+AppConfirmDialog            1.0      ConfirmDialog.qml
+AppConfirmDialogButton      1.0      ConfirmDialogButton.qml
+AppDateInput                1.0      DateInput.qml
+AppDayOfWeekRow             1.0      DayOfWeekRow.qml
+AppDialog                   1.0      Dialog.qml
+AppFilesSelection           1.0      FilesSelection.qml
+AppFlickTextArea            1.0      FlickTextArea.qml
+AppListView                 1.0      ListView.qml
+AppLog                      1.0      Log.qml
+AppMenu                     1.0      Menu.qml
+AppMenuItem                 1.0      MenuItem.qml
+AppPageIndicator            1.0      PageIndicator.qml
+AppRadioButton              1.0      RadioButton.qml
+AppRadioIndicator           1.0      RadioIndicator.qml
+AppSwitch                   1.0      Switch.qml
+AppSwitchIndicator          1.0      SwitchIndicator.qml
+AppTextField                1.0      TextField.qml
+AppTextInput                1.0      TextInput.qml
+
+singleton FriendsApi        1.0     ../Friends/FriendsAPI.qml
+singleton LogsApi           1.0     ../Things/LogsApi.qml
+singleton FilesApi          1.0     ../Things/FilesApi.qml
+singleton ThingsApi         1.0     ../Things/ThingsApi.qml
+singleton ContextsApi       1.0     ../Contexts/ContextsApi.qml
+singleton CategoriesApi     1.0     ../Categories/CategoriesApi.qml
+

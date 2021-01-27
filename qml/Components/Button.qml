@@ -5,26 +5,27 @@ import QtQuick.Controls.impl 2.14
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
 import QtGraphicalEffects 1.14
+import Global 1.0
 
 T.Button {
     id: control
     property bool leftBorder: false
     property bool disableLeftRadius: false
     property bool disableRightRadius: false
-    property real radius: size1W*5
+    property real radius: AppStyle.size1W*5
     property string borderColor: "transparent"
     property color disableColor: Material.hintTextColor
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding + 10*size1W)
+                            contentItem.implicitWidth + leftPadding + rightPadding + 10*AppStyle.size1W)
     implicitHeight: Math.max(background ? background.implicitHeight : 0,
                              contentItem.implicitHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     // external vertical padding is 6 (to increase touch area)
-    padding: size1W*12
-    leftPadding: padding - size1W*4
-    rightPadding: padding - size1W*4
-    spacing: size1W*20
+    padding: AppStyle.size1W*12
+    leftPadding: padding - AppStyle.size1W*4
+    rightPadding: padding - AppStyle.size1W*4
+    spacing: AppStyle.size1W*20
     Material.theme: Material.Light
     icon.color: !enabled ? Material.hintTextColor :
                            flat && highlighted ? Material.accentColor :
@@ -32,10 +33,10 @@ T.Button {
 
     Material.elevation: flat ? control.down || control.hovered ? 2 : 0
     : control.down ? 8 : 2
-    Material.background: flat ? "transparent"       : appStyle.primaryInt
-    Material.foreground: flat ? appStyle.textColor  : appStyle.textOnPrimaryColor
+    Material.background: flat ? "transparent"       : AppStyle.primaryInt
+    Material.foreground: flat ? AppStyle.textColor  : AppStyle.textOnPrimaryColor
     font.capitalization: Font.MixedCase
-    font.family: appStyle.appFont
+    font.family: AppStyle.appFont
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
@@ -51,8 +52,8 @@ T.Button {
 
     // TODO: Add a proper ripple/ink effect for mouse/touch input and focus state
     background: Rectangle {
-        implicitWidth: size1W*64
-        implicitHeight: size1H*48
+        implicitWidth: AppStyle.size1W*64
+        implicitHeight: AppStyle.size1H*48
 
         // external vertical padding is 6 (to increase touch area)
         //y: 6
@@ -68,12 +69,12 @@ T.Button {
         }
 
         PaddedRectangle {
-            //            y: parent.height - size1H*4
+            //            y: parent.height - AppStyle.size1H*4
             //            width: parent.width
-            //            height: size1H*4
+            //            height: AppStyle.size1H*4
 
             radius: control.radius
-            //            topPadding: -size1H*2
+            //            topPadding: -AppStyle.size1H*2
             anchors.fill: parent
             clip: true
             visible: control.checkable && (!control.highlighted || control.flat)
@@ -111,7 +112,7 @@ T.Button {
             anchors.topMargin: 0
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
-            width: size1W
+            width: AppStyle.size1W
             clip: true
             color: control.Material.accentColor
         }
@@ -150,7 +151,7 @@ T.Button {
         anchors.fill: parent
         color: "transparent"
         border.color: borderColor
-        border.width: size1W
+        border.width: AppStyle.size1W
         radius: radius
     }
 }

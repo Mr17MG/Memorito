@@ -2,7 +2,8 @@ import QtQuick 2.14
 import QtQuick.Templates 2.14 as T
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
-import "qrc:/Components" as App
+import Components 1.0
+import Global 1.0
 
 T.RadioButton {
     id: control
@@ -13,14 +14,14 @@ T.RadioButton {
                                       indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    spacing: size1W*8
-    padding: size1W*8
-    topPadding: padding + size1W*6
-    bottomPadding: padding + size1W*6
-    LayoutMirroring.enabled: !ltr
-    Material.accent: appStyle.primaryInt
-    font { family: appStyle.appFont; pixelSize: size1F*25;}
-    indicator: App.RadioIndicator{
+    spacing: AppStyle.size1W*8
+    padding: AppStyle.size1W*8
+    topPadding: padding + AppStyle.size1W*6
+    bottomPadding: padding + AppStyle.size1W*6
+    LayoutMirroring.enabled: !AppStyle.ltr
+    Material.accent: AppStyle.primaryInt
+    font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*25;}
+    indicator: AppRadioIndicator{
         x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
         control: control
@@ -28,8 +29,8 @@ T.RadioButton {
         Ripple {
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
-            width: size1W*45
-            height: size1W*45
+            width: AppStyle.size1W*45
+            height: AppStyle.size1W*45
 
             anchor: control
             pressed: control.pressed

@@ -1,30 +1,33 @@
+pragma Singleton
 import QtQuick 2.14
-import MEnum 1.0
+import Global 1.0
+import MTools 1.0 // Require For myTools
 
 QtObject {
+    property var myTools: MTools{}
 
-    function getLogsChanges()
+    function getFilesChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHLogs ,currentUser.id])
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHFiles ,User.id])
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
                                 {
                                     list.push(result.rows.item(i).record_id)
                                 }
-                                getMultipleLogsChanges(list.join(','))
+                                getMultipleFilesChanges(list.join(','))
                             }
 
                             list = []
                             let ids =[]
 
-                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type  =3 AND user_id = ? GROUP BY record_id",[Memorito.CHLogs ,currentUser.id])
+                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type = 3 AND user_id = ? GROUP BY record_id",[Memorito.CHFiles ,User.id])
                             if(result.rows.length > 0)
                             {
                                 for(let j=0;j<result.rows.length;j++)
@@ -32,8 +35,8 @@ QtObject {
                                     list.push(result.rows.item(j).record_id)
                                     ids.push(result.rows.item(j).id)
                                 }
-                                deleteLogLocalDatabase(list.join(','))
-                                localDB.deleteFromServerChanges(ids.join(','))
+                                deleteFilesLocalDatabase(list.join(','))
+                                LocalDatabase.deleteFromServerChanges(ids.join(','))
                             }
                         }
                         catch(e)
@@ -43,16 +46,16 @@ QtObject {
                     })
     }
 
-    function syncLogsChanges()
+    function syncFilesChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
                             let result = tx.executeSql("SELECT T1.record_id ,T1.changes_type,T1.id AS change_id ,T2.* FROM LocalChanges AS T1
-JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?",currentUser.id)
+JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = ?",User.id)
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -60,15 +63,15 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                                     let item = result.rows.item(i)
                                     if(item.changes_type === 1)
                                     {
-                                        addLog(item.log_text,null,item.local_id,item.change_id)
+                                        addFiles(item.file_name,item.file_detail,item.list_id,null,null,null,null,item.local_id ,item.change_id)
                                     }
                                     else if(item.changes_type === 2)
                                     {
-                                        editLog(item.id,logText,null,-1,item.local_id,item.change_id)
+                                        editFile(item.id,item.file_name,item.file_detail,item.list_id,null,null,item.local_id ,item.change_id)
                                     }
                                     else if(item.changes_type === 3)
                                     {
-                                        deleteLog(item.id,null,-1,item.local_id,item.change_id)
+                                        deleteFile( item.id,null,null,item.local_id ,item.change_id )
                                     }
                                 }
                             }
@@ -80,13 +83,13 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     })
     }
 
-    function getMultipleLogsChanges(changesList)
+    function getMultipleFilesChanges(changesList)
     {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id + "&log_id_list="+changesList
-        xhr.open("GET", domain+"/api/v1/logs"+"?"+query,true);
+        let query = "user_id=" + User.id + "&file_id_list="+changesList
+        xhr.open("GET", domain+"/api/v1/files"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
         xhr.timeout = 10000;
@@ -113,18 +116,18 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                                     }
                                     else if( item.changes_type === 2 )
                                     {
-                                        if(!getLogById(item.id))
+                                        if(!getFileById(item.id))
                                             insertArray.push(item)
                                         else
-                                            updateLogs(item)
+                                            updateFiles(item)
                                     }
                                     nChangeId.push(item.change_id)
                                 }
                                 if(insertArray.length > 0)
-                                    insertLogs(insertArray)
+                                    insertFiles(insertArray)
                                 if(nChangeId.length > 0)
                                 {
-                                    localDB.deleteFromServerChanges(nChangeId.join(','))
+                                    LocalDatabase.deleteFromServerChanges(nChangeId.join(','))
                                 }
                             }
                         }
@@ -142,28 +145,29 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
     }
 
 
-    function getLogs(model)
+    function getFiles(model,thingId)
     {
         if(model.count>0 )
             return model
 
-        let valuesLogs = getLogsLocalDatabase() // get Logs from local database
-        if(valuesLogs.length >0){
-            model.append(valuesLogs)
+        let valuesCategories = getFilesLocalDatabase(thingId) // get Categories from local database
+        if(valuesCategories.length >0){
+            model.append(valuesCategories)
             return model
         }
+
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id
-        xhr.open("GET", domain+"/api/v1/logs"+"?"+query,true);
+        let query = "user_id=" + User.id + "&things_id="+thingId
+        xhr.open("GET", domain+"/api/v1/files"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -188,161 +192,121 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            model.append(response.result)
-                            insertLogs(response.result)
+                            insertFiles(response.result)
+                            for(let i=0;i<response.result.length;i++)
+                            {
+                                let file=response.result[i]
+                                if(myTools.checkFileExist(file["file_name"],file["file_extension"]))
+                                    file["file_source"] = "file://"+myTools.getSaveDirectory()+file["file_name"]+"."+file["file_extension"]
+                                else file["file_source"] = "";
+                                model.append(file)
+                            }
                         }
-                        return model
                     }
                     else {
                         if(response.code === 401)
                         {
-                            usefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                         return null
                     }
                 }
                 catch(e) {
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                     return null
                 }
             }
         }
     }
 
-    function addLog(logText,typeId,rowId,model,local_id = null,change_id = null)
+    function addFiles(fileModel,filesCount,thingId)
     {
+        let fileList= [];
+        let deletedFile = [];
+
+        for(let i = 0; i < filesCount; i++)
+        {
+            let file = fileModel.get(i)
+            if(file.change_type === 1) {
+                let base64 = myTools.encodeToBase64(String(file.file_source.replace("file://","")))
+                fileList.push({"base64_file" : base64 , "file_extension": file.file_extension ,"file_name" :file.file_name})
+            }
+            else if( file.change_type === 3)
+            {
+                deletedFile.push(file.id)
+            }
+        }
+
+        for(let j = 0; j < deletedFile.length; j++)
+        {
+            deleteFiles(deletedFile[j])
+        }
+
+        if(fileList.length <= 0)
+            return
+
         let json = JSON.stringify(
                 {
-                    user_id: currentUser.id,
-                    log_text: logText
+                    things_id: thingId,
+                    user_id: User.id,
+                    file_list: fileList
                 }, null, 1);
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/logs",true);
+        xhr.open("POST", domain+"/api/v1/files",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+        var busyDialog = UsefulFunc.showBusy("در حال ارسال فایل ها");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
             {
-                if(local_id === null)
-                    busyDialog.close()
+                busyDialog.close()
                 try
                 {
                     let response = xhr.response
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            if(local_id === null)
-                            {
-                                model.append(response.result)
-                                insertLogs(Array(response.result))
-                                
-                            }
-                            else{
-                                updateLogs(response.result,local_id)
-                                localDB.deleteFromLocalChanges(change_id)
-                            }
+                            UsefulFunc.showLog(qsTr("فایل‌ها با موفقیت افزوده شد"),false,700*AppStyle.size1W)
+                            insertFiles(response.result)
                         }
                     }
-                    else if(local_id === null)
-                    {
+                    else {
                         if(response.code === 401)
                         {
-                            usefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
 
                 }
                 catch(e) {
-                    let id = insertLogs([{"id":-1, "log_text":logText, "type_id":typeId, "row_id":rowId, "user_id":currentUser.id,"register_date" : "", "modified_date":"" }])
-                    localDB.insertLocalChanges  (   [   {"table_id":7,   "record_id":id,    "changes_type":1,  "user_id":currentUser.id }   ] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
+                    let id = insertFiles(response.result)
+                    LocalDatabase.insertLocalChanges([ {"table_id":5,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
             }
         }
     }
 
-    function editLog(logId,logText,typeId,rowId,model,modelIndex,local_id = null,change_id = null)
-    {
-        let json = JSON.stringify(
-                {
-                    user_id: currentUser.id,
-                    log_text: logText
-                }, null, 1);
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.responseType = 'json';
-        xhr.open("PATCH", domain+"/api/v1/logs/"+logId,true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(json);
-        if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
-        xhr.timeout = 10000;
-        xhr.onreadystatechange = function ()
-        {
-            if (xhr.readyState === XMLHttpRequest.DONE)
-            {
-                if(local_id === null)
-                    busyDialog.close()
-                try
-                {
-                    let response = xhr.response
-                    if(response.ok)
-                    {
-                        if(response.code === 200){
-                            if(local_id === null)        {
-                                model.set(modelIndex,{"log_text":logText})
-                                
-                                updateLogs(response.result)
-                            }
-                            else {
-                                updateLogs(response.result,local_id)
-                                localDB.deleteFromLocalChanges(change_id)
-                            }
-                        }
-                    }
-                    else if(local_id === null) {
-                        if(response.code === 401)
-                        {
-                            usefulFunc.showUnauthorizedError()
-                        }
-                        else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
-                    }
-
-                }
-                catch(e) {
-                    model.set(modelIndex,{"log_text":logText})
-                    updateLogs( {"id":logId, "log_text":logText, "type_id":typeId, "row_id":rowId, "user_id": currentUser.id, "register_date":"", "modified_date":"" },local_id)
-                    localDB.insertLocalChanges([ {"table_id":7,   "record_id":logId,    "changes_type":2,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
-                }
-            }
-        }
-    }
-
-    function deleteLog(logId,model,modelIndex,local_id = null,change_id = null)
+    function deleteFiles(fileId,local_id = null,change_id = null)
     {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id
-        xhr.open("DELETE", domain+"/api/v1/logs/"+logId+"?"+query,true);
+        let query = "user_id=" + User.id
+        xhr.open("DELETE", domain+"/api/v1/files/"+fileId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
         if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
@@ -359,48 +323,47 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
 
                             if(local_id === null)
                             {
-                                model.remove(modelIndex)
-                                deleteLogLocalDatabase(logId)
-                                
+                                deleteFilesLocalDatabase(String(fileId))
                             }
                             else{
-                                localDB.deleteFromLocalChanges(change_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
                             }
                         }
                     }
                     else {
                         if(response.code === 401)
                         {
-                            usefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
 
                 }
                 catch(e) {
-                    deleteLogLocalDatabase(logId)
-                    localDB.insertLocalChanges([ {"table_id":7,   "record_id":logId,    "changes_type":3,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
+                    deleteFilesLocalDatabase(fileId)
+                    LocalDatabase.insertLocalChanges([ {"table_id":5,   "record_id":fileId,    "changes_type":3,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
             }
         }
     }
 
-    /****************** Local Database Function Table:Logs  **************************/
 
-    function getLogsLocalDatabase()
+    /****************** Local Database Function Table:Files  **************************/
+
+    function getFilesLocalDatabase(thingId)
     {
-        let valuesLogs=[]
-        dataBase.transaction(
+        let valuesFiles=[]
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Logs ORDER By id ASC")
+                            var result = tx.executeSql("SELECT * FROM Files WHERE thing_id = ? ORDER By id ASC",listId)
                             for(var i=0;i<result.rows.length;i++)
                             {
-                                valuesLogs.push(result.rows.item(i))
+                                valuesFiles.push(result.rows.item(i))
                             }
                         }
                         catch(e)
@@ -408,18 +371,17 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
 
                         }
                     })
-        return valuesLogs
+        return valuesFiles
     }
-
-    function getLogById(id)
+    function getFileById(id)
     {
         let valuesLogs = {}
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Logs WHERE id=?",id)
+                            var result = tx.executeSql("SELECT * FROM Files WHERE id=?",id)
                             if(result.rows.length)
                                 valuesLogs = result.rows.item(0)
                         }
@@ -432,9 +394,9 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
     }
 
 
-    function insertLogs(values)
+    function insertFiles(values)
     {
-        let mapValues = values.map(item => [ item.id??0, String(item.log_text)??"", item.type_id??0,  item.row_id??0, item.user_id??0,   String(item.register_date)??"", String(item.modified_date)??"" ] )
+        let mapValues = values.map(item => [ item.id, item.user_id, item.things_id, String(item.file), String(item.file_name), item.file_extension, item.register_date??"" ] )
         let finalString = ""
         for(let i=0;i<mapValues.length;i++)
         {
@@ -443,23 +405,24 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                 mapValues[i][j] = typeof mapValues[i][j] === "string"?'"'+ (mapValues[i][j]==="null"?"":mapValues[i][j]) + '"':mapValues[i][j]
             }
             let check = 0;
-            dataBase.transaction(function(tx){try{
-                    var result = tx.executeSql("SELECT * FROM Logs WHERE id=?",mapValues[i][0])
+            Database.connection.transaction(function(tx){try{
+                    var result = tx.executeSql("SELECT * FROM Files WHERE id=?",mapValues[i][0])
                     check = result.rows.length}catch(e){}
             })
 
             if(!check)
                 finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
         }
+
         let insertId = -1
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             if(finalString!== "")
                             {
-                                tx.executeSql("INSERT INTO Logs( id, log_text, type_id, row_id, user_id, register_date, modified_date ) VALUES "+ finalString)
+                                tx.executeSql("INSERT INTO Files( id, user_id, things_id, file, file_name, file_extension, register_date ) VALUES "+ finalString)
                                 var result = tx.executeSql("SELECT last_insert_rowid() as id")
                                 insertId= parseInt(result.insertId);
                             }
@@ -474,9 +437,9 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
     } // end of insert function
 
 
-    function updateLogs(values,local_id = null)
+    function updateFiles(values,local_id = null)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -484,12 +447,12 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             let result
                             if(local_id)
                                 result = tx.executeSql(
-                                            "UPDATE Logs SET log_text = ?,type_id =? , row_id = ? ,user_id= ? ,register_date = ?,modified_date = ?, id=?  WHERE local_id=?",
-                                            [values.log_text??"",values.type_id??0, values.row_id??0, values.user_id??0, values.register_date??"", values.modified_date??"",values.id??0, local_id]
+                                            "UPDATE Files SET id=? , user_id=? , things_id=? , file=? , file_name =? , file_extension=? , register_date=?  WHERE local_id=?",
+                                            [values.id, values.user_id ,values.things_id ,values.file, values.file_name, values.file_extension, values.register_date??"", local_id]
                                             )
                             else result = tx.executeSql(
-                                     "UPDATE Logs SET log_text = ?, type_id =? , row_id = ?, user_id= ? ,register_date = ?,modified_date = ?  WHERE id=?",
-                                     [values.log_text??"",values.type_id??0, values.row_id??0,  values.user_id??0, values.register_date??"", values.modified_date??"",values.id??0]
+                                     "UPDATE Files SET user_id=? , things_id=? , file=? , file_name =? , file_extension=? , register_date=?  WHERE id=?",
+                                     [values.user_id, values.things_id ,values.file, values.file_name, values.file_extension, values.register_date??"",values.id]
                                      )
                         }
                         catch(e)
@@ -501,14 +464,14 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
     } // end of update function
 
 
-    function deleteLogLocalDatabase(ids)
+    function deleteFilesLocalDatabase(ids)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("DELETE FROM Logs WHERE id IN (?)",ids)
+                            var result = tx.executeSql("DELETE FROM Files WHERE id IN (?)",ids)
                         }
                         catch(e)
                         {
@@ -517,4 +480,6 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     }//end of  function
                     ) // end of transaction
     }// end of delete function
+
+
 }

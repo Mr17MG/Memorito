@@ -1,54 +1,57 @@
 import QtQuick 2.14 // Require For Listview
 import QtGraphicalEffects 1.14 // Require For ColorOverlay
-import "qrc:/Components/" as App // Require For App.Button
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls 2.14 // Require For ScrollBar
-import MEnum 1.0
+import Components 1.0  // Require For AppButton
+import Global 1.0
 
 Item{
+    property bool isDrawer: false
     anchors{
         fill: parent
-        leftMargin: staticDrawer?staticDrawer.active?resizerLoader.active?resizerLoader.width:0:0:0
+        left: parent.left
+        leftMargin: isDrawer?0:10*AppStyle.size1W
+        right: parent.right
+        rightMargin: isDrawer?0:10*AppStyle.size1W
     }
-
     Text {
         id: userNameText
         text: {
             try{
-                    return "@"+(currentUser.username??"")
+                    return "@"+(User.username??"")
             }
             catch(e){}
         }
-        color: appStyle.textColor
-        font{family: appStyle.appFont;pixelSize: 25*size1F;bold:false}
+        color: AppStyle.textColor
+        font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
         horizontalAlignment: Text.AlignHCenter
         elide: Qt.ElideRight
 
         anchors{
-            verticalCenter: drawerLoader.active?profileRect.verticalCenter:undefined
-            top: drawerLoader.active?undefined:profileRect.bottom
-            topMargin: 10*size1H
-            right: drawerLoader.active?profileRect.left:parent.right
-            rightMargin: 5*size1W
+            verticalCenter: isDrawer?profileRect.verticalCenter:undefined
+            top: isDrawer?undefined:profileRect.bottom
+            topMargin: 10*AppStyle.size1H
+            right: isDrawer?profileRect.left:parent.right
+            rightMargin: 5*AppStyle.size1W
             left: parent.left
-            leftMargin: 0*size1W
+            leftMargin: 0*AppStyle.size1W
         }
 
     }
     Rectangle{
         id: profileRect
         width: height
-        height: parent.width >= 200*size1H?200*size1H:parent.width-10*size1H
+        height: parent.width >= 200*AppStyle.size1H?200*AppStyle.size1H:parent.width-10*AppStyle.size1H
         radius: width
-        border.color: appStyle.primaryColor
-        border.width: 3*size1W
-        color: Material.color(appStyle.primaryInt,Material.Shade50)
+        border.color: AppStyle.primaryColor
+        border.width: 3*AppStyle.size1W
+        color: Material.color(AppStyle.primaryInt,Material.Shade50)
         anchors{
             top: parent.top
-            topMargin: 20*size1H
-            right:drawerLoader.active? parent.right:undefined
-            horizontalCenter: drawerLoader.active?undefined:parent.horizontalCenter
-            rightMargin: 10*size1W
+            topMargin: 20*AppStyle.size1H
+            right:isDrawer? parent.right:undefined
+            horizontalCenter: isDrawer?undefined:parent.horizontalCenter
+            rightMargin: 10*AppStyle.size1W
         }
 
         Image {
@@ -77,81 +80,85 @@ Item{
             onClicked: {
                 if(nRow === 1)
                     drawerLoader.item.close()
-                usefulFunc.mainStackPush("qrc:/Profile.qml",qsTr("پروفایل"))
+                UsefulFunc.mainStackPush("qrc:/Account/Profile.qml",qsTr("پروفایل"))
 
             }
         }
 
     }
 
-    App.ListView{
+     ScrollBar {
+         id:listScroll
+        hoverEnabled: true
+        visible: nRow !== 1
+        active: hovered || pressed
+        orientation: Qt.Vertical
+        anchors{
+            top: listView.top
+            right: parent.right
+            rightMargin: isDrawer?0:-10*AppStyle.size1W
+        }
+        height: listView.height
+        width: hovered || pressed?18*AppStyle.size1W:8*AppStyle.size1W
+    }
+
+    AppListView{
         id:listView
         clip: true
+        ScrollBar.vertical: listScroll
         anchors{
-            top: drawerLoader.active?profileRect.bottom:userNameText.bottom
-            topMargin : 10*size1H
+            top: isDrawer?profileRect.bottom:userNameText.bottom
+            topMargin : 10*AppStyle.size1H
             bottom: parent.bottom
-        }
-        ScrollBar.vertical: ScrollBar {
-            hoverEnabled: true
-            visible: nRow !== 1
-            active: hovered || pressed
-            orientation: Qt.Vertical
-            anchors.right: listView.right
-            height: parent.height
-            width: hovered || pressed?18*size1W:8*size1W
         }
 
         width:parent.width
-        delegate: App.Button{
+        delegate: AppButton{
             id: listDelegate
-            property bool state1: staticDrawer.width <= (staticDrawerMaxWidth*2/3) && drawerLoader.active === false
+            property bool state1: splitView.staticDrawerWidth <= (staticDrawer.SplitView.maximumWidth*2/3) && isDrawer === false
             width: listView.width
-            height: listDelegate.state1 ? 120*size1H : 100*size1H
+            height: listDelegate.state1 ? 120*AppStyle.size1H : 100*AppStyle.size1H
             flat:true
             onClicked: {
                 if(nRow === 1)
                     drawerLoader.item.close()
                 if(pageSource)
                 {
-                    usefulFunc.mainStackPush(model.pageSource,model.title,{listId:model.listId,pageTitle:title})
+                    UsefulFunc.mainStackPush(model.pageSource,model.title,{listId:model.listId,pageTitle:model.title})
                 }
             }
             Image {
                 id: icon
-                width: 50*size1W
+                width: 50*AppStyle.size1W
                 height: width
-                source: iconSrc
+                source: model.iconSrc
                 sourceSize.width: width*2
                 sourceSize.height: height*2
                 visible: false
                 anchors{
                     top: parent.top
-                    topMargin: listDelegate.state1?20*size1H:(parent.height-height)/2
+                    topMargin: listDelegate.state1?20*AppStyle.size1H:(parent.height-height)/2
                     right: parent.right
                     rightMargin: listDelegate.state1
                                  ?(parent.width-width)/2 // Center in parent
-                                 :20*size1W
+                                 :20*AppStyle.size1W
                 }
 
-                Behavior on anchors.rightMargin {
-                    NumberAnimation{duration: 200}
-                }
             }
             ColorOverlay{
                 id:iconColor
                 anchors.fill: icon
                 source:icon
-                color: stackPages.get(stackPages.count-1).title === title?appStyle.primaryColor
-                                                                         :appStyle.textColor
+                color: UsefulFunc.stackPages.get(UsefulFunc.stackPages.count-1).title === model.title?AppStyle.primaryColor
+                                                                         :AppStyle.textColor
             }
 
             Text {
                 id: titleText
-                text: title
+                text: model.title
                 font{
-                    family: appStyle.appFont
-                    pixelSize: listDelegate.state1  ? 20*size1F : 25*size1F
+                    family: AppStyle.appFont
+                    pixelSize: listDelegate.state1  ? 20*AppStyle.size1F : 25*AppStyle.size1F
                 }
                 color: iconColor.color
                 elide: Text.ElideRight
@@ -159,14 +166,11 @@ Item{
 
                 anchors {
                     top: listDelegate.state1 ? icon.bottom : parent.top
-                    topMargin: listDelegate.state1 ? 8*size1H : 32*size1H
+                    topMargin: listDelegate.state1 ? 8*AppStyle.size1H : 32*AppStyle.size1H
                     right: listDelegate.state1 ? parent.right : icon.left
-                    rightMargin: listDelegate.state1 ? 0 : 20*size1W
+                    rightMargin: listDelegate.state1 ? 0 : 20*AppStyle.size1W
                     left: parent.left
-                    leftMargin: nRow === 2 ? 10*size1W : 0
-                }
-                Behavior on anchors.rightMargin {
-                    NumberAnimation{duration: 200}
+                    leftMargin: nRow === 2 ? 10*AppStyle.size1W : 0
                 }
             }
         } // end of delegate
@@ -175,74 +179,74 @@ Item{
             id:modelList
             ListElement{
                 title: qsTr("جمع‌آوری")
-                pageSource :"qrc:/AddEditThing.qml"
+                pageSource :"qrc:/Things/AddEditThing.qml"
                 iconSrc: "qrc:/collect.svg"
                 listId: Memorito.Collect
             }
             ListElement{
                 title:qsTr("پردازش نشده‌ها")
                 iconSrc: "qrc:/process.svg"
-                pageSource: "qrc:/ThingList.qml"
+                pageSource: "qrc:/Things/ThingList.qml"
                 listId: Memorito.Process
             }
             ListElement{
                 title:qsTr("عملیات بعدی")
                 iconSrc: "qrc:/nextAction.svg"
-                pageSource: "qrc:/ThingList.qml"
+                pageSource: "qrc:/Things/ThingList.qml"
                 listId: Memorito.NextAction
             }
             ListElement{
                 title:qsTr("لیست انتظار")
                 iconSrc: "qrc:/waiting.svg"
-                pageSource: "qrc:/ThingList.qml"
+                pageSource: "qrc:/Things/ThingList.qml"
                 listId: Memorito.Waiting
             }
             ListElement{
                 title:qsTr("تقویم")
                 iconSrc: "qrc:/calendar.svg"
-                pageSource: "qrc:/ThingList.qml"
+                pageSource: "qrc:/Things/ThingList.qml"
                 listId: Memorito.Calendar
             }
             ListElement{
                 title:qsTr("مرجع")
                 iconSrc: "qrc:/refrence.svg"
-                pageSource: "qrc:/CategoriesList.qml"
+                pageSource: "qrc:/Categories/CategoriesList.qml"
                 listId: Memorito.Refrence
             }
             ListElement{
                 title:qsTr("شاید یک‌روزی")
                 iconSrc: "qrc:/someday.svg"
-                pageSource: "qrc:/CategoriesList.qml"
+                pageSource: "qrc:/Categories/CategoriesList.qml"
                 listId: Memorito.Someday
             }
             ListElement{
                 title:qsTr("پروژه‌ها")
                 iconSrc: "qrc:/project.svg"
-                pageSource: "qrc:/CategoriesList.qml"
+                pageSource: "qrc:/Categories/CategoriesList.qml"
                 listId: Memorito.Project
             }
             ListElement{
                 title:qsTr("انجام شده‌ها")
                 iconSrc: "qrc:/done.svg"
-                pageSource: "qrc:/ThingList.qml"
+                pageSource: "qrc:/Things/ThingList.qml"
                 listId: Memorito.Done
             }
             ListElement{
                 title:qsTr("سطل زباله")
                 iconSrc: "qrc:/trash.svg"
-                pageSource: "qrc:/ThingList.qml"
+                pageSource: "qrc:/Things/ThingList.qml"
                 listId: Memorito.Trash
             }
             ListElement{
                 title:qsTr("محل‌های انجام")
-                pageSource:"qrc:/Contexts.qml"
+                pageSource:"qrc:/Contexts/Contexts.qml"
                 iconSrc: "qrc:/contexts.svg"
                 listId: Memorito.Contexts
             }
             ListElement{
                 title:qsTr("دوستان")
                 iconSrc: "qrc:/friends.svg"
-                pageSource: "qrc:/Friends.qml"
+                pageSource: "qrc:/Friends/Friends.qml"
                 listId: Memorito.Friends
             }
             ListElement{

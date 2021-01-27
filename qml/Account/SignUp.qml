@@ -1,14 +1,16 @@
 import QtQuick 2.14 // require for Item and ...
-import "qrc:/Components" as App // rquire for App.Button
 import QtQuick.Controls.Material 2.14 // require for Material.foreground
 import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.14
+import Components 1.0// Require for AppButton and ...
+import Global 1.0
 
 Item {
     function getKeyType()
     {
         if( usernameInput.text.length>0 && emailInput.text.length > 0 && passwordConfirmInput.text.length > 0 && passwordInput.text.length > 0)
             return Qt.EnterKeyGo
+
         else
             return Qt.EnterKeyNext
     }
@@ -16,56 +18,63 @@ Item {
     {
         if( usernameInput.text.length === 0 )
             usernameInput.forceActiveFocus()
+
         else if( emailInput.text.length === 0 )
             emailInput.forceActiveFocus()
+
         else if( passwordInput.text.length === 0 )
             passwordInput.forceActiveFocus()
+
         else if( passwordConfirmInput.text.length === 0 )
             passwordConfirmInput.forceActiveFocus()
+
         else signUpBtn.clicked(Qt.RightButton)
     }
 
-    App.Button{
+    AppButton{
         id:languageBtn
         flat: true
         anchors{
             top: parent.top
-            topMargin: 20*size1H
+            topMargin: 20*AppStyle.size1H
         }
         width: parent.width
         text: qsTr("English Version")
-        radius: 20*size1W
+        radius: 20*AppStyle.size1W
         onClicked: {
-            if(!ltr)
-                translator.updateLanguage(31)
-            else translator.updateLanguage(89)
+            if(!AppStyle.ltr)
+                translator.updateLanguage(31) // For Farsi
+            else translator.updateLanguage(89) // For English
         }
     }
+
     Item{
-        anchors{topMargin: 50*size1H
-            rightMargin: 100*size1W
-            bottomMargin: 30*size1H
-            leftMargin: 100*size1W
+        anchors{topMargin: 50*AppStyle.size1H
+            rightMargin: 100*AppStyle.size1W
+            bottomMargin: 30*AppStyle.size1H
+            leftMargin: 100*AppStyle.size1W
             bottom: accountItem.top
             top: languageBtn.bottom
             left: parent.left
             right: parent.right
         }
+
         Flow{
             width: parent.width
             anchors.centerIn: parent
             Text{
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
-                font{family: appStyle.appFont;pixelSize: 50*size1F;}
+                font{family: AppStyle.appFont;pixelSize: 50*AppStyle.size1F;}
                 text: qsTr("ساخت حساب")
-                color: appStyle.textColor
-                height: 100*size1H
+                color: AppStyle.textColor
+                height: 100*AppStyle.size1H
             }
+
             Item{
                 width: parent.width
-                height: 100*size1H
-                App.TextField{
+                height: 100*AppStyle.size1H
+                AppTextField{
                     id:usernameInput
                     placeholder.text: qsTr("نام کاربری")
                     validator: RegExpValidator{
@@ -95,10 +104,11 @@ Item {
                     }
                 }
             }
+
             Item{
                 width: parent.width
-                height: 100*size1H
-                App.TextField{
+                height: 100*AppStyle.size1H
+                AppTextField{
                     id:emailInput
                     placeholder.text: qsTr("ایمیل")
                     width: parent.width
@@ -118,14 +128,15 @@ Item {
                     }
                 }
             }
+
             Item{
                 width: parent.width
-                height: 100*size1H
-                App.TextField{
+                height: 100*AppStyle.size1H
+                AppTextField{
                     id:passwordInput
                     placeholder.text: qsTr("رمز عبور")
                     inputMethodHints: Qt.ImhHiddenText
-                    echoMode: App.TextField.Password
+                    echoMode: AppTextField.Password
                     passwordMaskDelay: 200
                     width: parent.width
                     height: parent.height
@@ -145,7 +156,7 @@ Item {
                     Image{
                         id:visiblePasswordIcon
                         LayoutMirroring.enabled: false
-                        width: 30*size1W
+                        width: 30*AppStyle.size1W
                         height: width
                         source: "qrc:/view.svg"
                         sourceSize.width: width*2
@@ -158,35 +169,36 @@ Item {
                         id: visiblePasswordColor
                         anchors.fill: visiblePasswordIcon
                         source: visiblePasswordIcon
-                        color: appStyle.textColor
+                        color: AppStyle.textColor
                         transform:rotation
                         antialiasing: true
                         visible: passwordInput.focus && passwordInput.text!=""
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                if(passwordInput.echoMode === App.TextField.Normal)
+                                if(passwordInput.echoMode === AppTextField.Normal)
                                 {
                                     visiblePasswordIcon.source = "qrc:/view.svg"
-                                    passwordInput.echoMode= App.TextField.Password
+                                    passwordInput.echoMode= AppTextField.Password
                                 }
                                 else{
                                     visiblePasswordIcon.source = "qrc:/hide.svg"
-                                    passwordInput.echoMode = App.TextField.Normal
+                                    passwordInput.echoMode = AppTextField.Normal
                                 }
                             }
                         }
                     }
                 }
             }
+
             Item{
                 width: parent.width
-                height: 100*size1H
-                App.TextField{
+                height: 100*AppStyle.size1H
+                AppTextField{
                     id:passwordConfirmInput
                     placeholder.text: qsTr("تکرار رمز عبور")
                     inputMethodHints: Qt.ImhHiddenText
-                    echoMode: App.TextField.Password
+                    echoMode: AppTextField.Password
                     passwordMaskDelay: 200
                     width: parent.width
                     height: parent.height
@@ -203,10 +215,11 @@ Item {
                         NumberAnimation { target: passwordConfirmInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
                         NumberAnimation { target: passwordConfirmInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
                     }
+
                     Image{
                         id:visiblePasswordConfirmIcon
                         LayoutMirroring.enabled: false
-                        width: 30*size1W
+                        width: 30*AppStyle.size1W
                         height: width
                         source: "qrc:/view.svg"
                         sourceSize.width: width*2
@@ -215,36 +228,39 @@ Item {
                         visible: false
                         anchors.right: parent.right
                     }
+
                     ColorOverlay{
                         id: visiblePasswordConfirmColor
                         anchors.fill: visiblePasswordConfirmIcon
                         source: visiblePasswordConfirmIcon
-                        color: appStyle.textColor
+                        color: AppStyle.textColor
                         transform:rotation
                         antialiasing: true
                         visible: passwordConfirmInput.focus && passwordConfirmInput.text!=""
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                if(passwordConfirmInput.echoMode === App.TextField.Normal)
+                                if(passwordConfirmInput.echoMode === AppTextField.Normal)
                                 {
                                     visiblePasswordConfirmIcon.source = "qrc:/view.svg"
-                                    passwordConfirmInput.echoMode= App.TextField.Password
+                                    passwordConfirmInput.echoMode= AppTextField.Password
                                 }
                                 else{
                                     visiblePasswordConfirmIcon.source = "qrc:/hide.svg"
-                                    passwordConfirmInput.echoMode = App.TextField.Normal
+                                    passwordConfirmInput.echoMode = AppTextField.Normal
                                 }
                             }
                         }
                     }
                 }
             }
-            Item{width: parent.width;height: 20*size1H}
-            App.Button{
+
+            Item{width: parent.width;height: 20*AppStyle.size1H}
+
+            AppButton{
                 id:signUpBtn
                 width: parent.width
-                radius: 20*size1W
+                radius: 20*AppStyle.size1W
                 text: qsTr("بساز")
                 Keys.onEnterPressed:  clicked(Qt.RightButton)
                 Keys.onReturnPressed:  clicked(Qt.RightButton)
@@ -253,28 +269,28 @@ Item {
                     {
                         usernameMoveAnimation.start()
                         usernameInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader.width)
                         return
                     }
-                    if(usefulFunc.emailValidation(emailInput.text) === false)
+                    if(UsefulFunc.emailValidation(emailInput.text) === false)
                     {
                         emailMoveAnimation.start()
                         emailInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("لطفا ایمیل خود را به صورت صحیح وارد نمایید"),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("لطفا ایمیل خود را به صورت صحیح وارد نمایید"),true,authLoader.width)
                         return
                     }
                     if(passwordInput.text === "" )
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true,authLoader.width)
                         return
                     }
                     if ( passwordConfirmInput.text === "" || passwordConfirmInput.text !== passwordInput.text)
                     {
                         passwordConfirmMoveAnimation.start()
                         passwordConfirmInput.forceActiveFocus()
-                        usefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true,authLoader.width)
                         return
                     }
 
@@ -284,31 +300,32 @@ Item {
             }
         }
     }
+
     Item{
         id: accountItem
         width: parent.width
-        height: 70*size1H
+        height: 70*AppStyle.size1H
         anchors{
             bottom: parent.bottom
-            bottomMargin: 20*size1H
+            bottomMargin: 20*AppStyle.size1H
         }
 
         Text{
             id: accountText
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: ltr?50*size1W:width/2
-            font{family: appStyle.appFont;pixelSize: 25*size1F;}
+            anchors.horizontalCenterOffset: AppStyle.ltr?50*AppStyle.size1W:width/2
+            font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;}
             text: qsTr("حساب داری؟")
-            color: appStyle.textColor
+            color: AppStyle.textColor
             anchors.verticalCenter: parent.verticalCenter
         }
-        App.Button{
+        AppButton{
             flat: true
             anchors.right: accountText.left
             anchors.verticalCenter: parent.verticalCenter
-            width: size1W*125
+            width: AppStyle.size1W*125
             text: "<u>" + qsTr("وارد شو") +"<u/>"
-            Material.foreground: appStyle.primaryInt
+            Material.foreground: AppStyle.primaryInt
             onClicked: {
                 isSignIn = true
             }

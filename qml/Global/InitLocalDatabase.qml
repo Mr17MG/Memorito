@@ -1,22 +1,26 @@
+pragma Singleton
 import QtQuick 2.14
+import Qt.labs.settings 1.1
 
 QtObject{
     function makeLocalTables()
     {
         makeLocalUsersTable()
+
         makeLocalThingsTable()
         makeLocalCategoriesTable()
         makeLocalContextsTable()
         makeLocalFriendsTable()
         makeLocalFilesTable()
         makeLocalLogsTable()
+
         makeServerChangesTable()
         makeLocalChangesTable()
         makeChangesOnThisDeviceTable()
     }
 
     function makeLocalUsersTable()
-    {        dataBase.transaction(
+    {        Database.connection.transaction(
                  function(tx)
                  {
                      try
@@ -42,7 +46,7 @@ QtObject{
     function dropAallLocalTables()
     {
         //DROP TABLE IF EXISTS table1;
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -65,37 +69,10 @@ QtObject{
                     )// end of transaction
     }
 
-    function makeChangesOnThisDeviceTable()
-    {
-
-        dataBase.transaction(
-                    function(tx)
-                    {
-                        try
-                        {
-                            let query = '
-        CREATE TABLE IF NOT EXISTS "ChangesOnThisDevice" (
-            "id"        INTEGER NOT NULL UNIQUE,
-            "table_id"	INTEGER,
-            "record_id"	INTEGER,
-            "changes_type" INTEGER,
-            "user_id"	INTEGER,
-            PRIMARY KEY("id" AUTOINCREMENT)
-        );'
-                            var result = tx.executeSql(query)
-                        } // end of try
-                        catch(e)
-                        {
-                            console.error(e)
-                        }
-                    }// end of function
-                    )// end of transaction
-    }//end of function
-
     function makeLocalThingsTable()
     {
 
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -121,7 +98,34 @@ QtObject{
     "friend_id"	INTEGER DEFAULT 0,
     PRIMARY KEY("local_id" AUTOINCREMENT)
 )'
-                            var result = tx.executeSql(query)
+                            tx.executeSql(query) // create things table
+                            query = 'CREATE TRIGGER IF NOT EXISTS insertThingsChanges
+    AFTER INSERT ON Things
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (4,NEW.id,1,NEW.user_id );
+    END;'
+                            tx.executeSql(query) // create trigerr on things after insert
+                            query = 'CREATE TRIGGER IF NOT EXISTS updateThingsChanges
+    AFTER UPDATE ON Things
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (4,NEW.id,2,NEW.user_id );
+    END;'
+                            tx.executeSql(query) // create trigerr on things after update
+                            query = 'CREATE TRIGGER IF NOT EXISTS deleteThingsChanges
+    AFTER DELETE ON Things
+    FOR EACH ROW
+    WHEN OLD.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (4,OLD.id,3,OLD.user_id );
+    END;'
+                            tx.executeSql(query) // create trigerr on things after delete
                         } // end of try
                         catch(e)
                         {
@@ -135,7 +139,7 @@ QtObject{
     function makeLocalCategoriesTable()
     {
 
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -152,7 +156,38 @@ QtObject{
     "modified_date"	TEXT,
     PRIMARY KEY("local_id" AUTOINCREMENT)
 )'
-                            var result = tx.executeSql(query)
+                            tx.executeSql(query)// create Categories table
+
+                            query = 'CREATE TRIGGER IF NOT EXISTS insertCategoriesChanges
+    AFTER INSERT ON Categories
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (1,NEW.id,1,NEW.user_id );
+    END;'
+                            tx.executeSql(query)// create trigerr on Categories after insert
+
+                            query = 'CREATE TRIGGER IF NOT EXISTS updateCategoriesChanges
+    AFTER UPDATE ON Categories
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (1,NEW.id,2,NEW.user_id );
+    END;'
+                            tx.executeSql(query)// create trigerr on Categories after update
+
+                            query = 'CREATE TRIGGER IF NOT EXISTS deleteCategoriesChanges
+    AFTER DELETE ON Categories
+    FOR EACH ROW
+    WHEN OLD.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (1,OLD.id,3,OLD.user_id );
+    END;'
+                            tx.executeSql(query)// create trigerr on Categories after delete
+
                         } // end of try
                         catch(e)
                         {
@@ -165,7 +200,7 @@ QtObject{
     function makeLocalContextsTable()
     {
 
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -180,7 +215,38 @@ QtObject{
     "modified_date"	TEXT,
     PRIMARY KEY("local_id" AUTOINCREMENT)
 );'
-                            var result = tx.executeSql(query)
+                            tx.executeSql(query)
+
+                            query = 'CREATE TRIGGER IF NOT EXISTS insertContextsChanges
+    AFTER INSERT ON Contexts
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (2,NEW.id,1,NEW.user_id );
+    END;'
+                            tx.executeSql(query)
+
+                            query = 'CREATE TRIGGER IF NOT EXISTS updateContextsChanges
+    AFTER UPDATE ON Contexts
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (2,NEW.id,2,NEW.user_id );
+    END;'
+                            tx.executeSql(query)
+
+                            query = 'CREATE TRIGGER IF NOT EXISTS deleteContextsChanges
+    AFTER DELETE ON Contexts
+    FOR EACH ROW
+    WHEN OLD.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (2,OLD.id,3,OLD.user_id );
+    END;'
+                            tx.executeSql(query)
+
                         } // end of try
                         catch(e)
                         {
@@ -194,7 +260,7 @@ QtObject{
     function makeLocalFriendsTable()
     {
 
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -209,7 +275,34 @@ QtObject{
     "modified_date"	TEXT,
     PRIMARY KEY("local_id" AUTOINCREMENT)
 );'
-                            var result = tx.executeSql(query)
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS insertFriendsChanges
+    AFTER INSERT ON Friends
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (3,NEW.id,1,NEW.user_id );
+    END;'
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS updateFriendsChanges
+    AFTER UPDATE ON Friends
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (3,NEW.id,2,NEW.user_id );
+    END;'
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS deleteFriendsChanges
+    AFTER DELETE ON Friends
+    FOR EACH ROW
+    WHEN OLD.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (3,OLD.id,3,OLD.user_id );
+    END;'
+                            tx.executeSql(query)
                         } // end of try
                         catch(e)
                         {
@@ -222,7 +315,7 @@ QtObject{
     function makeLocalFilesTable()
     {
 
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -239,7 +332,34 @@ QtObject{
     "register_date"	TEXT,
     PRIMARY KEY("local_id" AUTOINCREMENT)
 );'
-                            var result = tx.executeSql(query)
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS insertFilesChanges
+    AFTER INSERT ON Files
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (5,NEW.id,1,NEW.user_id );
+    END;'
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS updateFilesChanges
+    AFTER UPDATE ON Files
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (5,NEW.id,2,NEW.user_id );
+    END;'
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS deleteFilesChanges
+    AFTER DELETE ON Files
+    FOR EACH ROW
+    WHEN OLD.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (5,OLD.id,3,OLD.user_id );
+    END;'
+                            tx.executeSql(query)
                         } // end of try
                         catch(e)
                         {
@@ -252,7 +372,7 @@ QtObject{
     function makeLocalLogsTable()
     {
 
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -269,7 +389,34 @@ QtObject{
     "user_id"	INTEGER,
     PRIMARY KEY("local_id" AUTOINCREMENT)
 );'
-                            var result = tx.executeSql(query)
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS insertLogsChanges
+    AFTER INSERT ON Logs
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (7,NEW.id,1,NEW.user_id );
+    END;'
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS updateLogsChanges
+    AFTER UPDATE ON Logs
+    FOR EACH ROW
+    WHEN NEW.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (7,NEW.id,2,NEW.user_id );
+    END;'
+                            tx.executeSql(query)
+                            query = 'CREATE TRIGGER IF NOT EXISTS deleteLogsChanges
+    AFTER DELETE ON Logs
+    FOR EACH ROW
+    WHEN OLD.id != -1
+    BEGIN
+        INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+        VALUES (7,OLD.id,3,OLD.user_id );
+    END;'
+                            tx.executeSql(query)
                         } // end of try
                         catch(e)
                         {
@@ -282,7 +429,7 @@ QtObject{
 
     function makeLocalChangesTable()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -306,9 +453,36 @@ QtObject{
                     )// end of transaction
     }//end of function
 
+    function makeChangesOnThisDeviceTable()
+    {
+
+        Database.connection.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            let query = '
+        CREATE TABLE IF NOT EXISTS "ChangesOnThisDevice" (
+            "id"        INTEGER NOT NULL UNIQUE,
+            "table_id"	INTEGER,
+            "record_id"	INTEGER,
+            "changes_type" INTEGER,
+            "user_id"	INTEGER,
+            PRIMARY KEY("id" AUTOINCREMENT)
+        );'
+                            var result = tx.executeSql(query)
+                        } // end of try
+                        catch(e)
+                        {
+                            console.error(e)
+                        }
+                    }// end of function
+                    )// end of transaction
+    }//end of function
+
     function makeServerChangesTable()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -334,12 +508,12 @@ QtObject{
     }//end of function
 
 
-    function getLastChanges()
+    function getLastChanges(callback)
     {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id +"&last_date=" + decodeURIComponent(appSetting.value("last_date",""))
+        let query = "user_id=" + User.id +"&last_date=" + decodeURIComponent(SettingDriver.value("last_date",""))
         xhr.open("GET", domain+"/api/v1/changes"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -359,19 +533,19 @@ QtObject{
                             if(response.result.length > 0)
                             {
                                 insertServerChanges(response.result)
-                                appSetting.setValue("last_date",decodeURIComponent(response.result[0].register_date))
+                                SettingDriver.setValue("last_date",decodeURIComponent(response.result[0].register_date))
                             }
-                        }
+              }
                     }
                     else
                     {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            UsefulFunc.showUnauthorizedError()
                             return
                         }
                         else{
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                             return
                         }
                     }
@@ -380,19 +554,7 @@ QtObject{
                     console.error(e);
                     console.log(xhr.responseText)
                 }
-                friendsApi.getFriendsChanges()
-                friendsApi.syncFriendsChanges()
-                contextApi.getContextsChanges()
-                contextApi.syncContextsChanges()
-                categoryApi.getCategoriesChanges()
-                categoryApi.syncCategoriesChanges()
-                thingsApi.getThingsChanges()
-                thingsApi.syncThingsChanges()
-                filesApi.getFilesChanges()
-                filesApi.syncFilesChanges()
-                userApi.getUsersChanges()
-                logsApi.getLogsChanges()
-                logsApi.syncLogsChanges()
+                callback()
             }
         }
     }
@@ -410,7 +572,7 @@ QtObject{
             finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
         }
 
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -423,7 +585,7 @@ QtObject{
                         }
                     }//end of  function
                     ) // end of transaction
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -447,7 +609,7 @@ QtObject{
 
     function deleteFromServerChanges(ids)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -472,7 +634,7 @@ QtObject{
             finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
         }
 
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -490,7 +652,7 @@ QtObject{
 
     function deleteFromLocalChanges(ids)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -505,34 +667,9 @@ QtObject{
                     ) // end of transaction
     } // end of insert function
 
-    function insertDeviceChanges(values)
-    {
-        let mapValues = values.map(item => [ item.table_id,   item.record_id,    item.changes_type,  item.user_id] )
-        let finalString = ""
-        for(let i=0;i<mapValues.length;i++)
-        {
-            finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
-        }
-
-        dataBase.transaction(
-                    function(tx)
-                    {
-                        try
-                        {
-                            var result = tx.executeSql("INSERT INTO ChangesOnThisDevice (table_id, record_id, changes_type, user_id) VALUES "+ finalString)
-                        }
-                        catch(e)
-                        {
-                            console.error(e)
-                        }
-                    }//end of  function
-                    ) // end of transaction
-    } // end of insert function
-
-
     function deleteFromDeviceChanges(ids)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try

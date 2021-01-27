@@ -1,22 +1,28 @@
 import QtQuick 2.14
 import QtGraphicalEffects 1.14 // Require for DropShadow
 import QtQuick.Controls.Material 2.14 // // Require For Material Theme
-import "../"
+import MSysInfo 1.0                       // Require For SystemInfo
+import MSecurity 1.0                      // Require For MSecurity
+import Components 1.0
+import Global 1.0
+
 Item {
-    InitLocalDatabase   {   id: localDB     }
+    MSecurity           {   id: security    }
+    MSysInfo            {   id: sysInfo     }
+
     Component.onCompleted: {
-        users.append(userApi.getUsers())
-        if(users.count > 0)
+        User.users.append(UserApi.getUsers())
+        if(User.users.count > 0)
         {
-            currentUser = userApi.getUserByUserId(users.get(0).id)
-            let token = currentUser.authToken?currentUser.authToken:"-1"
-            let userId = currentUser.id?currentUser.id:-1
+            User.set(UserApi.getUserByUserId(User.users.get(0).id))
+            let token = User.authToken?User.authToken:"-1"
+            let userId = User.id?User.id:-1
             if(token ==="-1" || userId === -1)
             {
                 mainLoader.source = "qrc:/Account/AccountMain.qml"
             }
             else
-                userApi.validateToken(token,userId)
+                UserApi.validateToken(token,userId)
 
         }
         else{
@@ -28,28 +34,28 @@ Item {
     Image {
         id:iconLogo
         source: "qrc:/icon.png"
-        width: 150*size1W
+        width: 150*AppStyle.size1W
         height: width
         anchors.centerIn: parent
     }
     DropShadow {
         id:dropShadow
         anchors.fill: iconLogo
-        horizontalOffset: 0*size1W
-        verticalOffset: 0*size1H
-        radius: 50*size1W
-        samples: 30*size1W
-        color: Material.color(appStyle.primaryInt,Material.Shade200)
+        horizontalOffset: 0*AppStyle.size1W
+        verticalOffset: 0*AppStyle.size1H
+        radius: 50*AppStyle.size1W
+        samples: 30*AppStyle.size1W
+        color: Material.color(AppStyle.primaryInt,Material.Shade200)
         source: iconLogo
     }
 
     Text {
         id: waitText
         text: qsTr("ساخته شده با ♥")
-        font{family: appStyle.appFont;pixelSize: 30*size1F;bold: true}
+        font{family: AppStyle.appFont;pixelSize: 30*AppStyle.size1F;bold: true}
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 40*size1W
+        anchors.bottomMargin: 40*AppStyle.size1W
         anchors.horizontalCenter: parent.horizontalCenter
-        color: appStyle.textColor
+        color: AppStyle.textColor
     }
 }

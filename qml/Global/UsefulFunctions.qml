@@ -1,6 +1,26 @@
-import QtQuick 2.14
+pragma Singleton
+import QtQuick 2.14 // Require For QtObject
 
 QtObject {
+    property ListModel stackPages: ListModel{}
+
+    property var rootWindow: null
+    function setRootWindowVar(rootWindow)
+    {
+        this.rootWindow = rootWindow;
+    }
+
+    property var mainPage :null
+    function setMainPageVar(mainPage)
+    {
+        this.mainPage = mainPage;
+    }
+
+    property var mainLoader :null
+    function setMainLoaderVar(mainLoader)
+    {
+        this.mainLoader = mainLoader;
+    }
 
     function faToEnNumber(num)
     {
@@ -59,41 +79,47 @@ QtObject {
         return {index: index,value:listModel.get(index)};
     }
 
-    function showLog(message,isError,parent,width,isLeftEdge)
+    property var logDetail:[]
+
+    function showLog(message,isError,width)
     {
         var component = Qt.createComponent("qrc:/Components/Log.qml")
         if(component.status === Component.Ready)
         {
-            var error = component.createObject(parent?parent:rootWindow)
-            error.text = message
-            error.isError = isError
-            error.edge = isLeftEdge ? Qt.LeftEdge : Qt.RightEdge
-            error.width = width?(width>rootWindow.width?rootWindow.width:width)
-                               :360*size1W
+            var logObj = component.createObject(rootWindow)
+            logObj.text = message
+            logObj.isError = isError
+            logObj.width = width?(Math.min(width,rootWindow.width))
+                               :360*AppStyle.size1W
             let y = 0
             for(let i=0;i<logDetail.length;i++)
                 y += logDetail[i].height
-            error.y =y
-            error.open()
-            logDetail.push({"index":error.index = (logDetail.length>0?logDetail[logDetail.length-1].index+1:0),"index2":error.index2 = (logDetail.length>0?logDetail[logDetail.length-1].index2+1:0),"height":error.height,"dialog":error})
-            error.endTime = error.index?(error.index+1)*error.endTime:error.endTime
-            error.callAfterClose = function(){
-                for(let i = error.index; i< logDetail.length;i++)
+            logObj.y =y
+            logObj.open()
+            logDetail.push({"index":logObj.index = (logDetail.length>0?logDetail[logDetail.length-1].index+1:0),"index2":logObj.index2 = (logDetail.length>0?logDetail[logDetail.length-1].index2+1:0),"height":logObj.height,"dialog":logObj})
+            logObj.endTime = logObj.index?(logObj.index+1)*logObj.endTime:logObj.endTime
+            logObj.callAfterClose = function(){
+                for(let i = logObj.index; i< logDetail.length;i++)
                 {
-                    if(i !== error.index)
+                    if(i !== logObj.index)
                     {
-                        logDetail[i].dialog.endTime -= error.now
-                        logDetail[i].dialog.now -= error.now
+                        logDetail[i].dialog.endTime -= logObj.now
+                        logDetail[i].dialog.now -= logObj.now
                         logDetail[i].dialog.index -= 1
                         logDetail[i].index -= 1
-                        logDetail[i].dialog.y -= logDetail[error.index].height
+                        logDetail[i].dialog.y -= logDetail[logObj.index].height
                     }
                 }
-                logDetail.splice(error.index, 1);
+                logDetail.splice(logObj.index, 1);
             }
         }
         else
             console.error(component.errorString())
+    }
+
+    function showUnauthorizedError()
+    {
+        showLog(qsTr("نام کاربری شما مجاز شناخته نشد، ممکن حساب شما پاک شده باشد."),true,400*AppStyle.size1W)
     }
 
     function showBusy(text,callback)
@@ -141,8 +167,6 @@ QtObject {
     {
         if(page !== stackPages.get(stackPages.count-1).page || title !== stackPages.get(stackPages.count-1).title)
         {
-            mainHeaderTitle = title
-
             let result = findListModel(stackPages,function(model){return page===model["page"] && title===model["title"]},false)
             if(result)
             {
@@ -154,15 +178,18 @@ QtObject {
                 stackPages.append({"page":page,"title":title})
                 mainPage.item.mainStackView.push(page,data)
             }
+            mainPage.item.mainStackView.callWhenPush(data)
         }
     }
 
     function mainStackPop(object)
     {
         let prevPage = stackPages.get(stackPages.count-2)
-        mainHeaderTitle = prevPage.title
         stackPages.remove(stackPages.count-1)
+        if(!object)
+          object =  mainPage.item.mainStackView.callForGetDataBeforePop()
         mainPage.item.mainStackView.pop()
-        mainPage.item.mainStackView.callInItemFunction(object)
+        mainPage.item.mainStackView.callWhenPop(object)
     }
+
 }

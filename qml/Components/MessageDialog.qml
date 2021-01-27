@@ -1,17 +1,22 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
-import "qrc:/Components" as App
+import Components 1.0
+import Global 1.0
 
-App.Dialog {
+AppDialog {
     id: messageDialog
     x: (parent.width- width)/2
     y: (parent.height- height)/2
     property alias text : textContainer.text
     property var callback
     property string msgTitle :""
-    height: 160*size1W + textContainer.lineCount * 21*size1W
-    hasBotton: true
+    onVisibleChanged: {
+        if(!visible && typeof destroy === "function")
+            destroy()
+    }
+    height: 160*AppStyle.size1W + textContainer.lineCount * 21*AppStyle.size1W
+    hasButton: true
     dialogButton.onClicked: {close()}
     onClosed: {
         if(callback!==undefined )
@@ -25,24 +30,24 @@ App.Dialog {
         }
     }
     buttonTitle: qsTr("تایید")
-    dialogButton.anchors.bottomMargin: size1W*25
+    dialogButton.anchors.bottomMargin: AppStyle.size1W*25
     Text {
         id: title
         text: msgTitle?msgTitle:qsTr("خطا")
-        font { family: appStyle.appFont; pixelSize: size1F*17;bold: true }
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*17;bold: true }
         anchors.top: parent.top
-        anchors.topMargin: size1H*10
+        anchors.topMargin: AppStyle.size1H*10
         anchors.left: parent.left
         anchors.right: parent.right
         horizontalAlignment: Text.AlignHCenter
         color: textColor
         Rectangle{
             color: "#ccc"
-            height: size1H
+            height: AppStyle.size1H
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: -size1H*5
-            width: parent.width - size1W*40
+            anchors.bottomMargin: -AppStyle.size1H*5
+            width: parent.width - AppStyle.size1W*40
         }
     }
     Text {
@@ -51,12 +56,12 @@ App.Dialog {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         anchors.top: title.bottom
-        anchors.topMargin: size1H*25
+        anchors.topMargin: AppStyle.size1H*25
         anchors.right: parent.right
-        anchors.rightMargin: size1W*15
+        anchors.rightMargin: AppStyle.size1W*15
         anchors.left: parent.left
-        anchors.leftMargin: size1W*15
-        font { family: appStyle.appFont; pixelSize: size1F*14 }
+        anchors.leftMargin: AppStyle.size1W*15
+        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*14 }
         color: textColor
     }
 

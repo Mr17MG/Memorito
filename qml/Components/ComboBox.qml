@@ -4,27 +4,28 @@ import QtQuick.Controls.Material 2.14
 import QtQuick.Templates 2.14 as T
 import QtQuick.Controls.Material.impl 2.14
 import QtGraphicalEffects 1.14
+import Global 1.0
 
 ComboBox {
     id:control
     Material.background: "transparent"
     property int popupX: 0
-    property int popupY: popupCenter?(-(rootWindow.height-height)/2)-control.y:95*size1H
+    property int popupY: popupCenter?(-(rootWindow.height-height)/2)-control.y:95*AppStyle.size1H
     property bool popupCenter: false
     property int popupWidth: width
-    property int popupHeight: rootWindow.height>= delegateModel.count*size1H*85?delegateModel.count*size1H*85:rootWindow.height-size1H*85
+    property int popupHeight: rootWindow.height>= delegateModel.count*AppStyle.size1H*85?delegateModel.count*AppStyle.size1H*85:rootWindow.height-AppStyle.size1H*85
     property bool hasBottomBorder: true
     property alias contentItemText: contentItemText
     property int textAlign: Text.AlignRight
     property string placeholderText: ""
     property color errorColor: "red"
     property alias imageIndicator: imageIndicator
-    property color bottomBorderColor : appStyle.primaryColor
+    property color bottomBorderColor : AppStyle.primaryColor
     property string iconRole: ""
     property string placeholderIcon: ""
     property string displayIcon:  iconRole?"":""
     property bool hasClear: true
-    Material.accent: appStyle.primaryColor
+    Material.accent: AppStyle.primaryColor
 
     signal error();
     signal resetColor()
@@ -36,17 +37,17 @@ ComboBox {
         bottomBorder.color = bottomBorderColor
     }
 
-    height: size1H*100
-    font { family: appStyle.appFont; pixelSize: size1F*30}
+    height: AppStyle.size1H*100
+    font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30}
     indicator: Image {
         id:imageIndicator
         anchors{
             verticalCenter: parent.verticalCenter
             left: parent.left
-            leftMargin: 10*size1W
+            leftMargin: 10*AppStyle.size1W
         }
         source: "qrc:/arrow.svg"
-        width: size1W*35
+        width: AppStyle.size1W*35
         height: width
         sourceSize.width: width*2
         sourceSize.height: height*2
@@ -55,12 +56,12 @@ ComboBox {
     ColorOverlay{
         source: imageIndicator
         anchors.fill: imageIndicator
-        color: appStyle.primaryColor
+        color: AppStyle.primaryColor
     }
     Image {
         id: trashIcon
         source: "qrc:/trash.svg"
-        width: 35*size1W
+        width: 35*AppStyle.size1W
         height: width
         sourceSize.width: width*2
         sourceSize.height: height*2
@@ -73,7 +74,7 @@ ComboBox {
     ColorOverlay{
         source: trashIcon
         anchors.fill: trashIcon
-        color: appStyle.textColor
+        color: AppStyle.textColor
         visible: control.currentIndex>=0 && hasClear
         MouseArea{
             anchors.fill: parent
@@ -94,11 +95,11 @@ ComboBox {
             horizontalAlignment: Text.AlignHCenter
             anchors.fill: parent
             font: control.font
-            color: appStyle.textColor
-            elide: ltr?Text.ElideLeft:Text.ElideRight
+            color: AppStyle.textColor
+            elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
             anchors{
                 left: parent.left
-                leftMargin: 55*size1W
+                leftMargin: 55*AppStyle.size1W
                 right: parent.right
             }
         }
@@ -106,12 +107,12 @@ ComboBox {
             id:bottomBorder
             color: control.activeFocus ? control.Material.accentColor
                                        : (control.hovered ? control.Material.primaryTextColor : control.Material.hintTextColor)
-            height: size1H*3;
+            height: AppStyle.size1H*3;
             anchors{
                 right: parent.right
                 left: parent.left
                 top: parent.bottom
-                topMargin: -10*size1H
+                topMargin: -10*AppStyle.size1H
             }
             visible: hasBottomBorder
         }
@@ -121,10 +122,10 @@ ComboBox {
             anchors{
                 verticalCenter: parent.verticalCenter
                 right: parent.right
-                rightMargin: 10*size1W
+                rightMargin: 10*AppStyle.size1W
             }
             source: control.iconRole === ""?"":control.currentIndex === -1?placeholderIcon:control.model.get(control.currentIndex)[iconRole]
-            width: size1W*35
+            width: AppStyle.size1W*35
             height: width
             sourceSize.width: width*2
             sourceSize.height: height*2
@@ -134,11 +135,11 @@ ComboBox {
         id: delegateItem
         width: parent?parent.width:0
         text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
-        Material.foreground: parent?control.currentIndex === index ? appStyle.primaryColor: parent.Material.foreground:"white"
+        Material.foreground: parent?control.currentIndex === index ? AppStyle.primaryColor: parent.Material.foreground:"white"
         highlighted: control.highlightedIndex === index
         hoverEnabled: control.hoverEnabled
         font: control.font
-        height: size1H*85
+        height: AppStyle.size1H*85
         contentItem: Item{
             anchors.fill: parent
             Image {
@@ -147,10 +148,10 @@ ComboBox {
                 anchors{
                     verticalCenter: parent.verticalCenter
                     right: parent.right
-                    rightMargin: 10*size1W
+                    rightMargin: 10*AppStyle.size1W
                 }
                 source: control.iconRole ===""?"":model[control.iconRole]
-                width: size1W*35
+                width: AppStyle.size1W*35
                 height: width
                 sourceSize.width: width*2
                 sourceSize.height: height*2
@@ -162,8 +163,8 @@ ComboBox {
                 width: delegateItem.width
                 anchors{
                     right: displayIconImg.visible?displayIconImg.left:parent.right
-                    rightMargin: size1W*15
-                    leftMargin: size1W*15
+                    rightMargin: AppStyle.size1W*15
+                    leftMargin: AppStyle.size1W*15
                     verticalCenter: parent.verticalCenter
 
                 }
@@ -180,8 +181,8 @@ ComboBox {
         width: control.popupWidth
         height: popupHeight
         transformOrigin: Item.Top
-        topMargin: size1H*12
-        bottomMargin: size1H*12
+        topMargin: AppStyle.size1H*12
+        bottomMargin: AppStyle.size1H*12
 
         Material.theme: control.Material.theme
         Material.accent: control.Material.accent
@@ -222,7 +223,7 @@ ComboBox {
         }
 
         background: Rectangle {
-            radius: size1W*5
+            radius: AppStyle.size1W*5
             color: control.popup.Material.dialogColor
             layer.enabled: control.enabled
             layer.effect: ElevationEffect {

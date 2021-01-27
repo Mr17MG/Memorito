@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>Components/qmldir</file>
         <file>Components/Button.qml</file>
         <file>Components/CheckBox.qml</file>
         <file>Components/CheckIndicator.qml</file>
@@ -27,35 +28,39 @@
         <file>Components/FilesSelection.qml</file>
         <file>AppBase/AppHeader.qml</file>
         <file>AppBase/AppSettings.qml</file>
-        <file>AppBase/AppStyle.qml</file>
         <file>AppBase/DrawerBody.qml</file>
-        <file>Functions/UiFunctions.qml</file>
-        <file>Functions/UsefulFunctions.qml</file>
         <file>Account/Authentication.qml</file>
         <file>Account/AccountMain.qml</file>
         <file>Account/SignIn.qml</file>
         <file>Account/SignUp.qml</file>
+        <file>Account/Profile.qml</file>
         <file>Splash/MainSplash.qml</file>
         <file>Splash/SplashItem.qml</file>
         <file>Splash/SplashLoader.qml</file>
+        <file>Friends/Friends.qml</file>
+        <file>Friends/FriendsAPI.qml</file>
+        <file>Contexts/Contexts.qml</file>
+        <file>Contexts/ContextsApi.qml</file>
+        <file>Categories/CategoriesApi.qml</file>
+        <file>Categories/CategoriesList.qml</file>
+        <file>Things/ThingsApi.qml</file>
+        <file>Things/ThingList.qml</file>
+        <file>Things/FilesApi.qml</file>
+        <file>Things/ThingsDetail.qml</file>
+        <file>Things/LogsApi.qml</file>
+        <file>Things/AddEditThing.qml</file>
         <file>StartPage.qml</file>
         <file>StartMemorito.qml</file>
         <file>MainPage.qml</file>
-        <file>StaticDrawer.qml</file>
-        <file>UserAPI.qml</file>
-        <file>InitLocalDatabase.qml</file>
-        <file>Friends.qml</file>
-        <file>FriendsAPI.qml</file>
-        <file>Contexts.qml</file>
-        <file>ContextsApi.qml</file>
-        <file>AddEditThing.qml</file>
-        <file>CategoriesApi.qml</file>
-        <file>CategoriesList.qml</file>
-        <file>ThingsApi.qml</file>
-        <file>ThingList.qml</file>
-        <file>Profile.qml</file>
-        <file>FilesApi.qml</file>
-        <file>ThingsDetail.qml</file>
-        <file>LogsApi.qml</file>
+        <file>Global/Database.qml</file>
+        <file>Global/Enums.qml</file>
+        <file>Global/User.qml</file>
+        <file>Global/qmldir</file>
+        <file>Global/UiFunctions.qml</file>
+        <file>Global/UsefulFunctions.qml</file>
+        <file>Global/InitLocalDatabase.qml</file>
+        <file>Global/SettingDriver.qml</file>
+        <file>Global/AppStyle.qml</file>
+        <file>Global/UserAPI.qml</file>
     </qresource>
 </RCC>

@@ -1,16 +1,17 @@
-﻿import QtQuick 2.14
+﻿pragma Singleton
+import QtQuick 2.14
+import Global 1.0
 
 QtObject {
-
     function getThingsChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = 4 AND changes_type !=3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHThings ,User.id])
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -23,7 +24,7 @@ QtObject {
                             list = []
                             let ids =[]
 
-                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = 4 AND changes_type  =3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type  =3 AND user_id = ? GROUP BY record_id",[Memorito.CHThings ,User.id])
                             if(result.rows.length > 0)
                             {
                                 for(let j=0;j<result.rows.length;j++)
@@ -32,7 +33,7 @@ QtObject {
                                     ids.push(result.rows.item(j).id)
                                 }
                                 deleteThingLocalDatabase(list.join(','))
-                                localDB.deleteFromServerChanges(ids.join(','))
+                                LocalDatabase.deleteFromServerChanges(ids.join(','))
                             }
                         }
                         catch(e)
@@ -44,14 +45,14 @@ QtObject {
 
     function syncThingsChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
                             let result = tx.executeSql("SELECT T1.record_id ,T1.changes_type,T1.id AS change_id ,T2.* FROM LocalChanges AS T1
-JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id = ?",currentUser.id)
+JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id = ?",User.id)
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -86,7 +87,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id + "&thing_id_list="+changesList
+        let query = "user_id=" + User.id + "&thing_id_list="+changesList
         xhr.open("GET", domain+"/api/v1/things"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -125,7 +126,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                                     insertThings(insertArray)
                                 if(nChangeId.length > 0)
                                 {
-                                    localDB.deleteFromServerChanges(nChangeId.join(','))
+                                    LocalDatabase.deleteFromServerChanges(nChangeId.join(','))
                                 }
                             }
                         }
@@ -147,8 +148,12 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
     {
         if(model.count>0 )
             return model
+        let valuesThings;
+        if(categoryId === -1)
+            valuesThings = getThingsByListId(listId) // get Things from local database
+        else
+            valuesThings = getThingsByListIdAndCategoryId(listId,categoryId)
 
-        let valuesThings = getThingsLocalDatabase(listId,categoryId) // get Things from local database
         if(valuesThings.length >0){
             model.append(valuesThings)
             return model
@@ -157,14 +162,14 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id + "&list_id="+listId + (categoryId === -1 ?"":"&category_id="+categoryId)
+        let query = "user_id=" + User.id + "&list_id="+listId + (categoryId === -1 ?"":"&category_id="+categoryId)
         xhr.open("GET", domain+"/api/v1/things"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -189,63 +194,37 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            model.append(response.result)
                             insertThings(response.result)
+                            let ids = response.result.map(item =>[item.id]).join(",")
+
+                            let valuesThings = getThingById(ids)
+                            if(valuesThings.length >0){
+                                model.append(valuesThings)
+                                return model
+                            }
                         }
                     }
                     else {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                         return null
                     }
                 }
                 catch(e) {
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                     return null
                 }
             }
         }
     }
-    function prepareForAdd(model,options,listId,hasFiles,categoryId=null,dueDate=null,friendId=null)
+
+
+    function addThing(json,filesModel,local_id = null,change_id = null)
     {
-        if(titleInput.text.trim() === "")
-        {
-            usefulFunc.showLog(qsTr("لطفا قسمت 'چی تو دهنته؟' رو پر کن"),true,null,600*size1W, ltr)
-            titleMoveAnimation.start()
-            return
-        }
-
-        let title = titleInput.text.trim()
-        let detail = flickTextArea.text.trim()
-
-        if(dueDate !==null)
-            dueDate = encodeURIComponent(dueDate)
-
-        addThing(model,title,detail,listId,hasFiles,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId)
-    }
-
-    function addThing(model,title,detail,listId=null,hasFiles,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null,local_id = null,change_id = null)
-    {
-        let json = JSON.stringify(
-                {
-                    title : title,
-                    user_id: currentUser.id,
-                    detail : detail,
-                    list_id : listId,
-                    has_files: parseInt(hasFiles),
-                    priority_id : priorityId,
-                    estimate_time : estimateTime,
-                    context_id : contextId,
-                    energy_id : energyId,
-                    due_date : dueDate,
-                    friend_id : friendId,
-                    category_id : categoryId
-                }, null, 1);
-
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
@@ -253,7 +232,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
@@ -269,87 +248,60 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                         if(response.code === 201){
                             if(local_id === null)
                             {
-                                model.append(response.result)
-
+                                let ids;
                                 if(typeof response.result === "array")
+                                {
                                     insertThings(response.result)
+                                }
                                 else
+                                {
                                     insertThings(Array(response.result))
+                                }
 
-                                flickTextArea.detailInput.clear()
-                                titleInput.clear()
-                                isDual = false
+                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت افزوده شد"),false,700*AppStyle.size1W)
 
-                                usefulFunc.showLog(" <b>'"+ title+" '</b>" +qsTr("با موفقیت افزوده شد"),false,null,700*size1W, ltr)
+                                if(filesModel.count > 0)
+                                    FilesApi.addFiles(filesModel,filesModel.count,response.result.id)
 
-                                localDB.insertDeviceChanges([{"table_id":4,   "record_id":response.result.id,    "changes_type":1,  "user_id":currentUser.id}])
-
-                                if(hasFiles)
-                                    filesApi.addFiles(attachModel,attachModel.count,response.result.id)
+                                UsefulFunc.mainStackPop({"thingId":response.result.id,"changeType":Memorito.Insert})
                             }
                             else{
                                 updateThings(response.result,local_id)
-                                localDB.deleteFromLocalChanges(change_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
                             }
 
                         }
                     }
                     else if(local_id === null) {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            UsefulFunc.showLog(response.message,true,700*AppStyle.size1W)
                     }
 
                 }
                 catch(e) {
-                    console.error(e)
-                    let id = insertThings([{"id":-1, "title":title, "detail":detail, "list_id":listId, "is_done":0, "has_files":hasFiles,
-                                               "context_id":contextId, "priority_id":priorityId, "energy_id":energyId, "estimate_time":estimateTime,
-                                                "category_id":categoryId,"due_date":dueDate,"friend_id":friendId,  "user_id": currentUser.id, "register_date":"","modified_date":""}])
+                    json = JSON.parse(json)
+                    let id = insertThings([{"id":-1, "title":json.title??"", "detail":json.detail??"", "list_id":json.list_id??0, "is_done":0, "has_files":json.has_files,
+                                               "context_id":json.context_id??0, "priority_id":json.priorityId??0, "energy_id":json.energy_id??0, "estimate_time":json.estimate_time??0,
+                                               "category_id":json.category_id??0,"due_date":json.due_date??"","friend_id":json.friend_id??0,  "user_id": User.id, "register_date":"","modified_date":""}])
+                    if(filesModel.count > 0)
+                        FilesApi.addFiles(attachModel,attachModel.count,-1)
+                    LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,700*AppStyle.size1W)
+                    UsefulFunc.mainStackPop({"localThingId":thingId,"changeType":Memorito.Insert})
 
-                    localDB.insertLocalChanges([ {"table_id":4,   "record_id":id,    "changes_type":1,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
                 }
+
             }
         }
     }
 
-    function prepareForEdit(model,newModel,thingId,options,listId,hasFiles,categoryId=null,dueDate=null,friendId=null)
+    function editThing(thingId,json,filesModel,local_id = null,change_id = null)
     {
-        if(titleInput.text.trim() === "")
-        {
-            usefulFunc.showLog(qsTr("لطفا قسمت 'چی تو دهنته؟' رو پر کن"),true,null,600*size1W, ltr)
-            return
-        }
-        let title = titleInput.text.trim()
-        let detail = flickTextArea.text.trim()
 
-        if(dueDate !==null)
-            dueDate = encodeURIComponent(dueDate)
-
-        editThing(thingId,modelIndex,model,newModel,title,detail,listId,hasFiles,options["contextId"],options["priorityId"],options["energyId"],options["estimateTime"],categoryId,dueDate,friendId)
-    }
-
-    function editThing(thingId,modelIndex,model,newModel,title,detail,listId=null,hasFiles,contextId=null,priorityId=null,energyId=null,estimateTime=null,categoryId=null,dueDate=null,friendId=null,local_id = null,change_id = null)
-    {
-        let json = JSON.stringify(
-                {
-                    title : title,
-                    user_id: currentUser.id,
-                    detail : detail,
-                    has_files: parseInt(hasFiles),
-                    priority_id : priorityId,
-                    estimate_time : estimateTime,
-                    context_id : contextId,
-                    energy_id : energyId,
-                    due_date : dueDate,
-                    friend_id : friendId,
-                    category_id : categoryId,
-                    list_id : listId
-                }, null, 1);
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
@@ -357,7 +309,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
@@ -373,43 +325,42 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                         if(response.code === 200){
                             if(local_id === null)
                             {
-                                if(model){
-                                    model.remove(modelIndex,1)
-                                    newModel.append(response.result)
-                                }
-                                else newModel.set(modelIndex,response.result)
                                 updateThings(response.result)
-                                usefulFunc.showLog(" <b>'"+ title+" '</b>" +qsTr("با موفقیت بروزرسانی شد"),false,null,700*size1W, ltr)
-                                localDB.insertDeviceChanges([{"table_id":4,   "record_id":response.result.id,    "changes_type":2,  "user_id":currentUser.id}])
-                                if(hasFiles)
-                                    filesApi.addFiles(attachModel,attachModel.count,response.result.id)
-                                usefulFunc.mainStackPop()
-                                usefulFunc.mainStackPop()
+
+                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت بروزرسانی شد"),false,700*AppStyle.size1W)
+
+                                if(filesModel.count > 0)
+                                    FilesApi.addFiles(filesModel,filesModel.count,response.result.id)
+
                             }
                             else {
                                 updateThings(response.result,local_id)
-                                localDB.deleteFromLocalChanges(change_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
                             }
                         }
                     }
                     else if(local_id === null){
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
 
                 }
                 catch(e) {
-                    updateThings( {"id":thingId, "title":title, "detail":detail, "list_id":listId, "is_done":0, "has_files":hasFiles,
-                                    "context_id":contextId, "priority_id":priorityId, "energy_id":energyId, "estimate_time":estimateTime,
-                                     "category_id":categoryId,"due_date":dueDate,"friend_id":friendId,  "user_id": currentUser.id, "register_date":"","modified_date":""},local_id)
-
-                    localDB.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":2,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    json = JSON.parse(json)
+                    updateThings( {"id":thingId, "title":json.title??"", "detail":json.detail??"", "list_id":json.list_id??0, "is_done":0, "has_files":json.has_files,
+                                     "context_id":json.context_id??0, "priority_id":json.priorityId??0, "energy_id":json.energy_id??0, "estimate_time":json.estimate_time??0,
+                                     "category_id":json.category_id??0,"due_date":json.due_date??"","friend_id":json.friend_id??0,  "user_id": User.id, "register_date":"","modified_date":""},local_id)
+                    if(filesModel.count > 0)
+                        FilesApi.addFiles(filesModel,filesModel.count,thingId)
+                    LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":2,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
+                if(local_id === null)
+                    UsefulFunc.mainStackPop({"thingId":thingId,"chnageType":Memorito.Update})
             }
         }
     }
@@ -419,12 +370,12 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id
+        let query = "user_id=" + User.id
         xhr.open("DELETE", domain+"/api/v1/things/"+thingId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
         if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
@@ -440,46 +391,46 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                         if(response.code === 200){
                             if(local_id === null)
                             {
-//                                model.remove(modelIndex)
                                 deleteThingLocalDatabase(thingId)
-                                localDB.insertDeviceChanges([{"table_id":4,   "record_id":thingId,    "changes_type":3,  "user_id":currentUser.id}])
-                                usefulFunc.mainStackPop()
+
                             }
                             else{
-                                localDB.deleteFromLocalChanges(change_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
                             }
                         }
                     }
                     else if(local_id === null){
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
 
                 }
                 catch(e) {
                     deleteThingLocalDatabase(thingId)
-                    localDB.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":3,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":3,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
+                if(local_id === null)
+                    UsefulFunc.mainStackPop({"thingId":thingId,"changeType":Memorito.Delete})
             }
         }
     }
 
     /****************** Local Database Function Table:Things  **************************/
 
-    function getThingsLocalDatabase(listId,categoryId)
+    function getThingsByListId(listId)
     {
         let valuesThings=[]
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Things WHERE list_id=? OR (list_id=? AND category_id=?) ORDER By id ASC",[listId,listId,categoryId])
+                            var result = tx.executeSql("SELECT * FROM Things WHERE list_id = ?  ORDER By id ASC",listId)
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesThings.push(result.rows.item(i))
@@ -493,15 +444,59 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         return valuesThings
     }
 
-    function getThingById(id)
+    function getThingsByListIdAndCategoryId(listId,categoryId)
     {
-        let valuesLogs = {}
-        dataBase.transaction(
+        let valuesThings=[]
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Things WHERE id=?",id)
+                            var result = tx.executeSql("SELECT * FROM Things WHERE list_id = ? AND category_id = ? ORDER By id ASC",[listId,categoryId])
+                            for(var i=0;i<result.rows.length;i++)
+                            {
+                                valuesThings.push(result.rows.item(i))
+                            }
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesThings
+    }
+
+    function getThingById(ids)
+    {
+        let valuesThings = []
+        Database.connection.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Things WHERE id IN ("+ids+")")
+                            for(var i=0;i<result.rows.length;i++)
+                            {
+                                valuesThings.push(result.rows.item(i))
+                            }
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesThings
+    }
+
+    function getThingByLocalId(LocalId)
+    {
+        let valuesLogs = {}
+        Database.connection.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Things WHERE local_id=?",LocalId)
                             if(result.rows.length)
                                 valuesLogs = result.rows.item(0)
                         }
@@ -514,9 +509,9 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
     }
     function insertThings(values,local_id = null)
     {
-        let mapValues = values.map(item => [ item.id, String(item.title), String(item.detail)??"", item.list_id ?? 0, item.is_done??0, item.has_files??0,item.context_id??0,
-                                             item.priority_id??0, item.user_id??0, item.energy_id??0, item.estimate_time??0, item.category_id??0, String(item.due_date)??"",
-                                             item.friend_id??0, item.register_date??"",item.modified_date??"" ] )
+        let mapValues = values.map(item => [ item.id, item.title, item.detail??"", item.list_id ?? 0, item.is_done??0, item.has_files??0,item.context_id??0,
+                                            item.priority_id??0, item.user_id??0, item.energy_id??0, item.estimate_time??0, item.category_id??0, item.due_date??"",
+                                            item.friend_id??0, item.register_date??"",item.modified_date??"" ] )
         // todo decode dates
         let finalString = ""
         for(let i=0;i<mapValues.length;i++)
@@ -526,7 +521,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                 mapValues[i][j] = typeof mapValues[i][j] === "string"?'"'+ (mapValues[i][j]==="null"?"":mapValues[i][j]) + '"':mapValues[i][j]
             }
             let check = 0;
-            dataBase.transaction(function(tx){try{
+            Database.connection.transaction(function(tx){try{
                     var result = tx.executeSql("SELECT * FROM Things WHERE id=?",mapValues[i][0])
                     check = result.rows.length}catch(e){}
             })
@@ -535,7 +530,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                 finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
         }
         let insertId = -1
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -560,7 +555,7 @@ estimate_time, category_id, due_date, friend_id, register_date, modified_date ) 
 
     function updateThings(values,local_id = null)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -569,19 +564,19 @@ estimate_time, category_id, due_date, friend_id, register_date, modified_date ) 
                             if(local_id)
                                 result = tx.executeSql("UPDATE Things SET title = ?, detail = ?, list_id=?, is_done=?, has_files=?,context_id=?, priority_id=?, user_id= ?,
 energy_id=?, estimate_time=?, category_id=?, due_date=?, friend_id=?, register_date = ?, modified_date = ?, id=? WHERE local_id=? ",
-                                            [
-                                                values.title,values.detail ,values.list_id ,values.is_done??0 ,values.has_files??0 ,values.context_id??0 ,values.priority_id??0,
-                                                values.user_id??0 ,values.energy_id??0 ,values.estimate_time??0 , values.category_id??0, values.due_date??"", values.friend_id??0,
-                                                values.register_date??"", values.modified_date??"", values.id??0, local_id
-                                            ])
+                                                       [
+                                                           values.title??"", values.detail??"", values.list_id??0 ,values.is_done??0 ,values.has_files??0 ,values.context_id??0 ,values.priority_id??0,
+                                                           values.user_id??0 ,values.energy_id??0 ,values.estimate_time??0 , values.category_id??0, values.due_date??"", values.friend_id??0,
+                                                           values.register_date??"", values.modified_date??"", values.id??0, local_id
+                                                       ])
 
                             else result = tx.executeSql("UPDATE Things SET title = ?, detail = ?, list_id=?, is_done=?, has_files=?, context_id=?, priority_id=?, user_id= ?,
 energy_id=?, estimate_time=?, category_id=?, due_date=?, friend_id=?, register_date = ?, modified_date = ?  WHERE id=?",
-                                     [
-                                         values.title,values.detail ,values.list_id??0 ,values.is_done??0 ,values.has_files??0 ,values.context_id??0 ,values.priority_id??0,
-                                         values.user_id??0 ,values.energy_id??0 ,values.estimate_time??0 , values.category_id??0, values.due_date??"", values.friend_id??0,
-                                         values.register_date??"", values.modified_date??"", values.id
-                                     ])
+                                                        [
+                                                            values.title??"", values.detail??"", values.list_id??0, values.is_done??0, values.has_files??0, values.context_id??0 ,values.priority_id??0,
+                                                            values.user_id??0, values.energy_id??0, values.estimate_time??0, values.category_id??0, values.due_date??"", values.friend_id??0,
+                                                            values.register_date??"", values.modified_date??"", values.id
+                                                        ])
                         }
                         catch(e)
                         {
@@ -594,7 +589,7 @@ energy_id=?, estimate_time=?, category_id=?, due_date=?, friend_id=?, register_d
 
     function deleteThingLocalDatabase(ids)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try

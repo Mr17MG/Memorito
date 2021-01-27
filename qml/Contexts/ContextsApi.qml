@@ -1,16 +1,17 @@
+pragma Singleton
 import QtQuick 2.14
-import MEnum 1.0
+import Global 1.0
 
 QtObject {
     function getContextsChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHContexts ,currentUser.id])
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHContexts ,User.id])
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -23,7 +24,7 @@ QtObject {
                             list = []
                             let ids =[]
 
-                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type  =3 AND user_id = ? GROUP BY record_id",[Memorito.CHContexts ,currentUser.id])
+                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type  =3 AND user_id = ? GROUP BY record_id",[Memorito.CHContexts ,User.id])
                             if(result.rows.length > 0)
                             {
                                 for(let j=0;j<result.rows.length;j++)
@@ -32,7 +33,7 @@ QtObject {
                                     ids.push(result.rows.item(j).id)
                                 }
                                 deleteContextLocalDatabase(list.join(','))
-                                localDB.deleteFromServerChanges(ids.join(','))
+                                LocalDatabase.deleteFromServerChanges(ids.join(','))
                             }
                         }
                         catch(e)
@@ -44,14 +45,14 @@ QtObject {
 
     function syncContextsChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
                             let result = tx.executeSql("SELECT T1.record_id ,T1.changes_type,T1.id AS change_id ,T2.* FROM LocalChanges AS T1
-JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id = ?",currentUser.id)
+JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id = ?",User.id)
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -84,7 +85,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id + "&context_id_list="+changesList
+        let query = "user_id=" + User.id + "&context_id_list="+changesList
         xhr.open("GET", domain+"/api/v1/contexts"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
@@ -123,7 +124,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                                     insertContexts(insertArray)
                                 if(nChangeId.length > 0)
                                 {
-                                    localDB.deleteFromServerChanges(nChangeId.join(','))
+                                    LocalDatabase.deleteFromServerChanges(nChangeId.join(','))
                                 }
                             }
                         }
@@ -155,14 +156,14 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id
+        let query = "user_id=" + User.id
         xhr.open("GET", domain+"/api/v1/contexts"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -195,15 +196,15 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     else {
                         if(response.code === 401)
                         {
-                            usefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                         return null
                     }
                 }
                 catch(e) {
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                     return null
                 }
             }
@@ -214,7 +215,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
     {
         let json = JSON.stringify(
                 {
-                    user_id: currentUser.id,
+                    user_id: User.id,
                     context_name: contextName
                 }, null, 1);
 
@@ -225,7 +226,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
@@ -247,7 +248,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                             }
                             else{
                                 updateContexts(response.result,local_id)
-                                localDB.deleteFromLocalChanges(change_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
                             }
                         }
                     }
@@ -255,17 +256,17 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     {
                         if(response.code === 401)
                         {
-                            usefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
 
                 }
                 catch(e) {
-                    let id = insertContexts([{"id":-1, "context_name":contextName, "user_id":currentUser.id,"register_date" : "", "modified_date":"" }])
-                    localDB.insertLocalChanges([ {"table_id":2,   "record_id":id,    "changes_type":1,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
+                    let id = insertContexts([{"id":-1, "context_name":contextName, "user_id":User.id,"register_date" : "", "modified_date":"" }])
+                    LocalDatabase.insertLocalChanges([ {"table_id":2,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
             }
         }
@@ -275,7 +276,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
     {
         let json = JSON.stringify(
                 {
-                    user_id: currentUser.id,
+                    user_id: User.id,
                     context_name: contextName
                 }, null, 1);
 
@@ -286,7 +287,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
@@ -307,25 +308,25 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                             }
                             else {
                                 updateContexts(response.result,local_id)
-                                localDB.deleteFromLocalChanges(change_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
                             }
                         }
                     }
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            usefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
 
                 }
                 catch(e) {
                     model.set(modelIndex,{"context_name":contextName})
-                    updateContexts( {"id":contextId,"context_name":contextName, "user_id": currentUser.id ,"register_date":"", "modified_date":"" },local_id)
-                    localDB.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":2,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
+                    updateContexts( {"id":contextId,"context_name":contextName, "user_id": User.id ,"register_date":"", "modified_date":"" },local_id)
+                    LocalDatabase.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":2,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
             }
         }
@@ -336,12 +337,12 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id
+        let query = "user_id=" + User.id
         xhr.open("DELETE", domain+"/api/v1/contexts/"+contextId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
         if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
@@ -363,24 +364,24 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                                 
                             }
                             else{
-                                localDB.deleteFromLocalChanges(change_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
                             }
                         }
                     }
                     else {
                         if(response.code === 401)
                         {
-                            usefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
 
                 }
                 catch(e) {
                     deleteContextLocalDatabase(contextId)
-                    localDB.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":3,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width)
+                    LocalDatabase.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":3,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
             }
         }
@@ -391,7 +392,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
     function getContextsLocalDatabase()
     {
         let valuesContexts=[]
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -413,7 +414,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
     function getContextById(id)
     {
         let valuesLogs = {}
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -442,7 +443,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                 mapValues[i][j] = typeof mapValues[i][j] === "string"?'"'+ (mapValues[i][j]==="null"?"":mapValues[i][j]) + '"':mapValues[i][j]
             }
             let check = 0;
-            dataBase.transaction(function(tx){try{
+            Database.connection.transaction(function(tx){try{
                     var result = tx.executeSql("SELECT * FROM Contexts WHERE id=?",mapValues[i][0])
                     check = result.rows.length}catch(e){}
             })
@@ -451,7 +452,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                 finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
         }
         let insertId = -1
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -475,7 +476,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
 
     function updateContexts(values,local_id = null)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -502,7 +503,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
 
     function deleteContextLocalDatabase(ids)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try

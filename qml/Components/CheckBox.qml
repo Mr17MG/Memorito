@@ -2,7 +2,8 @@ import QtQuick 2.14
 import QtQuick.Templates 2.14 as T
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
-import "qrc:/Components" as App
+import Components 1.0
+import Global 1.0
 
 T.CheckBox {
     id: control
@@ -13,12 +14,12 @@ T.CheckBox {
                              implicitContentHeight + topPadding + bottomPadding,
                              implicitIndicatorHeight + topPadding + bottomPadding)
 
-    spacing: 8*size1W
-    padding: 8*size1W
-    verticalPadding: padding + 7*size1H
-    Material.accent: appStyle.primaryInt
-    LayoutMirroring.enabled: !ltr
-    indicator: App.CheckIndicator {
+    spacing: 8*AppStyle.size1W
+    padding: 8*AppStyle.size1W
+    verticalPadding: padding + 7*AppStyle.size1H
+    Material.accent: AppStyle.primaryInt
+    LayoutMirroring.enabled: !AppStyle.ltr
+    indicator: AppCheckIndicator {
         x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
         control: control
@@ -26,7 +27,7 @@ T.CheckBox {
         Ripple {
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
-            width: 42*size1W
+            width: 42*AppStyle.size1W
             height: width
             anchor: control
             pressed: control.pressed

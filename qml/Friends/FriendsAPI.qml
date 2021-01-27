@@ -1,28 +1,30 @@
+pragma Singleton
 import QtQuick 2.14
-
+import Global 1.0
 QtObject {
-    function getFilesChanges()
+
+    function getFriendsChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
-                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = 5 AND changes_type !=3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            let result = tx.executeSql("SELECT record_id FROM ServerChanges WHERE table_id = ? AND changes_type !=3 AND user_id = ? GROUP BY record_id",[Memorito.CHFriends ,User.id])
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
                                 {
                                     list.push(result.rows.item(i).record_id)
                                 }
-                                getMultipleFilesChanges(list.join(','))
+                                getMultipleFriendsChanges(list.join(','))
                             }
 
                             list = []
                             let ids =[]
 
-                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = 5 AND changes_type = 3 AND user_id = ? GROUP BY record_id",currentUser.id)
+                            result = tx.executeSql("    SELECT record_id,id FROM ServerChanges WHERE table_id = ? AND changes_type  =3 AND user_id = ? GROUP BY record_id",[Memorito.CHFriends ,User.id])
                             if(result.rows.length > 0)
                             {
                                 for(let j=0;j<result.rows.length;j++)
@@ -30,8 +32,8 @@ QtObject {
                                     list.push(result.rows.item(j).record_id)
                                     ids.push(result.rows.item(j).id)
                                 }
-                                deleteFilesLocalDatabase(list.join(','))
-                                localDB.deleteFromServerChanges(ids.join(','))
+                                deleteFriendLocalDatabase(list.join(','))
+                                LocalDatabase.deleteFromServerChanges(ids.join(','))
                             }
                         }
                         catch(e)
@@ -41,16 +43,16 @@ QtObject {
                     })
     }
 
-    function syncFilesChanges()
+    function syncFriendsChanges()
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             let list=[]
                             let result = tx.executeSql("SELECT T1.record_id ,T1.changes_type,T1.id AS change_id ,T2.* FROM LocalChanges AS T1
-JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = ?",currentUser.id)
+JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id = ?",User.id)
                             if(result.rows.length > 0)
                             {
                                 for(let i=0;i<result.rows.length;i++)
@@ -58,15 +60,15 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                                     let item = result.rows.item(i)
                                     if(item.changes_type === 1)
                                     {
-                                        addFiles(item.file_name,item.file_detail,item.list_id,null,null,null,null,item.local_id ,item.change_id)
+                                        addFriend(item.friend_name,null,item.local_id,item.change_id)
                                     }
                                     else if(item.changes_type === 2)
                                     {
-                                        editFile(item.id,item.file_name,item.file_detail,item.list_id,null,null,item.local_id ,item.change_id)
+                                        editFriend(item.id,friendName,null,-1,item.local_id,item.change_id)
                                     }
                                     else if(item.changes_type === 3)
                                     {
-                                        deleteFile( item.id,null,null,item.local_id ,item.change_id )
+                                        deleteFriend(item.id,null,-1,item.local_id,item.change_id)
                                     }
                                 }
                             }
@@ -78,13 +80,13 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     })
     }
 
-    function getMultipleFilesChanges(changesList)
+    function getMultipleFriendsChanges(changesList)
     {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id + "&file_id_list="+changesList
-        xhr.open("GET", domain+"/api/v1/files"+"?"+query,true);
+        let query = "user_id=" + User.id + "&friend_id_list="+changesList
+        xhr.open("GET", domain+"/api/v1/friends"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
         xhr.timeout = 10000;
@@ -111,18 +113,18 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                                     }
                                     else if( item.changes_type === 2 )
                                     {
-                                        if(!getFileById(item.id))
+                                        if(!getFriendById(item.id))
                                             insertArray.push(item)
                                         else
-                                            updateFiles(item)
+                                            updateFriends(item)
                                     }
                                     nChangeId.push(item.change_id)
                                 }
                                 if(insertArray.length > 0)
-                                    insertFiles(insertArray)
+                                    insertFriends(insertArray)
                                 if(nChangeId.length > 0)
                                 {
-                                    localDB.deleteFromServerChanges(nChangeId.join(','))
+                                    LocalDatabase.deleteFromServerChanges(nChangeId.join(','))
                                 }
                             }
                         }
@@ -139,30 +141,28 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
         }
     }
 
-
-    function getFiles(model,thingId)
+    function getFriends(model)
     {
         if(model.count>0 )
             return model
 
-        let valuesCategories = getFilesLocalDatabase(thingId) // get Categories from local database
-        if(valuesCategories.length >0){
-            model.append(valuesCategories)
+        let valuesFriends = getFriendsLocalDatabase() // get Friends from local database
+        if(valuesFriends.length >0){
+            model.append(valuesFriends)
             return model
         }
-
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id + "&things_id="+thingId
-        xhr.open("GET", domain+"/api/v1/files"+"?"+query,true);
+        let query = "user_id=" + User.id
+        xhr.open("GET", domain+"/api/v1/friends"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
-        var busyDialog = usefulFunc.showBusy("",
+        var busyDialog = UsefulFunc.showBusy("",
                                              function()
                                              {
-                                                 usefulFunc.showConfirm(
+                                                 UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
                                                              qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
                                                              function()
@@ -187,107 +187,106 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            insertFiles(response.result)
-                            for(let i=0;i<response.result.length;i++)
-                            {
-                                let file=response.result[i]
-                                if(myTools.checkFileExist(file["file_name"],file["file_extension"]))
-                                    file["file_source"] = "file://"+myTools.getSaveDirectory()+file["file_name"]+"."+file["file_extension"]
-                                else file["file_source"] = "";
-                                model.append(file)
-                            }
+                            model.append(response.result)
+                            insertFriends(response.result)
                         }
+                        return model
                     }
                     else {
-                        if(response.code === 406)
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                         return null
                     }
                 }
                 catch(e) {
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                     return null
                 }
             }
         }
     }
 
-    function addFiles(fileModel,filesCount,thingId)
+    function addFriend(friendName,model,local_id = null,change_id = null)
     {
-        let fileList= [];
-        for(let i = 0; i < filesCount; i++)
-        {
-            let file = fileModel.get(i)
-            let base64 = myTools.encodeToBase64(String(file.file_source.replace("file://","")))
-            fileList[i] = {"base64_file" : base64 , "file_extension": file.file_extension ,"file_name" :file.file_name}
-        }
-
         let json = JSON.stringify(
                 {
-                    things_id: thingId,
-                    user_id: currentUser.id,
-                    file_list: fileList
+                    user_id: User.id,
+                    friend_name: friendName
                 }, null, 1);
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("POST", domain+"/api/v1/files",true);
+        xhr.open("POST", domain+"/api/v1/friends",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = usefulFunc.showBusy("در حال ارسال فایل ها");
+        if(local_id === null)
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
             {
-                busyDialog.close()
+                if(local_id === null)
+                    busyDialog.close()
                 try
                 {
                     let response = xhr.response
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            usefulFunc.showLog(qsTr("فایل‌ها با موفقیت افزوده شد"),false,null,700*size1W, ltr)
-                            insertFiles(response.result)
-                            localDB.insertDeviceChanges([{"table_id":5,   "record_id":response.result.id,    "changes_type":1,  "user_id":currentUser.id}])
-                            fileModel.clear()
+                            if(local_id !== null)
+                            {
+                                updateFriends(response.result,local_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
+                            }
+                            else
+                            {
+                                model.append(response.result)
+                                
+                                insertFriends(Array(response.result))
+                            }
                         }
                     }
-                    else {
-                        if(response.code === 406)
+                    else if(local_id === null)
+                    {
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
-
                 }
                 catch(e) {
-                    let id = insertFiles(response.result)
-                    localDB.insertLocalChanges([ {"table_id":5,   "record_id":id,    "changes_type":1,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    let id = insertFriends([{"id":-1, "friend_name":friendName, "user_id":User.id,"register_date" : "", "modified_date":"" }])
+                    LocalDatabase.insertLocalChanges([ {"table_id":3,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
             }
         }
     }
 
-    function deleteFiles(fileId,model,modelIndex,local_id = null,change_id = null)
+    function editFriend(friendId,friendName,model,modelIndex,local_id = null,change_id = null)
     {
+        let json = JSON.stringify(
+                {
+                    user_id: User.id,
+                    friend_name: friendName
+                }, null, 1);
+
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + currentUser.id
-        xhr.open("DELETE", domain+"/api/v1/files/"+fileId+"?"+query,true);
+        xhr.open("PATCH", domain+"/api/v1/friends/"+friendId,true);
         xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(null);
+        xhr.send(json);
         if(local_id === null)
-            var busyDialog = usefulFunc.showBusy("");
+            var busyDialog = UsefulFunc.showBusy("");
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
         {
@@ -301,52 +300,105 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     if(response.ok)
                     {
                         if(response.code === 200){
-
                             if(local_id === null)
                             {
-                                model.remove(modelIndex)
-                                deleteFilesLocalDatabase(fileId)
-                                localDB.insertDeviceChanges([{"table_id":5,   "record_id":fileId,    "changes_type":3,  "user_id":currentUser.id}])
+                                model.set(modelIndex,{"friend_name":response.result.friend_name})
+                                updateFriends(response.result)
+                                
                             }
-                            else{
-                                localDB.deleteFromLocalChanges(change_id)
+                            else {
+                                updateFriends(response.result,local_id)
+                                LocalDatabase.deleteFromLocalChanges(change_id)
                             }
                         }
                     }
-                    else {
-                        if(response.code === 406)
+                    else if(local_id === null) {
+                        if(response.code === 401)
                         {
-                            usefulFunc.showLog(qsTr("خطا در ارتباط با سرور، لطفا مجدد تلاش نمایید"),true,null,400*size1W, ltr)
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            usefulFunc.showLog(response.message,true,mainPage,mainPage.width, ltr)
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                     }
-
                 }
                 catch(e) {
-                    deleteFilesLocalDatabase(fileId)
-                    localDB.insertLocalChanges([ {"table_id":5,   "record_id":fileId,    "changes_type":3,  "user_id":currentUser.id}] )
-                    usefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,mainPage,mainPage.width, ltr)
+                    model.set(modelIndex,{"friend_name":friendName})
+                    updateFriends( {"id":friendId,"friend_name":friendName,"user_id": User.id, "register_date":"","modified_date":""},local_id)
+                    LocalDatabase.insertLocalChanges([ {"table_id":3,   "record_id":friendId,    "changes_type":2,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
             }
         }
     }
 
-
-    /****************** Local Database Function Table:Files  **************************/
-
-    function getFilesLocalDatabase(thingId)
+    function deleteFriend(friendId,model,modelIndex,local_id = null,change_id = null)
     {
-        let valuesFiles=[]
-        dataBase.transaction(
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        let query = "user_id=" + User.id
+        xhr.open("DELETE", domain+"/api/v1/friends/"+friendId+"?"+query,true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(null);
+        if(local_id === null)
+            var busyDialog = UsefulFunc.showBusy("");
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                if(local_id === null)
+                    busyDialog.close()
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200){
+                            if(local_id === null)
+                            {
+                                model.remove(modelIndex)
+                                deleteFriendLocalDatabase(friendId)
+                                
+                            }
+                            else{
+                                LocalDatabase.deleteFromLocalChanges(change_id)
+                            }
+                        }
+                    }
+                    else if(local_id === null) {
+                        if(response.code === 401)
+                        {
+                            UsefulFunc.showUnauthorizedError()
+                        }
+                        else
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                    }
+
+                }
+                catch(e) {
+                    deleteFriendLocalDatabase(friendId)
+                    LocalDatabase.insertLocalChanges([ {"table_id":3,   "record_id":friendId,    "changes_type":3,  "user_id":User.id}] )
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                }
+            }
+        }
+    }
+
+    /****************** Local Database Function Table:Friends  **************************/
+
+    function getFriendsLocalDatabase()
+    {
+        let valuesFriends=[]
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Files WHERE thing_id = ? ORDER By id ASC",listId)
+                            var result = tx.executeSql("SELECT * FROM Friends ORDER By id ASC")
                             for(var i=0;i<result.rows.length;i++)
                             {
-                                valuesFiles.push(result.rows.item(i))
+                                valuesFriends.push(result.rows.item(i))
                             }
                         }
                         catch(e)
@@ -354,17 +406,18 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
 
                         }
                     })
-        return valuesFiles
+        return valuesFriends
     }
-    function getFileById(id)
+
+    function getFriendById(id)
     {
         let valuesLogs = {}
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Files WHERE id=?",id)
+                            var result = tx.executeSql("SELECT * FROM Friends WHERE id=?",id)
                             if(result.rows.length)
                                 valuesLogs = result.rows.item(0)
                         }
@@ -377,9 +430,9 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
     }
 
 
-    function insertFiles(values)
+    function insertFriends(values)
     {
-        let mapValues = values.map(item => [ item.id, item.user_id, item.things_id, item.file, String(item.file_name), item.file_extension, item.register_date??"" ] )
+        let mapValues = values.map(item => [ item.id, String(item.friend_name),   item.user_id,   String(item.register_date), String(item.modified_date) ] )
         let finalString = ""
         for(let i=0;i<mapValues.length;i++)
         {
@@ -388,24 +441,23 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                 mapValues[i][j] = typeof mapValues[i][j] === "string"?'"'+ (mapValues[i][j]==="null"?"":mapValues[i][j]) + '"':mapValues[i][j]
             }
             let check = 0;
-            dataBase.transaction(function(tx){try{
-                    var result = tx.executeSql("SELECT * FROM Files WHERE id=?",mapValues[i][0])
+            Database.connection.transaction(function(tx){try{
+                    var result = tx.executeSql("SELECT * FROM Friends WHERE id=?",mapValues[i][0])
                     check = result.rows.length}catch(e){}
             })
 
             if(!check)
                 finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
         }
-
         let insertId = -1
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
                             if(finalString!== "")
                             {
-                                tx.executeSql("INSERT INTO Files( id, user_id,things_id,file, file_name, file_extension, register_date ) VALUES "+ finalString)
+                                tx.executeSql("INSERT INTO Friends( id, friend_name, user_id, register_date, modified_date ) VALUES "+ finalString)
                                 var result = tx.executeSql("SELECT last_insert_rowid() as id")
                                 insertId= parseInt(result.insertId);
                             }
@@ -420,9 +472,9 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
     } // end of insert function
 
 
-    function updateFiles(values,local_id = null)
+    function updateFriends(values,local_id = null)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
@@ -430,12 +482,12 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                             let result
                             if(local_id)
                                 result = tx.executeSql(
-                                            "UPDATE Files SET id=? , user_id=? , things_id=? , file=? , file_name =? , file_extension=? , register_date=?  WHERE local_id=?",
-                                            [values.id, values.user_id ,values.things_id ,values.file, values.file_name, values.file_extension, values.register_date??"", local_id]
+                                            "UPDATE Friends SET friend_name = ?,user_id= ? ,register_date = ?,modified_date = ?, id=?  WHERE local_id=?",
+                                            [values.friend_name??"", values.user_id??0, values.register_date??"", values.modified_date??"",values.id??0, local_id]
                                             )
                             else result = tx.executeSql(
-                                     "UPDATE Files SET user_id=? , things_id=? , file=? , file_name =? , file_extension=? , register_date=?  WHERE id=?",
-                                     [values.user_id, values.things_id ,values.file, values.file_name, values.file_extension, values.register_date??"",values.id]
+                                     "UPDATE Friends SET friend_name = ?,user_id= ? ,register_date = ?,modified_date = ?  WHERE id=?",
+                                     [values.friend_name??"", values.user_id??0, values.register_date??"", values.modified_date??"",values.id??0]
                                      )
                         }
                         catch(e)
@@ -447,14 +499,14 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
     } // end of update function
 
 
-    function deleteFilesLocalDatabase(ids)
+    function deleteFriendLocalDatabase(ids)
     {
-        dataBase.transaction(
+        Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("DELETE FROM Files WHERE id IN (?)",ids)
+                            var result = tx.executeSql("DELETE FROM Friends WHERE id IN (?)",ids)
                         }
                         catch(e)
                         {
@@ -463,6 +515,4 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     }//end of  function
                     ) // end of transaction
     }// end of delete function
-
-
 }

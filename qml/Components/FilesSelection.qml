@@ -1,17 +1,20 @@
-import QtQuick 2.15
-import "qrc:/Components/" as App
-import QtQuick.Dialogs 1.2
+import QtQuick 2.14
+import QtQuick.Dialogs 1.3
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
 import QtGraphicalEffects 1.14
+import Components 1.0
+import Global 1.0
+import MTools 1.0                         // Require For myTools
 
 Rectangle{
     id: backRect
-    radius: 15*size1W
-    width: 450*size1W
-    height: 450*size1W
-    border.width: 2*size1W
-    border.color: appStyle.borderColor
+    MTools{id:myTools}
+    radius: 15*AppStyle.size1W
+    width: 450*AppStyle.size1W
+    height: 450*AppStyle.size1W
+    border.width: 2*AppStyle.size1W
+    border.color: AppStyle.borderColor
     color: "transparent"
     clip: true
     property ListModel model
@@ -19,18 +22,18 @@ Rectangle{
         id:gridLoader
         anchors{
             fill: parent
-            margins: 10*size1W
+            margins: 10*AppStyle.size1W
         }
         active: backRect.model.count>0
         sourceComponent: GridView{
             id:grid
             anchors{
                 fill: parent
-                topMargin: 10*size1H
-                bottomMargin: 10*size1H
+                topMargin: 10*AppStyle.size1H
+                bottomMargin: 10*AppStyle.size1H
             }
-            cellWidth: width / (parseInt(width / parseInt(500*size1W))===0?1:(parseInt(width / parseInt(500*size1W))))
-            cellHeight:  200*size1H
+            cellWidth: width / (parseInt(width / parseInt(500*AppStyle.size1W))===0?1:(parseInt(width / parseInt(500*AppStyle.size1W))))
+            cellHeight:  200*AppStyle.size1H
             clip: true
             layoutDirection: GridView.RightToLeft
             displaced: Transition {
@@ -42,10 +45,10 @@ Rectangle{
                 orientation: Qt.Vertical
                 anchors{
                     right: grid.right
-                    rightMargin: -10*size1W
+                    rightMargin: -10*AppStyle.size1W
                 }
                 height: parent.height
-                width: 15*size1W
+                width: 15*AppStyle.size1W
             }
             onContentYChanged: {
                 if(contentY<0 || contentHeight < grid.height)
@@ -66,22 +69,22 @@ Rectangle{
                     id:fullRect
                     anchors{
                         fill: parent
-                        margins: 5*size1W
+                        margins: 5*AppStyle.size1W
                     }
-                    color: Material.color(appStyle.primaryInt,Material.Shade50)
-                    radius: 15*size1W
+                    color: Material.color(AppStyle.primaryInt,Material.Shade50)
+                    radius: 15*AppStyle.size1W
                     Rectangle{
                         id:topRect
                         width: parent.width
-                        height: 90*size1H
-                        radius: 15*size1W
+                        height: 90*AppStyle.size1H
+                        radius: 15*AppStyle.size1W
                         Rectangle{
                             anchors.bottom: parent.bottom
                             width: parent.width
-                            height: 15*size1W
+                            height: 15*AppStyle.size1W
                             color: parent.color
                         }
-                        color: Material.color(appStyle.primaryInt,Material.ShadeA700)
+                        color: Material.color(AppStyle.primaryInt,Material.ShadeA700)
                         property var extensions: ["aac","ace","ai","aut","avi","bin","bmp","cad","cdr","css","db","dmg","doc","docx","dwf","dwg","eps",
                             "exe","flac","gif","hlp","htm","html","ini","iso","java","jpg","js","mkv","mov","mp3","mp4","mpg","pdf","php","png","ppt",
                             "ps","psd","rar","rss","rtf","svg","swf","sys","tiff","txt","xls","xlsx","zip",
@@ -89,58 +92,60 @@ Rectangle{
                         Image {
                             id: unprocessImg
                             source: parent.extensions.indexOf(model.file_extension.toLowerCase())!== -1?"qrc:/pack/"+(model.file_extension.toLowerCase())+".svg":"qrc:/pack/unknown.svg"
-                            width: 70*size1W
+                            width: 70*AppStyle.size1W
                             height: width
                             sourceSize.width: width*2
                             sourceSize.height: height*2
                             anchors{
                                 verticalCenter: parent.verticalCenter
                                 right: parent.right
-                                rightMargin: 15*size1W
+                                rightMargin: 15*AppStyle.size1W
                             }
                         }
                         Image {
                             id: sourceImg
                             /*source:  initial in visible: */
                             visible: (source = model.file_extension.toLowerCase().match(/svg|png|jpg|gif|jpeg/g)?model.file_source:"") !==""
-                            width: 70*size1W
+                            width: 70*AppStyle.size1W
                             height: width
                             sourceSize.width: width*2
                             sourceSize.height: height*2
                             anchors{
                                 verticalCenter: parent.verticalCenter
                                 left: parent.left
-                                leftMargin: 15*size1W
+                                leftMargin: 15*AppStyle.size1W
                             }
                             fillMode:Image.PreserveAspectFit
                         }
                         Text{
                             id: thingText
                             text: model.file_name + "."+ model.file_extension
-                            font{family: appStyle.appFont;pixelSize:  25*size1F;bold:true}
+                            font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
                             color: "white"
                             anchors{
                                 top:  parent.top
                                 bottom: parent.bottom
                                 right: unprocessImg.left
-                                rightMargin: 20*size1W
+                                rightMargin: 20*AppStyle.size1W
                                 left: sourceImg.visible?sourceImg.right:parent.left
-                                leftMargin: 20*size1W
+                                leftMargin: 20*AppStyle.size1W
                             }
                             verticalAlignment: Text.AlignVCenter
-                            wrapMode: Text.WordWrap
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            maximumLineCount: 2
+                            elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                         }
                     }
                     Flow{
                         anchors{
                             bottom: parent.bottom
-                            bottomMargin: 20*size1W
+                            bottomMargin: 20*AppStyle.size1W
                             horizontalCenter: parent.horizontalCenter
                         }
-                        spacing:  20*size1W
-                        App.Button{
+                        spacing:  20*AppStyle.size1W
+                        AppButton{
                             id:deleteBtn
-                            width: (parent.parent.width/2) - 20*size1W
+                            width: (parent.parent.width/2) - 20*AppStyle.size1W
                             text: fullRect.opacity === 0.8?qsTr("بازگرداندن"):qsTr("حذف")
                             Material.background: Material.Red
                             onClicked: {
@@ -148,11 +153,11 @@ Rectangle{
                                 {
                                     if(deleteBtn.text === qsTr("بازگرداندن"))
                                     {
-                                        model.deleted = 1
+                                        attachModel.set(index,{"change_type":0})
                                         fullRect.opacity = 1
                                     }
                                     else {
-                                        model.deleted = 0
+                                        attachModel.set(index,{"change_type":3})
                                         fullRect.opacity = 0.8
                                     }
                                 }
@@ -160,9 +165,9 @@ Rectangle{
                             }
 
                         }
-                        App.Button{
+                        AppButton{
                             id:openBtn
-                            width: (parent.parent.width/2)- 20*size1W
+                            width: (parent.parent.width/2)- 20*AppStyle.size1W
                             text: qsTr("باز کردن")
                             visible: !downloadBtn.visible
                             Material.background: Material.LightBlue
@@ -170,9 +175,9 @@ Rectangle{
                                 Qt.openUrlExternally(model.file_source)
                             }
                         }
-                        App.Button{
+                        AppButton{
                             id:downloadBtn
-                            width: (parent.parent.width/2)- 20*size1W
+                            width: (parent.parent.width/2)- 20*AppStyle.size1W
                             text: qsTr("دانلود")
                             visible: model.file_source === "" && !myTools.checkFileExist(model.file_name,model.file_extension)
                             Material.background: Material.LightGreen
@@ -197,7 +202,7 @@ Rectangle{
             anchors.fill: parent
             Image {
                 id: dragImg
-                width: 300*size1W
+                width: 300*AppStyle.size1W
                 visible: backRect.model.count === 0
                 height: width
                 source: dragItem.opacity === 1? "qrc:/first-shot.svg" :"qrc:/first-shot-drop.svg"
@@ -205,7 +210,7 @@ Rectangle{
                     right: parent.right
                     bottom: parent.bottom
                 }
-                mirror: !ltr
+                mirror: !AppStyle.ltr
                 sourceSize.width:width*2
                 sourceSize.height:height*2
             }
@@ -225,15 +230,15 @@ Rectangle{
                     for(let i=0;i<files.length;i++)
                     {
                         let file = myTools.getFileInfo(decodeURIComponent((files[i].trim())))
-                        if(usefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
+                        if(UsefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
                         {
-                            usefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true,null,900*size1W, ltr)
+                            UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true,900*AppStyle.size1W)
                             continue
                         }
 
                         if(file.file_size > 10485760) // Bigger than 10 Megabyte
                         {
-                            usefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true,null,900*size1W, ltr)
+                            UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true,900*AppStyle.size1W)
                             continue
                         }
 
@@ -242,7 +247,8 @@ Rectangle{
                                     {
                                         "file_source":"file://"+file.file_source,
                                         "file_name":file.file_name,
-                                        "file_extension":file.file_extension
+                                        "file_extension":file.file_extension,
+                                        "change_type":1
                                     }
                                     )
                     }
@@ -271,14 +277,14 @@ Rectangle{
                         for(let i=0;i<files.length;i++)
                         {
                             let file = myTools.getFileInfo(decodeURIComponent((files[i].trim())))
-                            if(usefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
+                            if(UsefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
                             {
-                                usefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true,null,900*size1W, ltr)
+                                UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true,900*AppStyle.size1W)
                                 continue
                             }
                             if(file.file_size > 10485760) // Bigger than 10 Megabyte
                             {
-                                usefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true,null,900*size1W, ltr)
+                                UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true,900*AppStyle.size1W)
                                 continue
                             }
 
@@ -287,7 +293,8 @@ Rectangle{
                                         {
                                             "file_source":"file://"+file.file_source,
                                             "file_name":file.file_name,
-                                            "file_extension":file.file_extension
+                                            "file_extension":file.file_extension,
+                                            "change_type":1
                                         }
                                         )
                         }
@@ -305,26 +312,26 @@ Rectangle{
                 anchors{
                     left: parent.left
                     right: parent.right
-                    rightMargin: !dargLoader.active?0:300*size1W
+                    rightMargin: !dargLoader.active?0:300*AppStyle.size1W
                 }
 
                 height: parent.height
-                font{family: appStyle.appFont;pixelSize: 25*size1F;bold:true}
-                color: appStyle.textColor
+                font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:true}
+                color: AppStyle.textColor
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
-            App.Button{
+            AppButton{
                 id: plusRect
-                width: 75*size1W
+                width: 75*AppStyle.size1W
                 height: width
                 radius: width/2
                 anchors{
                     left: parent.left
-                    leftMargin: -15*size1W
+                    leftMargin: -15*AppStyle.size1W
                     top: parent.top
-                    topMargin: -15*size1W
+                    topMargin: -15*AppStyle.size1W
                 }
                 onClicked: {
                     fileLoader.active = true
@@ -358,7 +365,7 @@ Rectangle{
                     id:plusColor
                     source: plusIcon
                     anchors.fill: plusIcon
-                    color: appStyle.textOnPrimaryColor
+                    color: AppStyle.textOnPrimaryColor
                 }
             }
         }

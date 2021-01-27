@@ -2,19 +2,18 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
-import "qrc:/Components/" as App
 import QtQuick.Templates 2.14 as T
+import Components 1.0
+import Global 1.0
 
 Item {
     id:item
-    width: parent.width
-    height:  190*size1H
     property string placeholderText : ""
     property alias text: detailInput.text
     property bool areaInDialog: false
     property int maximumLength : 65535
     property alias detailInput: detailInput
-    Rectangle{anchors{fill:control}width: control.width;height: control.height;border.width: 2*size1W; border.color: detailInput.focus? appStyle.primaryColor : appStyle.borderColor;color: "transparent";radius: 15*size1W}
+    Rectangle{anchors{fill:control}width: control.width;height: control.height;border.width: 2*AppStyle.size1W; border.color: detailInput.focus? AppStyle.primaryColor : AppStyle.borderColor;color: "transparent";radius: 15*AppStyle.size1W}
 
     Flickable{
         id: control
@@ -42,20 +41,20 @@ Item {
         contentHeight: detailInput.height
         TextArea.flickable:T.TextArea {
             id: detailInput
-            rightPadding: 30*size1W
-            leftPadding: 12*size1W
-            topPadding: 20*size1H
-            bottomPadding: 20*size1H
-            font{family: appStyle.appFont;pixelSize:  25*size1F;bold:false}
-            color: appStyle.textColor
+            rightPadding: 30*AppStyle.size1W
+            leftPadding: 12*AppStyle.size1W
+            topPadding: 20*AppStyle.size1H
+            bottomPadding: 20*AppStyle.size1H
+            font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:false}
+            color: AppStyle.textColor
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            placeholderTextColor: appStyle.borderColor
+            placeholderTextColor: AppStyle.borderColor
             placeholderText: item.placeholderText
-            Material.accent: enabled ?appStyle.primaryColor: Material.hintTextColor
+            Material.accent: enabled ?AppStyle.primaryColor: Material.hintTextColor
             selectionColor: Material.accentColor
             selectedTextColor: Material.primaryHighlightedTextColor
             cursorDelegate: CursorDelegate { }
-            font{family: appStyle.appFont;pixelSize:20*size1F}
+            font{family: AppStyle.appFont;pixelSize:20*AppStyle.size1F}
             selectByMouse: true
             selectByKeyboard: true
             mouseSelectionMode: TextEdit.SelectWords
@@ -75,54 +74,54 @@ Item {
                 right: control.right
             }
             height: parent.height
-            width: hovered || pressed?18*size1W:12*size1W
+            width: hovered || pressed?18*AppStyle.size1W:12*AppStyle.size1W
         }
     }
     Label {
         text: detailInput.placeholderText
-        color: detailInput.focus || detailInput.text!==""?appStyle.textColor: appStyle.placeholderColor
+        color: detailInput.focus || detailInput.text!==""?AppStyle.textColor: AppStyle.placeholderColor
         anchors{
             top: control.top
-            topMargin: detailInput.focus || detailInput.text!==""?-5*size1H:height-10*size1H
+            topMargin: detailInput.focus || detailInput.text!==""?-5*AppStyle.size1H:height-10*AppStyle.size1H
             right:  control.right
             rightMargin: detailInput.rightPadding
         }
-        font{family: appStyle.appFont;pixelSize:( detailInput.focus || detailInput.text!=""?20*size1F:25*size1F);bold:detailInput.focus || detailInput.text}
+        font{family: AppStyle.appFont;pixelSize:( detailInput.focus || detailInput.text!=""?20*AppStyle.size1F:25*AppStyle.size1F);bold:detailInput.focus || detailInput.text}
         Behavior on anchors.topMargin {
             NumberAnimation{ duration: 160}
         }
         Rectangle{
-            width: parent.width + 30*size1W
+            width: parent.width + 30*AppStyle.size1W
             anchors.right: parent.right
-            anchors.rightMargin: -15*size1W
+            anchors.rightMargin: -15*AppStyle.size1W
             height: parent.height
             z:-1
-            color: item.areaInDialog? appStyle.dialogBackgroundColor
-                                    : appStyle.appBackgroundColor
+            color: item.areaInDialog? AppStyle.dialogBackgroundColor
+                                    : AppStyle.appBackgroundColor
             visible: detailInput.focus || detailInput.text!==""
-            radius: 15*size1W
+            radius: 15*AppStyle.size1W
         }
     }
     Label {
         id: counterLabel
         text: detailInput.length+" / "+ item.maximumLength
-        color: appStyle.placeholderColor
+        color: AppStyle.placeholderColor
         anchors{
             left: control.left
-            leftMargin: 30 *size1W
+            leftMargin: 30 *AppStyle.size1W
             bottom: control.bottom
-            bottomMargin: -15*size1H
+            bottomMargin: -15*AppStyle.size1H
         }
-        font{family: appStyle.appFont;pixelSize:( 20*size1F);bold:true}
+        font{family: AppStyle.appFont;pixelSize:( 20*AppStyle.size1F);bold:true}
         Rectangle{
-            width: parent.width + 30*size1W
+            width: parent.width + 30*AppStyle.size1W
             anchors.right: parent.right
-            anchors.rightMargin: -15*size1W
+            anchors.rightMargin: -15*AppStyle.size1W
             height: parent.height
             z:-1
-            color: item.areaInDialog? appStyle.dialogBackgroundColor
-                                    : appStyle.appBackgroundColor
-            radius: 15*size1W
+            color: item.areaInDialog? AppStyle.dialogBackgroundColor
+                                    : AppStyle.appBackgroundColor
+            radius: 15*AppStyle.size1W
         }
     }
 }
