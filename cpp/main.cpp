@@ -1,16 +1,10 @@
 #include <QGuiApplication>// Require For app
 #include <QQmlApplicationEngine>// Require For engine
-#include "translator.h" // Require For Translator
 #include <QQmlContext> // Require For setContextProperty()
 #include <QQuickStyle> // Require For setStyle()
 #include <QIcon> // Require For icon
 #include <QSettings> // Require For settings
-#include "cpp/msysinfo.h" // Require For MSysInfo
-#include "cpp/msecurity.h" // Require For MSecurity
-#include "cpp/qcustomdate.h"// Require For QCustomDate
-#include "cpp/qdateconvertor.h"// Require For QDateConvertor
-#include "tools.h" // Require For Tools
-#include "memoritoenum.h"
+#include "translator.h" // Require For Translator
 
 int main(int argc, char *argv[])
 {
@@ -22,12 +16,13 @@ int main(int argc, char *argv[])
     app.setDesktopFileName("Memorito");
     app.setOrganizationDomain("Memorito.ir");
 
+    QQmlApplicationEngine engine;
+
     //**************** App Style ****************//
     QQuickStyle::setStyle("Material");
     app.setWindowIcon(QIcon(":/icon.png"));
     //*******************************************//
 
-    QQmlApplicationEngine engine;
 
     //**************** Load Language of App ****************//
     QSettings settings;
@@ -42,18 +37,17 @@ int main(int argc, char *argv[])
     bool isDebug = false;
     #endif
     engine.rootContext()->setContextProperty("isDebug",isDebug);
+
+    //******************************************************//
+    QString domain = isDebug?app.platformName() == "android"?"http://192.168.0.117"
+                                                                :"http://memorito.local"
+                                   :"https://memorito.ir";
+    engine.rootContext()->setContextProperty("domain",domain);
+
+    engine.addImportPath("qrc:/");
+
     //******************************************************//
 
-    //**************** Registry C++ To QML ****************//
-    qmlRegisterType<MSysInfo>("MSysInfo", 1, 0, "SystemInfo");
-    qmlRegisterType<MSecurity>("MSecurity", 1, 0, "MSecurity");
-    qmlRegisterType<QCustomDate>("MDate", 1 ,0, "CustomDate");
-    qmlRegisterType<QDateConvertor>("MDate", 1, 0, "DateConvertor");
-    qmlRegisterType<Tools>("MTools", 1, 0, "MTools");
-    qmlRegisterType<MemoritoEnum>("MEnum", 1, 0, "Memorito");
-    //******************************************************//
-
-    //////////////
     const QUrl url(QStringLiteral("qrc:/StartPage.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
