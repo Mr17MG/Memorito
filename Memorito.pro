@@ -17,21 +17,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         cpp/main.cpp \
-        cpp/memoritoenum.cpp \
-        cpp/msecurity.cpp \
-        cpp/msysinfo.cpp \
-        cpp/qcustomdate.cpp \
-        cpp/qdateconvertor.cpp \
-        cpp/tools.cpp \
         cpp/translator.cpp
 
 HEADERS += \
-    cpp/memoritoenum.h \
-    cpp/msecurity.h \
-    cpp/msysinfo.h \
-    cpp/qcustomdate.h \
-    cpp/qdateconvertor.h \
-    cpp/tools.h \
     cpp/translator.h
 
 
@@ -44,8 +32,10 @@ RESOURCES += \
 TRANSLATIONS += \
     ts/en.ts
 
+DESTDIR = $$PWD/../FinalExcutable
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH += $$PWD/qml
+QML_IMPORT_PATH += $$PWD/../FinalExcutable
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
@@ -66,6 +56,6 @@ android{
         android/res/values/libs.xml
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+    ANDROID_ABIS = armeabi-v7a
 }
 
-ANDROID_ABIS = armeabi-v7a
