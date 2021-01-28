@@ -4,6 +4,7 @@ import QtQuick.Templates 2.14 as T
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls.Material.impl 2.14
 import QtQuick.Window 2.14
+import Global 1.0
 
 T.Menu {
     id: control

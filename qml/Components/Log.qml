@@ -13,8 +13,10 @@ Drawer {
     property int endTime : 5000
     property int now: 1000
     onVisibleChanged: {
-        if(!visible && typeof destroy === "function")
-            destroy()
+        try{
+            if(!visible && typeof destroy === "function")
+                destroy()
+        }catch(e){}
     }
     modal: false
     closePolicy: Dialog.NoAutoClose
@@ -22,7 +24,7 @@ Drawer {
     height: AppStyle.size1H*30 + text.height
     onClosed: {
         if(typeof callAfterClose === "function")
-        callAfterClose()
+            callAfterClose()
     }
     edge: !AppStyle.ltr ? Qt.LeftEdge : Qt.RightEdge
     Behavior on y{
