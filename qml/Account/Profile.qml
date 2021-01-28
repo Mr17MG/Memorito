@@ -2,12 +2,36 @@ import QtQuick 2.14
 import QtGraphicalEffects 1.14
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls 2.14
+import QtQuick.Dialogs 1.3
 import Components 1.0
 import Global 1.0
+import MTools 1.0
 
 Item {
     property bool isEditable: false
     property bool modified: false
+    MTools{id:myTools}
+    Loader{
+        id:fileLoader
+        active: false
+        sourceComponent: FileDialog{
+            id:fileDialog
+            selectMultiple: false
+            title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
+            nameFilters: [ "All Images (*.png *.jpeg *jpg)" ]
+            folder: shortcuts.pictures
+            sidebarVisible: false
+            onAccepted: {
+                let file = fileDialog.fileUrl;
+                UsefulFunc.mainStackPush("qrc:/Components/ImageEditor.qml",qsTr("ویرایش‌گر تصویر"),{imageSource:file})
+                fileLoader.active = false
+            }
+            onRejected: {
+                fileLoader.active = false
+            }
+        }
+    }
+
 
     Rectangle{
         id: root
@@ -50,6 +74,10 @@ Item {
             anchors.fill: parent
             enabled: isEditable
             cursorShape:Qt.PointingHandCursor
+            onClicked: {
+                fileLoader.active = true
+                fileLoader.item.open()
+            }
         }
     }
 

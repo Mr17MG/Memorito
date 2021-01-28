@@ -62,5 +62,6 @@
         <file>Global/SettingDriver.qml</file>
         <file>Global/AppStyle.qml</file>
         <file>Global/UserAPI.qml</file>
+        <file>Components/ImageEditor.qml</file>
     </qresource>
 </RCC>
