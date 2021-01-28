@@ -124,5 +124,24 @@
         <file>empties/empty-list-7.svg</file>
         <file>empties/empty-list-8.svg</file>
         <file>empties/empty-list-9.svg</file>
+        <file>nodata/no-data-0.svg</file>
+        <file>nodata/no-data-1.svg</file>
+        <file>nodata/no-data-10.svg</file>
+        <file>nodata/no-data-11.svg</file>
+        <file>nodata/no-data-12.svg</file>
+        <file>nodata/no-data-13.svg</file>
+        <file>nodata/no-data-14.svg</file>
+        <file>nodata/no-data-15.svg</file>
+        <file>nodata/no-data-16.svg</file>
+        <file>nodata/no-data-17.svg</file>
+        <file>nodata/no-data-18.svg</file>
+        <file>nodata/no-data-2.svg</file>
+        <file>nodata/no-data-3.svg</file>
+        <file>nodata/no-data-4.svg</file>
+        <file>nodata/no-data-5.svg</file>
+        <file>nodata/no-data-6.svg</file>
+        <file>nodata/no-data-7.svg</file>
+        <file>nodata/no-data-8.svg</file>
+        <file>nodata/no-data-9.svg</file>
     </qresource>
 </RCC>
