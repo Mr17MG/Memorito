@@ -47,6 +47,13 @@ Item {
             width: gridView.cellWidth - 10*AppStyle.size1W
             height:  gridView.cellHeight - 10*AppStyle.size1H
             color: Material.color(AppStyle.primaryInt,Material.Shade50)
+            MouseArea{
+                anchors.fill: parent
+                cursorShape: Qt.OpenHandCursor
+                onClicked: {
+                    UsefulFunc.mainStackPush("qrc:/Things/ThingList.qml",qsTr("محل انجام")+": "+model.context_name,{listId:Memorito.Contexts,categoryId:model.id,pageTitle:model.context_name})
+                }
+            }
                 Image {
                     id: contextImage
                     source: "qrc:/context.svg"

@@ -47,6 +47,15 @@ Item {
             width: gridView.cellWidth - 10*AppStyle.size1W
             height:  gridView.cellHeight - 10*AppStyle.size1H
             color: Material.color(AppStyle.primaryInt,Material.Shade50)
+
+            MouseArea{
+                anchors.fill: parent
+                cursorShape: Qt.OpenHandCursor
+                onClicked: {
+                    UsefulFunc.mainStackPush("qrc:/Things/ThingList.qml",qsTr("دوست")+": "+model.friend_name,{listId:Memorito.Friends,categoryId:model.id,pageTitle:model.friend_name})
+                }
+            }
+
             Rectangle{
                 id: friendRect
                 height: 100*AppStyle.size1H
