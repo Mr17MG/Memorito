@@ -1,33 +1,65 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+import Global 1.0
+import MTools 1.0
 
 Item{
-
+    MTools{id:myTools}
     property real lastValue: 0
     property bool onlySquare: true
     property bool hasSquareLine: true
-    property int rulersSize: 18
+    property int rulersSize: 30*AppStyle.size1W
     property alias selectedArea: selectedArea
     property alias imageFlickable:imageFlickable
     property alias mainImage:mainImage
     property string imageSource: ""
+    property string rotateCheckImage: ""
 
-    function setZoom(value,mouseX,mouseY)
+    function cameInToPage(object){
+        let rSource = myTools.checkOrientation(imageSource);
+        if(rSource !== ""){
+            rotateCheckImage="file://"+rSource
+        }
+        else {
+            rotateCheckImage= imageSource
+        }
+        imageSource=""
+    }
+
+    function setZoom(value,isPinch = false)
     {
-        value = lastValue+value
-        if(value <= 2 && value >= -2)
+        if(!isPinch)
+            value = lastValue+value
+        if(isPinch)
+        {
+            if(mainImage.width*(value).toFixed(2) <selectedArea.width || mainImage.height*(value).toFixed(2) < selectedArea.height
+                    ||  mainImage.height*(value).toFixed(2) > imageArea.height*2 || mainImage.width*(value).toFixed(2)>imageArea.width*2)
+                return false
+            mainImage.width=mainImage.width*(value).toFixed(2)
+            mainImage.height=mainImage.height*(value).toFixed(2)
+            return true
+        }
+        else if(value <= 2 && value >= -2)
         {
             let scale = 1+(value-lastValue)
+            if(mainImage.width*(scale).toFixed(2) <selectedArea.width || mainImage.height*(scale).toFixed(2) < selectedArea.height)
+                return false
             mainImage.width=mainImage.width*(scale).toFixed(2)
             mainImage.height=mainImage.height*(scale).toFixed(2)
-            lastValue=value.toFixed(2)
+            lastValue= parseFloat(value.toFixed(2))
+            return true
         }
     }
     Item{
         id:imageArea
-        anchors.centerIn: parent
-        width: height
-        height: parent.height
+        width: Math.min(height,parent.width)
+        height: Math.min(parent.height,parent.width) - (btnArea.height+ 30*AppStyle.size1W)
+        anchors{
+            top: parent.top
+            bottom: btnArea.top
+            horizontalCenter: parent.horizontalCenter
+        }
+
         Flickable{
             id: imageFlickable
             anchors.fill: parent
@@ -35,24 +67,17 @@ Item{
 
             contentWidth: mainImage.width
             contentHeight: mainImage.height
-
             onWidthChanged: {
-                if(mainImage.width < imageArea.width)
-                    mainImage.width = imageArea.width
-
                 if(selectedArea.width === 0 && imageArea.width>0)
                     selectedArea.width = width/2
             }
             onHeightChanged: {
-                if(mainImage.height < imageArea.height)
-                    mainImage.height = imageArea.height
-
                 if(selectedArea.height === 0 && imageArea.height>0)
                     selectedArea.height = height/2
             }
 
-            ScrollBar.vertical  : ScrollBar {id:vScrollBar}
-            ScrollBar.horizontal: ScrollBar {id:hScrollbar }
+            ScrollBar.vertical  : ScrollBar { id:vScrollBar }
+            ScrollBar.horizontal: ScrollBar { id:hScrollbar }
             Keys.onUpPressed    : vScrollBar.decrease()
             Keys.onLeftPressed  : hScrollbar.decrease()
             Keys.onDownPressed  : vScrollBar.increase()
@@ -74,78 +99,91 @@ Item{
 
             Image {
                 id: mainImage
-                width: imageArea.width
-                height: imageArea.height
-                onWidthChanged: {
-                    if(width < imageArea.width)
-                        width = imageArea.width
-                }
-                onHeightChanged: {
-                    if(height < imageArea.height)
-                        height = imageArea.height
-                }
-
-                clip:true
                 asynchronous: true
-                fillMode: Image.PreserveAspectFit
-                source: imageSource
+                source: rotateCheckImage
+                onStatusChanged:  {
+                    if(status === Image.Ready)
+                    {
+                        if(sourceSize.width === sourceSize.height)
+                        {
+                            mainImage.width  = imageArea.width
+                            mainImage.height = imageArea.height
+                        }
+                        else{
+                            let scale =0
+                            while(true){
+                                scale =0.9
+                                if((parseFloat(mainImage.width*(scale).toFixed(2)) < imageArea.width) && (parseFloat(mainImage.height*(scale).toFixed(2)) < imageArea.height))
+                                    break
+
+                                mainImage.width=   parseFloat(mainImage.width*(scale).toFixed(2))
+                                mainImage.height=  parseFloat(mainImage.height*(scale).toFixed(2))
+                            }
+                            selectedArea.width = mainImage.width
+                        }
+                    }
+                }
             }
         }
-        Rectangle{
-            id:a
+
+        Loader{
+            active: true
+            asynchronous: true
             anchors{
                 right: selectedArea.left
                 left: imageArea.left
                 top: imageArea.top
                 bottom: imageArea.bottom
             }
-            color:"black"
-            opacity: 0.4
+            sourceComponent: Rectangle{ color:"black"; opacity: 0.6 }
         }
 
-        Rectangle{
-            id:c
+        Loader{
+            active: true
+            asynchronous: true
             anchors{
                 left : selectedArea.right
                 right: imageArea.right
                 top: imageArea.top
                 bottom: imageArea.bottom
             }
-            color:"black"
-            opacity: 0.4
+            sourceComponent: Rectangle{ color:"black"; opacity: 0.6 }
+
         }
 
-        Rectangle{
-            id:b
+        Loader{
+            active: true
+            asynchronous: true
             anchors{
                 bottom: selectedArea.top
                 top: imageArea.top
                 right: selectedArea.right
                 left: selectedArea.left
             }
-            color:"black"
-            opacity: 0.4
+            sourceComponent: Rectangle{ color:"black"; opacity: 0.6 }
+
         }
 
-        Rectangle{
-            id:d
+        Loader{
+            active: true
+            asynchronous: true
             anchors{
                 top: selectedArea.bottom
                 bottom: imageArea.bottom
                 left: selectedArea.left
                 right: selectedArea.right
             }
-            color:"black"
-            opacity: 0.4
+            sourceComponent: Rectangle{ color:"black"; opacity: 0.6 }
         }
 
         Rectangle {
             id:selectedArea
-            width: imageArea.width  / 2
-            height: imageArea.width / 2
+            width: mainImage.width
+            height: width
             color: "transparent"
-            border { width: 2; color: "white"}
+            border { width: 4*AppStyle.size1W; color: "white"}
             MouseArea {     // drag mouse area
+                enabled: !pinchArea.enabled
                 anchors.fill: parent
                 cursorShape: Qt.DragMoveCursor
                 drag{
@@ -155,72 +193,114 @@ Item{
                 onWheel: {
                     var delta = wheel.angleDelta.y/120;
                     if(delta > 0)
-                        setZoom(0.1,wheel.x,wheel.y)
+                        setZoom(0.1)
                     else
-                        setZoom(-0.1,wheel.x,wheel.y)
+                        setZoom(-0.1)
                     imageFlickable.forceActiveFocus()
                 }
             }
+
+            PinchArea{
+                id: pinchArea
+                enabled: Qt.platform.os === "android" || Qt.platform.os === "ios"
+                anchors.fill: parent
+                pinch.target: selectedArea
+                property real lastScale: 0
+                onPinchUpdated: {
+                    if(lastScale<pinch.scale)
+                    {
+                        setZoom(pinch.scale/1,true)
+                        lastScale = pinch.scale
+                    }
+                    else
+                    {
+                        setZoom(-pinch.scale/1,true)
+                        lastScale = -pinch.scale
+                    }
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    drag{
+                        target: selectedArea
+                        smoothed: true
+                    }
+                }
+            }
+
             Component.onCompleted: {
-                x = (imageArea.width  - selectedArea.width ) /2
-                y = (imageArea.height - selectedArea.height) /2
+                x = 0
+                y = 0
             }
             onXChanged: {
+                if(mainImage.status !== Image.Ready)
+                    return
                 if(x < 0)
                     x = 0
-                else if(x+selectedArea.width > (Math.min(mainImage.width,imageArea.width)))
+                else if(x+selectedArea.width > Math.min(mainImage.width,imageArea.width))
                 {
-                    x = (Math.min(mainImage.width,imageArea.width)) - selectedArea.width
+                    x = Math.min(mainImage.width,imageArea.width) - selectedArea.width
                 }
             }
             onYChanged: {
+                if(mainImage.status !== Image.Ready)
+                    return
                 if( y < 0)
                     y = 0
-                else if(y+selectedArea.height > imageArea.height)
-                    y = imageArea.height - selectedArea.height
+                else if(y+selectedArea.height > Math.min(mainImage.height,imageArea.height))
+                    y = Math.min(mainImage.height,imageArea.height) - selectedArea.height
+
             }
 
             onWidthChanged: {
-                if(x+width > (Math.min(mainImage.width,imageArea.width)) )
+                if(mainImage.status !== Image.Ready)
+                    return
+                if(x+width > Math.min(mainImage.width,imageArea.width) )
                 {
-                    width = (Math.min(mainImage.width,imageArea.width))-x
+                    width = Math.min(mainImage.width,imageArea.width)-x
                 }
 
                 if(onlySquare)
                     height = width
             }
             onHeightChanged: {
-                if(y+height > (Math.min(mainImage.height,imageArea.height)))
+                if(mainImage.status !== Image.Ready)
+                    return
+                if(y+height > Math.min(mainImage.height,imageArea.height) )
                 {
-                    height = (Math.min(mainImage.height,imageArea.height))-y
+                    height = Math.min(mainImage.height,imageArea.height)-y
                 }
                 if(onlySquare)
                     width = height
             }
 
-            Rectangle{ width  : parent.width  ; height: 2; y: parent.height /3    ; x:0 ; color: "white"; opacity: 0.5 ; visible:hasSquareLine}
-            Rectangle{ width  : parent.width  ; height: 2; y: parent.height /3 *2 ; x:0 ; color: "white"; opacity: 0.5 ; visible:hasSquareLine}
-            Rectangle{ height : parent.height ; width:  2; x: parent.width  /3    ; y:0 ; color: "white"; opacity: 0.5 ; visible:hasSquareLine}
-            Rectangle{ height : parent.height ; width:  2; x: parent.width  /3 *2 ; y:0 ; color: "white"; opacity: 0.5 ; visible:hasSquareLine}
+            Rectangle{ width  : parent.width  ; height: 2*AppStyle.size1W; y: parent.height /3    ; x:0 ; color: "white"; opacity: 0.5 ; visible:hasSquareLine}
+            Rectangle{ width  : parent.width  ; height: 2*AppStyle.size1W; y: parent.height /3 *2 ; x:0 ; color: "white"; opacity: 0.5 ; visible:hasSquareLine}
+            Rectangle{ height : parent.height ; width:  2*AppStyle.size1W; x: parent.width  /3    ; y:0 ; color: "white"; opacity: 0.5 ; visible:hasSquareLine}
+            Rectangle{ height : parent.height ; width:  2*AppStyle.size1W; x: parent.width  /3 *2 ; y:0 ; color: "white"; opacity: 0.5 ; visible:hasSquareLine}
 
-            Canvas {
-                id:canvas
-                width: selectedArea.width
-                height: selectedArea.height
-                opacity: 0.4
-                onAvailableChanged: {
-                    let maskcontext = canvas.getContext('2d');
-                    canvas.markDirty()
-                    maskcontext.fillStyle = "black";
-                    if(onlySquare)
-                        maskcontext.arc(parent.width/2,parent.width/2,parent.width/2,parent.width/2,Math.PI);
-                    else
+            Loader{
+                active: rotateCheckImage !== ""
+                asynchronous: true
+                sourceComponent: Canvas {
+                    id:canvas
+                    width: selectedArea.width
+                    height: selectedArea.height
+                    opacity: 0.6
+                    onAvailableChanged: {
+                        canvas.markDirty()
+                        let maskcontext = canvas.getContext('2d');
+                        maskcontext.fillStyle = "black";
+                        if(onlySquare)
+                            maskcontext.arc(parent.width/2,parent.width/2,parent.width/2,parent.width/2,Math.PI);
+                        else
+                            maskcontext.fillRect(0, 0, canvas.width, canvas.height);
                         maskcontext.fillRect(0, 0, canvas.width, canvas.height);
-                    maskcontext.fillRect(0, 0, canvas.width, canvas.height);
-                    maskcontext.globalCompositeOperation = 'xor';
+                        maskcontext.globalCompositeOperation = 'xor';
 
+                        canvas.markDirty()
 
-                    maskcontext.fill();
+                        maskcontext.fill();
+                    }
                 }
             }
 
@@ -450,6 +530,98 @@ Item{
             }
 
         }
+
+
     }
 
+    Loader{
+        id:btnArea
+        active: true
+        asynchronous: true
+        width: parent.width
+        height: 100*AppStyle.size1W
+        anchors{
+            bottom: parent.bottom
+            bottomMargin: 15*AppStyle.size1W
+            horizontalCenter: parent.horizontalCenter
+        }
+        sourceComponent: Item { Flow
+            {
+                spacing:20*AppStyle.size1W
+                anchors{ centerIn: parent }
+                layoutDirection: Qt.RightToLeft
+
+                AppButton{
+                    id: submitBtn
+                    radius: width
+                    height: width
+                    width: 70*AppStyle.size1W
+                    icon{
+                        source: "qrc:/tick.svg"
+                        color: AppStyle.textOnPrimaryColor
+                        width: 40*AppStyle.size1W
+                    }
+                    display: AppButton.IconOnly
+                    onClicked: {
+                        let source = "file://" + myTools.cropImageAndSave(rotateCheckImage,"profile-"+User.id,
+                                                                          (selectedArea.x + imageFlickable.contentX),
+                                                                          (selectedArea.y + imageFlickable.contentY),
+                                                                          selectedArea.width,
+                                                                          selectedArea.height,
+                                                                          mainImage.width,
+                                                                          mainImage.height
+                                                                          )
+
+                        UsefulFunc.mainStackPop({"profile_source":source,"base64":myTools.encodeToBase64(source)})
+                        myTools.deleteFile("tempSelection","jpeg")
+                    }
+                }
+                AppButton{
+                    id: zoomInBtn
+                    radius: width
+                    height: width
+                    width: 70*AppStyle.size1W
+                    icon{
+                        source: "qrc:/zoom-in.svg"
+                        color: AppStyle.textOnPrimaryColor
+                        width: 40*AppStyle.size1W
+                    }
+                    display: AppButton.IconOnly
+                    onClicked: {
+                        setZoom(0.3)
+                    }
+                }
+                AppButton{
+                    id: zoomOutBtn
+                    radius: width
+                    height: width
+                    width: 70*AppStyle.size1W
+                    icon{
+                        source: "qrc:/zoom-out.svg"
+                        color: AppStyle.textOnPrimaryColor
+                        width: 40*AppStyle.size1W
+                    }
+                    display: AppButton.IconOnly
+                    onClicked: {
+                        setZoom(-0.2)
+                    }
+                }
+                AppButton{
+                    id: discardBtn
+                    radius: width
+                    height: width
+                    width: 70*AppStyle.size1W
+                    icon{
+                        source: "qrc:/close.svg"
+                        color: AppStyle.textOnPrimaryColor
+                        width: 30*AppStyle.size1W
+                    }
+                    display: AppButton.IconOnly
+                    onClicked: {
+                        UsefulFunc.mainStackPop()
+                    }
+                }
+            }
+        }
+    }
 }
