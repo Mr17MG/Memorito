@@ -21,6 +21,11 @@ QtObject {
     {
         this.mainLoader = mainLoader;
     }
+    property var authLoader :null
+    function setAuthLoaderVar(authLoader)
+    {
+        this.authLoader = authLoader;
+    }
 
     function faToEnNumber(num)
     {
