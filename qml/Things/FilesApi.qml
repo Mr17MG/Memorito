@@ -41,7 +41,7 @@ QtObject {
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -78,7 +78,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -91,6 +91,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
         let query = "user_id=" + User.id + "&file_id_list="+changesList
         xhr.open("GET", domain+"/api/v1/files"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
@@ -163,6 +164,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
         let query = "user_id=" + User.id + "&things_id="+thingId
         xhr.open("GET", domain+"/api/v1/files"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         var busyDialog = UsefulFunc.showBusy("",
                                              function()
@@ -206,7 +208,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -259,6 +261,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
         xhr.responseType = 'json';
         xhr.open("POST", domain+"/api/v1/files",true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         var busyDialog = UsefulFunc.showBusy("در حال ارسال فایل ها");
         xhr.timeout = 10000;
@@ -280,7 +283,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -304,6 +307,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
         let query = "user_id=" + User.id
         xhr.open("DELETE", domain+"/api/v1/files/"+fileId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -333,7 +337,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -429,7 +433,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -457,7 +461,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -475,7 +479,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction

@@ -39,7 +39,7 @@ QtObject {
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -76,7 +76,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -89,6 +89,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
         let query = "user_id=" + User.id + "&log_id_list="+changesList
         xhr.open("GET", domain+"/api/v1/logs"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
@@ -160,6 +161,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
         let query = "user_id=" + User.id
         xhr.open("GET", domain+"/api/v1/logs"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         var busyDialog = UsefulFunc.showBusy("",
                                              function()
@@ -197,7 +199,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -225,6 +227,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
         xhr.responseType = 'json';
         xhr.open("POST", domain+"/api/v1/logs",true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -257,7 +260,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -286,6 +289,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
         xhr.responseType = 'json';
         xhr.open("PATCH", domain+"/api/v1/logs/"+logId,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -316,7 +320,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -341,6 +345,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
         let query = "user_id=" + User.id
         xhr.open("DELETE", domain+"/api/v1/logs/"+logId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -372,7 +377,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -435,7 +440,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
 
     function insertLogs(values)
     {
-        let mapValues = values.map(item => [ item.id??0, String(item.log_text)??"", item.type_id??0,  item.row_id??0, item.user_id??0,   String(item.register_date)??"", String(item.modified_date)??"" ] )
+        let mapValues = values.map(item => [ item.id??0, String(item.log_text)??"", item.type_id??0,  item.row_id??0, item.user_id??0,   item.register_date??"", item.modified_date??"" ] )
         let finalString = ""
         for(let i=0;i<mapValues.length;i++)
         {
@@ -467,7 +472,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -495,7 +500,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -513,7 +518,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction

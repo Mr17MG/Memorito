@@ -38,7 +38,7 @@ QtObject {
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -60,24 +60,56 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                                     let item = result.rows.item(i)
                                     if(item.changes_type === 1)
                                     {
-                                        addThing(null,item.title,item.detail,item.list_id,item.has_files,item.context_id,item.priority_id,item.energy_id,item.estimate_time,item.category_id,
-                                                 item.due_date,item.friend_id,item.local_id,item.change_id)
+                                        let json = JSON.stringify(
+                                                {
+                                                    title           : item.title                                                ,
+                                                    user_id         : User.id                                                   ,
+                                                    detail          : item.detail                                               ,
+                                                    list_id         : item.list_id                                              ,
+                                                    has_files       : parseInt(item.has_files)                                  ,
+                                                    energy_id       : item.energy_id        === 0 ? null :  item.energy_id      ,
+                                                    context_id      : item.context_id       === 0 ? null :  item.context_id     ,
+                                                    priority_id     : item.priority_id      === 0 ? null :  item.priority_id    ,
+                                                    estimate_time   : item.estimate_time    === 0 ? null :  item.estimate_time  ,
+                                                    due_date        : item.due_date         === ""? null :  item.due_date       ,
+                                                    friend_id       : item.friend_id        === 0 ? null :  item.friend_id      ,
+                                                    category_id     : item.category_id      === 0 ? null :  item.category_id    ,
+                                                    is_done         : item.is_done ?? 0
+                                                }, null, 1);
+
+                                        addThing(json,null,item.local_id,item.change_id)
                                     }
                                     else if(item.changes_type === 2)
                                     {
-                                        editThing(item.id,-1,null,null,item.title,item.detail,item.list_id,item.has_files,item.context_id,item.priority_id,item.energy_id,item.estimate_time,
-                                                  item.category_id,decodeURIComponent(item.due_date)??"",item.friend_id,item.local_id,item.change_id)
+                                        let json = JSON.stringify(
+                                                {
+                                                    title           : item.title                                                ,
+                                                    user_id         : User.id                                                   ,
+                                                    detail          : item.detail                                               ,
+                                                    list_id         : item.list_id                                              ,
+                                                    has_files       : parseInt(item.has_files)                                  ,
+                                                    energy_id       : item.energy_id        === 0 ? null :  item.energy_id      ,
+                                                    context_id      : item.context_id       === 0 ? null :  item.context_id     ,
+                                                    priority_id     : item.priority_id      === 0 ? null :  item.priority_id    ,
+                                                    estimate_time   : item.estimate_time    === 0 ? null :  item.estimate_time  ,
+                                                    due_date        : item.due_date         === ""? null :  item.due_date       ,
+                                                    friend_id       : item.friend_id        === 0 ? null :  item.friend_id      ,
+                                                    category_id     : item.category_id      === 0 ? null :  item.category_id    ,
+                                                    is_done         : item.is_done ?? 0
+                                                }, null, 1);
+
+                                        editThing(item.id,json,null,item.local_id,item.change_id)
                                     }
                                     else if(item.changes_type === 3)
                                     {
-                                        deleteThing(item.id,null,-1,item.local_id,item.change_id)
+                                        deleteThing(item.id,item.local_id,item.change_id)
                                     }
                                 }
                             }
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -90,6 +122,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         let query = "user_id=" + User.id + "&thing_id_list="+changesList
         xhr.open("GET", domain+"/api/v1/things"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
@@ -159,12 +192,16 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
             return model
         }
 
+        if(listId === Memorito.Done)
+            return
+
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
         let query = "user_id=" + User.id + "&list_id="+listId + (categoryId === -1 ?"":"&category_id="+categoryId)
         xhr.open("GET", domain+"/api/v1/things"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         var busyDialog = UsefulFunc.showBusy("",
                                              function()
@@ -207,7 +244,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -230,6 +267,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         xhr.responseType = 'json';
         xhr.open("POST", domain+"/api/v1/things",true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -260,8 +298,9 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
 
                                 UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت افزوده شد"),false,700*AppStyle.size1W)
 
-                                if(filesModel.count > 0)
-                                    FilesApi.addFiles(filesModel,filesModel.count,response.result.id)
+                                if(filesModel)
+                                    if(filesModel.count > 0)
+                                        FilesApi.addFiles(filesModel,filesModel.count,response.result.id)
 
                                 UsefulFunc.mainStackPop({"thingId":response.result.id,"changeType":Memorito.Insert})
                             }
@@ -275,7 +314,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,700*AppStyle.size1W)
@@ -287,11 +326,13 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     let id = insertThings([{"id":-1, "title":json.title??"", "detail":json.detail??"", "list_id":json.list_id??0, "is_done":0, "has_files":json.has_files,
                                                "context_id":json.context_id??0, "priority_id":json.priorityId??0, "energy_id":json.energy_id??0, "estimate_time":json.estimate_time??0,
                                                "category_id":json.category_id??0,"due_date":json.due_date??"","friend_id":json.friend_id??0,  "user_id": User.id, "register_date":"","modified_date":""}])
-                    if(filesModel.count > 0)
-                        FilesApi.addFiles(attachModel,attachModel.count,-1)
+                    if(filesModel)
+                        if(filesModel.count > 0)
+                            FilesApi.addFiles(filesModel,filesModel.count,-1)
+
                     LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
                     UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,700*AppStyle.size1W)
-                    UsefulFunc.mainStackPop({"localThingId":thingId,"changeType":Memorito.Insert})
+                    UsefulFunc.mainStackPop({"localThingId":id,"changeType":Memorito.Insert})
 
                 }
 
@@ -307,6 +348,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         xhr.responseType = 'json';
         xhr.open("PATCH", domain+"/api/v1/things/"+thingId,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -328,9 +370,9 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                                 updateThings(response.result)
 
                                 UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت بروزرسانی شد"),false,700*AppStyle.size1W)
-
-                                if(filesModel.count > 0)
-                                    FilesApi.addFiles(filesModel,filesModel.count,response.result.id)
+                                if(filesModel)
+                                    if(filesModel.count > 0)
+                                        FilesApi.addFiles(filesModel,filesModel.count,response.result.id)
 
                             }
                             else {
@@ -342,7 +384,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     else if(local_id === null){
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -354,8 +396,10 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     updateThings( {"id":thingId, "title":json.title??"", "detail":json.detail??"", "list_id":json.list_id??0, "is_done":0, "has_files":json.has_files,
                                      "context_id":json.context_id??0, "priority_id":json.priorityId??0, "energy_id":json.energy_id??0, "estimate_time":json.estimate_time??0,
                                      "category_id":json.category_id??0,"due_date":json.due_date??"","friend_id":json.friend_id??0,  "user_id": User.id, "register_date":"","modified_date":""},local_id)
-                    if(filesModel.count > 0)
-                        FilesApi.addFiles(filesModel,filesModel.count,thingId)
+                    if(filesModel)
+                        if(filesModel.count > 0)
+                            FilesApi.addFiles(filesModel,filesModel.count,thingId)
+
                     LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":2,  "user_id":User.id}] )
                     UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                 }
@@ -365,7 +409,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         }
     }
 
-    function deleteThing(thingId,model,modelIndex,local_id = null,change_id = null)
+    function deleteThing(thingId,local_id = null,change_id = null)
     {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -373,6 +417,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
         let query = "user_id=" + User.id
         xhr.open("DELETE", domain+"/api/v1/things/"+thingId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -402,7 +447,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     else if(local_id === null){
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -430,7 +475,11 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Things WHERE list_id = ?  ORDER By id ASC",listId)
+                            let result
+                            if( listId === Memorito.Done )
+                                result = tx.executeSql("SELECT * FROM Things WHERE is_done = 1 ORDER By id ASC")
+                            else
+                                result = tx.executeSql("SELECT * FROM Things WHERE list_id = ?  ORDER By id ASC",listId)
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesThings.push(result.rows.item(i))
@@ -475,6 +524,50 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                         try
                         {
                             var result = tx.executeSql("SELECT * FROM Things WHERE id IN ("+ids+")")
+                            for(var i=0;i<result.rows.length;i++)
+                            {
+                                valuesThings.push(result.rows.item(i))
+                            }
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesThings
+    }
+
+    function getThingByFriendId(ids)
+    {
+        let valuesThings = []
+        Database.connection.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Things WHERE list_id != ? AND friend_id IN ("+ids+")",Memorito.Trash)
+                            for(var i=0;i<result.rows.length;i++)
+                            {
+                                valuesThings.push(result.rows.item(i))
+                            }
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesThings
+    }
+
+    function getThingByContextId(ids)
+    {
+        let valuesThings = []
+        Database.connection.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Things WHERE list_id != ? AND context_id IN ("+ids+")",Memorito.Trash)
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesThings.push(result.rows.item(i))
@@ -545,7 +638,7 @@ estimate_time, category_id, due_date, friend_id, register_date, modified_date ) 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -565,22 +658,49 @@ estimate_time, category_id, due_date, friend_id, register_date, modified_date ) 
                                 result = tx.executeSql("UPDATE Things SET title = ?, detail = ?, list_id=?, is_done=?, has_files=?,context_id=?, priority_id=?, user_id= ?,
 energy_id=?, estimate_time=?, category_id=?, due_date=?, friend_id=?, register_date = ?, modified_date = ?, id=? WHERE local_id=? ",
                                                        [
-                                                           values.title??"", values.detail??"", values.list_id??0 ,values.is_done??0 ,values.has_files??0 ,values.context_id??0 ,values.priority_id??0,
-                                                           values.user_id??0 ,values.energy_id??0 ,values.estimate_time??0 , values.category_id??0, values.due_date??"", values.friend_id??0,
-                                                           values.register_date??"", values.modified_date??"", values.id??0, local_id
+                                                           values.title??"",
+                                                           values.detail??"",
+                                                           values.list_id??0 ,
+                                                           values.is_done??0 ,
+                                                           values.has_files??0 ,
+                                                           values.context_id??0 ,
+                                                           values.priority_id??0,
+                                                           values.user_id??0 ,
+                                                           values.energy_id??0 ,
+                                                           values.estimate_time??0 ,
+                                                           values.category_id??0,
+                                                           values.due_date??"",
+                                                           values.friend_id??0,
+                                                           values.register_date??"",
+                                                           values.modified_date??"",
+                                                           values.id??0,
+                                                           local_id
                                                        ])
 
                             else result = tx.executeSql("UPDATE Things SET title = ?, detail = ?, list_id=?, is_done=?, has_files=?, context_id=?, priority_id=?, user_id= ?,
 energy_id=?, estimate_time=?, category_id=?, due_date=?, friend_id=?, register_date = ?, modified_date = ?  WHERE id=?",
                                                         [
-                                                            values.title??"", values.detail??"", values.list_id??0, values.is_done??0, values.has_files??0, values.context_id??0 ,values.priority_id??0,
-                                                            values.user_id??0, values.energy_id??0, values.estimate_time??0, values.category_id??0, values.due_date??"", values.friend_id??0,
-                                                            values.register_date??"", values.modified_date??"", values.id
+                                                            values.title??"",
+                                                            values.detail??"",
+                                                            values.list_id??0 ,
+                                                            values.is_done??0 ,
+                                                            values.has_files??0 ,
+                                                            values.context_id??0 ,
+                                                            values.priority_id??0,
+                                                            values.user_id??0 ,
+                                                            values.energy_id??0 ,
+                                                            values.estimate_time??0 ,
+                                                            values.category_id??0,
+                                                            values.due_date??"",
+                                                            values.friend_id??0,
+                                                            values.register_date??"",
+                                                            values.modified_date??"",
+                                                            values.id
                                                         ])
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -598,7 +718,7 @@ energy_id=?, estimate_time=?, category_id=?, due_date=?, friend_id=?, register_d
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction

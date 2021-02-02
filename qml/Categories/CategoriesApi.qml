@@ -39,6 +39,7 @@ QtObject {
                         }
                         catch(e)
                         {
+                            console.trace()
                             console.error(e)
                         }
                     })
@@ -76,6 +77,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                         }
                         catch(e)
                         {
+                            console.trace()
                             console.error(e)
                         }
                     })
@@ -89,6 +91,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         let query = "user_id=" + User.id + "&category_id_list="+changesList
         xhr.open("GET", domain+"/api/v1/categories"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
@@ -136,6 +139,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     }
                 }
                 catch(e) {
+                    console.trace()
                     return null
                 }
             }
@@ -159,6 +163,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         let query = "user_id=" + User.id + "&list_id=" + listId
         xhr.open("GET", domain+"/api/v1/categories"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         var busyDialog = UsefulFunc.showBusy("",
                                              function()
@@ -188,19 +193,28 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            model.append(response.result)
                             insertCategories(response.result)
+                            let ids = response.result.map(item =>[item.id]).join(",")
+
+                            let valuesThings = getCategoryById(ids)
+                            if(valuesThings.length >0){
+                                model.append(valuesThings)
+                                return model
+                            }
                         }
                     }
                     else {
                         if(response.code === 401)
-                            UsefulFunc.showUnauthorizedError()
+                        {
+                            console.trace();UsefulFunc.showUnauthorizedError()
+                        }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
                         return null
                     }
                 }
                 catch(e) {
+                    console.trace()
                     UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
                     return null
                 }
@@ -223,6 +237,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         xhr.responseType = 'json';
         xhr.open("POST", domain+"/api/v1/categories",true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -268,7 +283,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -276,6 +291,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
 
                 }
                 catch(e) {
+                    console.trace()
                     let id = insertCategories([{"id":-1, "category_name":categoryName, "category_detail":categoryDetail,"list_id":listId,"user_id":User.id,"register_date" : "", "modified_date":"" }])
                     LocalDatabase.insertLocalChanges([ {"table_id":1,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
                     UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
@@ -299,6 +315,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         xhr.responseType = 'json';
         xhr.open("PATCH", domain+"/api/v1/categories/"+categoryId,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -329,7 +346,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -337,6 +354,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
 
                 }
                 catch(e) {
+                    console.trace()
                     model.set(modelIndex,{"category_name":categoryName})
                     updateCategories( {"id":categoryId,"category_name":categoryName, "category_detail":categoryDetail,"list_id":listId,"user_id": User.id, "register_date":"","modified_date":""},local_id)
                     LocalDatabase.insertLocalChanges([ {"table_id":1,   "record_id":categoryId,    "changes_type":2,  "user_id":User.id}] )
@@ -354,6 +372,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         let query = "user_id=" + User.id
         xhr.open("DELETE", domain+"/api/v1/categories/"+categoryId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -381,7 +400,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     else if(local_id === null){
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -389,6 +408,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
 
                 }
                 catch(e) {
+                    console.trace()
                     deleteCategoryLocalDatabase(categoryId)
                     LocalDatabase.insertLocalChanges([ {"table_id":3,   "record_id":categoryId,    "changes_type":3,  "user_id":User.id}] )
                     UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
@@ -416,6 +436,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                         }
                         catch(e)
                         {
+                            console.trace()
 
                         }
                     })
@@ -430,12 +451,13 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Categories WHERE id=?",id)
+                            var result = tx.executeSql("SELECT * FROM Categories WHERE id IN (?)",id)
                             if(result.rows.length)
                                 valuesLogs = result.rows.item(0)
                         }
                         catch(e)
                         {
+                            console.trace()
 
                         }
                     })
@@ -445,7 +467,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
 
     function insertCategories(values)
     {
-        let mapValues = values.map(item => [ item.id??0, String(item.category_name)??"", String(item.category_detail)??"" ,item.list_id??0, item.user_id??0,   String(item.register_date)??"", String(item.modified_date)??"" ] )
+        let mapValues = values.map(item => [ item.id??0, item.category_name??"", item.category_detail??"" ,item.list_id??0, item.user_id??0,   item.register_date??"", item.modified_date??"" ] )
         let finalString = ""
         for(let i=0;i<mapValues.length;i++)
         {
@@ -456,7 +478,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
             let check = 0;
             Database.connection.transaction(function(tx){try{
                     var result = tx.executeSql("SELECT * FROM Categories WHERE id=?",mapValues[i][0])
-                    check = result.rows.length}catch(e){}
+                    check = result.rows.length}catch(e){console.trace()}
             })
 
             if(!check)
@@ -477,6 +499,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                         }
                         catch(e)
                         {
+                            console.trace()
                             console.error(e)
                         }
                     }//end of  function
@@ -500,11 +523,12 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                                             )
                             else result = tx.executeSql(
                                      "UPDATE Categories SET category_name = ?,category_detail = ? , list_id=?,user_id= ? ,register_date = ?,modified_date = ?  WHERE id=?",
-                                     [values.category_name??"", values.category_detail??"" ,values.list_id??0, values.user_id??0, String(values.register_date)??"", String(values.modified_date)??"",values.id]
+                                     [values.category_name??"", values.category_detail??"" ,values.list_id??0, values.user_id??0, values.register_date??"", values.modified_date??"",values.id]
                                      )
                         }
                         catch(e)
                         {
+                            console.trace()
                             console.error(e)
                         }
                     }//end of  function
@@ -523,6 +547,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                         }
                         catch(e)
                         {
+                            console.trace()
                             console.error(e)
                         }
                     }//end of  function

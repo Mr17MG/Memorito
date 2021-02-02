@@ -38,6 +38,7 @@ QtObject {
                         }
                         catch(e)
                         {
+                            console.trace()
                             console.error(e)
                         }
                     })
@@ -75,7 +76,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -88,6 +89,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         let query = "user_id=" + User.id + "&context_id_list="+changesList
         xhr.open("GET", domain+"/api/v1/contexts"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
@@ -159,6 +161,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         let query = "user_id=" + User.id
         xhr.open("GET", domain+"/api/v1/contexts"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         var busyDialog = UsefulFunc.showBusy("",
                                              function()
@@ -188,15 +191,21 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            model.append(response.result)
                             insertContexts(response.result)
+                            let ids = response.result.map(item =>[item.id]).join(",")
+
+                            let valuesThings = getContextById(ids)
+                            if(valuesThings.length >0){
+                                model.append(valuesThings)
+                                return model
+                            }
                         }
                         return model
                     }
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -224,6 +233,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         xhr.responseType = 'json';
         xhr.open("POST", domain+"/api/v1/contexts",true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -256,7 +266,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -285,6 +295,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         xhr.responseType = 'json';
         xhr.open("PATCH", domain+"/api/v1/contexts/"+contextId,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -315,7 +326,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -340,6 +351,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         let query = "user_id=" + User.id
         xhr.open("DELETE", domain+"/api/v1/contexts/"+contextId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -371,7 +383,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -419,7 +431,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Contexts WHERE id=?",id)
+                            var result = tx.executeSql("SELECT * FROM Contexts WHERE id IN (?)",id)
                             if(result.rows.length)
                                 valuesLogs = result.rows.item(0)
                         }
@@ -434,7 +446,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
 
     function insertContexts(values)
     {
-        let mapValues = values.map(item => [ item.id??0, String(item.context_name)??"",   item.user_id??0,   String(item.register_date)??"", String(item.modified_date)??"" ] )
+        let mapValues = values.map(item => [ item.id??0, item.context_name??"",   item.user_id??0,   item.register_date??"", item.modified_date??"" ] )
         let finalString = ""
         for(let i=0;i<mapValues.length;i++)
         {
@@ -466,7 +478,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -494,7 +506,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -512,7 +524,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction

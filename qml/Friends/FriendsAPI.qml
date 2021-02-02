@@ -38,7 +38,7 @@ QtObject {
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -75,7 +75,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -88,6 +88,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         let query = "user_id=" + User.id + "&friend_id_list="+changesList
         xhr.open("GET", domain+"/api/v1/friends"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         xhr.timeout = 10000;
         xhr.onreadystatechange = function ()
@@ -158,6 +159,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         let query = "user_id=" + User.id
         xhr.open("GET", domain+"/api/v1/friends"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         var busyDialog = UsefulFunc.showBusy("",
                                              function()
@@ -187,15 +189,21 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            model.append(response.result)
                             insertFriends(response.result)
+                            let ids = response.result.map(item =>[item.id]).join(",")
+
+                            let valuesThings = getFriendById(ids)
+                            if(valuesThings.length >0){
+                                model.append(valuesThings)
+                                return model
+                            }
                         }
                         return model
                     }
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -223,6 +231,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         xhr.responseType = 'json';
         xhr.open("POST", domain+"/api/v1/friends",true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -256,7 +265,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                     {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -284,6 +293,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         xhr.responseType = 'json';
         xhr.open("PATCH", domain+"/api/v1/friends/"+friendId,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -315,7 +325,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -339,6 +349,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         let query = "user_id=" + User.id
         xhr.open("DELETE", domain+"/api/v1/friends/"+friendId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
@@ -369,7 +380,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showUnauthorizedError()
+                            console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
@@ -417,7 +428,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Friends WHERE id=?",id)
+                            var result = tx.executeSql("SELECT * FROM Friends WHERE id IN (?)",id)
                             if(result.rows.length)
                                 valuesLogs = result.rows.item(0)
                         }
@@ -432,7 +443,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
 
     function insertFriends(values)
     {
-        let mapValues = values.map(item => [ item.id, String(item.friend_name),   item.user_id,   String(item.register_date), String(item.modified_date) ] )
+        let mapValues = values.map(item => [ item.id, String(item.friend_name)??"",   item.user_id,   item.register_date??"", item.modified_date??"" ] )
         let finalString = ""
         for(let i=0;i<mapValues.length;i++)
         {
@@ -464,7 +475,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -492,7 +503,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -510,7 +521,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
