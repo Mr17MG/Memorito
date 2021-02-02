@@ -28,16 +28,28 @@ QtObject{
                          tx.executeSql("CREATE TABLE IF NOT EXISTS Users(
                                                         local_id INTEGER PRIMARY KEY AUTOINCREMENT ,
                                                         id INTEGER DEFAULT -1 ,
-                                                        username TEXT ,
-                                                        email TEXT ,
-                                                        hashed_password TEXT ,
-                                                        auth_token TEXT
+                                                        username TEXT DEFAULT '' ,
+                                                        email TEXT DEFAULT '' ,
+                                                        hashed_password TEXT DEFAULT '' ,
+                                                        auth_token TEXT DEFAULT '' ,
+                                                        avatar TEXT DEFAULT '',
+                                                        register_date TEXT DEFAULT '',
+                                                        modified_date TEXT DEFAULT '',
+                                                        two_step INTEGER DEFAULT 0
                                                        )"
                                        );
+
+                         let query = 'CREATE TRIGGER IF NOT EXISTS updateUserChanges
+ AFTER UPDATE ON Users
+ BEGIN
+     INSERT INTO ChangesOnThisDevice(table_id,record_id,changes_type,user_id)
+     VALUES ( 6,NEW.id,2,NEW.id );
+ END;'
+                         tx.executeSql(query) // create trigerr on users after update
                      } // end of try
                      catch(e)
                      {
-                         console.error(e)
+                         console.trace();console.error(e)
                      }
                  }// end of function
                  )// end of transaction
@@ -63,7 +75,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -82,19 +94,19 @@ QtObject{
     "local_id"	INTEGER NOT NULL UNIQUE,
     "id"	INTEGER ,
     "user_id"   INTEGER,
-    "title"	TEXT,
-    "detail"	TEXT,
+    "title"	TEXT DEFAULT "",
+    "detail"	TEXT DEFAULT "",
     "list_id"	INTEGER,
     "is_done"	INTEGER DEFAULT 0,
-    "register_date"	TEXT,
-    "modified_date"	TEXT,
+    "register_date"	TEXT DEFAULT "",
+    "modified_date"	TEXT DEFAULT "",
     "has_files"	INTEGER DEFAULT 0,
     "context_id"	INTEGER DEFAULT 0,
     "priority_id"	INTEGER DEFAULT 0,
     "energy_id"	INTEGER DEFAULT 0,
     "estimate_time"	INTEGER DEFAULT 0,
     "category_id"	INTEGER DEFAULT 0,
-    "due_date"	TEXT,
+    "due_date"	TEXT DEFAULT "",
     "friend_id"	INTEGER DEFAULT 0,
     PRIMARY KEY("local_id" AUTOINCREMENT)
 )'
@@ -129,7 +141,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -148,12 +160,12 @@ QtObject{
     CREATE TABLE IF NOT EXISTS "Categories"(
     "local_id"	INTEGER NOT NULL UNIQUE,
     "id"	INTEGER UNIQUE,
-    "category_name"	TEXT,
-    "category_detail"	TEXT,
+    "category_name"	TEXT DEFAULT "",
+    "category_detail"	TEXT DEFAULT "",
     "user_id"	INTEGER,
     "list_id"	INTEGER,
-    "register_date"	TEXT,
-    "modified_date"	TEXT,
+    "register_date"	TEXT DEFAULT "",
+    "modified_date"	TEXT DEFAULT "",
     PRIMARY KEY("local_id" AUTOINCREMENT)
 )'
                             tx.executeSql(query)// create Categories table
@@ -191,7 +203,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -209,10 +221,10 @@ QtObject{
     CREATE TABLE IF NOT EXISTS "Contexts" (
     "local_id"	INTEGER NOT NULL UNIQUE,
     "id"	INTEGER,
-    "context_name"	TEXT,
+    "context_name"	TEXT DEFAULT "",
     "user_id"	INTEGER,
-    "register_date"	TEXT,
-    "modified_date"	TEXT,
+    "register_date"	TEXT DEFAULT "",
+    "modified_date"	TEXT DEFAULT "",
     PRIMARY KEY("local_id" AUTOINCREMENT)
 );'
                             tx.executeSql(query)
@@ -250,7 +262,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -269,10 +281,10 @@ QtObject{
     CREATE TABLE IF NOT EXISTS "Friends" (
     "local_id"	INTEGER NOT NULL UNIQUE,
     "id"	INTEGER,
-    "friend_name"	TEXT,
+    "friend_name"	TEXT DEFAULT "",
     "user_id"	INTEGER,
-    "register_date"	TEXT,
-    "modified_date"	TEXT,
+    "register_date"	TEXT DEFAULT "",
+    "modified_date"	TEXT DEFAULT "",
     PRIMARY KEY("local_id" AUTOINCREMENT)
 );'
                             tx.executeSql(query)
@@ -306,7 +318,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -326,10 +338,10 @@ QtObject{
     "id"	INTEGER,
     "user_id"	INTEGER,
     "things_id"	INTEGER,
-    "file"	TEXT,
-    "file_name"	TEXT,
-    "file_extension"	TEXT,
-    "register_date"	TEXT,
+    "file"	TEXT DEFAULT "",
+    "file_name"	TEXT DEFAULT "",
+    "file_extension"	TEXT DEFAULT "",
+    "register_date"	TEXT DEFAULT "",
     PRIMARY KEY("local_id" AUTOINCREMENT)
 );'
                             tx.executeSql(query)
@@ -363,7 +375,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -381,9 +393,9 @@ QtObject{
     CREATE TABLE IF NOT EXISTS "Logs" (
     "local_id"	INTEGER NOT NULL UNIQUE,
     "id"	INTEGER,
-    "log_text"	TEXT,
-    "register_date"	TEXT,
-    "modified_date"	TEXT,
+    "log_text"	TEXT DEFAULT "",
+    "register_date"	TEXT DEFAULT "",
+    "modified_date"	TEXT DEFAULT "",
     "type_id"	INTEGER,
     "row_id"	INTEGER,
     "user_id"	INTEGER,
@@ -420,7 +432,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -447,7 +459,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -474,7 +486,7 @@ QtObject{
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -494,14 +506,14 @@ QtObject{
     "record_id"	INTEGER,
     "changes_type"	INTEGER,
     "user_id"	INTEGER,
-    "register_date"	TEXT,
+    "register_date"	TEXT DEFAULT "",
     PRIMARY KEY("id" AUTOINCREMENT)
 );'
                             var result = tx.executeSql(query)
                         } // end of try
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }// end of function
                     )// end of transaction
@@ -514,8 +526,9 @@ QtObject{
         xhr.withCredentials = true;
         xhr.responseType = 'json';
         let query = "user_id=" + User.id +"&last_date=" + decodeURIComponent(SettingDriver.value("last_date",""))
-        xhr.open("GET", domain+"/api/v1/changes"+"?"+query,true);
-        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.open( "GET", domain+"/api/v1/changes"+"?"+query,true);
+        xhr.setRequestHeader("Content-Type" , "application/json");
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
 
         xhr.timeout = 10000;
@@ -551,6 +564,7 @@ QtObject{
                     }
                 }
                 catch(e) {
+                    console.trace();
                     console.error(e);
                     console.log(xhr.responseText)
                 }
@@ -561,7 +575,7 @@ QtObject{
 
     function insertServerChanges(values)
     {
-        let mapValues = values.map(item => [ item.id,   item.table_id,   item.record_id,    item.changes_type,  item.user_id,   String(item.register_date)] )
+        let mapValues = values.map(item => [ item.id,   item.table_id,   item.record_id,    item.changes_type,  item.user_id,   item.register_date] )
         let finalString = ""
         for(let i=0;i<mapValues.length;i++)
         {
@@ -581,7 +595,7 @@ QtObject{
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -593,13 +607,23 @@ QtObject{
                             var ids = tx.executeSql("SELECT a.id as ChangeId,b.id as ServerId FROM ChangesOnThisDevice a JOIN ServerChanges b on a.table_id = b.table_id AND a.record_id = b.record_id AND a.changes_type = b.changes_type AND a.user_id = b.user_id");
                             var sIds = ""
                             var cIds = ""
-                            for(let i=0;i<ids.rows.length;i++){
-                                sIds += ids.rows.item(i).ServerId;cIds += ids.rows.item(i).ChangeId
-                                if(i !==ids.rows.length -1){ cIds+=",";sIds+=',' }
-                            }
 
-                            deleteFromServerChanges(sIds)
-                            deleteFromDeviceChanges(cIds)
+                            for(var i=0; i < ids.rows.length ; i++)
+                            {
+                                sIds += ids.rows.item(i).ServerId;
+                                cIds += ids.rows.item(i).ChangeId;
+                                console.log(i,JSON.stringify(ids.rows.item(i)))
+                                if(i !==ids.rows.length -1)
+                                {
+                                    cIds+=",";
+                                    sIds+=','
+                                }
+                            }
+                            console.log(sIds,cIds)
+                            if(sIds)
+                                deleteFromServerChanges(sIds)
+                            if(cIds)
+                                deleteFromDeviceChanges(cIds)
                         }
                         catch(e){}
                     })
@@ -614,11 +638,11 @@ QtObject{
                     {
                         try
                         {
-                            var result = tx.executeSql("DELETE FROM ServerChanges WHERE id IN (?)",ids)
+                            var result = tx.executeSql("DELETE FROM ServerChanges WHERE id IN ("+ids+")")
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -643,7 +667,7 @@ QtObject{
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -657,11 +681,11 @@ QtObject{
                     {
                         try
                         {
-                            var result = tx.executeSql("DELETE FROM LocalChanges WHERE id IN (?)",ids)
+                            var result = tx.executeSql("DELETE FROM LocalChanges WHERE id IN ("+ids+")")
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
@@ -674,11 +698,11 @@ QtObject{
                     {
                         try
                         {
-                            var result = tx.executeSql("DELETE FROM ChangesOnThisDevice WHERE id IN (?)",ids)
+                            var result = tx.executeSql("DELETE FROM ChangesOnThisDevice WHERE id IN ("+ids+")")
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }//end of  function
                     ) // end of transaction
