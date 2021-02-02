@@ -269,28 +269,28 @@ Item {
                     {
                         usernameMoveAnimation.start()
                         usernameInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,UsefulFunc.authLoader.width)
                         return
                     }
                     if(UsefulFunc.emailValidation(emailInput.text) === false)
                     {
                         emailMoveAnimation.start()
                         emailInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("لطفا ایمیل خود را به صورت صحیح وارد نمایید"),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("لطفا ایمیل خود را به صورت صحیح وارد نمایید"),true,UsefulFunc.authLoader.width)
                         return
                     }
                     if(passwordInput.text === "" )
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true,UsefulFunc.authLoader.width)
                         return
                     }
                     if ( passwordConfirmInput.text === "" || passwordConfirmInput.text !== passwordInput.text)
                     {
                         passwordConfirmMoveAnimation.start()
                         passwordConfirmInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true,UsefulFunc.authLoader.width)
                         return
                     }
 

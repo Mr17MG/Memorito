@@ -165,14 +165,14 @@ Item{
                     {
                         usernameMoveAnimation.start()
                         usernameInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,UsefulFunc.authLoader.width)
                         return
                     }
                     if(passwordInput.text === "" )
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را وارد نمایید"),true,authLoader.width)
+                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را وارد نمایید"),true,UsefulFunc.authLoader.width)
                         return
                     }
                     UserApi.signIn(usernameInput.text,passwordInput.text)
@@ -202,7 +202,7 @@ Item{
                         {
                             usernameMoveAnimation.start()
                             usernameInput.forceActiveFocus()
-                            UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,authLoader.width)
+                            UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,UsefulFunc.authLoader.width)
                             return
                         }
                         UserApi.forgetPass(usernameInput.text)

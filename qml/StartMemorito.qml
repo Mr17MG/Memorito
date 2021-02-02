@@ -98,7 +98,7 @@ Page {
             active: nRow>1 && AppStyle.ltr
             visible: active
             SplitView.minimumWidth: 150*AppStyle.size1W
-            SplitView.maximumWidth: nRow ==2?rootWindow.width*2.5/8:rootWindow.width*1.80/8
+            SplitView.maximumWidth: nRow ==2?UsefulFunc.rootWindow.width*2.5/8:UsefulFunc.rootWindow.width*1.80/8
         }
 
         MainPage{ id:mainPage; SplitView.fillWidth: true}
@@ -109,8 +109,7 @@ Page {
             active: nRow>1  && !AppStyle.ltr
             visible: active
             SplitView.minimumWidth: 150*AppStyle.size1W
-            SplitView.maximumWidth: nRow ==2?rootWindow.width*2.5/8:rootWindow.width*1.80/8
+            SplitView.maximumWidth: nRow ==2?UsefulFunc.rootWindow.width*2.5/8:UsefulFunc.rootWindow.width*1.80/8
         }
     }
-
 }

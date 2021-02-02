@@ -5,6 +5,6 @@ singleton Memorito          1.0     Enums.qml
 singleton AppStyle          1.0     AppStyle.qml
 singleton UsefulFunc        1.0     UsefulFunctions.qml
 singleton UiFunctions       1.0     UiFunctions.qml
-singleton LocalDatabase     1.0     InitLocalDatabase.qml
+singleton LocalDatabase     1.0     LocalDatabase.qml
 singleton SettingDriver     1.0     SettingDriver.qml
 singleton UserApi           1.0     UserAPI.qml

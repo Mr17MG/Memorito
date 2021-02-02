@@ -26,6 +26,7 @@ Loader{
             color: "yellow"
             visible: false
         }
+
         Base.AppHeader{ id: header }
 
         StackView{
@@ -59,19 +60,21 @@ Loader{
                 }
             }
         }
-
         Loader{
             id:drawerLoader
             active: nRow===1
-            width: rootWindow.width*2/3
-            height: mainPage.height
-            y:header.height
+            width: UsefulFunc.rootWindow.width*2/3
+            height: mainStackView.height
+            y: header.height
             sourceComponent: Drawer{
+                y: header.height
+
+                Base.DrawerBody{isDrawer:true}
+
                 width: drawerLoader.width
                 height: drawerLoader.height
-                y:header.height
-                edge: AppStyle.ltr?Qt.LeftEdge:Qt.RightEdge
                 dragMargin:0
+                edge: AppStyle.ltr?Qt.LeftEdge:Qt.RightEdge
                 Overlay.modal: Rectangle { color: AppStyle.appTheme?"#aa606060":"#80000000" }
                 background:Rectangle{
                     color: AppStyle.appTheme?"#424242":"#f5f5f5"
@@ -85,10 +88,8 @@ Loader{
                         }
                     }
                 }
-                Base.DrawerBody{isDrawer:true}
             }
         }
-
     }
 }
 

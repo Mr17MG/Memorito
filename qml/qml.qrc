@@ -58,7 +58,7 @@
         <file>Global/qmldir</file>
         <file>Global/UiFunctions.qml</file>
         <file>Global/UsefulFunctions.qml</file>
-        <file>Global/InitLocalDatabase.qml</file>
+        <file>Global/LocalDatabase.qml</file>
         <file>Global/SettingDriver.qml</file>
         <file>Global/AppStyle.qml</file>
         <file>Global/UserAPI.qml</file>

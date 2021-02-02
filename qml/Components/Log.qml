@@ -16,7 +16,7 @@ Drawer {
         try{
             if(!visible && typeof destroy === "function")
                 destroy()
-        }catch(e){}
+        }catch(e){console.trace()}
     }
     modal: false
     closePolicy: Dialog.NoAutoClose

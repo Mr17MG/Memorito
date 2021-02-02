@@ -11,6 +11,7 @@ Item {
     Component.onCompleted: {
         LocalDatabase.dropAallLocalTables()
         LocalDatabase.makeLocalTables()
+        UsefulFunc.setAuthLoaderVar(authLoader)
     }
 
     onIsSignInChanged: {
@@ -37,7 +38,7 @@ Item {
         if(Qt.platform.os === "android" || Qt.platform.os === "ios")
             return false
 
-        if(rootWindow.width>window.width/3)
+        if(UsefulFunc.rootWindow.width>window.width/3)
             return true;
 
         else
@@ -49,6 +50,8 @@ Item {
         x: splashLoader.active ? ( splashLoader.active? ( isSignIn === !AppStyle.ltr? width :0 ) :0 ) :0
         width: parent.width - splashLoader.width
         height: parent.height
+
+
         sourceComponent: StackView{
             id: authStack   ;   anchors.fill: parent;
             initialItem: splashLoader.active === false?"qrc:/Splash/MainSplash.qml"

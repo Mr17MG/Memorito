@@ -119,7 +119,7 @@ Item {
                 autoMoveTimer.restart()
             if(view.currentIndex === 0 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))
             {
-                authLoader.item.replace("qrc:/Account/SignIn.qml")
+                UsefulFunc.authLoader.item.replace("qrc:/Account/SignIn.qml")
             }
             else view.currentIndex= (view.currentIndex-1)%view.count<0?(view.currentIndex-1)%view.count+view.count:(view.currentIndex-1)%view.count;
         }
@@ -160,7 +160,7 @@ Item {
                 autoMoveTimer.restart()
             if(view.currentIndex === view.count-1 && (Qt.platform.os === "android" || Qt.platform.os === "ios" || splashLoader.active === false))
             {
-                authLoader.item.replace("qrc:/Account/SignIn.qml")
+                UsefulFunc.authLoader.item.replace("qrc:/Account/SignIn.qml")
             }
             else view.currentIndex= ((view.currentIndex+1)%view.count);
         }

@@ -78,7 +78,6 @@ ApplicationWindow {
         Component.onCompleted: {
             UsefulFunc.setMainLoaderVar(mainLoader)
         }
-
         sourceComponent: Splash.SplashLoader{}
     }
 

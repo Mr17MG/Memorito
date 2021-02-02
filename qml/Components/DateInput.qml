@@ -87,8 +87,8 @@ Item {
         property bool selectTime: false;
         property var asolutePosition: getAbsolutePosition(date)
         modal: true
-        x: ((rootWindow.width - calendarWidth ) / 2) - asolutePosition.x
-        y: ((rootWindow.height - calendarHeight) / 2) - asolutePosition.y
+        x: ((UsefulFunc.rootWindow.width - calendarWidth ) / 2) - asolutePosition.x
+        y: ((UsefulFunc.rootWindow.height - calendarHeight) / 2) - asolutePosition.y
         //        z: 2
         implicitWidth: calendarWidth
         implicitHeight: calendarHeight
@@ -583,7 +583,7 @@ Item {
                     }
                 }
                 // not found
-                console.log("Minutes not found: "+hour)
+                //console.log("Minutes not found: "+hour)
                 pickMinutes = false
                 innerButtonIndex = -1
                 outerButtonIndex = 0
@@ -618,7 +618,7 @@ Item {
                     }
                 }
                 // not found
-                console.log("Minutes not found: "+minutes)
+                //console.log("Minutes not found: "+minutes)
                 innerButtonIndex = -1
                 outerButtonIndex = 0
                 pickMinutes = true

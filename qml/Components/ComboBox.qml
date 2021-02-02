@@ -10,10 +10,10 @@ ComboBox {
     id:control
     Material.background: "transparent"
     property int popupX: 0
-    property int popupY: popupCenter?(-(rootWindow.height-height)/2)-control.y:95*AppStyle.size1H
+    property int popupY: popupCenter?(-(UsefulFunc.rootWindow.height-height)/2)-control.y:95*AppStyle.size1H
     property bool popupCenter: false
     property int popupWidth: width
-    property int popupHeight: rootWindow.height>= delegateModel.count*AppStyle.size1H*85?delegateModel.count*AppStyle.size1H*85:rootWindow.height-AppStyle.size1H*85
+    property int popupHeight: UsefulFunc.rootWindow.height>= delegateModel.count*AppStyle.size1H*85?delegateModel.count*AppStyle.size1H*85:UsefulFunc.rootWindow.height-AppStyle.size1H*85
     property bool hasBottomBorder: true
     property alias contentItemText: contentItemText
     property int textAlign: Text.AlignRight
@@ -177,7 +177,7 @@ ComboBox {
     }
     popup: T.Popup {
         y: popupY
-        x: popupCenter?(+(rootWindow.width-popupWidth)/2)-(popupX/2)-(control.x):popupX
+        x: popupCenter?(+(UsefulFunc.rootWindow.width-popupWidth)/2)-(popupX/2)-(control.x):popupX
         width: control.popupWidth
         height: popupHeight
         transformOrigin: Item.Top
