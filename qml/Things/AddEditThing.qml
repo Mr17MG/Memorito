@@ -59,7 +59,7 @@ Item {
                              || listId === Memorito.Collect)
                && isDual ? parent.width / 2 : parent.width
         clip: true
-        contentHeight: item1.height
+        contentHeight: mainFlow.height + 120*AppStyle.size1W
         anchors {
             right: parent.right
             top: parent.top
@@ -85,132 +85,132 @@ Item {
             height: parent.height
             width: hovered || pressed ? 18 * AppStyle.size1W : 8 * AppStyle.size1W
         }
-        Item {
-            id: item1
+
+        Flow {
+            id: mainFlow
             width: parent.width
-            height: mainFlow.height
-            Flow {
-                id: mainFlow
-                spacing: 25 * AppStyle.size1H
-                anchors {
-                    top: parent.top
-                    topMargin: 15 * AppStyle.size1H
-                    right: parent.right
-                    rightMargin: 25 * AppStyle.size1W
-                    left: parent.left
-                    leftMargin: 25 * AppStyle.size1W
-                }
+            spacing: 25 * AppStyle.size1H
+            anchors {
+                top: parent.top
+                topMargin: 15 * AppStyle.size1H
+                right: parent.right
+                rightMargin: 25 * AppStyle.size1W
+                left: parent.left
+                leftMargin: 25 * AppStyle.size1W
+            }
 
-                Item {
-                    id: titleItem
+            Item {
+                id: titleItem
+                width: parent.width
+                height: 100 * AppStyle.size1H
+                AppTextInput {
+                    id: titleInput
+                    placeholderText: qsTr("چی تو ذهنته؟")
+                    text: prevPageModel ? prevPageModel.title ?? "" : ""
                     width: parent.width
-                    height: 100 * AppStyle.size1H
-                    AppTextInput {
-                        id: titleInput
-                        placeholderText: qsTr("چی تو ذهنته؟")
-                        text: prevPageModel ? prevPageModel.title ?? "" : ""
+                    height: parent.height
+                    inputMethodHints: Qt.ImhPreferLowercase
+                    font.bold: false
+                    maximumLength: 50
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                    }
+                }
+                SequentialAnimation {
+                    id: titleMoveAnimation
+                    running: false
+                    loops: 3
+                    NumberAnimation {
+                        target: titleInput
+                        property: "anchors.horizontalCenterOffset"
+                        to: -10
+                        duration: 50
+                    }
+                    NumberAnimation {
+                        target: titleInput
+                        property: "anchors.horizontalCenterOffset"
+                        to: 10
+                        duration: 100
+                    }
+                    NumberAnimation {
+                        target: titleInput
+                        property: "anchors.horizontalCenterOffset"
+                        to: 0
+                        duration: 50
+                    }
+                }
+            }
+            SplitView {
+                width: parent.width
+                height: 190 * AppStyle.size1H + Math.max( (mainFlick.height - titleItem.height - 415 * AppStyle.size1H),450 * AppStyle.size1H)
+
+                orientation: Qt.Vertical
+                spacing: 100 * AppStyle.size1W
+                Item{
+                    SplitView.minimumHeight: 100 * AppStyle.size1H
+                    SplitView.preferredHeight: 240 * AppStyle.size1H
+                    AppFlickTextArea {
+                        id: flickTextArea
+                        placeholderText: qsTr(
+                                             "توضیحاتی از چیزی که تو ذهنته رو بنویس") + " (" + qsTr(
+                                             "اختیاری") + ")"
+                        text: prevPageModel ? prevPageModel.detail ?? "" : ""
                         width: parent.width
-                        height: parent.height
-                        inputMethodHints: Qt.ImhPreferLowercase
-                        font.bold: false
-                        maximumLength: 50
-                        anchors {
-                            horizontalCenter: parent.horizontalCenter
-                        }
-                    }
-                    SequentialAnimation {
-                        id: titleMoveAnimation
-                        running: false
-                        loops: 3
-                        NumberAnimation {
-                            target: titleInput
-                            property: "anchors.horizontalCenterOffset"
-                            to: -10
-                            duration: 50
-                        }
-                        NumberAnimation {
-                            target: titleInput
-                            property: "anchors.horizontalCenterOffset"
-                            to: 10
-                            duration: 100
-                        }
-                        NumberAnimation {
-                            target: titleInput
-                            property: "anchors.horizontalCenterOffset"
-                            to: 0
-                            duration: 50
-                        }
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 10*AppStyle.size1H
                     }
                 }
-                SplitView {
-                    width: parent.width
-                    height: 190 * AppStyle.size1H + Math.max(
-                                mainFlick.height - titleItem.height - 415 * AppStyle.size1H,
-                                450 * AppStyle.size1H)
-
-                    orientation: Qt.Vertical
-                    spacing: 100 * AppStyle.size1W
-                    Item{
-                        SplitView.minimumHeight: 100 * AppStyle.size1H
-                        SplitView.preferredHeight: 240 * AppStyle.size1H
-                        AppFlickTextArea {
-                            id: flickTextArea
-                            placeholderText: qsTr(
-                                                 "توضیحاتی از چیزی که تو ذهنته رو بنویس") + " (" + qsTr(
-                                                 "اختیاری") + ")"
-                            text: prevPageModel ? prevPageModel.detail ?? "" : ""
-                            width: parent.width
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            anchors.bottomMargin: 10*AppStyle.size1H
+                Item{
+                    SplitView.minimumHeight: 275 * AppStyle.size1H
+                    SplitView.preferredHeight: 450 * AppStyle.size1W
+                    AppFilesSelection {
+                        id: fileRect
+                        width: parent.width
+                        anchors{
+                            top: parent.top
+                            topMargin: 10*AppStyle.size1H
+                            bottom: parent.bottom
                         }
-                    }
-                    Item{
-                        SplitView.minimumHeight: 275 * AppStyle.size1H
-                        SplitView.preferredHeight: 450 * AppStyle.size1W
-                        AppFilesSelection {
-                            id: fileRect
-                            width: parent.width
-                            anchors.top: parent.top
-                            anchors.topMargin: 10*AppStyle.size1H
-                            anchors.bottom: parent.bottom
-                            model: attachModel
-                        }
+                        model: attachModel
                     }
                 }
+            }
 
-                Loader {
-                    id: optionLoader
-                    width: flickTextArea.width
-                    active: listId !== Memorito.Collect
-                            && listId !== Memorito.Process
-                    height: active ? 600 * AppStyle.size1H : 0
-                    sourceComponent: optionsComponent
-                }
+            Loader {
+                id: optionLoader
+                width: flickTextArea.width
+                active: listId !== Memorito.Collect && listId !== Memorito.Process
+                height: active ? 600 * AppStyle.size1H : 0
+                sourceComponent: optionsComponent
+            }
 
-                Loader {
-                    id: collectLoader
-                    width: flickTextArea.width
-                    height: active ? ((listId === Memorito.Project
-                                       || listId === Memorito.Someday
-                                       || listId === Memorito.Waiting
-                                       || listId === Memorito.Calendar || listId
-                                       === Memorito.Refrence) ? 220 * AppStyle.size1H : 110 * AppStyle.size1H) : 0
-                    sourceComponent: listId === Memorito.NextAction ? nextComponent : listId === Memorito.Someday ? somedayComponent : listId === Memorito.Refrence ? refrenceComponent : listId === Memorito.Waiting ? friendComponent : listId === Memorito.Calendar ? calendarComponent : listId === Memorito.Trash ? trashComponent : listId === Memorito.Done ? doComponent : listId === Memorito.Project ? projectCategoryComponent : collectComponent
-                }
+            Loader {
+                id: collectLoader
+                width: flickTextArea.width
+                height: active ? (
+                                     (   listId === Memorito.Project
+                                      || listId === Memorito.Someday
+                                      || listId === Memorito.Waiting
+                                      || listId === Memorito.Calendar
+                                      || listId === Memorito.Refrence) ? 220 * AppStyle.size1H
+                                                                       : 110 * AppStyle.size1H
+                                     )
+                               : 0
+                sourceComponent: listId === Memorito.NextAction ? nextComponent : listId === Memorito.Someday ? somedayComponent : listId === Memorito.Refrence ? refrenceComponent : listId === Memorito.Waiting ? friendComponent : listId === Memorito.Calendar ? calendarComponent : listId === Memorito.Trash ? trashComponent : listId === Memorito.Done ? doComponent : listId === Memorito.Project ? projectCategoryComponent : collectComponent
+            }
 
-                Loader {
-                    id: processLoader
-                    width: flickTextArea.width
-                    height: active ? 1900 * AppStyle.size1W : 0
-                    active: nRow <= 2
-                            && (listId === Memorito.Process
-                                || listId === Memorito.Collect) && isDual
-                    sourceComponent: processComponent
-                    visible: active
-                }
-            } // end of Flow
-        } // end of item1
+            Loader {
+                id: processLoader
+                width: flickTextArea.width
+                height: active ? 1800 * AppStyle.size1W : 0
+                active: nRow <= 2
+                        && (listId === Memorito.Process
+                            || listId === Memorito.Collect) && isDual
+                sourceComponent: processComponent
+                visible: active
+            }
+        } // end of Flow
     } //end of Flickable
 
     Loader {
@@ -1428,15 +1428,16 @@ Item {
                                 title : titleInput.text.trim(),
                                 user_id: User.id,
                                 detail : flickTextArea.text.trim(),
-                                list_id : Memorito.Done,
+                                list_id : listId === Memorito.Collect?Memorito.Done:listId,
                                 has_files: parseInt(hasFiles),
                                 priority_id : options["priorityId"]??null,
                                 estimate_time : options["estimateTime"]??null,
                                 context_id : options["contextId"]??null,
                                 energy_id : options["energyId"]??null,
-                                due_date : null,
-                                friend_id : null,
-                                category_id : null
+                                due_date : prevPageModel?prevPageModel.due_date??null:null,
+                                friend_id : prevPageModel?prevPageModel.friend??null:null,
+                                category_id : categoryId === -1?null:categoryId,
+                                is_done: 1
                             }, null, 1);
 
                     if (prevPageModel)
