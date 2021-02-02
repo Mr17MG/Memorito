@@ -344,8 +344,85 @@ Item {
                         }
                     }
                     Loader{
-                        active: listId === Memorito.Waiting
-                        width: parent.width
+                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        height: 70*AppStyle.size1H
+                        active: true
+                        sourceComponent: Item{
+                            anchors.fill: parent
+                            Image {
+                                id: listImg
+                                source:"qrc:/list-colorful.svg"
+                                width: 40*AppStyle.size1W
+                                height: width
+                                sourceSize.width:width*2
+                                sourceSize.height:height*2
+                                anchors{
+                                    verticalCenter: parent.verticalCenter
+                                    right: parent.right
+                                }
+                            }
+                            Text {
+                                property var listName:  [
+                                    {id:Memorito.Collect    ,name:qsTr("جمع آوری")},
+                                    {id:Memorito.Process    ,name:qsTr("پردازش نشده‌‌ها")},
+                                    {id:Memorito.NextAction ,name:qsTr("عملیات بعدی")},
+                                    {id:Memorito.Refrence   ,name:qsTr("مرجع")},
+                                    {id:Memorito.Waiting    ,name:qsTr("لیست انتظار")},
+                                    {id:Memorito.Calendar   ,name:qsTr("تقویم")},
+                                    {id:Memorito.Trash      ,name:qsTr("سطل آشغال")},
+                                    {id:Memorito.Done       ,name:qsTr("انجام شده‌ها")},
+                                    {id:Memorito.Someday    ,name:qsTr("شاید یک‌روزی")},
+                                    {id:Memorito.Project    ,name:qsTr("پروژه‌ها")}
+                                ]
+                                text: qsTr("در لیست")+":<b> "+listName.find(list => list.id === (prevPageModel?prevPageModel.list_id:listId)).name +"</b>"
+
+                                anchors{
+                                    verticalCenter: listImg.verticalCenter
+                                    right: listImg.left
+                                    rightMargin: 10*AppStyle.size1W
+                                    left: parent.left
+                                }
+                                font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
+                                elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
+                            }
+                        }
+                    }
+                    Loader{
+                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        height: 70*AppStyle.size1H
+                        active: prevPageModel?prevPageModel.category_id:false
+                        visible: active
+                        sourceComponent: Item{
+                            anchors.fill: parent
+                            Image {
+                                id: categorymg
+                                source:prevPageModel?(prevPageModel.list_id === Memorito.Project ?"qrc:/project-colorful.svg":"qrc:/category-colorful.svg"):""
+                                width: 40*AppStyle.size1W
+                                height: width
+                                sourceSize.width:width*2
+                                sourceSize.height:height*2
+                                anchors{
+                                    verticalCenter: parent.verticalCenter
+                                    right: parent.right
+                                }
+                            }
+                            Text {
+                                text: prevPageModel?(prevPageModel.list_id === Memorito.Project ?qsTr("در پروژه"):qsTr("در دسته بندی"))+":<b> "+CategoriesApi.getCategoryById(prevPageModel.category_id).category_name+"</b>":""
+
+                                anchors{
+                                    verticalCenter: categorymg.verticalCenter
+                                    right: categorymg.left
+                                    rightMargin: 10*AppStyle.size1W
+                                    left: parent.left
+                                }
+                                font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
+                                elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
+                            }
+                        }
+                    }
+                    Loader{
+                        active: listId === Memorito.Waiting || (prevPageModel?prevPageModel.friend_id:0)
+                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
                         visible: active
                         height: 70*AppStyle.size1H
                         sourceComponent: Item{
@@ -378,8 +455,8 @@ Item {
                         }
                     }
                     Loader{
-                        active: listId === Memorito.Calendar
-                        width: parent.width
+                        active: listId === Memorito.Calendar || (prevPageModel?prevPageModel.due_date:0)
+                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
                         height: 70*AppStyle.size1H
                         visible: active
                         sourceComponent: Item{
@@ -537,9 +614,6 @@ Item {
                         Material.background: Material.Red
                         onClicked: {
                             deleteLoader.active = true
-                            deleteLoader.item.thingName = prevPageModel.title
-                            deleteLoader.item.thingId = prevPageModel.id
-                            deleteLoader.item.modelIndex = modelIndex
                             deleteLoader.item.open()
                         }
 
@@ -560,7 +634,25 @@ Item {
                         text: qsTr("انجام شد")
                         Material.background: Material.Green
                         onClicked: {
+                            let json = JSON.stringify(
+                                    {
+                                        title           : prevPageModel.title                                                         ,
+                                        user_id         : User.id                                                                     ,
+                                        detail          : prevPageModel.detail                                                        ,
+                                        list_id         : prevPageModel.list_id                                                       ,
+                                        has_files       : parseInt(prevPageModel.has_files)                                           ,
+                                        energy_id       : prevPageModel.energy_id       === 0  ? null :  prevPageModel.energy_id      ,
+                                        context_id      : prevPageModel.context_id      === 0  ? null :  prevPageModel.context_id     ,
+                                        priority_id     : prevPageModel.priority_id     === 0  ? null :  prevPageModel.priority_id    ,
+                                        estimate_time   : prevPageModel.estimate_time   === 0  ? null :  prevPageModel.estimate_time  ,
+                                        due_date        : prevPageModel.due_date        === "" ? null :  prevPageModel.due_date       ,
+                                        friend_id       : prevPageModel.friend_id       === 0  ? null :  prevPageModel.friend_id      ,
+                                        category_id     : prevPageModel.category_id     === 0  ? null :  prevPageModel.category_id    ,
+                                        is_done         : 1
+                                    }, null, 1);
 
+                            if (prevPageModel)
+                                ThingsApi.editThing(prevPageModel.id,json,null)
                         }
                     }
 
@@ -577,13 +669,35 @@ Item {
             onClosed: {
                 deleteLoader.active = false
             }
-            property string thingName: ""
-            property int thingId: -1
-            property int modelIndex: -1
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " '" + thingName + "' " + qsTr("را حذف کنید؟")
+            dialogText: qsTr("آیا مایلید که") + " '" + prevPageModel.title  + "' " + (prevPageModel.list_id === Memorito.Trash?qsTr("برای همیشه حذف کنید؟"):qsTr("را به سطل آشغال انتفال دهید؟"))
             accepted: function() {
-                ThingsApi.deleteThing(thingId,null,null)
+
+
+                if (prevPageModel.list_id === Memorito.Trash)
+                {
+                    ThingsApi.deleteThing(prevPageModel.id,null,null)
+                }
+                else
+                {
+                    let json = JSON.stringify(
+                            {
+                                title           : prevPageModel.title                                                         ,
+                                user_id         : User.id                                                                     ,
+                                detail          : prevPageModel.detail                                                        ,
+                                list_id         : Memorito.Trash                                                              ,
+                                has_files       : parseInt(prevPageModel.has_files)                                           ,
+                                energy_id       : prevPageModel.energy_id       === 0  ? null :  prevPageModel.energy_id      ,
+                                context_id      : prevPageModel.context_id      === 0  ? null :  prevPageModel.context_id     ,
+                                priority_id     : prevPageModel.priority_id     === 0  ? null :  prevPageModel.priority_id    ,
+                                estimate_time   : prevPageModel.estimate_time   === 0  ? null :  prevPageModel.estimate_time  ,
+                                due_date        : prevPageModel.due_date        === "" ? null :  prevPageModel.due_date       ,
+                                friend_id       : prevPageModel.friend_id       === 0  ? null :  prevPageModel.friend_id      ,
+                                category_id     : prevPageModel.category_id     === 0  ? null :  prevPageModel.category_id    ,
+                                is_done         : prevPageModel.is_done??0
+                            }, null, 1);
+                    ThingsApi.editThing(prevPageModel.id,json,null)
+                }
             }
         }
     }

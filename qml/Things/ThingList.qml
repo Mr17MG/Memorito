@@ -18,9 +18,17 @@ Item {
     {
         ContextsApi.getContexts(contextModel)
 
-        ThingsApi.getThings(internalModel,listId,categoryId)
+        if(listId === Memorito.Friends)
+            internalModel.append(ThingsApi.getThingByFriendId(categoryId))
+        else if(listId === Memorito.Contexts)
+            internalModel.append(ThingsApi.getThingByContextId(categoryId))
+        else
+            ThingsApi.getThings(internalModel,listId,categoryId)
 
         addBtn.text = qsTr("افزودن چیز به") +" "+ (object.pageTitle??"")
+
+        if(listId === Memorito.Waiting ||listId === Memorito.Done)
+            FriendsApi.getFriends(friendModel)
     }
 
     function cameBackToPage(object)
@@ -62,10 +70,7 @@ Item {
         }
     }
 
-    Component.onCompleted: {
-        if(listId === Memorito.Waiting)
-            FriendsApi.getFriends(friendModel)
-    }
+
     Item {
         anchors{ centerIn: parent }
         visible: internalModel.count === 0
@@ -84,7 +89,7 @@ Item {
             }
         }
         Text{
-            text: qsTr("چیزی ثبت نشده‌است")
+            text: qsTr("تو این لیست که چیزی نیست")
             font{family: AppStyle.appFont;pixelSize:  40*AppStyle.size1F;bold:true}
             color: AppStyle.textColor
             anchors{
@@ -220,11 +225,31 @@ Item {
                             bottom: parent.bottom
                             right: unprocessImg.left
                             rightMargin: 20*AppStyle.size1W
-                            left: parent.left
+                            left: isDoneImg.visible?isDoneImg.right:parent.left
                             leftMargin: 20*AppStyle.size1W
                         }
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    }
+                    Image {
+                        id: isDoneImg
+                        source: "qrc:/check-circle.svg"
+                        width: 40*AppStyle.size1W
+                        height: width
+                        sourceSize.width:width*2
+                        sourceSize.height:height*2
+                        anchors{
+                            verticalCenter: topRect.verticalCenter
+                            left: parent.left
+                            leftMargin: 20*AppStyle.size1W
+                        }
+                        visible: false
+                        asynchronous: true
+                    }
+                    ColorOverlay{
+                        visible: model.is_done === 1
+                        source: isDoneImg
+                        anchors.fill: isDoneImg
                     }
                 }
                 Text{
@@ -374,7 +399,7 @@ Item {
                             }
                         }
                         Loader{
-                            active: listId === Memorito.Waiting
+                            active: model.list_id === Memorito.Waiting || model.friend_id
                             width: parent.width /2
                             visible: active
                             height: 50*AppStyle.size1H
@@ -408,7 +433,7 @@ Item {
                             }
                         }
                         Loader{
-                            active: listId === Memorito.Calendar
+                            active: model.list_id === Memorito.Calendar || model.due_date
                             width: parent.width
                             height: 50*AppStyle.size1H
                             visible: active
