@@ -15,11 +15,19 @@ Dialog{
     signal acceptSignal
     property real oneLineWidth
     onVisibleChanged: {
-        if(!visible && typeof destroy === "function")
-            destroy()
+        try{
+            if(!visible && typeof destroy === "function")
+                destroy()
+        }catch(e){console.trace()}
+    }
+    onClosed: {
+        try{
+            if(!visible && typeof destroy === "function")
+                destroy()
+        }catch(e){console.trace()}
     }
 
-    width: rootWindow.width/2<480*AppStyle.size1W ? 480*AppStyle.size1W:rootWindow.width/2>1000*AppStyle.size1W?1000*AppStyle.size1W:rootWindow.width/2
+    width: UsefulFunc.rootWindow.width/2<480*AppStyle.size1W ? 480*AppStyle.size1W:UsefulFunc.rootWindow.width/2>1000*AppStyle.size1W?1000*AppStyle.size1W:UsefulFunc.rootWindow.width/2
 
     height: AppStyle.size1H*280 + text.height
     modal: true
