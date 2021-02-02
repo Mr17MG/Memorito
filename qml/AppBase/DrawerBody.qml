@@ -1,11 +1,13 @@
-import QtQuick 2.14 // Require For Listview
+import QtQuick 2.15 // Require For Listview
 import QtGraphicalEffects 1.14 // Require For ColorOverlay
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls 2.14 // Require For ScrollBar
 import Components 1.0  // Require For AppButton
 import Global 1.0
-
+import MTools 1.0
+import QtQml 2.15
 Item{
+    MTools{id:myTools}
     property bool isDrawer: false
     anchors{
         fill: parent
@@ -14,13 +16,16 @@ Item{
         right: parent.right
         rightMargin: isDrawer?0:10*AppStyle.size1W
     }
+
     Text {
         id: userNameText
         text: {
             try{
-                    return "@"+(User.username??"")
+                return "@"+(User.username??"")
             }
-            catch(e){}
+            catch(e){
+                console.trace()
+            }
         }
         color: AppStyle.textColor
         font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
@@ -53,13 +58,21 @@ Item{
             horizontalCenter: isDrawer?undefined:parent.horizontalCenter
             rightMargin: 10*AppStyle.size1W
         }
+        Binding{
+            target: profileImage
+            property: "source"
+            value: User.profile
+            when: User.isSet
+            restoreMode: Binding.RestoreBindingOrValue
+        }
 
         Image {
             id: profileImage
-            source: "qrc:/user.svg"
+            cache: false
+            asynchronous: true
             anchors.fill: parent
-            sourceSize.width: width*2
-            sourceSize.height: height*2
+            sourceSize.width: parent.width*4
+            sourceSize.height: parent.height*4
             anchors.margins: profileRect.border.width
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -87,8 +100,8 @@ Item{
 
     }
 
-     ScrollBar {
-         id:listScroll
+    ScrollBar {
+        id:listScroll
         hoverEnabled: true
         visible: nRow !== 1
         active: hovered || pressed
@@ -150,7 +163,7 @@ Item{
                 anchors.fill: icon
                 source:icon
                 color: UsefulFunc.stackPages.get(UsefulFunc.stackPages.count-1).title === model.title?AppStyle.primaryColor
-                                                                         :AppStyle.textColor
+                                                                                                     :AppStyle.textColor
             }
 
             Text {

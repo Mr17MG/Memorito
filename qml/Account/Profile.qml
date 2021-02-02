@@ -1,4 +1,5 @@
 import QtQuick 2.14
+import QtQml 2.15
 import QtGraphicalEffects 1.14
 import QtQuick.Controls.Material 2.14
 import QtQuick.Controls 2.14
@@ -31,7 +32,19 @@ Item {
             }
         }
     }
+    function cameBackToPage(object)
+    {
+        if(object)
+        {
+            let json = JSON.stringify(
+                    {
+                        avatar : object.base64,
+                        two_step : User.twoStep,
+                    }, null, 1);
 
+            UserApi.editUser(User.id,json)
+        }
+    }
 
     Rectangle{
         id: root
@@ -45,16 +58,23 @@ Item {
         }
         border.color: Material.color(AppStyle.primaryInt)
         border.width: 5*AppStyle.size1W
-
+        Binding{
+            target: profileImage
+            property: "source"
+            value: User.profile
+            when: User.isSet
+            restoreMode: Binding.RestoreBindingOrValue
+        }
         Image {
             id: profileImage
-            source: "qrc:/user.svg"
             anchors{
                 fill: parent
                 margins: root.border.width
             }
-            sourceSize.width: parent.width
-            sourceSize.height: parent.height
+            cache: false
+            asynchronous: true
+            sourceSize.width: parent.width*4
+            sourceSize.height: parent.height*4
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
@@ -213,6 +233,7 @@ Item {
                         qsTr("آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟"),
                         function()
                         {
+                            myTools.deleteSaveDir();
                             UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
                             SettingDriver.setValue("last_date","")
                             User.clear()

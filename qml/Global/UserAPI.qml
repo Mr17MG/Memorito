@@ -3,10 +3,12 @@ import QtQuick 2.14
 import QtQuick.LocalStorage 2.14
 import MSysInfo 1.0
 import MSecurity 1.0
+import MTools 1.0
 
 QtObject {
     property var sysInfo : MSysInfo{}
     property var security: MSecurity{}
+    property var myTools: MTools{}
 
     function getUsersChanges()
     {
@@ -24,7 +26,7 @@ QtObject {
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     })
     }
@@ -48,7 +50,6 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 200){
-                            response.result.localId = User.localId
                             updateUser(response.result)
                             Database.connection.transaction(
                                         function(tx)
@@ -59,7 +60,7 @@ QtObject {
                                             }
                                             catch(e)
                                             {
-                                                console.error(e)
+                                                console.trace();console.error(e)
                                             }
                                         }
                                         )
@@ -72,6 +73,47 @@ QtObject {
                 }
                 catch(e) {
                     return null
+                }
+            }
+        }
+    }
+
+    function editUser(userId,json)
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("PATCH", domain+"/api/v1/users/"+userId,true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                try
+                {
+                    let response = xhr.response
+                    if(response.ok)
+                    {
+                        if(response.code === 200){
+                            updateUser(response.result)
+                            UsefulFunc.showLog(qsTr("تصویر پروفایل شما با موفقیت بروزرسانی شد."),false,UsefulFunc.rootWindow.width)
+                        }
+                        return true
+                    }
+                    else {
+                        if(response.code === 401)
+                        {
+                            console.trace();UsefulFunc.showUnauthorizedError()
+                        }
+                        else
+                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                    }
+                }
+                catch(e) {
+                    console.trace();console.log(xhr.responseText);console.log(e)
+                    return false
                 }
             }
         }
@@ -131,7 +173,7 @@ QtObject {
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:false,email:email})
+                            UsefulFunc.authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:false,email:email})
                         }
                     }
                     else {
@@ -139,21 +181,21 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری که انتخاب کرده اید، توسط شخص دیگری استفاده شده است. لطفا نام کاربری دیگری انتخاب نمایید."),true,authLoader,authLoader.width, true)
+                                UsefulFunc.showLog(qsTr("نام کاربری که انتخاب کرده اید، توسط شخص دیگری استفاده شده است. لطفا نام کاربری دیگری انتخاب نمایید."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, true)
                             }
                             else if(response.message.includes("email"))
                             {
-                                UsefulFunc.showLog(qsTr("حسابی با ایمیلی که وارد کرده‌اید، وجود دارید در صورتی که از ایمیل خود مطمئن هستید از بخش ورود به حساب، وارد حساب خود شوید."),true,authLoader,authLoader.width, true)
+                                UsefulFunc.showLog(qsTr("حسابی با ایمیلی که وارد کرده‌اید، وجود دارید در صورتی که از ایمیل خود مطمئن هستید از بخش ورود به حساب، وارد حساب خود شوید."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, true)
                             }
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, true)
+                            UsefulFunc.showLog(response.message,true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, true)
                     }
 
                 }
                 catch(e) {
-                    console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, true)
+                    console.trace();console.error(e);console.log(xhr.responseText)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, true)
                 }
             }
         }
@@ -201,7 +243,7 @@ QtObject {
                     let response = xhr.response
                     if(response.ok)
                     {
-                        if(response.code === 202){                           
+                        if(response.code === 202){
                             addUser(response.result)
                             User.users.append(getUsers())
                             UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
@@ -211,21 +253,21 @@ QtObject {
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showLog(qsTr("ایمیل شما توسط شخص دیگری ثبت گردید لطفا مجدد امتحان نمایید."),true,authLoader,authLoader.width, true)
+                            UsefulFunc.showLog(qsTr("ایمیل شما توسط شخص دیگری ثبت گردید لطفا مجدد امتحان نمایید."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, true)
                         }
                         else if(response.code === 403)
                         {
-                            UsefulFunc.showLog(qsTr("کد تائیدی که ارسال کرده اید، اشتباه است لطفا مجدد ارسال نمایید"),true,authLoader,authLoader.width, true)
+                            UsefulFunc.showLog(qsTr("کد تائیدی که ارسال کرده اید، اشتباه است لطفا مجدد ارسال نمایید"),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, true)
                         }
 
                         else
-                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, true)
+                            UsefulFunc.showLog(response.message,true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, true)
                     }
 
                 }
                 catch(e) {
-                    console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, true)
+                    console.trace();console.error(e);console.log(xhr.responseText)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, true)
                 }
             }
         }
@@ -290,7 +332,7 @@ QtObject {
                         }
                         else if(response.code === 200)
                         {
-                            authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:false,email:response.result.email})
+                            UsefulFunc.authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:false,email:response.result.email})
                         }
                     }
                     else {
@@ -298,21 +340,21 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                             }
                             else if (response.message.includes("password"))
                             {
-                                UsefulFunc.showLog(qsTr("رمزعبور وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("رمزعبور وارد شده اشتباه می‌باشد."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                             }
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(response.message,true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                     }
 
                 }
                 catch(e) {
-                    console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                    console.trace();console.error(e);console.log(xhr.responseText)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                 }
             }
         }
@@ -370,7 +412,7 @@ QtObject {
                     {
                         if(response.code === 200)
                         {
-                            authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:true,email:response.result.email})
+                            UsefulFunc.authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:true,email:response.result.email})
                         }
                     }
                     else {
@@ -378,17 +420,17 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                             }
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(response.message,true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                     }
 
                 }
                 catch(e) {
-                    console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                    console.trace();console.error(e);console.log(xhr.responseText)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                 }
             }
         }
@@ -451,25 +493,25 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                             }
                         }
                         else if(response.code === 403)
                         {
                             if(response.message.includes("OTP"))
                             {
-                                UsefulFunc.showLog(qsTr("کد تائید وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("کد تائید وارد شده اشتباه می‌باشد."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                             }
                         }
 
                         else
-                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(response.message,true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                     }
 
                 }
                 catch(e) {
-                    console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                    console.trace();console.error(e);console.log(xhr.responseText)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                 }
             }
         }
@@ -519,7 +561,7 @@ QtObject {
                     {
                         if(response.code === 200)
                         {
-                            UsefulFunc.showLog(qsTr("کد تایید مجدد به ایمیل شما ارسال شد."),false,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(qsTr("کد تایید مجدد به ایمیل شما ارسال شد."),false,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                         }
                     }
                     else {
@@ -527,17 +569,17 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,authLoader,authLoader.width, false)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                             }
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,authLoader,authLoader.width, false)
+                            UsefulFunc.showLog(response.message,true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                     }
 
                 }
                 catch(e) {
-                    console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,authLoader,authLoader.width, false)
+                    console.trace();console.error(e);console.log(xhr.responseText)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,UsefulFunc.authLoader,UsefulFunc.authLoader.width, false)
                 }
             }
         }
@@ -579,12 +621,12 @@ QtObject {
                         }
 
                         else
-                            UsefulFunc.showLog(response.message,true,rootWindow,rootWindow, true)
+                            UsefulFunc.showLog(response.message,true,UsefulFunc.rootWindow,UsefulFunc.rootWindow, true)
                     }
 
                 }
                 catch(e) {
-                    console.error(e);console.log(xhr.responseText)
+                    console.trace();console.error(e);console.log(xhr.responseText)
                     UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,UsefulFunc.mainLoader,UsefulFunc.mainLoader.width, true)
                     UsefulFunc.mainLoader.source = User.isSet?"qrc:/StartMemorito.qml":"qrc:/Account/AccountMain.qml"
                 }
@@ -605,14 +647,7 @@ QtObject {
                             var result = tx.executeSql("SELECT * FROM Users ORDER BY id DESC")
                             for(var i=0;i<result.rows.length;i++)
                             {
-                                var row = {
-                                    "localId":result.rows.item(i).local_id,
-                                    "id":result.rows.item(i).id,
-                                    "username":result.rows.item(i).username,
-                                    "email":result.rows.item(i).email,
-                                    "hashedPassword":result.rows.item(i).hashed_password,
-                                    "authToken":result.rows.item(i).auth_token
-                                }
+                                var row = result.rows.item(i)
                                 response.push(row)
                             }
                         }
@@ -632,19 +667,12 @@ QtObject {
                         {
                             var result = tx.executeSql("SELECT * FROM Users WHERE id=?",[id])
                             if(result.rows.length>0){
-                                response = {
-                                    "localId":result.rows.item(0).local_id,
-                                    "id":result.rows.item(0).id,
-                                    "username":result.rows.item(0).username,
-                                    "email":result.rows.item(0).email,
-                                    "hashedPassword":result.rows.item(0).hashed_password,
-                                    "authToken":result.rows.item(0).auth_token
-                                }
+                                response = result.rows.item(0)
                             }
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }
                     )
@@ -659,14 +687,18 @@ QtObject {
                         try
                         {
                             var result = tx.executeSql(
-                                        "INSERT INTO Users( id, username, email, hashed_password, auth_token)
-                                                                    VALUES(?,?,?,?,?)",
-                                        [user.id??0, user.username??"", user.email??"", user.hashed_password??"", user.auth_token??""]
+                                        "INSERT INTO Users( id, username, email, hashed_password, auth_token,
+ avatar, register_date, modified_date, two_step)
+                                                                    VALUES(?,?,?,?,?,?,?,?,?)",
+                                        [
+                                            user.id??0, user.username??"", user.email??"", user.hashed_password??"", user.auth_token??"",
+                                            user.avatar??"", user.register_date??"", user.modified_date??"", user.two_step??0
+                                        ]
                                         )
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }
                     )
@@ -679,15 +711,17 @@ QtObject {
                     {
                         try
                         {
-                            var result = tx.executeSql(
-                                        "UPDATE Users SET id=?, username=?, email=?, hashed_password=? WHERE local_id=?",
-                                        [user.id??0, user.username??"", user.email??"", user.hashed_password??"", user.localId??0]
+
+                            tx.executeSql(
+                                        "UPDATE Users SET username=?, email=?, hashed_password=?, avatar=?, register_date=?, modified_date=?, two_step=? WHERE id=?"
+                                        ,[user.username??"", user.email??"", user.hashed_password??"",user.avatar??"", user.register_date??"", user.modified_date??"", user.two_step??0, user.id]
                                         )
-                            User.set(getUserByUserId(user.id))
+
+                            User.set(getUserByUserId(user.id),true)
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }
                     )
@@ -704,7 +738,7 @@ QtObject {
                         }
                         catch(e)
                         {
-                            console.error(e)
+                            console.trace();console.error(e)
                         }
                     }
                     )
