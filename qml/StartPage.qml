@@ -4,7 +4,7 @@ import QtQuick.Controls 2.14              // Require For Drawer and other
 import QtQuick.Controls.Material 2.14     // Require For Material Theme
 import "qrc:/Splash/" as Splash           // Require For SplashLoader
 import Global 1.0
-
+import "qrc:/Responsive"
 ApplicationWindow {
     id:rootWindow
 
@@ -16,8 +16,8 @@ ApplicationWindow {
     width: Qt.platform.os === "android" || Qt.platform.os === "ios"?width:SettingDriver.value("AppWidth" ,640)
     height: Qt.platform.os === "android" || Qt.platform.os === "ios"?height:SettingDriver.value("AppHeight",480)
 
-    minimumWidth: Screen.width/5<380?380:Screen.width/5
-    minimumHeight: Screen.height/3<480?480:Screen.height/3
+    minimumWidth:  Screen.width/ 5< 380? 380  : Screen.width/ 5
+    minimumHeight: Screen.height/ 3< 480? 480: Screen.height/ 3
 
     x: Qt.platform.os === "android" || Qt.platform.os === "ios"?0:SettingDriver.value("AppX",40)
     y: Qt.platform.os === "android" || Qt.platform.os === "ios"?0:SettingDriver.value("AppY",40)
@@ -34,7 +34,7 @@ ApplicationWindow {
     }
 
     /********************************************************************************/
-    ////////////////////////////////// Multi Language ////////////////////////////////
+    ////////////////////////////// Multi Language ////////////////////////////////////
 
     LayoutMirroring.enabled: AppStyle.ltr
     LayoutMirroring.childrenInherit: true
@@ -44,9 +44,9 @@ ApplicationWindow {
 
     Component.onCompleted: {
         //For one Display
-        AppStyle.size1F= UiFunctions.getFontSize  (1,Screen)
-        AppStyle.size1W= UiFunctions.getWidthSize (1,Screen)
-        AppStyle.size1H= UiFunctions.getHeightSize(1,Screen)
+        AppStyle.size1F= UiFunctions.getFontSize  (1)
+        AppStyle.size1W= UiFunctions.getWidthSize (1)
+        AppStyle.size1H= UiFunctions.getHeightSize(1)
 
         UsefulFunc.setRootWindowVar(rootWindow)
     }
@@ -56,12 +56,13 @@ ApplicationWindow {
 
     Material.theme: AppStyle.appTheme
     Material.primary: AppStyle.primaryColor
+    Material.accent: AppStyle.primaryColor
 
     function setSizes(scale)
     {
-//        AppStyle.size1W= size1W*scale
-//        AppStyle.size1H= size1H*scale
-        AppStyle.size1F = UiFunctions.getFontSize(1,Screen)*scale
+        //        AppStyle.size1W= size1W*scale
+        //        AppStyle.size1H= size1H*scale
+        AppStyle.size1F = UiFunctions.getFontSize(1)*scale
     }
 
     /********************************************************************************/
@@ -80,5 +81,7 @@ ApplicationWindow {
         }
         sourceComponent: Splash.SplashLoader{}
     }
+    ////////////////////////////////////////////////////////////////////
+    AppShortcut{}
 
 }
