@@ -247,12 +247,12 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                         return null
                     }
                 }
                 catch(e) {
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                     return null
                 }
             }
@@ -296,7 +296,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                                     insertThings(Array(response.result))
                                 }
 
-                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت افزوده شد"),false,700*AppStyle.size1W)
+                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت افزوده شد"),false)
 
                                 if(filesModel)
                                     if(filesModel.count > 0)
@@ -317,7 +317,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                     }
 
                 }
@@ -331,7 +331,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             FilesApi.addFiles(filesModel,filesModel.count,-1)
 
                     LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                     UsefulFunc.mainStackPop({"localThingId":id,"changeType":Memorito.Insert})
 
                 }
@@ -369,7 +369,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             {
                                 updateThings(response.result)
 
-                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت بروزرسانی شد"),false,700*AppStyle.size1W)
+                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت بروزرسانی شد"),false)
                                 if(filesModel)
                                     if(filesModel.count > 0)
                                         FilesApi.addFiles(filesModel,filesModel.count,response.result.id)
@@ -387,7 +387,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                     }
 
                 }
@@ -401,7 +401,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             FilesApi.addFiles(filesModel,filesModel.count,thingId)
 
                     LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":2,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                 }
                 if(local_id === null)
                     UsefulFunc.mainStackPop({"thingId":thingId,"chnageType":Memorito.Update})
@@ -450,14 +450,14 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                     }
 
                 }
                 catch(e) {
                     deleteThingLocalDatabase(thingId)
                     LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":3,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                 }
                 if(local_id === null)
                     UsefulFunc.mainStackPop({"thingId":thingId,"changeType":Memorito.Delete})
@@ -600,6 +600,29 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     })
         return valuesLogs
     }
+
+    function getThingByDate(fromDate,toDate)
+    {
+        let valuesThings = []
+        Database.connection.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Things WHERE date(due_date) BETWEEN date(?) AND date(?) ",[fromDate,toDate])
+                            for(var i=0;i<result.rows.length;i++)
+                            {
+                                valuesThings.push(result.rows.item(i))
+                            }
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesThings
+    }
+
     function insertThings(values,local_id = null)
     {
         let mapValues = values.map(item => [ item.id, item.title, item.detail??"", item.list_id ?? 0, item.is_done??0, item.has_files??0,item.context_id??0,

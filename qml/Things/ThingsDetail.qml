@@ -2,6 +2,8 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
 import QtGraphicalEffects 1.14
+import QtQuick.Layouts 1.15
+
 import QDateConvertor 1.0
 import MTools 1.0
 import Components 1.0
@@ -20,11 +22,15 @@ Item {
         if(object)
         {
             listId = object.listId ?? -1;
+
             if(object.thingLocalId)
                 prevPageModel = ThingsApi.getThingByLocalId(object.thingLocalId)
+
             console.timeEnd("Start")
             if(prevPageModel.has_files)
                 FilesApi.getFiles(filesModel,prevPageModel.id)
+
+            LogsApi.getLogs(logModel,1,prevPageModel.id)
         }
     }
 
@@ -124,7 +130,8 @@ Item {
             Item{
                 id:item1
                 width: parent.width
-                height: titleText.height+detailText.height+dateFlow.height+conentFlow.height+filesFlow.height+buttonFlow.height+200*AppStyle.size1W
+                height: titleText.height+detailText.height+dateFlow.height+conentFlow.height+filesFlow.height+
+                        logItem.height+ buttonFlow.height+200*AppStyle.size1W
                 Text {
                     id: titleText
                     anchors{
@@ -135,10 +142,21 @@ Item {
                         left: parent.left
                         leftMargin: 20*AppStyle.size1W
                     }
-                    text: !prevPageModel?"":prevPageModel.title??""
-                                                                  font{family: AppStyle.appFont;pixelSize:  35*AppStyle.size1F;bold:true}
+                    text: !prevPageModel?"":prevPageModel.title??"";
+                    font{family: AppStyle.appFont;pixelSize:  35*AppStyle.size1F;bold:true}
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    height: 80*AppStyle.size1H
+                    Rectangle{
+                        width: parent.width - 100*AppStyle.size1W
+                        height:2*AppStyle.size1H
+                        color: "#000000"
+                        anchors{
+                            bottom: parent.bottom
+                            bottomMargin: 10*AppStyle.size1H
+                            horizontalCenter: parent.horizontalCenter
+                        }
+                    }
                 }
                 Column{
                     width: parent.width
@@ -201,7 +219,8 @@ Item {
                                                                              +
                                                                              registerDate.getHours()+":"+registerDate.getMinutes()+":"+registerDate.getSeconds()
                                                                              +"  "+
-                                                                             String(dateConverter.toJalali(registerDate.getFullYear(),registerDate.getMonth(),registerDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
+                                                                             (AppStyle.ltr? registerDate.getFullYear()+"/"+(registerDate.getMonth()+1)+"/"+registerDate.getDate()
+                                                                                          : dateConverter.toJalali(registerDate.getFullYear(),registerDate.getMonth()+1,registerDate.getDate()).slice(0,3).join("/"))
                                                                              +"</b>"
                                                                            :""
                         font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
@@ -213,7 +232,8 @@ Item {
                                                                             +
                                                                             modifiedDate.getHours()+":"+modifiedDate.getMinutes()+":"+modifiedDate.getSeconds()
                                                                             +"  "+
-                                                                            String(dateConverter.toJalali(modifiedDate.getFullYear(),modifiedDate.getMonth(),modifiedDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
+                                                                            (AppStyle.ltr? modifiedDate.getFullYear()+"/"+(modifiedDate.getMonth()+1)+"/"+modifiedDate.getDate()
+                                                                                         :dateConverter.toJalali(modifiedDate.getFullYear(),modifiedDate.getMonth()+1,modifiedDate.getDate()).slice(0,3).join("/"))
                                                                             +"</b>"
                                                                           :""
                         font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
@@ -475,17 +495,20 @@ Item {
                             }
                             Text {
                                 property date dueDate:  !prevPageModel?"":prevPageModel.due_date?new Date(prevPageModel.due_date):""
-                                text: !prevPageModel?"":qsTr("زمان مشخص شده") +":<b> "
-                                                      + (
-                                                          (
-                                                              dueDate.getHours()===17 && dueDate.getMinutes() === 17 && dueDate.getSeconds() === 17
-                                                              ?"":dueDate.getHours()+":"+dueDate.getMinutes()+":"+dueDate.getSeconds()+"  ")
-                                                          +
-                                                          (
-                                                              dueDate?String(dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth(),dueDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
-                                                                     :qsTr("ثبت نشده است"))
-                                                          )
-                                                      +"</b>"
+                                text:
+                                    !prevPageModel?"":qsTr("زمان مشخص شده") +":<b> "
+                                                    + (
+                                                        (
+                                                            dueDate.getHours()===17 && dueDate.getMinutes() === 17 && dueDate.getSeconds() === 17
+                                                            ?"":dueDate.getHours()+":"+dueDate.getMinutes()+":"+dueDate.getSeconds()+"  ")
+                                                        +
+                                                        (
+                                                            dueDate?AppStyle.ltr? dueDate.getFullYear()+"/"+(dueDate.getMonth()+1)+"/"+dueDate.getDate()
+                                                                                : dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate()).slice(0,3).join("/")
+                                                            :qsTr("ثبت نشده است"))
+                                                        )
+                                                    +"</b>"
+
 
                                 anchors{
                                     verticalCenter: dateImg.verticalCenter
@@ -508,6 +531,24 @@ Item {
                         top: conentFlow.bottom
                         topMargin: 40*AppStyle.size1H
                         horizontalCenter: parent.horizontalCenter
+                    }
+                    Text {
+                        text: qsTr("فایل‌ها")
+                        font{family: AppStyle.appFont;pixelSize:  35*AppStyle.size1F;bold:true}
+                        width: parent.width
+                        height: 80*AppStyle.size1H
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        Rectangle{
+                            width: parent.width - 100*AppStyle.size1W
+                            height:2*AppStyle.size1H
+                            color: "#000000"
+                            anchors{
+                                bottom: parent.bottom
+                                bottomMargin: 10*AppStyle.size1H
+                                horizontalCenter: parent.horizontalCenter
+                            }
+                        }
                     }
                     Repeater{
                         model: ListModel{id:filesModel}
@@ -611,7 +652,7 @@ Item {
                         id:deleteBtn
                         width: 200*AppStyle.size1W
                         text: qsTr("حذف")
-                        Material.background: Material.Red
+                        Material.background: Material.color(Material.Red,Material.Shade900)
                         onClicked: {
                             deleteLoader.active = true
                             deleteLoader.item.open()
@@ -622,7 +663,7 @@ Item {
                         id:openBtn
                         width: 200*AppStyle.size1W
                         text: qsTr("ویرایش کردن")
-                        Material.background: Material.LightBlue
+                        Material.background: Material.color(Material.LightBlue,Material.Shade900)
                         onClicked: {
                             UsefulFunc.mainStackPush("qrc:/Things/AddEditThing.qml",qsTr("پردازش"),{"thingLocalId":prevPageModel.local_id,listId:listId})
                         }
@@ -632,7 +673,7 @@ Item {
                         visible: parent.doneableArray.indexOf(listId) !== -1
                         width: 200*AppStyle.size1W
                         text: qsTr("انجام شد")
-                        Material.background: Material.Green
+                        Material.background: Material.color(Material.Green,Material.Shade900)
                         onClicked: {
                             let json = JSON.stringify(
                                     {
@@ -656,6 +697,205 @@ Item {
                         }
                     }
 
+                }
+                Flow {
+                    id: logItem
+                    width: parent.width
+                    layoutDirection: Flow.TopToBottom
+                    spacing: 15*AppStyle.size1H
+                    anchors{
+                        top: buttonFlow.bottom
+                        topMargin: 20*AppStyle.size1H
+                        left: parent.left
+                        leftMargin: 20*AppStyle.size1W
+                        right: parent.right
+                        rightMargin: 20*AppStyle.size1W
+                    }
+                    Text {
+                        id:logTitle
+                        text: qsTr("روند کار")
+                        font{family: AppStyle.appFont;pixelSize:  35*AppStyle.size1F;bold:true}
+                        width: parent.width
+                        height: 80*AppStyle.size1H
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        Rectangle{
+                            width: parent.width - 100*AppStyle.size1W
+                            height:2*AppStyle.size1H
+                            color: "#000000"
+                            anchors{
+                                bottom: parent.bottom
+                                bottomMargin: 10*AppStyle.size1H
+                                horizontalCenter: parent.horizontalCenter
+                            }
+                        }
+                    }
+                    Repeater{
+                        model: ListModel { id: logModel }
+                        delegate:
+                            Item{
+
+                            id: rect1
+                            width:  parent.width
+                            height: 80*AppStyle.size1W + logText.height
+                            Rectangle{
+                                color: Material.color(AppStyle.primaryInt,Material.ShadeA700)
+                                width: parent.width
+                                height: 2*AppStyle.size1W
+                                anchors{
+                                    bottom: parent.bottom
+                                }
+
+                            }
+                            Text{
+                                id:logText
+                                text: model.log_text
+                                color: "black"
+                                verticalAlignment: Text.AlignVCenter
+                                anchors{
+                                    right: parent.right
+                                    rightMargin: 15*AppStyle.size1W
+                                    left: parent.left
+                                    leftMargin: 15*AppStyle.size1W
+                                    top: parent.top
+                                    topMargin: 40*AppStyle.size1H
+                                }
+                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                                font{family: AppStyle.appFont;pixelSize:  20*AppStyle.size1F}
+                            }
+                            Text{
+                                id:registerDateText
+                                property date registerDate: !model?"":model.register_date?new Date(model.register_date):""
+                                text: !model?"":model.register_date?qsTr("ثبت شده در")+": <b> "
+                                                                     +
+                                                                     registerDate.getHours()+":"+registerDate.getMinutes()+":"+registerDate.getSeconds()
+                                                                     +"  "+
+                                                                     dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate()).slice(0,3).join("/")
+                                                                     +"</b>"
+                                                                   :""
+                                color: "black"
+                                verticalAlignment: Text.AlignVCenter
+                                anchors{
+                                    right: parent.right
+                                    rightMargin: 15*AppStyle.size1W
+                                    top: parent.top
+                                    topMargin: 10*AppStyle.size1H
+                                }
+                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                                font{family: AppStyle.appFont;pixelSize:  18*AppStyle.size1F}
+                            }
+                            Text{
+                                id: modifiedDateText
+                                visible: text !== ""
+                                property date modifiedDate: !model?"":model.modified_date?new Date(model.modified_date):""
+                                text:!model?"":model.modified_date?qsTr("ویرایش شده در")+": <b> "
+                                                                    +
+                                                                    modifiedDate.getHours()+":"+modifiedDate.getMinutes()+":"+modifiedDate.getSeconds()
+                                                                    +"  "+
+                                                                    String(dateConverter.toJalali(modifiedDate.getFullYear(),modifiedDate.getMonth(),modifiedDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
+                                                                    +"</b>"
+                                                                  :""
+                                color: "black"
+                                verticalAlignment: Text.AlignVCenter
+                                anchors{
+                                    left: parent.left
+                                    leftMargin: 15*AppStyle.size1W
+                                    bottom: parent.bottom
+                                    bottomMargin: 10*AppStyle.size1H
+                                }
+                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                                font{family: AppStyle.appFont;pixelSize:  18*AppStyle.size1F;bold:true}
+                            }
+                            Image {
+                                id: menuImg
+                                source: "qrc:/dots.svg"
+                                width: 30*AppStyle.size1W
+                                height: width
+                                sourceSize.width: width*2
+                                sourceSize.height: height*2
+                                anchors{
+                                    left: parent.left
+                                    leftMargin: 5*AppStyle.size1W
+                                    top: parent.top
+                                    topMargin: 5*AppStyle.size1W
+                                }
+                                MouseArea{
+                                    anchors{
+                                        fill: parent
+                                        topMargin: -10*AppStyle.size1H
+                                        bottomMargin: -10*AppStyle.size1H
+                                        rightMargin: -10*AppStyle.size1W
+                                        leftMargin: -10*AppStyle.size1W
+                                    }
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        menuLoader.active = true
+                                        menuLoader.item.open()
+                                    }
+                                }
+                            }
+                            Loader{
+                                id: menuLoader
+                                active: false
+                                x: menuImg.x + (menuImg.width - 15*AppStyle.size1W)
+                                y: menuImg.y + (menuImg.height/2)
+                                sourceComponent: AppMenu{
+                                    id:menu
+                                    AppMenuItem{
+                                        text: qsTr("ویرایش")
+                                        onTriggered: {
+
+                                        }
+                                    }
+                                    AppMenuItem{
+                                        text: qsTr("حذف")
+                                        onTriggered: {
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                    }
+
+                    RowLayout{
+                        height: 120*AppStyle.size1H
+                        width: parent.width
+                        AppTextInput {
+                            id:commentInput
+                            height: parent.height
+                            fieldInPrimary: true
+                            placeholderText: qsTr("روند کار یا نظرات‌ِتو بنویس")
+                            bgUnderItem: Material.color(AppStyle.primaryInt,Material.Shade50)
+                            maximumLength: 50
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                        AppButton {
+                            id: submitBtn
+                            text: qsTr("ثبت")
+                            radius: 20*AppStyle.size1W
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            Layout.maximumWidth: 200*AppStyle.size1W
+
+                            icon{
+                                source: "qrc:/check.svg"
+                                color: AppStyle.textOnPrimaryColor
+                                width: 25*AppStyle.size1W
+                            }
+                            onClicked: {
+                                if(commentInput.text.trim() === "" )
+                                {
+                                    UsefulFunc.showLog(qsTr("نظرتو وارد نکردی."),true)
+                                }
+                                else LogsApi.addLog(commentInput.text.trim(), 1, prevPageModel.id, logModel)
+                                commentInput.clear()
+                            }
+                        }
+                    }
                 }
             }
         }

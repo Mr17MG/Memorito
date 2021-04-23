@@ -62,6 +62,11 @@
         <file>Global/SettingDriver.qml</file>
         <file>Global/AppStyle.qml</file>
         <file>Global/UserAPI.qml</file>
+        <file>Global/AppShortcut.qml</file>
         <file>Components/ImageEditor.qml</file>
+        <file>Responsive/Button.qml</file>
+        <file>Responsive/ResponsiveHelper.qml</file>
+        <file>Responsive/TextField.qml</file>
+        <file>Things/DayButton.qml</file>
     </qresource>
 </RCC>

@@ -1,18 +1,20 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
-import QtQuick.Controls.Material.impl 2.14
+import QtQml 2.15 as D
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
+import QtQuick.Controls.Material.impl 2.15
+import QtGraphicalEffects 1.15
 
-import QtGraphicalEffects 1.14
 import QDateConvertor 1.0
 import Components 1.0
 import Global 1.0
+import Qt.labs.calendar 1.0
 
 Item {
     property int listId: -1
     property int categoryId: -1
-
     ListModel{ id:internalModel }
+    QDateConvertor{id:dateConverter}
 
     function cameInToPage(object)
     {
@@ -22,6 +24,8 @@ Item {
             internalModel.append(ThingsApi.getThingByFriendId(categoryId))
         else if(listId === Memorito.Contexts)
             internalModel.append(ThingsApi.getThingByContextId(categoryId))
+        else if(listId === Memorito.Calendar);
+
         else
             ThingsApi.getThings(internalModel,listId,categoryId)
 
@@ -98,11 +102,225 @@ Item {
             }
         }
     }
+    Loader{
+        id: calendarTab
+        active: listId === Memorito.Calendar
+        anchors{
+            top: parent.top
+            topMargin: active?15*AppStyle.size1H:0
+            right: parent.right
+            rightMargin: 20*AppStyle.size1W
+            left: parent.left
+            leftMargin: 20*AppStyle.size1W
+        }
+        width: parent.width
 
+        sourceComponent: Component{
+            TabBar{
+                id:topTab
+                LayoutMirroring.enabled: !AppStyle.ltr
+                LayoutMirroring.childrenInherit: true
+
+                TabButton{
+                    id:dayBtn
+                    text: qsTr("روز")
+                }
+
+                TabButton{
+                    id:monthBtn
+                    text: qsTr("ماه")
+                }
+
+                TabButton{
+                    id:yearBtn
+                    text: qsTr("سال")
+                }
+
+                TabButton{
+                    id:optionBtn
+                    text: qsTr("دلخواه")
+                }
+            }
+        }
+    }
+    Loader{
+        id: calendarRangeTab
+        active: listId === Memorito.Calendar
+        anchors{
+            top: calendarTab.bottom
+            topMargin: active?15*AppStyle.size1H:0
+            right: parent.right
+            rightMargin: 20*AppStyle.size1W
+            left: parent.left
+            leftMargin: 20*AppStyle.size1W
+        }
+        width: parent.width
+
+        sourceComponent:Item{
+            width: parent.width
+            height: 100*AppStyle.size1H
+            Loader{
+                active: calendarTab.item.currentIndex === 0
+                visible: active
+                anchors.fill: parent
+                sourceComponent: TabBar{
+                    id:dayTab
+                    currentIndex: 1
+                    Component.onCompleted: {
+                        sevenDaysLater.clicked()
+                    }
+                    LayoutMirroring.enabled: !AppStyle.ltr
+                    LayoutMirroring.childrenInherit: true
+                    TabButton{
+                        id: sevenDaysAgo
+                        text: qsTr("۷ روز قبلی")
+                        icon{
+                            source: AppStyle.ltr?"qrc:/previous.svg":"qrc:/next.svg"
+                            color: !enabled ? Material.hintTextColor :
+                                               sevenDaysAgo.pressed ? Material.accentColor
+                                                                    : Material.foreground
+                            width: 30*AppStyle.size1W
+                            height:30*AppStyle.size1W
+                        }
+                        LayoutMirroring.enabled: !AppStyle.ltr
+                        width: 200*AppStyle.size1W
+                        property int deletedDays : 0
+                        enabled: dayTab.count < 21
+                        onClicked: {
+                            for(let i=0; i <7 ; i++)
+                            {
+                                var today = new Date()
+                                var component = Qt.createComponent(DayButton,parent);
+                                if (component.status === Component.Ready){
+                                    var d = component.createObject(parent, {modelData: new Date(today.setDate( today.getDate()+(deletedDays-i)))});
+                                    dayTab.insertItem(1,d)
+                                }
+                                else console.log(component.errorString())
+                            }
+
+                            deletedDays -= 7
+                            dayTab.setCurrentIndex(7)
+                        }
+                    }
+                    TabButton{
+                        id: sevenDaysLater
+                        text: qsTr("۷ روز بعدی")
+                        width: 200*AppStyle.size1W
+                        property int addedDays: 0
+                        enabled: dayTab.count < 21
+                        icon{
+                            source: !AppStyle.ltr?"qrc:/previous.svg":"qrc:/next.svg"
+                            color: !enabled ? Material.hintTextColor :
+                                               sevenDaysLater.pressed ? Material.accentColor
+                                                                    : Material.foreground
+                            width: 30*AppStyle.size1W
+                            height:30*AppStyle.size1W
+                        }
+                        LayoutMirroring.enabled: AppStyle.ltr
+
+                        onClicked: {
+                            for(let i=0; i<7; i++)
+                            {
+                                var today = new Date()
+                                var component = Qt.createComponent('DayButton.qml',parent);
+                                if (component.status === Component.Ready){
+                                    var d = component.createObject(parent, {modelData: new Date(today.setDate( today.getDate()+(addedDays+i)))});
+                                    dayTab.insertItem(dayTab.count-2,d)
+                                }
+                                else console.log(component.errorString())
+                            }
+
+                            addedDays+=7
+                            dayTab.setCurrentIndex(dayTab.count-8)
+                        }
+                    }
+                }
+            }
+
+
+            Loader{
+                id:monthLoader
+                active: calendarTab.item.currentIndex === 1
+                visible: active
+                anchors.fill: parent
+                sourceComponent: TabBar{
+                    LayoutMirroring.enabled: !AppStyle.ltr
+                    LayoutMirroring.childrenInherit: true
+                    currentIndex: AppStyle.ltr?new Date().getMonth()
+                                              :dateConverter.toJalali(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())[1]
+                    Repeater{
+                        model: AppStyle.ltr?["January","February","March","April","May","June","July","August","September","October","November","December"]
+                                           :dateConverter.get_month()
+                        delegate: TabButton{
+                            text: modelData
+                            width: monthLoader.width/12<200*AppStyle.size1W?200*AppStyle.size1W:monthLoader.width/12
+                        }
+                    }
+                }
+            }
+            Loader{
+                active: calendarTab.item.currentIndex === 2
+                visible: active
+                anchors.fill: parent
+                sourceComponent: TabBar{
+                    id:yearTab
+                    LayoutMirroring.enabled: !AppStyle.ltr
+                    LayoutMirroring.childrenInherit: true
+                    Repeater{
+                        model: [-2,-1,0,1,2,3]
+                        delegate: TabButton{
+                            property date today : new Date()
+
+                            text: AppStyle.ltr?today.getFullYear()+modelData
+                                              :parseInt(dateConverter.toJalali(today.getFullYear(),today.getMonth()+1,today.getDate())[0])+modelData
+                            width: monthLoader.width/count<200*AppStyle.size1W?200*AppStyle.size1W:monthLoader.width/count
+                            Component.onCompleted: {
+
+                                yearTab.currentIndex = today.getFullYear() === today.getFullYear()+modelData?index:yearTab.currentIndex
+
+                            }
+                        }
+                    }
+                }
+            }
+            Loader{
+                id: yearLoader
+                active: calendarTab.item.currentIndex === 3
+                visible: active
+                width: parent.width
+                height: visible?parent.height:0
+
+                sourceComponent: Flow{
+                    width: parent.width
+                    height:parent.height - 20*AppStyle.size1H
+                    anchors{
+                        top: parent.top
+                        topMargin:  20*AppStyle.size1H
+                    }
+
+                    spacing: 20*AppStyle.size1W
+                    AppDateInput{
+                        id:toDate
+                        placeholderText: qsTr("تا")+":"
+                        width: parent.width / 2 - 10*AppStyle.size1W
+                        height:parent.height- 20*AppStyle.size1H
+                        minSelectedDate: fromDate.selectedDate
+                    }
+                    AppDateInput{
+                        id:fromDate
+                        maxSelectedDate: toDate.selectedDate
+                        placeholderText: qsTr("از")+":"
+                        width: parent.width / 2 - 10*AppStyle.size1W
+                        height:parent.height - 20*AppStyle.size1H
+                    }
+                }
+            }
+        }
+    }
     Loader{
         active: internalModel.count > 0
         anchors{
-            top: parent.top
+            top: calendarRangeTab.bottom
             topMargin: 15*AppStyle.size1H
             right: parent.right
             rightMargin: 20*AppStyle.size1W
@@ -112,6 +330,7 @@ Item {
             leftMargin: 20*AppStyle.size1W
         }
         width: parent.width
+        clip: true
 
         sourceComponent: GridView{
             id: control
@@ -149,10 +368,20 @@ Item {
             delegate: Rectangle {
                 id:rootItem
                 radius: 15*AppStyle.size1W
-                width: control.cellWidth - 10*AppStyle.size1W
+                width: control.cellWidth - 20*AppStyle.size1W
                 height:  control.cellHeight - 10*AppStyle.size1H
                 color: Material.color(AppStyle.primaryInt,Material.Shade50)
                 clip: true
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 10*AppStyle.size1W
+                    verticalOffset: 10*AppStyle.size1H
+                    radius: 20
+                    samples: 41
+                    color: AppStyle.shadowColor// Material.color(AppStyle.primaryInt,Material.Shade100)
+                }
+
                 MouseArea{
                     id: mouseArea
                     anchors.fill: parent
@@ -225,11 +454,11 @@ Item {
                             bottom: parent.bottom
                             right: unprocessImg.left
                             rightMargin: 20*AppStyle.size1W
-                            left: isDoneImg.visible?isDoneImg.right:parent.left
+                            left: isDoneColor.visible?isDoneImg.right:parent.left
                             leftMargin: 20*AppStyle.size1W
                         }
                         verticalAlignment: Text.AlignVCenter
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        elide: Qt.ElideRight
                     }
                     Image {
                         id: isDoneImg
@@ -247,7 +476,9 @@ Item {
                         asynchronous: true
                     }
                     ColorOverlay{
+                        id:isDoneColor
                         visible: model.is_done === 1
+                        color: AppStyle.textOnPrimaryColor
                         source: isDoneImg
                         anchors.fill: isDoneImg
                     }
@@ -452,11 +683,11 @@ Item {
                                     }
                                 }
                                 Text {
-                                    QDateConvertor{id:dateConverter}
-                                    property date dueDate: model.due_date
+                                    property date dueDate: new Date(model.due_date)
                                     text:qsTr("زمان مشخص شده") +":<b> "
-                                         +(dueDate?String(dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth(),dueDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
-                                                  :qsTr("ثبت نشده است"))
+                                         +( dueDate ?AppStyle.ltr? dueDate.getFullYear()+"/"+(dueDate.getMonth()+1)+"/"+dueDate.getDate()
+                                                                 :(dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate())).slice(0,3).join("/")
+                                                    : qsTr("ثبت نشده است"))
                                          + "</b>"
                                     anchors{
                                         verticalCenter: dateImg.verticalCenter
