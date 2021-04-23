@@ -201,6 +201,8 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                                 if(myTools.checkFileExist(file["file_name"],file["file_extension"]))
                                     file["file_source"] = "file://"+myTools.getSaveDirectory()+file["file_name"]+"."+file["file_extension"]
                                 else file["file_source"] = "";
+                                let ids = response.result.map(item =>[item.id]).join(",")
+                                file["file_name"] = String(file["file_name"])
                                 model.append(file)
                             }
                         }
@@ -211,12 +213,12 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                         return null
                     }
                 }
                 catch(e) {
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                     return null
                 }
             }
@@ -276,7 +278,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            UsefulFunc.showLog(qsTr("فایل‌ها با موفقیت افزوده شد"),false,700*AppStyle.size1W)
+                            UsefulFunc.showLog(qsTr("فایل‌ها با موفقیت افزوده شد"),false)
                             insertFiles(response.result)
                         }
                     }
@@ -286,14 +288,14 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                     }
 
                 }
                 catch(e) {
                     let id = insertFiles(response.result)
                     LocalDatabase.insertLocalChanges([ {"table_id":5,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                 }
             }
         }
@@ -340,14 +342,14 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                     }
 
                 }
                 catch(e) {
                     deleteFilesLocalDatabase(fileId)
                     LocalDatabase.insertLocalChanges([ {"table_id":5,   "record_id":fileId,    "changes_type":3,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                 }
             }
         }
@@ -364,9 +366,10 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Files WHERE thing_id = ? ORDER By id ASC",listId)
+                            var result = tx.executeSql("SELECT * FROM Files WHERE things_id = ? ORDER By id ASC",thingId)
                             for(var i=0;i<result.rows.length;i++)
                             {
+                                result.rows.item(i).file_name = String(result.rows.item(i).file_name)
                                 valuesFiles.push(result.rows.item(i))
                             }
                         }
@@ -377,6 +380,29 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     })
         return valuesFiles
     }
+
+    function getFilseByIds(ids)
+    {
+        let valuesLogs = {}
+        Database.connection.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Files WHERE id IN(?))",idsS)
+                            if(result.rows.length)
+                            {
+                                valuesLogs = result.rows.item(0)
+                            }
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesLogs
+    }
+
     function getFileById(id)
     {
         let valuesLogs = {}
@@ -387,7 +413,9 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                         {
                             var result = tx.executeSql("SELECT * FROM Files WHERE id=?",id)
                             if(result.rows.length)
+                            {
                                 valuesLogs = result.rows.item(0)
+                            }
                         }
                         catch(e)
                         {
@@ -408,6 +436,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
             {
                 mapValues[i][j] = typeof mapValues[i][j] === "string"?'"'+ (mapValues[i][j]==="null"?"":mapValues[i][j]) + '"':mapValues[i][j]
             }
+
             let check = 0;
             Database.connection.transaction(function(tx){try{
                     var result = tx.executeSql("SELECT * FROM Files WHERE id=?",mapValues[i][0])
@@ -415,8 +444,10 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
             })
 
             if(!check)
-                finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
+                finalString += "(" + mapValues[i] + ")" + (i !== mapValues.length-1?",":"")
         }
+        if(finalString[finalString.length - 1] === ',')
+            finalString = finalString.slice(0,-1)
 
         let insertId = -1
         Database.connection.transaction(
