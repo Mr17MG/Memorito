@@ -3,6 +3,8 @@ QT += quick svg quickcontrols2
 CONFIG += c++11
 
 include(projects/openssl/openssl.pri)
+#include(projects/qt-quick-responsive-helper/src/src.pro)
+
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
