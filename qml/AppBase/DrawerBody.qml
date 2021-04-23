@@ -113,6 +113,11 @@ Item{
         }
         height: listView.height
         width: hovered || pressed?18*AppStyle.size1W:8*AppStyle.size1W
+        contentItem: Rectangle {
+            visible: parent.active
+            radius: parent.pressed || parent.hovered ?20*AppStyle.size1W:8*AppStyle.size1W
+            color: parent.pressed ?Material.color(AppStyle.primaryInt,Material.Shade900):Material.color(AppStyle.primaryInt,Material.Shade600)
+        }
     }
 
     AppListView{

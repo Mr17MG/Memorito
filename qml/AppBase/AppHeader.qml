@@ -18,18 +18,20 @@ Loader{
 
         Text{
             anchors{
-                right: parent.right
-                left : parent.left
+                right: menuBtn.visible?menuBtn.left:parent.right
+                rightMargin: AppStyle.size1W*20
+                left : backButton.visible?backButton.right:parent.left
                 verticalCenter: parent.verticalCenter
             }
             horizontalAlignment: Text.AlignHCenter
-            elide: AppStyle.ltr?Text.ElideRight:Text.ElideLeft
+            elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
             text: UsefulFunc.stackPages.get(UsefulFunc.mainPage.item.mainStackView.depth-1).title
             font{family: AppStyle.appFont;pixelSize: 50*AppStyle.size1F;}
             color: AppStyle.textColor
         }
 
         AppButton{
+            id: menuBtn
             flat: true
             implicitWidth: 90*AppStyle.size1W
             implicitHeight: 90*AppStyle.size1H

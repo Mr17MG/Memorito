@@ -9,8 +9,10 @@ import Global 1.0
 T.Menu {
     id: control
     onVisibleChanged: {
+        try{
         if(!visible)
             destroy()
+        }catch(e){}
     }
     Material.elevation: 8
 

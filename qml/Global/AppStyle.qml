@@ -25,8 +25,9 @@ QtObject {
 
 
     property color textColor                : appTheme ?   "#FFFFFF"     : "#0F110F"
-    property color shadowColor              : appTheme ?   "#171717"   :   "#EAEAEA"
+    property color shadowColor              : appTheme ?   "#5c5c5c"   :   "#d6d6d6"
     property color borderColor              : appTheme ?   "#ADFFFFFF" :   "#8D000000"
+    property color borderColorOnPrimary     : Material.color(primaryInt,Material.Shade200)
     property color rippleColor              : appTheme ?   "#22171717" :   "#224D4D4D"
     property color primaryColor             : Material.color(primaryInt)
     property color placeholderColor         : appTheme ?   "#B3FFFFFF" :   "#B3000000"
@@ -48,7 +49,6 @@ QtObject {
             SettingDriver.setValue("AppColor",primaryInt)
     }
 
-//    property aSettingDrivernt: appFont.name
     property bool ltr: translator?translator.getCurrentLanguage() === translator.getLanguages().ENG:false
 
     property var font: FontLoader{ name: "appFont";    source: ltr?"qrc:/Gilroy.otf":"qrc:/Shabnam.ttf" }

@@ -211,7 +211,7 @@ Item {
                     addDialog.close()
                 }
                 else {
-                    UsefulFunc.showLog(qsTr("لطفا نام دوست خود را وارد نمایید"),true,400*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("لطفا نام دوست خود را وارد نمایید"),true)
                 }
             }
             AppTextField{

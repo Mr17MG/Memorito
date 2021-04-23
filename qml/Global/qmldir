@@ -8,3 +8,6 @@ singleton UiFunctions       1.0     UiFunctions.qml
 singleton LocalDatabase     1.0     LocalDatabase.qml
 singleton SettingDriver     1.0     SettingDriver.qml
 singleton UserApi           1.0     UserAPI.qml
+
+AppShortcut                 1.0     AppShortcut.qml
+

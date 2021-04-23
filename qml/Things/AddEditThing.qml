@@ -38,7 +38,7 @@ Item {
     {
         if(titleInput.text.trim() === "")
         {
-            UsefulFunc.showLog(qsTr("لطفا قسمت 'چی تو دهنته؟' رو پر کن"),true,600*AppStyle.size1W)
+            UsefulFunc.showLog(qsTr("لطفا قسمت 'چی تو دهنته؟' رو پر کن"),true)
             titleMoveAnimation.start()
             return 2
         }
@@ -1181,11 +1181,11 @@ Item {
                         if (friendModel.count > 0)
                             UsefulFunc.showLog(
                                         qsTr("لطفا دوست خودتو انتخاب کن"),
-                                        true, 600 * AppStyle.size1W)
+                                        true)
                         else
                             UsefulFunc.showLog(
                                         qsTr("لطفااول دوستاتو اضافه کن بعد دوست خودتو انتخاب کن"),
-                                        true, 700 * AppStyle.size1W)
+                                        true)
                         return
                     }
 
@@ -1296,7 +1296,7 @@ Item {
                     if (dateInput.selectedDate.toString() === "Invalid Date") {
                         UsefulFunc.showLog(
                                     qsTr("لطفا زمانی که میخوای این کار رو بکنی مشخص کن"),
-                                    true, 700 * AppStyle.size1W)
+                                    true)
                         return
                     }
                     let hasFiles = checking()
@@ -1311,7 +1311,7 @@ Item {
                         dateInput.selectedDate = new Date(dateInput.selectedDate.setSeconds(
                                                               17))
                     }
-                    let dueDate = decodeURIComponent(UsefulFunc.formatDate( dateInput.selectedDate, false ))
+                    let dueDate = encodeURIComponent(UsefulFunc.formatDate( dateInput.selectedDate, false ))
                     let json = JSON.stringify(
                             {
                                 title : titleInput.text.trim(),
@@ -1633,7 +1633,7 @@ Item {
                     {
                         UsefulFunc.showLog(
                                     qsTr("لطفا پروژه موردنظر را انتخاب کن"),
-                                    true, 600 * AppStyle.size1W)
+                                    true)
                         return
                     }
                     let hasFiles = checking()

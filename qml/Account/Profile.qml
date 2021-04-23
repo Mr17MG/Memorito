@@ -199,7 +199,7 @@ Item {
 
             if(usernameInput.text.trim()==="" || emailInput.text.trim()==="")
             {
-                UsefulFunc.showLog(qsTr("اطلاعات وارد شده صحیح نمی‌باشد."),true)
+                UsefulFunc.showLog(qsTr("اطلاعات وارد شده صحیح نمی‌باشد."))
                 if(usernameInput.text.trim()==="")
                     usernameMoveAnimation.start()
                 if(emailInput.text.trim()==="")

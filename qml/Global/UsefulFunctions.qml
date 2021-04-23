@@ -91,14 +91,13 @@ QtObject {
         var component = Qt.createComponent("qrc:/Components/Log.qml")
         if(component.status === Component.Ready)
         {
-            var logObj = component.createObject(rootWindow)
+            var logObj = component.createObject(UsefulFunc.rootWindow)
             logObj.text = message
             logObj.isError = isError
-            logObj.width = width?(Math.min(width,rootWindow.width))
-                               :360*AppStyle.size1W
+
             let y = 0
             for(let i=0;i<logDetail.length;i++)
-                y += logDetail[i].height
+                y += logDetail[i].height + 5
             logObj.y =y
             logObj.open()
             logDetail.push({"index":logObj.index = (logDetail.length>0?logDetail[logDetail.length-1].index+1:0),"index2":logObj.index2 = (logDetail.length>0?logDetail[logDetail.length-1].index2+1:0),"height":logObj.height,"dialog":logObj})
@@ -112,7 +111,7 @@ QtObject {
                         logDetail[i].dialog.now -= logObj.now
                         logDetail[i].dialog.index -= 1
                         logDetail[i].index -= 1
-                        logDetail[i].dialog.y -= logDetail[logObj.index].height
+                        logDetail[i].dialog.y -= logDetail[logObj.index].height + 5
                     }
                 }
                 logDetail.splice(logObj.index, 1);
@@ -192,7 +191,7 @@ QtObject {
         let prevPage = stackPages.get(stackPages.count-2)
         stackPages.remove(stackPages.count-1)
         if(!object)
-          object =  mainPage.item.mainStackView.callForGetDataBeforePop()
+            object =  mainPage.item.mainStackView.callForGetDataBeforePop()
         mainPage.item.mainStackView.pop()
         mainPage.item.mainStackView.callWhenPop(object)
     }

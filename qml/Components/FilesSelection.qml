@@ -232,13 +232,13 @@ Rectangle{
                         let file = myTools.getFileInfo(decodeURIComponent((files[i].trim())))
                         if(UsefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
                         {
-                            UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true,900*AppStyle.size1W)
+                            UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true)
                             continue
                         }
 
                         if(file.file_size > 10485760) // Bigger than 10 Megabyte
                         {
-                            UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true,900*AppStyle.size1W)
+                            UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true)
                             continue
                         }
 
@@ -279,12 +279,12 @@ Rectangle{
                             let file = myTools.getFileInfo(decodeURIComponent((files[i].trim())))
                             if(UsefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
                             {
-                                UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true,900*AppStyle.size1W)
+                                UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true)
                                 continue
                             }
                             if(file.file_size > 10485760) // Bigger than 10 Megabyte
                             {
-                                UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true,900*AppStyle.size1W)
+                                UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true)
                                 continue
                             }
 

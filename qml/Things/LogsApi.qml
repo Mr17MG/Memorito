@@ -61,11 +61,11 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                                     let item = result.rows.item(i)
                                     if(item.changes_type === 1)
                                     {
-                                        addLog(item.log_text,null,item.local_id,item.change_id)
+                                        addLog(item.log_text,item.type_id,item.row_id,null,item.local_id,item.change_id)
                                     }
                                     else if(item.changes_type === 2)
                                     {
-                                        editLog(item.id,logText,null,-1,item.local_id,item.change_id)
+                                        editLog(item.id,item.log_text,item.type_id,item.row_id,null,-1,item.local_id,item.change_id)
                                     }
                                     else if(item.changes_type === 3)
                                     {
@@ -144,12 +144,12 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
     }
 
 
-    function getLogs(model)
+    function getLogs(model,typeId,rowId)
     {
         if(model.count>0 )
             return model
 
-        let valuesLogs = getLogsLocalDatabase() // get Logs from local database
+        let valuesLogs = getLogsLocalDatabase(typeId,rowId) // get Logs from local database
         if(valuesLogs.length >0){
             model.append(valuesLogs)
             return model
@@ -158,7 +158,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        let query = "user_id=" + User.id
+        let query = "user_id=" + User.id + "&type_id=" + typeId + "&row_id=" + rowId
         xhr.open("GET", domain+"/api/v1/logs"+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
@@ -202,12 +202,12 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                         return null
                     }
                 }
                 catch(e) {
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                     return null
                 }
             }
@@ -218,8 +218,10 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
     {
         let json = JSON.stringify(
                 {
-                    user_id: User.id,
-                    log_text: logText
+                    user_id : User.id,
+                    log_text: logText,
+                    type_id : typeId,
+                    row_id  : rowId
                 }, null, 1);
 
         var xhr = new XMLHttpRequest();
@@ -263,14 +265,14 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                     }
 
                 }
                 catch(e) {
                     let id = insertLogs([{"id":-1, "log_text":logText, "type_id":typeId, "row_id":rowId, "user_id":User.id,"register_date" : "", "modified_date":"" }])
                     LocalDatabase.insertLocalChanges  (   [   {"table_id":7,   "record_id":id,    "changes_type":1,  "user_id":User.id }   ] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                 }
             }
         }
@@ -307,8 +309,8 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     {
                         if(response.code === 200){
                             if(local_id === null)        {
-                                model.set(modelIndex,{"log_text":logText})
-                                
+                                model.set(modelIndex,response.result)
+
                                 updateLogs(response.result)
                             }
                             else {
@@ -323,7 +325,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                     }
 
                 }
@@ -331,7 +333,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     model.set(modelIndex,{"log_text":logText})
                     updateLogs( {"id":logId, "log_text":logText, "type_id":typeId, "row_id":rowId, "user_id": User.id, "register_date":"", "modified_date":"" },local_id)
                     LocalDatabase.insertLocalChanges([ {"table_id":7,   "record_id":logId,    "changes_type":2,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                 }
             }
         }
@@ -380,14 +382,14 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             console.trace();UsefulFunc.showUnauthorizedError()
                         }
                         else
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                     }
 
                 }
                 catch(e) {
                     deleteLogLocalDatabase(logId)
                     LocalDatabase.insertLocalChanges([ {"table_id":7,   "record_id":logId,    "changes_type":3,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true,1700*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
                 }
             }
         }
@@ -395,7 +397,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
 
     /****************** Local Database Function Table:Logs  **************************/
 
-    function getLogsLocalDatabase()
+    function getLogsLocalDatabase(typeId,rowId)
     {
         let valuesLogs=[]
         Database.connection.transaction(
@@ -403,7 +405,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Logs ORDER By id ASC")
+                            var result = tx.executeSql("SELECT * FROM Logs WHERE TYPE_ID = ? AND ROW_ID = ? ORDER By id ASC",[typeId,rowId])
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesLogs.push(result.rows.item(i))

@@ -10,7 +10,10 @@ T.TextField {
     id: control
     property bool hasCounter: true
     property bool filedInDialog: false
-    color: AppStyle.textColor
+    property bool fieldInPrimary : false
+    property alias borderColor : bgRect.border
+    property color bgUnderItem
+    color: fieldInPrimary ? "black" : AppStyle.textColor
     padding: AppStyle.size1H*10
     font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*25;}
     placeholderText: ""
@@ -28,11 +31,11 @@ T.TextField {
     selectByMouse: true
     verticalAlignment: TextInput.AlignVCenter
     cursorDelegate: CursorDelegate { }
-    horizontalAlignment: AppStyle.ltr?Text.AlignLeft:Text.AlignRight
+    horizontalAlignment: Text.AlignRight
     Label {
         id: controlPlaceHolder
         text: control.placeholderText
-        color: control.focus || control.text!==""?AppStyle.textColor: AppStyle.placeholderColor
+        color: fieldInPrimary ? "black":control.focus || control.text!==""?AppStyle.textColor: AppStyle.placeholderColor
         y: control.focus || control.text!==""?-10*AppStyle.size1H:height-10*AppStyle.size1H
         anchors.right:  control.right
         anchors.rightMargin: parent.padding + 10*AppStyle.size1W
@@ -46,8 +49,9 @@ T.TextField {
             anchors.rightMargin: -15*AppStyle.size1W
             height: parent.height
             z:-1
-            color: filedInDialog?AppStyle.dialogBackgroundColor
-                                 :AppStyle.appBackgroundColor
+            color: filedInDialog? AppStyle.dialogBackgroundColor
+                                : fieldInPrimary ? bgUnderItem
+                                                 : AppStyle.appBackgroundColor
             visible: control.focus || control.text!==""
             radius: 15*AppStyle.size1W
         }
@@ -55,7 +59,7 @@ T.TextField {
     Label {
         id: counterLabel
         text: control.length+" / "+control.maximumLength
-        color: AppStyle.placeholderColor
+        color: fieldInPrimary ? "black":AppStyle.placeholderColor
         y: control.height-15*AppStyle.size1H
         visible: hasCounter
         anchors{
@@ -70,14 +74,17 @@ T.TextField {
             height: parent.height
             z:-1
             color: filedInDialog? AppStyle.dialogBackgroundColor
-                                : AppStyle.appBackgroundColor
+                                : fieldInPrimary ? bgUnderItem
+                                                 : AppStyle.appBackgroundColor
             radius: 15*AppStyle.size1W
         }
     }
     background: Rectangle {
         id: bgRect
         anchors.fill: parent
-        border.color: control.focus? AppStyle.primaryColor : AppStyle.borderColor
+        border.color: control.focus? AppStyle.primaryColor
+                                   : fieldInPrimary ? AppStyle.borderColorOnPrimary
+                                                    : AppStyle.borderColor
         radius: 15*AppStyle.size1W
         color: "transparent"
     }

@@ -252,14 +252,14 @@ Item {
                 if(categoryName.text.trim() !== "")
                 {
                     if(isAdd){
-                        CategoriesApi.addCategory(categoryName.text.trim(),categoryDetailArea.text.trim(),listId,projectCategoryModel)
+                        CategoriesApi.addCategory(categoryName.text.trim(),categoryDetailArea.text.trim(),listId,internalModel)
                     } else {
-                        CategoriesApi.editCategory(categoryId,categoryName.text.trim(),categoryDetailArea.text.trim(),listId,projectCategoryModel,modelIndex)
+                        CategoriesApi.editCategory(categoryId,categoryName.text.trim(),categoryDetailArea.text.trim(),listId,internalModel,modelIndex)
                     }
                     addDialog.close()
                 }
                 else {
-                    UsefulFunc.showLog(qsTr("لطفا نام پروژه خود را وارد نمایید"),true,400*AppStyle.size1W)
+                    UsefulFunc.showLog(qsTr("لطفا نام پروژه خود را وارد نمایید"),true)
                 }
             }
             AppTextInput{

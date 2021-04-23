@@ -2,9 +2,12 @@ import QtQuick 2.14 // Rquire For Item
 import QtQuick.Controls.Material 2.14 // Require for Material.foreground
 import QtGraphicalEffects 1.14
 import Components 1.0// Require for AppButton and ...
+import QtQuick.Window 2.15
 import Global 1.0
+import QtQuick.Controls 2.15
 
 Item{
+    id:root
     function getKeyType()
     {
         if( usernameInput.text.length > 0  && passwordInput.text.length > 0)
@@ -24,32 +27,15 @@ Item{
         else signinBtn.clicked(Qt.RightButton)
     }
 
-    AppButton{
-        id:languageBtn
-        flat: true
-        anchors{
-            top: parent.top
-            topMargin: 20*AppStyle.size1H
-        }
-        width: parent.width
-        text: qsTr("English Version")
-        radius: 20*AppStyle.size1W
-        onClicked: {
-            if(!AppStyle.ltr)
-                translator.updateLanguage(31) // For Farsi
-
-            else translator.updateLanguage(89) // For English
-        }
-    }
 
     Item{
         anchors{
-            topMargin: 50*AppStyle.size1H
+            topMargin: 150*AppStyle.size1H
             rightMargin: 100*AppStyle.size1W
             bottomMargin: 30*AppStyle.size1H
             leftMargin: 100*AppStyle.size1W
             bottom: accountItem.top
-            top: languageBtn.bottom
+            top: parent.top
             left: parent.left
             right: parent.right
         }
@@ -165,14 +151,14 @@ Item{
                     {
                         usernameMoveAnimation.start()
                         usernameInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,UsefulFunc.authLoader.width)
+                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true)
                         return
                     }
                     if(passwordInput.text === "" )
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را وارد نمایید"),true,UsefulFunc.authLoader.width)
+                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را وارد نمایید"),true)
                         return
                     }
                     UserApi.signIn(usernameInput.text,passwordInput.text)
@@ -202,7 +188,7 @@ Item{
                         {
                             usernameMoveAnimation.start()
                             usernameInput.forceActiveFocus()
-                            UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true,UsefulFunc.authLoader.width)
+                            UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true)
                             return
                         }
                         UserApi.forgetPass(usernameInput.text)

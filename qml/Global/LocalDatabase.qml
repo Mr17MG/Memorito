@@ -546,6 +546,7 @@ QtObject{
                             if(response.result.length > 0)
                             {
                                 insertServerChanges(response.result)
+
                                 SettingDriver.setValue("last_date",decodeURIComponent(response.result[0].register_date))
                             }
               }
@@ -558,7 +559,7 @@ QtObject{
                             return
                         }
                         else{
-                            UsefulFunc.showLog(response.message,true,1700*AppStyle.size1W)
+                            UsefulFunc.showLog(response.message,true)
                             return
                         }
                     }
@@ -585,7 +586,6 @@ QtObject{
             }
             finalString += "(" + mapValues[i] + ")" + (i!==mapValues.length-1?",":"")
         }
-
         Database.connection.transaction(
                     function(tx)
                     {
@@ -612,14 +612,12 @@ QtObject{
                             {
                                 sIds += ids.rows.item(i).ServerId;
                                 cIds += ids.rows.item(i).ChangeId;
-                                console.log(i,JSON.stringify(ids.rows.item(i)))
                                 if(i !==ids.rows.length -1)
                                 {
                                     cIds+=",";
                                     sIds+=','
                                 }
                             }
-                            console.log(sIds,cIds)
                             if(sIds)
                                 deleteFromServerChanges(sIds)
                             if(cIds)

@@ -43,7 +43,7 @@ QtObject{
 
         else if(User.avatar.length>10)
         {
-            profile= "file://" + myTools.saveBase64asFile("profile-"+User.id,"jpeg",User.avatar)
+            profile= "file://" +encodeURIComponent( myTools.saveBase64asFile("profile-"+User.id,"jpeg",User.avatar))
         }
         else{
             profile= "qrc:/user.svg"

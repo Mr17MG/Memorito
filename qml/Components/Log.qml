@@ -20,7 +20,8 @@ Drawer {
     }
     modal: false
     closePolicy: Dialog.NoAutoClose
-    width: 360*AppStyle.size1W
+    width:  text.width + 80*AppStyle.size1W
+
     height: AppStyle.size1H*30 + text.height
     onClosed: {
         if(typeof callAfterClose === "function")
@@ -91,17 +92,20 @@ Drawer {
         id:text
         text: "محل نمایش خطا"
         color: "white"
-        width: parent.width - close.width
         anchors{
             right: close.left
             rightMargin: AppStyle.size1W*10
-            left: parent?parent.left:undefined
-            leftMargin: AppStyle.size1W*5
             verticalCenter: parent?parent.verticalCenter:undefined
         }
+        onTextChanged: {
+            if( width > (UsefulFunc.rootWindow.width - 75*AppStyle.size1W))
+                width = (UsefulFunc.rootWindow.width - 75*AppStyle.size1W)
+        }
+
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        wrapMode: Text.WordWrap
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:false }
+
     }
 }

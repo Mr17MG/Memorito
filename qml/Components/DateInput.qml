@@ -1,4 +1,4 @@
-import QtQuick 2.12
+﻿import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
@@ -13,7 +13,7 @@ Item {
     property bool hasTime: false
     property bool justTime: false
     property alias date: date
-    property color textOnPrimary: "white"
+    property color textOnPrimary: AppStyle.textOnPrimaryColor
     property string placeholderText: ""
     property color placeholderColor : AppStyle.textColor//Material.color(AppStyle.primaryInt)
     property alias datePicker: datePickerRoot
@@ -106,7 +106,7 @@ Item {
             rows: 5
             width: datePickerRoot.calendarWidth
             height: datePickerRoot.calendarHeight
-//            layoutDirection: isShamsi?Qt.RightToLeft:Qt.LeftToRight
+            //            layoutDirection: isShamsi?Qt.RightToLeft:Qt.LeftToRight
             LayoutMirroring.enabled: isShamsi?true:false;
             LayoutMirroring.childrenInherit: isShamsi?true:false
             Pane {
@@ -118,14 +118,24 @@ Item {
                 Layout.row: 0
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                onWidthChanged: {
+                    if(width === calendarGrid.width)
+                    {
+                        col1.Layout.preferredWidth= parent.width/2
+                        col1.Layout.maximumWidth  = parent.width/2
+                        col2.Layout.preferredWidth= parent.width/2
+                        col2.Layout.maximumWidth  = parent.width/2
+                    }
+                }
                 background: Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     color: Material.color(AppStyle.primaryInt)
                 }
                 RowLayout{
-                    Layout.rowSpan: 2
+                    Layout.rowSpan: 1
                     ColumnLayout {
+                        id:col1
                         spacing: AppStyle.size1W*6
                         Label {
                             topPadding: AppStyle.size1H*24
@@ -148,8 +158,10 @@ Item {
                         }
                     }
                     ColumnLayout {
+                        id:col2
                         spacing: AppStyle.size1W*6
                         Label {
+                            Layout.alignment: Qt.AlignRight
                             topPadding: AppStyle.size1H*24
                             leftPadding: AppStyle.size1W*48
                             rightPadding: AppStyle.size1W*48
@@ -160,6 +172,7 @@ Item {
                             opacity: 0.9
                         }
                         Label {
+                            Layout.alignment: Qt.AlignRight
                             leftPadding: AppStyle.size1W*48
                             rightPadding: AppStyle.size1W*48
                             bottomPadding: AppStyle.size1H*24
@@ -209,14 +222,48 @@ Item {
                             monthgridflow.monthModel= customDate.monthDays(isShamsi);
                         }
                     }
-                    Label {
+                    Item{
                         Layout.fillWidth: true
                         Layout.preferredWidth: AppStyle.size1W*3
-                        text: getShamsiDate(datePicker.selectedDate,getLocale()).monthName() + " " + getShamsiYear(datePicker.selectedDate,getLocale());
-                        font.family: AppStyle.appFont
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        font.pixelSize: AppStyle.size1F*36
+                        Label {
+                            id:monthLbl
+                            text: getShamsiDate(datePicker.selectedDate,getLocale()).monthName();
+                            font.family: AppStyle.appFont
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.pixelSize: AppStyle.size1F*36
+                            anchors{
+                                horizontalCenter: parent.horizontalCenter
+                                horizontalCenterOffset: -width/2 - 10*AppStyle.size1W
+                                verticalCenter: parent.verticalCenter
+                            }
+
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+//                                    monthSelector.open()
+                                }
+                            }
+                        }
+                        Label {
+                            id:yearLbl
+                            text:getShamsiYear(datePicker.selectedDate,getLocale());
+                            font.family: AppStyle.appFont
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.pixelSize: AppStyle.size1F*36
+                            anchors{
+                                horizontalCenter: parent.horizontalCenter
+                                horizontalCenterOffset: width/2 + 10*AppStyle.size1W
+                                verticalCenter: parent.verticalCenter
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+//                                    yearSelector.open()
+                                }
+                            }
+                        }
                     }
                     Button {
                         Layout.fillWidth: true
@@ -236,7 +283,44 @@ Item {
                     }
                 } // row layout title
             } // title column layout
+// TODO: Choose month and year easier
+//            Popup{
+//                id:yearSelector
+//                parent: yearLbl
+//                x: -width/4
+//                y:yearLbl.height
+//                width: yearLbl.width*2
+//                height: 200*AppStyle.size1H
+//            }
 
+//            Popup{
+//                id:monthSelector
+//                parent: monthLbl
+//                x: -width/4
+//                y: monthLbl.height
+//                width: monthLbl.width*2
+//                height: 6*85*AppStyle.size1H
+
+//                Flickable{
+//                    anchors.fill: parent
+//                    clip: true
+//                    contentHeight: column.height
+
+//                    Column{
+//                        id:column
+//                        width: parent.width
+//                        Repeater{
+//                            model: 12
+//                            delegate: AppButton{
+//                                text: monthName(index+1)
+//                                height: 85*AppStyle.size1H
+//                                width: parent.width
+//                                flat: true
+//                            }
+//                        }
+//                    }
+//                }
+//            }
             // TODO not working in dark theme
             DayOfWeekRow {
                 id: dayOfWeekRow
@@ -422,7 +506,12 @@ Item {
                         font.family: AppStyle.appFont
                         font.pixelSize: AppStyle.size1F*28
                         onClicked: {
-                            datePickerRoot.selectedDate = new Date()
+                            var today = datePickerRoot.selectedDate = new Date()
+                            if(maxSelectedDate && today > maxSelectedDate.setHours(23,59,59,0))
+                                datePickerRoot.selectedDate = maxSelectedDate;
+                            if(maxSelectedDate && today <= minSelectedDate.setHours(0,0,0,0))
+                                datePickerRoot.selectedDate = minSelectedDate;
+
                             datePickerRoot.displayMonth = getShamsiMonth(datePickerRoot.selectedDate,getLocale())-1
                             datePickerRoot.displayYear = datePickerRoot.selectedDate.getFullYear()
                             customDate.date = datePickerRoot.selectedDate;
@@ -451,6 +540,11 @@ Item {
             datePickerRoot.isOK = false
             customDate.date = selectedDate;
             monthgridflow.monthModel= customDate.monthDays(isShamsi);
+
+//            if(maxSelectedDate && selectedDate > maxSelectedDate.setHours(23,59,59,0))
+//                datePickerRoot.selectedDate = maxSelectedDate;
+//            if(maxSelectedDate && selectedDate <= minSelectedDate.setHours(0,0,0,0))
+//                datePickerRoot.selectedDate = minSelectedDate;
         }
         onClosed: {
             if(!datePickerRoot.isOK){
@@ -582,8 +676,7 @@ Item {
                         }
                     }
                 }
-                // not found
-                //console.log("Minutes not found: "+hour)
+
                 pickMinutes = false
                 innerButtonIndex = -1
                 outerButtonIndex = 0
@@ -617,8 +710,7 @@ Item {
                         return
                     }
                 }
-                // not found
-                //console.log("Minutes not found: "+minutes)
+
                 innerButtonIndex = -1
                 outerButtonIndex = 0
                 pickMinutes = true
@@ -1148,12 +1240,14 @@ Item {
         return customDate;
     }
     function isInRange(date){
+
         if(maxSelectedDate && date>maxSelectedDate.setHours(23,59,59,0)){
             return false;
         }
-        if(minSelectedDate && date<minSelectedDate.setHours(0,0,0,0)){
+        if(minSelectedDate && date<=minSelectedDate.setHours(0,0,0,0)){
             return false;
         }
+
         return true;
     }
     function addDays(date, days) {
