@@ -51,6 +51,6 @@ QtObject {
 
     property bool ltr: translator?translator.getCurrentLanguage() === translator.getLanguages().ENG:false
 
-    property var font: FontLoader{ name: "appFont";    source: ltr?"qrc:/Gilroy.otf":"qrc:/Shabnam.ttf" }
+    property var font: FontLoader{ name: "appFont";    source: ltr?"qrc:/Gilroy.otf":"qrc:/Nahid.ttf" }
     property string appFont: font.name
 }

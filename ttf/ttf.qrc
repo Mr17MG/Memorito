@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>Shabnam.ttf</file>
         <file>Gilroy.otf</file>
+        <file>Heebo-Regular.ttf</file>
+        <file>Nahid.ttf</file>
     </qresource>
 </RCC>
