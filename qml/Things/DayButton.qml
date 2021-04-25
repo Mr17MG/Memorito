@@ -27,12 +27,13 @@ TabButton{
         var fromDate = new Date(modelData)
         var toDate = new Date(modelData)
 
-        modelData.setHours(0)
-        modelData.setMinutes(0)
-        modelData.setSeconds(0)
-        modelData.setHours(23)
-        modelData.setMinutes(59)
-        modelData.setSeconds(59)
+        fromDate.setHours(0)
+        fromDate.setMinutes(0)
+        fromDate.setSeconds(0)
+
+        toDate.setHours(23)
+        toDate.setMinutes(59)
+        toDate.setSeconds(59)
 
         internalModel.append(ThingsApi.getThingByDate(fromDate,toDate))
 

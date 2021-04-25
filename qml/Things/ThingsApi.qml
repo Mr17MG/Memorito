@@ -188,7 +188,8 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
             valuesThings = getThingsByListIdAndCategoryId(listId,categoryId)
 
         if(valuesThings.length >0){
-            model.append(valuesThings)
+            if(model[0] !== "__")
+                model.append(valuesThings)
             return model
         }
 
@@ -236,7 +237,8 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
 
                             let valuesThings = getThingById(ids)
                             if(valuesThings.length >0){
-                                model.append(valuesThings)
+                                if(model[0] !== "__")
+                                    model.append(valuesThings)
                                 return model
                             }
                         }
@@ -604,12 +606,22 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
     function getThingByDate(fromDate,toDate)
     {
         let valuesThings = []
+
+        if(fromDate === 0 && toDate ===0)
+            return valuesThings
+
+        else if (fromDate !== 0 && toDate === 0)
+            toDate = new Date('3000')
+
+        else if (fromDate === 0 && toDate !== 0)
+            fromDate = new Date(0)
+
         Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Things WHERE date(due_date) BETWEEN date(?) AND date(?) ",[fromDate,toDate])
+                            var result = tx.executeSql("SELECT * FROM Things WHERE datetime(due_date) BETWEEN datetime(?) AND datetime(?) ",[fromDate,toDate])
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesThings.push(result.rows.item(i))

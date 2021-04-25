@@ -3,9 +3,10 @@ import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.14
 import QtGraphicalEffects 1.14
 import QtQuick.Layouts 1.15
+
 import Components 1.0
 import Global 1.0
-
+import QDateConvertor 1.0
 Item {
 
     ListModel { id: attachModel }
@@ -479,7 +480,7 @@ Item {
                     id: calendarLoader
                     active: height !== 0
                     width: parent.width
-                    height: calendarRadio.checked ? 220 * AppStyle.size1W : 0
+                    height: calendarRadio.checked ? 320 * AppStyle.size1W : 0
                     Behavior on height {
                         NumberAnimation {
                             duration: 200
@@ -1242,13 +1243,147 @@ Item {
                 }
             }
             clip: true
+            TabBar{
+                id: suggestionTab
+                width: parent.width
+                height: 100*AppStyle.size1H
+                anchors {
+                    top: parent.top
+                    topMargin: 20 * AppStyle.size1W
+                    right: parent.right
+                    rightMargin: 20 * AppStyle.size1W
+                    left: parent.left
+                    leftMargin: 20 * AppStyle.size1W
+                }
+                LayoutMirroring.enabled: !AppStyle.ltr
+                LayoutMirroring.childrenInherit: true
+                currentIndex: 0
+                QDateConvertor{id:dateConvertor}
+                TabButton{
+                    text: qsTr("زمان دلخواه")
+                    width: 200 * AppStyle.size1W
+                }
+                TabButton{
+                    text: qsTr("فردا")
+                    width: 200 * AppStyle.size1W
+                    onCheckedChanged: {
+                        if(checked)
+                        {
+                            var today = new Date()
+                            today.setDate(today.getDate()+1)
+                            dateInput.selectedDate = today
+                        }
+                    }
+                }
+                TabButton{
+                    text: qsTr("پس فردا")
+                    width: 200 * AppStyle.size1W
+                    onCheckedChanged: {
+                        if(checked)
+                        {
+                            var today = new Date()
+                            today.setDate(today.getDate()+2)
+                            dateInput.selectedDate = today
+                        }
+                    }
+                }
+                TabButton{
+                    text: qsTr("آخرهفته")
+                    width: 200 * AppStyle.size1W
+                    onCheckedChanged: {
+                        if(checked)
+                        {
+                            var today = new Date()
+                            today.setDate((AppStyle.ltr?6:4)-today.getDay()+today.getDate())
+                            dateInput.selectedDate = today
+                        }
+                    }
+                }
+                TabButton{
+                    text: qsTr("اول هفته‌ی بعد")
+                    width: 200 * AppStyle.size1W
+                    onCheckedChanged: {
+                        if(checked)
+                        {
+                            var today = new Date()
+                            today.setDate((AppStyle.ltr?8:6)-today.getDay()+today.getDate())
+                            dateInput.selectedDate = today
+                        }
+                    }
+                }
+                TabButton{
+                    text: qsTr("آخر ماه")
+                    width: 200 * AppStyle.size1W
+                    onCheckedChanged: {
+                        if(checked)
+                        {
+                            var today = new Date()
+                            if(AppStyle.ltr)
+                            {
+                                today.setMonth(today.getMonth()+1)
+                                today.setDate(1)
+                                today.setDate(today.getDate()-2)
+                            }
+                            else{
+                                var todayJalali = dateConvertor.toJalali(today.getFullYear(),today.getMonth()+1,today.getDate())
+                                if(Number(todayJalali[1])+1 > 12)
+                                {
+                                    todayJalali[0] = Number(todayJalali[0])+1
+                                    todayJalali[1] = Number(todayJalali[1])-12
+                                }
+                                else {
+                                    todayJalali[1] = Number(todayJalali[1])+1
+                                }
+                                var miladi = dateConvertor.toMiladi(Number(todayJalali[0]),Number(todayJalali[1]),1)
+                                today = new Date(Number(miladi[0]),Number(miladi[1])-1,Number(miladi[2]))
+                                today.setDate(today.getDate()-2)
+                            }
+
+                            dateInput.selectedDate = today
+                        }
+                    }
+                }
+                TabButton{
+                    text: qsTr("اول ماه بعد")
+                    width: 200 * AppStyle.size1W
+                    onCheckedChanged: {
+                        if(checked)
+                        {
+                            var today = new Date()
+                            if(AppStyle.ltr)
+                            {
+                                today.setMonth(today.getMonth()+1)
+                                today.setDate(1)
+                                today.setDate(today.getDate())
+                            }
+                            else{
+                                var todayJalali = dateConvertor.toJalali(today.getFullYear(),today.getMonth()+1,today.getDate())
+                                if(Number(todayJalali[1])+1 > 12)
+                                {
+                                    todayJalali[0] = Number(todayJalali[0])+1
+                                    todayJalali[1] = Number(todayJalali[1])-12
+                                }
+                                else {
+                                    todayJalali[1] = Number(todayJalali[1])+1
+                                }
+                                var miladi = dateConvertor.toMiladi(Number(todayJalali[0]),Number(todayJalali[1]),1)
+                                today = new Date(Number(miladi[0]),Number(miladi[1]-1),Number(miladi[2]))
+                            }
+
+                            dateInput.selectedDate = today
+                        }
+                    }
+                }
+            }
+
             property date dueDate: prevPageModel ? prevPageModel.due_date ? new Date(prevPageModel.due_date) : "" : ""
             AppCheckBox {
                 id: clockCheck
+                visible: suggestionTab.currentIndex === 0
                 anchors {
                     left: parent.left
                     leftMargin: 20 * AppStyle.size1W
-                    top: parent.top
+                    top: suggestionTab.bottom
                     topMargin: 20 * AppStyle.size1W
                 }
                 text: qsTr("تعیین ساعت")
@@ -1258,17 +1393,36 @@ Item {
             }
             AppDateInput {
                 id: dateInput
+                visible: suggestionTab.currentIndex === 0
                 placeholderText: qsTr("زمان مورد نظر را انتخاب نمایید")
                 hasTime: clockCheck.checked
                 minSelectedDate: new Date()
                 selectedDate: calendarItem.dueDate
                 anchors {
-                    top: parent.top
+                    top: suggestionTab.bottom
                     right: clockCheck.left
                     rightMargin: 30 * AppStyle.size1W
                     left: parent.left
                     leftMargin: 20 * AppStyle.size1W
                 }
+            }
+            Text{
+                anchors {
+                    top: suggestionTab.bottom
+                    topMargin: 20 * AppStyle.size1W
+                    right: parent.right
+                    rightMargin: 20 * AppStyle.size1W
+                    left: parent.left
+                    leftMargin: 20 * AppStyle.size1W
+                }
+                visible: suggestionTab.currentIndex !== 0
+                text: qsTr("زمان انتخاب شده") + ": "+ dateInput.date.text
+                color: AppStyle.textColor
+                font {
+                    family: AppStyle.appFont
+                    pixelSize: AppStyle.size1F * 30
+                }
+
             }
 
             AppButton {

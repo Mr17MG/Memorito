@@ -154,5 +154,8 @@
         <file>tick.svg</file>
         <file>translate.svg</file>
         <file>previous.svg</file>
+        <file>day.svg</file>
+        <file>month.svg</file>
+        <file>year.svg</file>
     </qresource>
 </RCC>

@@ -68,5 +68,7 @@
         <file>Responsive/ResponsiveHelper.qml</file>
         <file>Responsive/TextField.qml</file>
         <file>Things/DayButton.qml</file>
+        <file>Things/MonthButton.qml</file>
+        <file>Things/YearButton.qml</file>
     </qresource>
 </RCC>

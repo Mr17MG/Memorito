@@ -24,7 +24,10 @@ Item {
             internalModel.append(ThingsApi.getThingByFriendId(categoryId))
         else if(listId === Memorito.Contexts)
             internalModel.append(ThingsApi.getThingByContextId(categoryId))
-        else if(listId === Memorito.Calendar);
+        else if(listId === Memorito.Calendar)
+        {
+            ThingsApi.getThings(["__"],listId,categoryId)
+        }
 
         else
             ThingsApi.getThings(internalModel,listId,categoryId)
@@ -120,25 +123,47 @@ Item {
                 id:topTab
                 LayoutMirroring.enabled: !AppStyle.ltr
                 LayoutMirroring.childrenInherit: true
+                Material.accent: AppStyle.textOnPrimaryColor
+                background: Rectangle {
+                    color: Material.color(AppStyle.primaryInt,Material.ShadeA700)
+                    radius: 50*AppStyle.size1W
+                    Rectangle {
+                        width: parent.width
+                        color: parent.color
+                        anchors{
+                            bottom: parent.bottom
+                        }
+                        height: parent.radius
+                    }
+                    layer.enabled: topTab.Material.elevation > 0
+                    layer.effect: ElevationEffect {
+                        elevation: topTab.Material.elevation
+                        fullWidth: true
+                    }
+                }
 
                 TabButton{
                     id:dayBtn
                     text: qsTr("روز")
+                    Material.foreground: AppStyle.textOnPrimaryColor
                 }
 
                 TabButton{
                     id:monthBtn
                     text: qsTr("ماه")
+                    Material.foreground: AppStyle.textOnPrimaryColor
                 }
 
                 TabButton{
                     id:yearBtn
                     text: qsTr("سال")
+                    Material.foreground: AppStyle.textOnPrimaryColor
                 }
 
                 TabButton{
                     id:optionBtn
                     text: qsTr("دلخواه")
+                    Material.foreground: AppStyle.textOnPrimaryColor
                 }
             }
         }
@@ -155,7 +180,7 @@ Item {
             leftMargin: 20*AppStyle.size1W
         }
         width: parent.width
-
+        clip: true
         sourceComponent:Item{
             width: parent.width
             height: 100*AppStyle.size1H
@@ -177,20 +202,20 @@ Item {
                         icon{
                             source: AppStyle.ltr?"qrc:/previous.svg":"qrc:/next.svg"
                             color: !enabled ? Material.hintTextColor :
-                                               sevenDaysAgo.pressed ? Material.accentColor
-                                                                    : Material.foreground
+                                              sevenDaysAgo.pressed ? Material.accentColor
+                                                                   : Material.foreground
                             width: 30*AppStyle.size1W
                             height:30*AppStyle.size1W
                         }
                         LayoutMirroring.enabled: !AppStyle.ltr
                         width: 200*AppStyle.size1W
-                        property int deletedDays : 0
+                        property int deletedDays : -1
                         enabled: dayTab.count < 21
                         onClicked: {
                             for(let i=0; i <7 ; i++)
                             {
                                 var today = new Date()
-                                var component = Qt.createComponent(DayButton,parent);
+                                var component = Qt.createComponent('DayButton.qml',parent);
                                 if (component.status === Component.Ready){
                                     var d = component.createObject(parent, {modelData: new Date(today.setDate( today.getDate()+(deletedDays-i)))});
                                     dayTab.insertItem(1,d)
@@ -199,7 +224,8 @@ Item {
                             }
 
                             deletedDays -= 7
-                            dayTab.setCurrentIndex(7)
+                            dayTab.setCurrentIndex(1)
+                            dayTab.currentItem.clicked(Qt.RightButton)
                         }
                     }
                     TabButton{
@@ -211,8 +237,8 @@ Item {
                         icon{
                             source: !AppStyle.ltr?"qrc:/previous.svg":"qrc:/next.svg"
                             color: !enabled ? Material.hintTextColor :
-                                               sevenDaysLater.pressed ? Material.accentColor
-                                                                    : Material.foreground
+                                              sevenDaysLater.pressed ? Material.accentColor
+                                                                     : Material.foreground
                             width: 30*AppStyle.size1W
                             height:30*AppStyle.size1W
                         }
@@ -232,6 +258,7 @@ Item {
 
                             addedDays+=7
                             dayTab.setCurrentIndex(dayTab.count-8)
+                            dayTab.currentItem.clicked(Qt.RightButton)
                         }
                     }
                 }
@@ -244,16 +271,77 @@ Item {
                 visible: active
                 anchors.fill: parent
                 sourceComponent: TabBar{
+                    id: monthTab
                     LayoutMirroring.enabled: !AppStyle.ltr
                     LayoutMirroring.childrenInherit: true
                     currentIndex: AppStyle.ltr?new Date().getMonth()
                                               :dateConverter.toJalali(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())[1]
-                    Repeater{
-                        model: AppStyle.ltr?["January","February","March","April","May","June","July","August","September","October","November","December"]
-                                           :dateConverter.get_month()
-                        delegate: TabButton{
-                            text: modelData
-                            width: monthLoader.width/12<200*AppStyle.size1W?200*AppStyle.size1W:monthLoader.width/12
+                    Component.onCompleted: {
+                        fourMonthLater.clicked()
+                    }
+                    TabButton{
+                        id: fourMonthAgo
+                        text: qsTr("۴ ماه قبلی")
+                        icon{
+                            source: AppStyle.ltr?"qrc:/previous.svg":"qrc:/next.svg"
+                            color: !enabled ? Material.hintTextColor :
+                                              fourMonthAgo.pressed ? Material.accentColor
+                                                                   : Material.foreground
+                            width: 30*AppStyle.size1W
+                            height:30*AppStyle.size1W
+                        }
+                        LayoutMirroring.enabled: !AppStyle.ltr
+                        width: 200*AppStyle.size1W
+                        property int deletedMonth : -1
+                        enabled: monthTab.count < 12
+                        onClicked: {
+                            for(let i=0; i < 4 ; i++)
+                            {
+                                var today = new Date()
+                                var component = Qt.createComponent('MonthButton.qml',parent);
+                                if (component.status === Component.Ready){
+                                    var d = component.createObject(parent, {modelData: new Date(today.setMonth( today.getMonth()+(deletedMonth-i)))});
+                                    monthTab.insertItem(1,d)
+                                }
+                                else console.log(component.errorString())
+                            }
+
+                            deletedMonth -= 4
+                            monthTab.setCurrentIndex(1)
+                            monthTab.currentItem.clicked(Qt.RightButton)
+                        }
+                    }
+                    TabButton{
+                        id: fourMonthLater
+                        text: qsTr("۴ ماه بعدی")
+                        width: 200*AppStyle.size1W
+                        property int addedMonth: 0
+                        enabled: monthTab.count < 12
+                        icon{
+                            source: !AppStyle.ltr?"qrc:/previous.svg":"qrc:/next.svg"
+                            color: !enabled ? Material.hintTextColor :
+                                              fourMonthLater.pressed ? Material.accentColor
+                                                                     : Material.foreground
+                            width: 30*AppStyle.size1W
+                            height:30*AppStyle.size1W
+                        }
+                        LayoutMirroring.enabled: AppStyle.ltr
+
+                        onClicked: {
+                            for(let i=0; i<4; i++)
+                            {
+                                var today = new Date()
+                                var component = Qt.createComponent('MonthButton.qml',parent);
+                                if (component.status === Component.Ready){
+                                    var d = component.createObject(parent, {modelData: new Date(today.setMonth( today.getMonth()+(addedMonth+i)))});
+                                    monthTab.insertItem(monthTab.count-2,d)
+                                }
+                                else console.log(component.errorString())
+                            }
+
+                            addedMonth += 4
+                            monthTab.setCurrentIndex(monthTab.count-5)
+                            monthTab.currentItem.clicked(Qt.RightButton)
                         }
                     }
                 }
@@ -266,19 +354,73 @@ Item {
                     id:yearTab
                     LayoutMirroring.enabled: !AppStyle.ltr
                     LayoutMirroring.childrenInherit: true
-                    Repeater{
-                        model: [-2,-1,0,1,2,3]
-                        delegate: TabButton{
-                            property date today : new Date()
+                    Component.onCompleted: {
+                        twoYearLater.clicked()
+                    }
 
-                            text: AppStyle.ltr?today.getFullYear()+modelData
-                                              :parseInt(dateConverter.toJalali(today.getFullYear(),today.getMonth()+1,today.getDate())[0])+modelData
-                            width: monthLoader.width/count<200*AppStyle.size1W?200*AppStyle.size1W:monthLoader.width/count
-                            Component.onCompleted: {
-
-                                yearTab.currentIndex = today.getFullYear() === today.getFullYear()+modelData?index:yearTab.currentIndex
-
+                    TabButton{
+                        id: twoYearhAgo
+                        text: qsTr("۲ سال قبلی")
+                        icon{
+                            source: AppStyle.ltr?"qrc:/previous.svg":"qrc:/next.svg"
+                            color: !enabled ? Material.hintTextColor :
+                                              twoYearhAgo.pressed ? Material.accentColor
+                                                                  : Material.foreground
+                            width: 30*AppStyle.size1W
+                            height:30*AppStyle.size1W
+                        }
+                        LayoutMirroring.enabled: !AppStyle.ltr
+                        width: 300*AppStyle.size1W
+                        property int deletedYear : -1
+                        enabled: yearTab.count < 10
+                        onClicked: {
+                            for(let i=0; i < 2 ; i++)
+                            {
+                                var today = new Date()
+                                var component = Qt.createComponent('YearButton.qml',parent);
+                                if (component.status === Component.Ready){
+                                    var d = component.createObject(parent, {modelData: new Date(today.setYear(today.getFullYear()+(deletedYear-i)))});
+                                    yearTab.insertItem(1,d)
+                                }
+                                else console.log(component.errorString())
                             }
+
+                            deletedYear -= 2
+                            yearTab.setCurrentIndex(1)
+                            yearTab.currentItem.clicked(Qt.RightButton)
+                        }
+                    }
+                    TabButton{
+                        id: twoYearLater
+                        text: qsTr("۲ سال بعدی")
+                        width: 300*AppStyle.size1W
+                        enabled: yearTab.count < 10
+                        icon{
+                            source: !AppStyle.ltr?"qrc:/previous.svg":"qrc:/next.svg"
+                            color: !enabled ? Material.hintTextColor :
+                                              twoYearLater.pressed ? Material.accentColor
+                                                                   : Material.foreground
+                            width: 30*AppStyle.size1W
+                            height:30*AppStyle.size1W
+                        }
+                        LayoutMirroring.enabled: AppStyle.ltr
+
+                        property int addedYear: 0
+                        onClicked: {
+                            for(let i=0; i<2; i++)
+                            {
+                                var today = new Date()
+                                var component = Qt.createComponent('YearButton.qml',parent);
+                                if (component.status === Component.Ready){
+                                    var d = component.createObject(parent, {modelData: new Date(today.setYear( today.getFullYear()+(addedYear+i)))});
+                                    yearTab.insertItem(yearTab.count-2,d)
+                                }
+                                else console.log(component.errorString())
+                            }
+
+                            addedYear += 2
+                            yearTab.setCurrentIndex(yearTab.count-3)
+                            yearTab.currentItem.clicked(Qt.RightButton)
                         }
                     }
                 }
@@ -297,6 +439,7 @@ Item {
                         top: parent.top
                         topMargin:  20*AppStyle.size1H
                     }
+                    Component.onCompleted: internalModel.clear()
 
                     spacing: 20*AppStyle.size1W
                     AppDateInput{
@@ -305,6 +448,17 @@ Item {
                         width: parent.width / 2 - 10*AppStyle.size1W
                         height:parent.height- 20*AppStyle.size1H
                         minSelectedDate: fromDate.selectedDate
+                        okButton.onClicked: {
+                            internalModel.clear()
+                            internalModel.append(
+                                        ThingsApi.getThingByDate(
+                                            fromDate.selectedDate.toString()==="Invalid Date"?0
+                                                                                             :fromDate.selectedDate,
+                                            toDate.selectedDate.toString() === "Invalid Date"?0
+                                                                                             :toDate.selectedDate)
+                                        )
+                        }
+                        cancelButton.onClicked: okButton.clicked()
                     }
                     AppDateInput{
                         id:fromDate
@@ -312,6 +466,17 @@ Item {
                         placeholderText: qsTr("از")+":"
                         width: parent.width / 2 - 10*AppStyle.size1W
                         height:parent.height - 20*AppStyle.size1H
+                        okButton.onClicked:  {
+                            internalModel.clear()
+                            internalModel.append(
+                                        ThingsApi.getThingByDate(
+                                            fromDate.selectedDate.toString()==="Invalid Date"?0
+                                                                                             :fromDate.selectedDate,
+                                            toDate.selectedDate.toString() === "Invalid Date"?0
+                                                                                             :toDate.selectedDate)
+                                        )
+                        }
+                        cancelButton.onClicked: okButton.clicked()
                     }
                 }
             }
@@ -372,15 +537,6 @@ Item {
                 height:  control.cellHeight - 10*AppStyle.size1H
                 color: Material.color(AppStyle.primaryInt,Material.Shade50)
                 clip: true
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    transparentBorder: true
-                    horizontalOffset: 10*AppStyle.size1W
-                    verticalOffset: 10*AppStyle.size1H
-                    radius: 20
-                    samples: 41
-                    color: AppStyle.shadowColor// Material.color(AppStyle.primaryInt,Material.Shade100)
-                }
 
                 MouseArea{
                     id: mouseArea
@@ -485,7 +641,7 @@ Item {
                 }
                 Text{
                     id: detailText
-                    text: qsTr("توضیحات") + ": <b>" + (model.detail? model.detail : qsTr("توضیحاتی ثبت نشده است")) +"</b>"
+                    text: qsTr("توضیحات") + ": " + (model.detail? model.detail : qsTr("توضیحاتی ثبت نشده است"))
                     font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;}
                     anchors{
                         top:  topRect.bottom
@@ -540,7 +696,7 @@ Item {
                                     rightMargin: 10*AppStyle.size1W
                                     left: parent.left
                                 }
-                                text: qsTr("اولویت") +":    <b> " + (model.priority_id?UsefulFunc.findInModel(model.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است")) + "</b>"
+                                text: qsTr("اولویت") +": " + (model.priority_id?UsefulFunc.findInModel(model.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است"))
                                 elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                                 font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                             }
@@ -568,7 +724,7 @@ Item {
                                     rightMargin: 10*AppStyle.size1W
                                     left: parent.left
                                 }
-                                text: qsTr("سطح انرژی") +":<b> " + (model.energy_id?UsefulFunc.findInModel(model.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده است")) + "</b>"
+                                text: qsTr("سطح انرژی") +": " + (model.energy_id?UsefulFunc.findInModel(model.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده است"))
                                 elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                                 font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                             }
@@ -596,7 +752,7 @@ Item {
                                     rightMargin: 10*AppStyle.size1W
                                     left: parent.left
                                 }
-                                text: qsTr("محل انجام") +":<b> " + (model.context_id?contextModel.count>0?UsefulFunc.findInModel(model.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده است")) + "</b>"
+                                text: qsTr("محل انجام") +": " + (model.context_id?contextModel.count>0?UsefulFunc.findInModel(model.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده است"))
                                 font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                                 elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             }
@@ -624,7 +780,7 @@ Item {
                                     rightMargin: 10*AppStyle.size1W
                                     left: parent.left
                                 }
-                                text: qsTr("تخمین زمانی") +":<b> " + (model.estimate_time?model.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده است")) + "</b> "
+                                text: qsTr("تخمین زمانی") +": " + (model.estimate_time?model.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده است"))
                                 font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                                 elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             }
@@ -649,9 +805,9 @@ Item {
                                     }
                                 }
                                 Text {
-                                    text:qsTr("فرد انجام دهنده") +":<b> " + (model.friend_id?friendModel.count>0?UsefulFunc.findInModel(model.friend_id,"id",friendModel).value.friend_name
+                                    text:qsTr("فرد انجام دهنده") +": " + (model.friend_id?friendModel.count>0?UsefulFunc.findInModel(model.friend_id,"id",friendModel).value.friend_name
                                                                                                                 :""
-                                                                             :qsTr("ثبت نشده است")) + "</b>"
+                                                                             :qsTr("ثبت نشده است"))
                                     anchors{
                                         verticalCenter: friendImg.verticalCenter
                                         right: friendImg.left
@@ -684,11 +840,11 @@ Item {
                                 }
                                 Text {
                                     property date dueDate: new Date(model.due_date)
-                                    text:qsTr("زمان مشخص شده") +":<b> "
+                                    text:qsTr("زمان مشخص شده") +": "
                                          +( dueDate ?AppStyle.ltr? dueDate.getFullYear()+"/"+(dueDate.getMonth()+1)+"/"+dueDate.getDate()
                                                                  :(dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate())).slice(0,3).join("/")
-                                                    : qsTr("ثبت نشده است"))
-                                         + "</b>"
+                                           : qsTr("ثبت نشده است"))
+
                                     anchors{
                                         verticalCenter: dateImg.verticalCenter
                                         right: dateImg.left
