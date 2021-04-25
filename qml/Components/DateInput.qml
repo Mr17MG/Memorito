@@ -5,6 +5,7 @@ import QtQuick.Controls.Material 2.12
 import QtGraphicalEffects 1.14
 import QCustomDate 1.0
 import Global 1.0
+import QDateConvertor 1.0
 
 Item {
 
@@ -26,6 +27,7 @@ Item {
     property bool bottomBorderColorChanged : false
     property alias displayMouse: displayMouse
     property alias okButton: okButton
+    property alias cancelButton: cancelButton
     function reset(){
         tmpSelectedDate = '';
         selectedDate = '';
@@ -117,7 +119,6 @@ Item {
                 Layout.column: 1
                 Layout.row: 0
                 Layout.fillWidth: true
-                Layout.fillHeight: true
                 onWidthChanged: {
                     if(width === calendarGrid.width)
                     {
@@ -132,22 +133,27 @@ Item {
                     Layout.fillHeight: true
                     color: Material.color(AppStyle.primaryInt)
                 }
-                RowLayout{
-                    Layout.rowSpan: 1
+                GridLayout{
+                    rows: 1
+                    columns: 2
                     ColumnLayout {
                         id:col1
                         spacing: AppStyle.size1W*6
+                        Layout.maximumWidth: datePickerRoot.width/2
                         Label {
+                            Layout.fillWidth: true
                             topPadding: AppStyle.size1H*24
                             leftPadding: AppStyle.size1W*48
                             rightPadding: AppStyle.size1W*48
                             font.pixelSize: AppStyle.size1F*28
                             text: getShamsiYear(datePicker.selectedDate,Qt.locale("fa_IR"))
                             color: textOnPrimary
+                            horizontalAlignment: Qt.AlignLeft
                             font.family: AppStyle.appFont
                             opacity: 0.9
                         }
                         Label {
+                            Layout.fillWidth: true
                             leftPadding: AppStyle.size1W*48
                             rightPadding: AppStyle.size1W*48
                             bottomPadding: AppStyle.size1H*24
@@ -159,9 +165,11 @@ Item {
                     }
                     ColumnLayout {
                         id:col2
+                        Layout.maximumWidth: datePickerRoot.width/2
                         spacing: AppStyle.size1W*6
                         Label {
                             Layout.alignment: Qt.AlignRight
+                            Layout.fillWidth: true
                             topPadding: AppStyle.size1H*24
                             leftPadding: AppStyle.size1W*48
                             rightPadding: AppStyle.size1W*48
@@ -173,6 +181,7 @@ Item {
                         }
                         Label {
                             Layout.alignment: Qt.AlignRight
+                            Layout.fillWidth: true
                             leftPadding: AppStyle.size1W*48
                             rightPadding: AppStyle.size1W*48
                             bottomPadding: AppStyle.size1H*24
@@ -189,7 +198,7 @@ Item {
 
             ColumnLayout {
                 id: title
-                Layout.minimumHeight: AppStyle.size1H*55
+                Layout.preferredHeight: AppStyle.size1H*100
                 Layout.columnSpan: 2
                 Layout.column: 1
                 Layout.row: 1
@@ -197,18 +206,16 @@ Item {
                 Layout.fillHeight: true
                 spacing: AppStyle.size1W*6
                 layoutDirection: isShamsi?Qt.RightToLeft:Qt.LeftToRight
-                QCustomDate{
-                    id: customDateNavigation
-                    date: datePickerRoot.selectedDate
-                    locale:getLocale()
-                }
-                RowLayout {
+
+                GridLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    spacing: AppStyle.size1W*12
+                    columns: 6
+                    rows: 1
                     Button {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: AppStyle.size1W
+                        Layout.columnSpan: 1
+                        Layout.column: 0
+                        Layout.row: 0
                         text: ">"
                         flat: true
                         font.pixelSize: AppStyle.size1F*60
@@ -222,52 +229,48 @@ Item {
                             monthgridflow.monthModel= customDate.monthDays(isShamsi);
                         }
                     }
-                    Item{
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: AppStyle.size1W*3
-                        Label {
-                            id:monthLbl
-                            text: getShamsiDate(datePicker.selectedDate,getLocale()).monthName();
-                            font.family: AppStyle.appFont
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.pixelSize: AppStyle.size1F*36
-                            anchors{
-                                horizontalCenter: parent.horizontalCenter
-                                horizontalCenterOffset: -width/2 - 10*AppStyle.size1W
-                                verticalCenter: parent.verticalCenter
-                            }
 
-                            MouseArea{
-                                anchors.fill: parent
-                                onClicked: {
-//                                    monthSelector.open()
-                                }
-                            }
-                        }
-                        Label {
-                            id:yearLbl
-                            text:getShamsiYear(datePicker.selectedDate,getLocale());
-                            font.family: AppStyle.appFont
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.pixelSize: AppStyle.size1F*36
-                            anchors{
-                                horizontalCenter: parent.horizontalCenter
-                                horizontalCenterOffset: width/2 + 10*AppStyle.size1W
-                                verticalCenter: parent.verticalCenter
-                            }
-                            MouseArea{
-                                anchors.fill: parent
-                                onClicked: {
-//                                    yearSelector.open()
-                                }
+                    Label {
+                        id:monthLbl
+                        Layout.columnSpan: 2
+                        Layout.column: 1
+                        Layout.row: 0
+                        Layout.fillWidth: true
+                        text: getShamsiDate(datePicker.selectedDate,getLocale()).monthName();
+                        font.family: AppStyle.appFont
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: AppStyle.size1F*36
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                monthSelector.open()
                             }
                         }
                     }
-                    Button {
+                    Label {
+                        id:yearLbl
+                        Layout.columnSpan: 2
+                        Layout.column: 3
+                        Layout.row: 0
                         Layout.fillWidth: true
-                        Layout.preferredWidth: AppStyle.size1W
+                        text:getShamsiYear(datePicker.selectedDate,getLocale());
+                        font.family: AppStyle.appFont
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: AppStyle.size1F*36
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                yearSelector.open()
+                            }
+                        }
+                    }
+
+                    Button {
+                        Layout.columnSpan: 1
+                        Layout.column: 5
+                        Layout.row: 0
                         text:"<"
                         flat: true
                         font.pixelSize: AppStyle.size1F*60
@@ -283,45 +286,119 @@ Item {
                     }
                 } // row layout title
             } // title column layout
-// TODO: Choose month and year easier
-//            Popup{
-//                id:yearSelector
-//                parent: yearLbl
-//                x: -width/4
-//                y:yearLbl.height
-//                width: yearLbl.width*2
-//                height: 200*AppStyle.size1H
-//            }
+            // TODO: Choose month and year easier
+            QDateConvertor{id:dateConvertor}
 
-//            Popup{
-//                id:monthSelector
-//                parent: monthLbl
-//                x: -width/4
-//                y: monthLbl.height
-//                width: monthLbl.width*2
-//                height: 6*85*AppStyle.size1H
+            Popup{
+                id:yearSelector
+                parent: yearLbl
+                x: -width/4
+                y: yearLbl.height
+                width: yearLbl.width*2
+                height: 6*85*AppStyle.size1H
+                Flickable{
+                    anchors.fill: parent
+                    clip: true
+                    contentHeight: yearColumn.height
+                    ButtonGroup{
+                        id:btnGrop
+                        onClicked: {
+                            if(AppStyle.ltr)
+                            {
+                                selectedDate = new Date(selectedDate.setFullYear(Number(button.text)))
+                            }
+                            else {
+                                var j = dateConvertor.toJalali(selectedDate.getFullYear(),selectedDate.getMonth()+1,selectedDate.getDate())
+                                var m = dateConvertor.toMiladi(Number(button.text),j[1]-1,j[2])
+                                selectedDate = new Date(m[0],m[1],m[2])
+                            }
+                            datePickerRoot.displayMonth = selectedDate.getMonth()
+                            customDate.date = datePickerRoot.selectedDate;
+                            monthgridflow.monthModel= customDate.monthDays(isShamsi);
+                            yearSelector.close()
+                        }
+                    }
+                    Column{
+                        id:yearColumn
+                        width: parent.width
+                        Repeater{
+                            model: 7
+                            delegate: AppButton{
+                                text: getShamsiYear(datePicker.selectedDate,getLocale())+modelData-2
+                                enabled: isInRange(new Date(AppStyle.ltr?Number(text):Number(text)+621,selectedDate.getMonth(),selectedDate.getDate()))
+                                height: 85*AppStyle.size1H
+                                width: parent.width
+                                flat: true
+                                checkable: true
+                                checked: Number(text) === getShamsiYear(datePicker.selectedDate,getLocale())
+                                Material.primary: "transparent"
+                                ButtonGroup.group: btnGrop
+                            }
+                        }
+                    }
+                }
+            }
 
-//                Flickable{
-//                    anchors.fill: parent
-//                    clip: true
-//                    contentHeight: column.height
+            Popup{
+                id:monthSelector
+                parent: monthLbl
+                y: monthLbl.height
+                width: 300*AppStyle.size1W
+                height: 6*85*AppStyle.size1H
+                ButtonGroup{
+                    id:monthGrop
+                    onClicked: {
+                        if(AppStyle.ltr)
+                        {
+                            selectedDate = new Date(selectedDate.setMonth(button.monthIndex))
 
-//                    Column{
-//                        id:column
-//                        width: parent.width
-//                        Repeater{
-//                            model: 12
-//                            delegate: AppButton{
-//                                text: monthName(index+1)
-//                                height: 85*AppStyle.size1H
-//                                width: parent.width
-//                                flat: true
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-            // TODO not working in dark theme
+                        }
+                        else {
+                            var j = dateConvertor.toJalali(selectedDate.getFullYear(),selectedDate.getMonth()+1,selectedDate.getDate())
+                            var m = dateConvertor.toMiladi(j[0],button.monthIndex,j[2])
+                            selectedDate = new Date(m[0],m[1],m[2])
+                        }
+                        datePickerRoot.displayMonth = selectedDate.getMonth()
+                        customDate.date = datePickerRoot.selectedDate;
+                        monthgridflow.monthModel= customDate.monthDays(isShamsi);
+                        monthSelector.close()
+                    }
+                }
+                Flickable{
+                    anchors.fill: parent
+                    clip: true
+                    contentHeight: column.height
+
+                    Column{
+                        id:column
+                        width: parent.width
+                        Repeater{
+                            model: 12
+                            delegate: AppButton{
+                                property int monthIndex: index
+                                text: AppStyle.ltr?getShamsiDate(new Date(selectedDate.getFullYear(),index),Qt.locale("en_US")).monthName()
+                                                  :monthName(index+1)
+                                enabled: if(AppStyle.ltr)
+                                             return isInRange(new Date(selectedDate.setMonth(index)))
+
+                                         else {
+                                             var j = dateConvertor.toJalali(selectedDate.getFullYear(),selectedDate.getMonth()+1,selectedDate.getDate())
+                                             var m = dateConvertor.toMiladi(j[0],index,j[2])
+                                             return isInRange(new Date(m[0],m[1],m[2]))
+                                         }
+                                height: 85*AppStyle.size1H
+                                width: parent.width
+                                flat: true
+                                checkable: true
+                                checked: text === getShamsiDate(datePicker.selectedDate,getLocale()).monthName()
+                                Material.primary: "transparent"
+                                ButtonGroup.group: monthGrop
+                            }
+                        }
+                    }
+                }
+            }
+
             DayOfWeekRow {
                 id: dayOfWeekRow
                 locale: getLocale()
@@ -344,83 +421,6 @@ Item {
                 }
             } // day of weeks
 
-            /*// TODO not working in dark theme
-            WeekNumberColumn {
-                locale: getLocale()
-                id: weekNumbers
-                Layout.alignment: !isShamsi?Qt.AlignRight : Qt.AlignLeft
-                Layout.column: 1
-                Layout.row: 3
-                Layout.fillHeight: true
-                rightPadding: isShamsi?24:0
-                leftPadding: isShamsi?0:24
-                font.family: AppStyle.appFont
-                font.bold: false
-                month: datePickerRoot.displayMonth
-                year: datePickerRoot.displayYear
-                delegate: Label {
-                    text: model.weekNumber
-                    font: weekNumbers.font
-                    //font.bold: false
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            } */// WeekNumberColumn
-
-
-
-            //            MonthGrid {
-            //                visible: false
-            //                locale: isShamsi? Qt.locale("fa_IR"):Qt.locale("en_US")
-            //                id: monthGrid
-            //                Layout.column: 2
-            //                Layout.row: 3
-            //                Layout.fillHeight: true
-            //                Layout.fillWidth: true
-            //                rightPadding: AppStyle.size1W*24
-            //                leftPadding: AppStyle.size1W*24
-            //                topPadding: AppStyle.size1W*5
-            //                month: datePickerRoot.displayMonth
-            //                year: datePickerRoot.displayYear
-            //                day: (datePicker.selectedDate.getTime()?datePicker.selectedDate:new Date()).getDate()
-            //                realMonth: (datePicker.selectedDate.getTime()?datePicker.selectedDate:new Date()).getMonth()
-
-            //                delegate: Label {
-            //                    id: dayLabel
-            //                    property int day: getShamsiDay(model.date,getLocale());
-            //                    property int month: getShamsiMonth(model.date,getLocale())-1;
-            //                    readonly property bool selected: model.day === datePickerRoot.selectedDate.getDate()
-            //                                                     && model.month === datePickerRoot.selectedDate.getMonth()
-            //                                                     && model.year === datePickerRoot.selectedDate.getFullYear()
-            //                    text: day
-            //                    font.bold: model.today? true: false
-            //                    opacity: month === monthGrid.month ?isInRange(model.date)? 1 : 0.5 : 0
-            //                    color: pressed || selected ? textOnPrimary : model.today ? Material.accent : Material.foreground
-            //                    minimumPointSize: AppStyle.size1W*8
-            //                    font.pixelSize: AppStyle.size1F*14
-            //                    fontSizeMode: Text.Fit
-            //                    horizontalAlignment: Text.AlignHCenter
-            //                    verticalAlignment: Text.AlignVCenter
-            //                    font.family: AppStyle.appFont
-            //                    background: Rectangle {
-            //                        anchors.centerIn: parent
-            //                        width: Math.min(parent.width, parent.height) * 1.2
-            //                        height: width
-            //                        radius: width / 2
-            //                        color: Material.color(AppStyle.primaryInt)
-            //                        visible: pressed || parent.selected
-            //                    }
-            //                    // WORKAROUND !! see onClicked()
-            //                    MouseArea {
-            //                        anchors.fill: parent
-            //                        onClicked: {
-            //                            if(month === monthGrid.month && isInRange(model.date)) {
-            //                                datePickerRoot.selectedDate = date;
-            //                            }
-            //                        }
-            //                    } // mouse
-            //                } // label in month grid
-            //            } // month grid
             Flow{
                 id:monthgridflow
                 Layout.column: 2
@@ -429,7 +429,6 @@ Item {
                 Layout.fillWidth: true
                 rightPadding: AppStyle.size1W*30
                 leftPadding: AppStyle.size1W*30
-                topPadding: AppStyle.size1W*10
                 property var monthModel: customDate.monthDays(isShamsi);
                 Repeater{
                     model: parent.monthModel;
@@ -519,6 +518,7 @@ Item {
                         }
                     } // today button
                     Button {
+                        id: cancelButton
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredWidth: 3
@@ -527,7 +527,7 @@ Item {
                         text: qsTr("انصراف")
                         flat: true
                         onClicked: {
-                            selectedDate = tmpSelectedDate;
+                            selectedDate = "";
                             datePickerRoot.close()
                         }
                     } // cancel button
@@ -541,15 +541,15 @@ Item {
             customDate.date = selectedDate;
             monthgridflow.monthModel= customDate.monthDays(isShamsi);
 
-//            if(maxSelectedDate && selectedDate > maxSelectedDate.setHours(23,59,59,0))
-//                datePickerRoot.selectedDate = maxSelectedDate;
-//            if(maxSelectedDate && selectedDate <= minSelectedDate.setHours(0,0,0,0))
-//                datePickerRoot.selectedDate = minSelectedDate;
+            //            if(maxSelectedDate && selectedDate > maxSelectedDate.setHours(23,59,59,0))
+            //                datePickerRoot.selectedDate = maxSelectedDate;
+            //            if(maxSelectedDate && selectedDate <= minSelectedDate.setHours(0,0,0,0))
+            //                datePickerRoot.selectedDate = minSelectedDate;
         }
         onClosed: {
-            if(!datePickerRoot.isOK){
-                selectedDate = tmpSelectedDate;
-            }
+            //            if(!datePickerRoot.isOK){
+            //                selectedDate = tmpSelectedDate;
+            //            }
             datePickerRoot.selectTime = false;
         }
 
@@ -748,7 +748,7 @@ Item {
                 id: headerPane
                 padding: 0
                 implicitWidth:  parent.width
-                implicitHeight: AppStyle.size1H*100
+                implicitHeight: portraitHeader.height
                 background: Rectangle {
                     color: Material.color(AppStyle.primaryInt)
                 }
@@ -762,30 +762,28 @@ Item {
                     columns: 3
                     rowSpacing: 0
                     LayoutMirroring.enabled: false
-                    Button {
+                    AppButton {
                         id: hrsButton
                         focusPolicy: Qt.NoFocus
                         Layout.alignment: isLandscape? Text.AlignHCenter : Text.AlignRight
                         checked: true
                         checkable: true
-                        contentItem: Label {
-                            text: timePicker.hrsDisplay
-                            font.pixelSize: AppStyle.size1F*40
-                            font.bold: false
-                            fontSizeMode: Text.Fit
-                            font.family: AppStyle.appFont
-                            opacity: hrsButton.checked ? 1.0 : 0.6
-                            color: textOnPrimary
-                            elide: Text.ElideRight
+                        text: timePicker.hrsDisplay
+                        font{
+                            pixelSize: AppStyle.size1F*40
+                            bold: false
+                            family: AppStyle.appFont
                         }
                         flat: true
-                        Material.accent: "transparent"
+                        hasBottomChecker: true
+                        Material.foreground: AppStyle.textOnPrimaryColor
+
                         onClicked: {
                             timePicker.onHoursButtonClicked()
                         }
                     } // hrsButton
 
-                    Label {
+                    Text {
                         text: ":"
                         Layout.alignment: Text.AlignHCenter
                         font.pixelSize: AppStyle.size1F*40
@@ -796,24 +794,20 @@ Item {
                         color: textOnPrimary
                     }
 
-                    Button {
+                    AppButton {
                         id: minutesButton
                         focusPolicy: Qt.NoFocus
                         Layout.alignment: isLandscape? Text.AlignHCenter : Text.AlignLeft
                         checked: false
                         checkable: true
-                        contentItem: Label {
-                            text: timePicker.minutesDisplay
-                            font.pixelSize: AppStyle.size1F*40
-                            font.bold: false
-                            font.family: AppStyle.appFont
-                            fontSizeMode: Text.Fit
-                            opacity: minutesButton.checked ? 1.0 : 0.6
-                            color: textOnPrimary
-                            elide: Text.ElideRight
+                        text: timePicker.minutesDisplay
+                        font{
+                            pixelSize: AppStyle.size1F*40
+                            family: AppStyle.appFont
                         }
+                        hasBottomChecker: true
                         flat: true
-                        Material.accent: "transparent"
+                        Material.foreground: AppStyle.textOnPrimaryColor
                         onClicked: {
                             timePicker.onMinutesButtonClicked()
                         }
@@ -924,7 +918,7 @@ Item {
                     Repeater {
                         id: innerRepeater
                         model: timePicker.timePickerModel
-                        delegate: Button {
+                        delegate: AppButton {
                             id: innerButton
                             focusPolicy: Qt.NoFocus
                             text: timePicker.useWorkTimes? modelData.n : modelData.c2
@@ -932,7 +926,7 @@ Item {
                             font.family: AppStyle.appFont
                             font.pixelSize: AppStyle.size1F*50
                             x: timePicker.innerButtonsPaneSize / 2 - width / 2 + 0*AppStyle.size1W
-                            y: timePicker.innerButtonsPaneSize / 2 - height / 2 + 7*AppStyle.size1W
+                            y: timePicker.innerButtonsPaneSize / 2 - height / 2 + 7*AppStyle.size1H
                             width: AppStyle.size1W*60
                             height: AppStyle.size1W*60
                             checked: index == timePicker.innerButtonIndex
@@ -987,10 +981,9 @@ Item {
                 } // innerButtonsPane
 
                 Repeater {
-
                     id: outerRepeater
                     model: timePicker.timePickerModel
-                    delegate: Button {
+                    delegate: AppButton {
                         id: outerButton
                         focusPolicy: Qt.NoFocus
                         text: timePicker.pickMinutes? modelData.m : timePicker.useWorkTimes? modelData.d : modelData.c1
@@ -998,7 +991,7 @@ Item {
                         font.pixelSize: AppStyle.size1F*50
                         font.family: AppStyle.appFont
                         x: (timePicker.timeButtonsPaneSize / 2)  + width / 2 - 40*AppStyle.size1W
-                        y: timePicker.timeButtonsPaneSize / 2   + height / 2 - 5*AppStyle.size1W
+                        y: timePicker.timeButtonsPaneSize / 2   + height / 2 - 25*AppStyle.size1W
                         width: AppStyle.size1W*60
                         height: AppStyle.size1W*60
                         checked: index == timePicker.outerButtonIndex
@@ -1060,8 +1053,8 @@ Item {
                 Rectangle {
                     // line to outer buttons
                     visible: timePicker.outerButtonIndex >= 0
-                    x: parent.width/2
-                    y: timePicker.innerButtonsPaneSize / 2 - AppStyle.size1W*143
+                    x: parent.width/2 - 3*AppStyle.size1W
+                    y: timePicker.innerButtonsPaneSize / 2 - AppStyle.size1W*165
                     width: AppStyle.size1W*5
                     height: timePicker.timeButtonsPaneSize / 2 - AppStyle.size1W*60
                     transformOrigin: Item.Bottom
@@ -1073,8 +1066,8 @@ Item {
                 Rectangle {
                     // line to inner buttons
                     visible: timePicker.innerButtonIndex >= 0 && !timePicker.pickMinutes
-                    x: parent.width/2
-                    y: innerButtonsPane.height/2 -AppStyle.size1W*79
+                    x: parent.width/2 - AppStyle.size1W*3
+                    y: innerButtonsPane.height/2 - AppStyle.size1W*103
                     width: AppStyle.size1W *5
                     height: timePicker.innerButtonsPaneSize / 2 - AppStyle.size1W*90
                     transformOrigin: Item.Bottom
@@ -1100,6 +1093,7 @@ Item {
                 anchors{
                     right: parent.right
                     bottom: parent.bottom
+                    bottomMargin: 10*AppStyle.size1H
                 }
 
                 implicitWidth: parent.width
@@ -1197,7 +1191,7 @@ Item {
         }
     }
     function dayName(i,locale){
-        if(!isShamsi && locale === Qt.locale("en_US"))
+        if(!isShamsi && getLocale() === Qt.locale("en_US"))
             return i
         switch(i)
         {
