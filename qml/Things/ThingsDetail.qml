@@ -215,26 +215,26 @@ Item {
                     Text {
                         width: parent.width/2 > 350*AppStyle.size1W?parent.width/2-20*AppStyle.size1W:350*AppStyle.size1W
                         property date registerDate: !prevPageModel?"":prevPageModel.register_date?new Date(prevPageModel.register_date):""
-                        text: !prevPageModel?"":prevPageModel.register_date?qsTr("ثبت شده در")+": <b> "
+                        text: !prevPageModel?"":prevPageModel.register_date?qsTr("ثبت شده در")+":  "
                                                                              +
                                                                              registerDate.getHours()+":"+registerDate.getMinutes()+":"+registerDate.getSeconds()
                                                                              +"  "+
                                                                              (AppStyle.ltr? registerDate.getFullYear()+"/"+(registerDate.getMonth()+1)+"/"+registerDate.getDate()
                                                                                           : dateConverter.toJalali(registerDate.getFullYear(),registerDate.getMonth()+1,registerDate.getDate()).slice(0,3).join("/"))
-                                                                             +"</b>"
+
                                                                            :""
                         font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                     }
                     Text {
                         width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
                         property date modifiedDate: !prevPageModel?"":prevPageModel.modified_date?new Date(prevPageModel.modified_date):""
-                        text:!prevPageModel?"":prevPageModel.modified_date?qsTr("ویرایش شده در")+": <b> "
+                        text:!prevPageModel?"":prevPageModel.modified_date?qsTr("ویرایش شده در")+":  "
                                                                             +
                                                                             modifiedDate.getHours()+":"+modifiedDate.getMinutes()+":"+modifiedDate.getSeconds()
                                                                             +"  "+
                                                                             (AppStyle.ltr? modifiedDate.getFullYear()+"/"+(modifiedDate.getMonth()+1)+"/"+modifiedDate.getDate()
                                                                                          :dateConverter.toJalali(modifiedDate.getFullYear(),modifiedDate.getMonth()+1,modifiedDate.getDate()).slice(0,3).join("/"))
-                                                                            +"</b>"
+
                                                                           :""
                         font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                     }
@@ -274,7 +274,7 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("اولویت") +":    <b> " + (prevPageModel.priority_id?UsefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است")) + "</b>"
+                            text: !prevPageModel?"":qsTr("اولویت") +":     " + (prevPageModel.priority_id?UsefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است"))
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                         }
@@ -302,7 +302,7 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("سطح انرژی") +":<b> " + (prevPageModel.energy_id?UsefulFunc.findInModel(prevPageModel.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده است")) + "</b>"
+                            text: !prevPageModel?"":qsTr("سطح انرژی") +": " + (prevPageModel.energy_id?UsefulFunc.findInModel(prevPageModel.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده است"))
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                         }
@@ -330,7 +330,7 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("محل انجام") +":<b> " + (prevPageModel.context_id?contextModel.count>0?UsefulFunc.findInModel(prevPageModel.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده است")) + "</b>"
+                            text: !prevPageModel?"":qsTr("محل انجام") +": " + (prevPageModel.context_id?contextModel.count>0?UsefulFunc.findInModel(prevPageModel.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده است"))
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                         }
@@ -358,7 +358,7 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("تخمین زمانی") +":<b> " + (prevPageModel.estimate_time?prevPageModel.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده است")) + "</b> "
+                            text: !prevPageModel?"":qsTr("تخمین زمانی") +": " + (prevPageModel.estimate_time?prevPageModel.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده است"))
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                         }
@@ -394,7 +394,7 @@ Item {
                                     {id:Memorito.Someday    ,name:qsTr("شاید یک‌روزی")},
                                     {id:Memorito.Project    ,name:qsTr("پروژه‌ها")}
                                 ]
-                                text: qsTr("در لیست")+":<b> "+listName.find(list => list.id === (prevPageModel?prevPageModel.list_id:listId)).name +"</b>"
+                                text: qsTr("در لیست")+": "+listName.find(list => list.id === (prevPageModel?prevPageModel.list_id:listId)).name
 
                                 anchors{
                                     verticalCenter: listImg.verticalCenter
@@ -427,7 +427,7 @@ Item {
                                 }
                             }
                             Text {
-                                text: prevPageModel?(prevPageModel.list_id === Memorito.Project ?qsTr("در پروژه"):qsTr("در دسته بندی"))+":<b> "+CategoriesApi.getCategoryById(prevPageModel.category_id).category_name+"</b>":""
+                                text: prevPageModel?(prevPageModel.list_id === Memorito.Project ?qsTr("در پروژه"):qsTr("در دسته بندی"))+": "+CategoriesApi.getCategoryById(prevPageModel.category_id).category_name:""
 
                                 anchors{
                                     verticalCenter: categorymg.verticalCenter
@@ -460,9 +460,9 @@ Item {
                                 }
                             }
                             Text {
-                                text:!prevPageModel?"":qsTr("فرد انجام دهنده") +":<b> " + (prevPageModel.friend_id?friendModel.count>0?UsefulFunc.findInModel(prevPageModel.friend_id,"id",friendModel).value.friend_name
+                                text:!prevPageModel?"":qsTr("فرد انجام دهنده") +": " + (prevPageModel.friend_id?friendModel.count>0?UsefulFunc.findInModel(prevPageModel.friend_id,"id",friendModel).value.friend_name
                                                                                                                                       :""
-                                                                                           :qsTr("ثبت نشده است")) + "</b>"
+                                                                                           :qsTr("ثبت نشده است"))
                                 anchors{
                                     verticalCenter: friendImg.verticalCenter
                                     right: friendImg.left
@@ -496,7 +496,7 @@ Item {
                             Text {
                                 property date dueDate:  !prevPageModel?"":prevPageModel.due_date?new Date(prevPageModel.due_date):""
                                 text:
-                                    !prevPageModel?"":qsTr("زمان مشخص شده") +":<b> "
+                                    !prevPageModel?"":qsTr("زمان مشخص شده") +": "
                                                     + (
                                                         (
                                                             dueDate.getHours()===17 && dueDate.getMinutes() === 17 && dueDate.getSeconds() === 17
@@ -507,7 +507,7 @@ Item {
                                                                                 : dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate()).slice(0,3).join("/")
                                                             :qsTr("ثبت نشده است"))
                                                         )
-                                                    +"</b>"
+
 
 
                                 anchors{
@@ -766,12 +766,12 @@ Item {
                             Text{
                                 id:registerDateText
                                 property date registerDate: !model?"":model.register_date?new Date(model.register_date):""
-                                text: !model?"":model.register_date?qsTr("ثبت شده در")+": <b> "
+                                text: !model?"":model.register_date?qsTr("ثبت شده در")+":  "
                                                                      +
                                                                      registerDate.getHours()+":"+registerDate.getMinutes()+":"+registerDate.getSeconds()
                                                                      +"  "+
-                                                                     dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate()).slice(0,3).join("/")
-                                                                     +"</b>"
+                                                                     dateConverter.toJalali(registerDate.getFullYear(),registerDate.getMonth()+1,registerDate.getDate()).slice(0,3).join("/")
+
                                                                    :""
                                 color: "black"
                                 verticalAlignment: Text.AlignVCenter
@@ -788,12 +788,12 @@ Item {
                                 id: modifiedDateText
                                 visible: text !== ""
                                 property date modifiedDate: !model?"":model.modified_date?new Date(model.modified_date):""
-                                text:!model?"":model.modified_date?qsTr("ویرایش شده در")+": <b> "
+                                text:!model?"":model.modified_date?qsTr("ویرایش شده در")+":  "
                                                                     +
                                                                     modifiedDate.getHours()+":"+modifiedDate.getMinutes()+":"+modifiedDate.getSeconds()
                                                                     +"  "+
                                                                     String(dateConverter.toJalali(modifiedDate.getFullYear(),modifiedDate.getMonth(),modifiedDate.getDate())).replace(/,/ig,"/").split("/").slice(0,3)
-                                                                    +"</b>"
+
                                                                   :""
                                 color: "black"
                                 verticalAlignment: Text.AlignVCenter

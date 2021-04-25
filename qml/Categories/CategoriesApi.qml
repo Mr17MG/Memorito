@@ -254,7 +254,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            UsefulFunc.showLog(" <b>'"+qsTr("پروژه جدید با نام")+ " "+ categoryName+" '</b>" +qsTr("با موفقیت افزوده شد"),false,700*AppStyle.size1W)
+                            UsefulFunc.showLog(qsTr("پروژه جدید با نام")+ " <b>' "+ categoryName+" '</b>" +qsTr("با موفقیت افزوده شد"),false,700*AppStyle.size1W)
                             if(local_id !== null)
                             {
                                 updateCategories(response.result,local_id)

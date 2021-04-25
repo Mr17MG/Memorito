@@ -125,7 +125,7 @@ Item {
                     wrapMode: Text.WordWrap
                 }
                 Text{
-                    text: (listId ===Memorito.Project?qsTr("هدف پروژه"):qsTr("توضیحات"))  + ": <b>" +((model.category_detail??(listId ===Memorito.Project?qsTr("هدفی"):qsTr("توضیحاتی")) +" "+ qsTr("ثبت نشده است"))) +"</b>"
+                    text: (listId ===Memorito.Project?qsTr("هدف پروژه"):qsTr("توضیحات"))  + ": " +((model.category_detail??(listId ===Memorito.Project?qsTr("هدفی"):qsTr("توضیحاتی")) +" "+ qsTr("ثبت نشده است"))) +""
                     font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;}
                     anchors{
                         top:  categoryText.bottom

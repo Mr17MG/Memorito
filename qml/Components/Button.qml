@@ -10,6 +10,7 @@ import Global 1.0
 T.Button {
     id: control
     property bool leftBorder: false
+    property bool hasBottomChecker: false
     property bool disableLeftRadius: false
     property bool disableRightRadius: false
     property real radius: AppStyle.size1W*5
@@ -123,7 +124,16 @@ T.Button {
         layer.effect: ElevationEffect {
             elevation: control.Material.elevation
         }
-
+        PaddedRectangle {
+            y: parent.height - 4
+            width: parent.width
+            height: 4
+            radius: 2
+            topPadding: -2
+            clip: true
+            visible: hasBottomChecker && control.checkable && (!control.highlighted || control.flat)
+            color: control.checked && control.enabled ? control.Material.foreground : "transparent"
+        }
         Ripple {
             clipRadius: control.radius
             //radius: control.radius

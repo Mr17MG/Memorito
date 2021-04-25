@@ -237,6 +237,7 @@ Item {
                             UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
                             SettingDriver.setValue("last_date","")
                             User.clear()
+                            UsefulFunc.stackPages.clear()
                         }
                         )
         }
