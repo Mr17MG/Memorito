@@ -157,5 +157,12 @@
         <file>day.svg</file>
         <file>month.svg</file>
         <file>year.svg</file>
+        <file>search.svg</file>
+        <file>sort-asc.svg</file>
+        <file>sort-desc.svg</file>
+        <file>energies/full.svg</file>
+        <file>priorities/full.svg</file>
+        <file>filter.svg</file>
+        <file>sort.svg</file>
     </qresource>
 </RCC>
