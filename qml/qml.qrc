@@ -70,5 +70,7 @@
         <file>Things/DayButton.qml</file>
         <file>Things/MonthButton.qml</file>
         <file>Things/YearButton.qml</file>
+        <file>About/AboutBook.qml</file>
+        <file>About/GTD-Farsi.md</file>
     </qresource>
 </RCC>
