@@ -58,13 +58,6 @@ ApplicationWindow {
     Material.primary: AppStyle.primaryColor
     Material.accent: AppStyle.primaryColor
 
-    function setSizes(scale)
-    {
-        //        AppStyle.size1W= size1W*scale
-        //        AppStyle.size1H= size1H*scale
-        AppStyle.size1F = UiFunctions.getFontSize(1)*scale
-    }
-
     /********************************************************************************/
     ////////////////////////////// useful Component ////////////////////////////////
 

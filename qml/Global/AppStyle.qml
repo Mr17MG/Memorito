@@ -23,6 +23,18 @@ QtObject {
         return appTheme
     }
 
+    function setFontSizes(scale)
+    {
+        AppStyle.size1F = UiFunctions.getFontSize(1)*scale
+    }
+    function setWidthSizes(scale)
+    {
+        AppStyle.size1W= UiFunctions.getWidthSize(1)*scale
+    }
+    function setHeightSizes(scale)
+    {
+        AppStyle.size1H= UiFunctions.getHeightSize(1)*scale
+    }
 
     property color textColor                : appTheme ?   "#FFFFFF"     : "#0F110F"
     property color shadowColor              : appTheme ?   "#5c5c5c"   :   "#d6d6d6"
