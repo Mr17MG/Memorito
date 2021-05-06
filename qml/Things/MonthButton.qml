@@ -11,6 +11,7 @@ TabButton{
                                          :dateConverter.get_month()
     QDateConvertor{id:dateConvertor}
 
+    font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
     property date modelData
     property var alternativeDate:{
         if(!AppStyle.ltr)
@@ -81,6 +82,8 @@ TabButton{
 
             /******************************************************/
         }
+        queryList.due_date.fromDate = fromDate.toISOString()
+        queryList.due_date.toDate = toDate.toISOString()
 
         internalModel.append(ThingsApi.getThingByDate(fromDate,toDate))
     }

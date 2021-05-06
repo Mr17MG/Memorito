@@ -14,17 +14,20 @@ Dialog{
     property var accepted
     signal acceptSignal
     property real oneLineWidth
+    Overlay.modal: Rectangle {
+        color: AppStyle.appTheme?"#aa606060":"#80000000"
+    }
     onVisibleChanged: {
         try{
             if(!visible && typeof destroy === "function")
                 destroy()
-        }catch(e){console.trace()}
+        }catch(e){}
     }
     onClosed: {
         try{
             if(!visible && typeof destroy === "function")
                 destroy()
-        }catch(e){console.trace()}
+        }catch(e){}
     }
 
     width: UsefulFunc.rootWindow.width/2<480*AppStyle.size1W ? 480*AppStyle.size1W:UsefulFunc.rootWindow.width/2>1000*AppStyle.size1W?1000*AppStyle.size1W:UsefulFunc.rootWindow.width/2

@@ -94,8 +94,7 @@ Rectangle{
                             source: parent.extensions.indexOf(model.file_extension.toLowerCase())!== -1?"qrc:/pack/"+(model.file_extension.toLowerCase())+".svg":"qrc:/pack/unknown.svg"
                             width: 70*AppStyle.size1W
                             height: width
-                            sourceSize.width: width*2
-                            sourceSize.height: height*2
+                            sourceSize:Qt.size(width*2,height*2)
                             anchors{
                                 verticalCenter: parent.verticalCenter
                                 right: parent.right
@@ -105,11 +104,16 @@ Rectangle{
                         Image {
                             id: sourceImg
                             /*source:  initial in visible: */
-                            visible: (source = model.file_extension.toLowerCase().match(/svg|png|jpg|gif|jpeg/g)?model.file_source:"") !==""
+                            visible: (source =
+                                      !model.local_id?
+                                          (model.file_extension.toLowerCase().match(/svg|png|jpg|gif|jpeg/g)?model.file_source
+                                                                                                            :"")
+                                        :"file://"+myTools.getSaveDirectory()+"/"+model.file_name + "."+ model.file_extension)
+                                     !==""
+
                             width: 70*AppStyle.size1W
                             height: width
-                            sourceSize.width: width*2
-                            sourceSize.height: height*2
+                            sourceSize: Qt.size(width*2,height*2)
                             anchors{
                                 verticalCenter: parent.verticalCenter
                                 left: parent.left
@@ -121,7 +125,7 @@ Rectangle{
                             id: thingText
                             text: model.file_name + "."+ model.file_extension
                             font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
-                            color: "white"
+                            color: AppStyle.textOnPrimaryColor
                             anchors{
                                 top:  parent.top
                                 bottom: parent.bottom

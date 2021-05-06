@@ -189,14 +189,13 @@ Item {
             Loader {
                 id: collectLoader
                 width: flickTextArea.width
-                height: active ? (
-                                     (   listId === Memorito.Project
-                                      || listId === Memorito.Someday
-                                      || listId === Memorito.Waiting
-                                      || listId === Memorito.Calendar
-                                      || listId === Memorito.Refrence) ? 220 * AppStyle.size1H
-                                                                       : 110 * AppStyle.size1H
-                                     )
+                height: active ? (listId === Memorito.Calendar?320 * AppStyle.size1H
+                                                              :(   listId === Memorito.Project
+                                                                || listId === Memorito.Someday
+                                                                || listId === Memorito.Waiting
+                                                                || listId === Memorito.Refrence) ? 220 * AppStyle.size1H
+                                                                                                 : 110 * AppStyle.size1H
+                                  )
                                : 0
                 sourceComponent: listId === Memorito.NextAction ? nextComponent : listId === Memorito.Someday ? somedayComponent : listId === Memorito.Refrence ? refrenceComponent : listId === Memorito.Waiting ? friendComponent : listId === Memorito.Calendar ? calendarComponent : listId === Memorito.Trash ? trashComponent : listId === Memorito.Done ? doComponent : listId === Memorito.Project ? projectCategoryComponent : collectComponent
             }

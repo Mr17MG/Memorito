@@ -46,7 +46,7 @@ Item{
     Rectangle{
         id: profileRect
         width: height
-        height: parent.width >= 200*AppStyle.size1H?200*AppStyle.size1H:parent.width-10*AppStyle.size1H
+        height: parent.width >= 300*AppStyle.size1H?300*AppStyle.size1H:parent.width-10*AppStyle.size1H
         radius: width
         border.color: AppStyle.primaryColor
         border.width: 3*AppStyle.size1W
@@ -71,8 +71,7 @@ Item{
             cache: false
             asynchronous: true
             anchors.fill: parent
-            sourceSize.width: parent.width*4
-            sourceSize.height: parent.height*4
+            sourceSize: Qt.size(width*4,height*4)
             anchors.margins: profileRect.border.width
             layer.enabled: true
             layer.effect: OpacityMask {

@@ -10,6 +10,7 @@ TabButton{
     id: tempButton;
     QDateConvertor{id:dateConvertor}
     property date modelData
+    font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
     text: {
         if(!AppStyle.ltr)
         {
@@ -34,6 +35,9 @@ TabButton{
         toDate.setHours(23)
         toDate.setMinutes(59)
         toDate.setSeconds(59)
+
+        queryList.due_date.fromDate = fromDate.toISOString()
+        queryList.due_date.toDate = toDate.toISOString()
 
         internalModel.append(ThingsApi.getThingByDate(fromDate,toDate))
 

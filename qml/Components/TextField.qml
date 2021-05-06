@@ -16,7 +16,7 @@ TextField{
     Label {
         id: textFieldPlaceHolder
         text: textField.placeholderText
-        color: textField.focus || textField.text!=""?AppStyle.textColor: AppStyle.placeholderColor
+        color: enabled?textField.focus || textField.text!=""?AppStyle.textColor: AppStyle.placeholderColor:textField.color
         y: textField.focus || textField.text!=""?0:height-10*AppStyle.size1H
         anchors.right:  textField.right
         font{family: AppStyle.appFont;pixelSize:( textField.focus || textField.text!=""?20*AppStyle.size1F:25*AppStyle.size1F);bold:textField.focus || textField.text}

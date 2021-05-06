@@ -16,6 +16,7 @@ T.Button {
     property real radius: AppStyle.size1W*5
     property string borderColor: "transparent"
     property color disableColor: Material.hintTextColor
+    property int horizontalAlignment: Qt.AlignHCenter
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding + 10*AppStyle.size1W)
     implicitHeight: Math.max(background ? background.implicitHeight : 0,
@@ -36,13 +37,16 @@ T.Button {
     : control.down ? 8 : 2
     Material.background: flat ? "transparent"       : AppStyle.primaryInt
     Material.foreground: flat ? AppStyle.textColor  : AppStyle.textOnPrimaryColor
-    font.capitalization: Font.MixedCase
-    font.family: AppStyle.appFont
+    font{
+        pixelSize: 25*AppStyle.size1F
+        capitalization: Font.MixedCase
+        family: AppStyle.appFont
+    }
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display
-
+        alignment: control.horizontalAlignment
         icon: control.icon
         text: control.text
         font: control.font
@@ -160,8 +164,10 @@ T.Button {
         id:border
         anchors.fill: parent
         color: "transparent"
-        border.color: borderColor
-        border.width: AppStyle.size1W
-        radius: radius
+        border{
+            color: borderColor
+            width: AppStyle.size1W
+        }
+        radius: control.radius
     }
 }

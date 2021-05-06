@@ -5,7 +5,9 @@ Loader {
     Shortcut{
         sequence: "Alt+L"
         onActivated: {
+            AppStyle.languageChanged = true
             translator.updateLanguage(AppStyle.ltr?translator.getLanguages().FA:translator.getLanguages().ENG);
+            AppStyle.languageChanged = false
         }
         context: Qt.ApplicationShortcut
     }
@@ -20,7 +22,6 @@ Loader {
         sequence: "Alt+]"
         onActivated: {
             AppStyle.primaryInt = (AppStyle.primaryInt+1)%19
-            console.log("]", AppStyle.primaryInt)
         }
         context: Qt.ApplicationShortcut
     }
@@ -28,7 +29,6 @@ Loader {
         sequence: "Alt+["
         onActivated: {
             AppStyle.primaryInt =  AppStyle.primaryInt!==0?(AppStyle.primaryInt-1)%19:18
-            console.log("[", AppStyle.primaryInt)
         }
         context: Qt.ApplicationShortcut
     }

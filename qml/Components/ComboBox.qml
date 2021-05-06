@@ -10,7 +10,7 @@ ComboBox {
     id:control
     Material.background: "transparent"
     property int popupX: 0
-    property int popupY: popupCenter?(-(UsefulFunc.rootWindow.height-height)/2)-control.y:95*AppStyle.size1H
+    property int popupY: popupCenter?(-(UsefulFunc.rootWindow.height-height)/2)-control.y:height
     property bool popupCenter: false
     property int popupWidth: width
     property int popupHeight: UsefulFunc.rootWindow.height>= delegateModel.count*AppStyle.size1H*85?delegateModel.count*AppStyle.size1H*85:UsefulFunc.rootWindow.height-AppStyle.size1H*85
@@ -25,6 +25,7 @@ ComboBox {
     property string placeholderIcon: ""
     property string displayIcon:  iconRole?"":""
     property bool hasClear: true
+    property real iconSize: AppStyle.size1W*35
     Material.accent: AppStyle.primaryColor
 
     signal error();
@@ -49,8 +50,7 @@ ComboBox {
         source: "qrc:/arrow.svg"
         width: AppStyle.size1W*35
         height: width
-        sourceSize.width: width*2
-        sourceSize.height: height*2
+        sourceSize: Qt.size(width*4,height*4)
         visible: false
     }
     ColorOverlay{
@@ -61,10 +61,9 @@ ComboBox {
     Image {
         id: trashIcon
         source: "qrc:/trash.svg"
-        width: 35*AppStyle.size1W
-        height: width
-        sourceSize.width: width*2
-        sourceSize.height: height*2
+        width: iconSize
+        height: iconSize
+        sourceSize: Qt.size(width*4,height*4)
         anchors{
             left: parent.right
             verticalCenter: parent.verticalCenter
@@ -125,10 +124,9 @@ ComboBox {
                 rightMargin: 10*AppStyle.size1W
             }
             source: control.iconRole === ""?"":control.currentIndex === -1?placeholderIcon:control.model.get(control.currentIndex)[iconRole]
-            width: AppStyle.size1W*35
-            height: width
-            sourceSize.width: width*2
-            sourceSize.height: height*2
+            width: iconSize
+            height: iconSize
+            sourceSize: Qt.size(width*4,height*4)
         }
     }
     delegate: MenuItem {
@@ -151,19 +149,20 @@ ComboBox {
                     rightMargin: 10*AppStyle.size1W
                 }
                 source: control.iconRole ===""?"":model[control.iconRole]
-                width: AppStyle.size1W*35
-                height: width
-                sourceSize.width: width*2
-                sourceSize.height: height*2
+                width: iconSize
+                height: iconSize
+                sourceSize: Qt.size(width*4,height*4)
+
             }
             Text {
                 id: name
                 text: delegateItem.text
                 font: delegateItem.font
-                width: delegateItem.width
                 anchors{
-                    right: displayIconImg.visible?displayIconImg.left:parent.right
+                    right: control.iconRole !==""?displayIconImg.left
+                                                 :parent.right
                     rightMargin: AppStyle.size1W*15
+                    left: parent.left
                     leftMargin: AppStyle.size1W*15
                     verticalCenter: parent.verticalCenter
 

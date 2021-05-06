@@ -18,6 +18,7 @@ TabButton{
         }
         else ""
     }
+    font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
 
     width:200*AppStyle.size1W
     text:{
@@ -75,6 +76,9 @@ TabButton{
 
             /******************************************************/
         }
+
+        queryList.due_date.fromDate = fromDate.toISOString()
+        queryList.due_date.toDate = toDate.toISOString()
 
         internalModel.append(ThingsApi.getThingByDate(fromDate,toDate))
     }
