@@ -480,8 +480,23 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             let result
                             if( listId === Memorito.Done )
                                 result = tx.executeSql("SELECT * FROM Things WHERE is_done = 1 ORDER By id ASC")
+                            else if( listId === Memorito.NextAction ){
+                                var fromDate = new Date()
+                                var toDate = new Date()
+
+                                fromDate.setHours(0)
+                                fromDate.setMinutes(0)
+                                fromDate.setSeconds(0)
+
+                                toDate.setHours(23)
+                                toDate.setMinutes(59)
+                                toDate.setSeconds(59)
+                                result = tx.executeSql("SELECT * FROM Things WHERE ( list_id IN (?,?) OR ( list_id = ? AND datetime(due_date) BETWEEN datetime(?) AND datetime(?) ) )
+ AND is_done != 1 ORDER By id ASC"
+                                                       ,[Memorito.NextAction,Memorito.Project,Memorito.Calendar,fromDate,toDate])
+                            }
                             else
-                                result = tx.executeSql("SELECT * FROM Things WHERE list_id = ?  ORDER By id ASC",listId)
+                                result = tx.executeSql("SELECT * FROM Things WHERE list_id = ? AND is_done != 1 ORDER By id ASC",listId)
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesThings.push(result.rows.item(i))
@@ -504,6 +519,28 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                         try
                         {
                             var result = tx.executeSql("SELECT * FROM Things WHERE list_id = ? AND category_id = ? ORDER By id ASC",[listId,categoryId])
+                            for(var i=0;i<result.rows.length;i++)
+                            {
+                                valuesThings.push(result.rows.item(i))
+                            }
+                        }
+                        catch(e)
+                        {
+
+                        }
+                    })
+        return valuesThings
+    }
+
+    function getThingsByQuery(query)
+    {
+        let valuesThings=[]
+        Database.connection.transaction(
+                    function(tx)
+                    {
+                        try
+                        {
+                            var result = tx.executeSql("SELECT * FROM Things " + query)
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesThings.push(result.rows.item(i))
@@ -607,21 +644,12 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
     {
         let valuesThings = []
 
-        if(fromDate === 0 && toDate ===0)
-            return valuesThings
-
-        else if (fromDate !== 0 && toDate === 0)
-            toDate = new Date('3000')
-
-        else if (fromDate === 0 && toDate !== 0)
-            fromDate = new Date(0)
-
         Database.connection.transaction(
                     function(tx)
                     {
                         try
                         {
-                            var result = tx.executeSql("SELECT * FROM Things WHERE datetime(due_date) BETWEEN datetime(?) AND datetime(?) ",[fromDate,toDate])
+                            var result = tx.executeSql("SELECT * FROM Things WHERE list_id = ? AND datetime(due_date) BETWEEN datetime(?) AND datetime(?) ",[Memorito.Calendar,fromDate,toDate])
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesThings.push(result.rows.item(i))

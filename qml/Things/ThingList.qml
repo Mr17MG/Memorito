@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
 import QtQuick.Controls.Material.impl 2.15
 import QtGraphicalEffects 1.15
-
+import QtQuick.Layouts 1.15
 import QDateConvertor 1.0
 import Components 1.0
 import Global 1.0
@@ -15,6 +15,66 @@ Item {
     property int categoryId: -1
     ListModel{ id:internalModel }
     QDateConvertor{id:dateConverter}
+    property bool searched : false
+    property var queryList:{
+        "context_id" : [],
+        "priority_id" : [],
+        "energy_id" : [],
+        "has_files" : 2,
+        "estimate_type":"<", // timeCompbo.model.get(timeCompbo.currentIndex).query
+        "estimate_time" : "", //Number(timeInput.text.trim()),
+        "list_id": listId,
+        "category_id": categoryId,
+        "due_date" : {
+            "fromDate": "",
+            "toDate" : ""
+        },
+        "searchText" : "",
+        "orderBy":"title",
+        "orderType":"ASC"
+    }
+
+    function makeQuery()
+    {
+        let query= []
+
+        if (queryList.context_id.length)
+            query.push("context_id IN("+(queryList.context_id)+")")
+
+        if (queryList.priority_id.length)
+            query.push("priority_id IN("+(queryList.priority_id)+")")
+
+        if (queryList.energy_id.length)
+            query.push("energy_id IN("+(queryList.energy_id)+")")
+
+        if (queryList.has_files !== 2)
+            query.push("has_files"+"="+queryList.has_files)
+
+        if (queryList.estimate_time !== "")
+            query.push("estimate_time"+queryList.estimate_type + queryList.estimate_time)
+
+        if( listId !== -1)
+            query.push("list_id"+"="+listId)
+
+        if( categoryId !== -1)
+            query.push("category_id"+"="+categoryId)
+
+
+        if(listId===Memorito.Calendar)
+        {
+            query.push("datetime(due_date) BETWEEN datetime('" + queryList.due_date.fromDate + "') AND datetime('" + queryList.due_date.toDate + "')")
+        }
+
+        if( queryList.searchText !=="" )
+        {
+            query.push("(lower(title) LIKE '%"+ queryList.searchText.toLowerCase() +"%' OR "+"lower(detail) LIKE '%"+ queryList.searchText.toLowerCase() +"%')")
+        }
+
+        var conditions = query.length?"WHERE "+query.join(" AND "):""
+        var order = ("ORDER BY lower(" + queryList.orderBy + ") " + queryList.orderType)
+        searched=true
+        return conditions + " " + order
+    }
 
     function cameInToPage(object)
     {
@@ -105,8 +165,10 @@ Item {
             }
         }
     }
+
     Loader{
         id: calendarTab
+        width: parent.width
         active: listId === Memorito.Calendar
         anchors{
             top: parent.top
@@ -116,7 +178,6 @@ Item {
             left: parent.left
             leftMargin: 20*AppStyle.size1W
         }
-        width: parent.width
 
         sourceComponent: Component{
             TabBar{
@@ -146,28 +207,33 @@ Item {
                     id:dayBtn
                     text: qsTr("روز")
                     Material.foreground: AppStyle.textOnPrimaryColor
+                    font{family: AppStyle.appFont;pixelSize:  30*AppStyle.size1F;bold:true}
                 }
 
                 TabButton{
                     id:monthBtn
                     text: qsTr("ماه")
                     Material.foreground: AppStyle.textOnPrimaryColor
+                    font{family: AppStyle.appFont;pixelSize:  30*AppStyle.size1F;bold:true}
                 }
 
                 TabButton{
                     id:yearBtn
                     text: qsTr("سال")
                     Material.foreground: AppStyle.textOnPrimaryColor
+                    font{family: AppStyle.appFont;pixelSize:  30*AppStyle.size1F;bold:true}
                 }
 
                 TabButton{
                     id:optionBtn
                     text: qsTr("دلخواه")
                     Material.foreground: AppStyle.textOnPrimaryColor
+                    font{family: AppStyle.appFont;pixelSize:  30*AppStyle.size1F;bold:true}
                 }
             }
         }
     }
+
     Loader{
         id: calendarRangeTab
         active: listId === Memorito.Calendar
@@ -181,10 +247,12 @@ Item {
         }
         width: parent.width
         clip: true
+
         sourceComponent:Item{
             width: parent.width
             height: 100*AppStyle.size1H
             Loader{
+                id:dayLoader
                 active: calendarTab.item.currentIndex === 0
                 visible: active
                 anchors.fill: parent
@@ -208,6 +276,7 @@ Item {
                             height:30*AppStyle.size1W
                         }
                         LayoutMirroring.enabled: !AppStyle.ltr
+                        font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
                         width: 200*AppStyle.size1W
                         property int deletedDays : -1
                         enabled: dayTab.count < 21
@@ -243,6 +312,7 @@ Item {
                             height:30*AppStyle.size1W
                         }
                         LayoutMirroring.enabled: AppStyle.ltr
+                        font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
 
                         onClicked: {
                             for(let i=0; i<7; i++)
@@ -263,7 +333,6 @@ Item {
                     }
                 }
             }
-
 
             Loader{
                 id:monthLoader
@@ -291,6 +360,7 @@ Item {
                             height:30*AppStyle.size1W
                         }
                         LayoutMirroring.enabled: !AppStyle.ltr
+                        font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
                         width: 200*AppStyle.size1W
                         property int deletedMonth : -1
                         enabled: monthTab.count < 12
@@ -326,6 +396,7 @@ Item {
                             height:30*AppStyle.size1W
                         }
                         LayoutMirroring.enabled: AppStyle.ltr
+                        font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
 
                         onClicked: {
                             for(let i=0; i<4; i++)
@@ -346,7 +417,9 @@ Item {
                     }
                 }
             }
+
             Loader{
+                id:yearLoader
                 active: calendarTab.item.currentIndex === 2
                 visible: active
                 anchors.fill: parent
@@ -370,6 +443,7 @@ Item {
                             height:30*AppStyle.size1W
                         }
                         LayoutMirroring.enabled: !AppStyle.ltr
+                        font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
                         width: 300*AppStyle.size1W
                         property int deletedYear : -1
                         enabled: yearTab.count < 10
@@ -404,6 +478,7 @@ Item {
                             height:30*AppStyle.size1W
                         }
                         LayoutMirroring.enabled: AppStyle.ltr
+                        font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
 
                         property int addedYear: 0
                         onClicked: {
@@ -426,7 +501,7 @@ Item {
                 }
             }
             Loader{
-                id: yearLoader
+                id: customLoader
                 active: calendarTab.item.currentIndex === 3
                 visible: active
                 width: parent.width
@@ -449,14 +524,24 @@ Item {
                         height:parent.height- 20*AppStyle.size1H
                         minSelectedDate: fromDate.selectedDate
                         okButton.onClicked: {
+                            var localFromDate = fromDate.selectedDate.toString()==="Invalid Date"?0
+                                                                                                 :fromDate.selectedDate
+                            var localToDate = toDate.selectedDate.toString() === "Invalid Date"?0
+                                                                                               :toDate.selectedDate
+                            if(localFromDate === 0 && localToDate ===0)
+                                return valuesThings
+
+                            else if (localFromDate !== 0 && localToDate === 0)
+                                localToDate = new Date('3000')
+
+                            else if (localFromDate === 0 && localToDate !== 0)
+                                localFromDate = new Date(0)
+
                             internalModel.clear()
-                            internalModel.append(
-                                        ThingsApi.getThingByDate(
-                                            fromDate.selectedDate.toString()==="Invalid Date"?0
-                                                                                             :fromDate.selectedDate,
-                                            toDate.selectedDate.toString() === "Invalid Date"?0
-                                                                                             :toDate.selectedDate)
-                                        )
+                            internalModel.append(ThingsApi.getThingByDate(localFromDate,localToDate))
+
+                            queryList.due_date.fromDate = fromDate.toISOString()
+                            queryList.due_date.toDate = toDate.toISOString()
                         }
                         cancelButton.onClicked: okButton.clicked()
                     }
@@ -467,14 +552,24 @@ Item {
                         width: parent.width / 2 - 10*AppStyle.size1W
                         height:parent.height - 20*AppStyle.size1H
                         okButton.onClicked:  {
+                            var localFromDate = fromDate.selectedDate.toString()==="Invalid Date"?0
+                                                                                                 :fromDate.selectedDate
+                            var localToDate = toDate.selectedDate.toString() === "Invalid Date"?0
+                                                                                               :toDate.selectedDate
+                            if(localFromDate === 0 && localToDate ===0)
+                                return valuesThings
+
+                            else if (localFromDate !== 0 && localToDate === 0)
+                                localToDate = new Date('3000')
+
+                            else if (localFromDate === 0 && localToDate !== 0)
+                                localFromDate = new Date(0)
+
                             internalModel.clear()
-                            internalModel.append(
-                                        ThingsApi.getThingByDate(
-                                            fromDate.selectedDate.toString()==="Invalid Date"?0
-                                                                                             :fromDate.selectedDate,
-                                            toDate.selectedDate.toString() === "Invalid Date"?0
-                                                                                             :toDate.selectedDate)
-                                        )
+                            internalModel.append(ThingsApi.getThingByDate(localFromDate,localToDate))
+
+                            queryList.due_date.fromDate = fromDate.toISOString()
+                            queryList.due_date.toDate = toDate.toISOString()
                         }
                         cancelButton.onClicked: okButton.clicked()
                     }
@@ -483,9 +578,586 @@ Item {
         }
     }
     Loader{
-        active: internalModel.count > 0
+        id: sortLoader
+        width: parent.width
+        height: 100*AppStyle.size1H
         anchors{
             top: calendarRangeTab.bottom
+            topMargin: listId === Memorito.Calendar ?0:15*AppStyle.size1H
+            right: parent.right
+            rightMargin: 30*AppStyle.size1W
+            left: parent.left
+            leftMargin: 30*AppStyle.size1W
+        }
+        active: internalModel.count>0 || searched
+        sourceComponent: RowLayout{
+            id:sortFlow
+            layoutDirection: Qt.RightToLeft
+            spacing: 10*AppStyle.size1W
+
+            AppTextInput{
+                id: searchInput
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                placeholderText: qsTr("جست و جو")
+                hasCounter: false
+                leftPadding: parent.height
+                text: queryList.searchText
+                onTextEdited: {
+                    queryList.searchText = text.trim()
+                }
+
+                AppButton{
+                    height: parent.height - 20*AppStyle.size1H
+                    width: height
+                    radius: 20*AppStyle.size1W
+                    icon{
+                        source: "qrc:/search.svg"
+                        color: AppStyle.textOnPrimaryColor
+                        width: Qt.size(50*AppStyle.size1W,50*AppStyle.size1W).width
+                        height: Qt.size(50*AppStyle.size1W,50*AppStyle.size1W).height
+                    }
+
+                    anchors{
+                        left: parent.left
+                        leftMargin: 10*AppStyle.size1W
+                        verticalCenter: parent.verticalCenter
+                    }
+
+                    onClicked: {
+                        internalModel.clear()
+                        internalModel.append(ThingsApi.getThingsByQuery(makeQuery()))
+                    }
+                }
+            }
+            AppButton{
+                id: advanceSearchBtn
+                Layout.fillHeight: true
+                text: qsTr("تنظیمات پیشرفته")
+                radius: 30*AppStyle.size1W
+                flat: true
+                borderColor: AppStyle.borderColor
+                onClicked: {
+                    dialogLoader.active = true
+                    dialogLoader.item.open()
+                }
+                visible: listId !== Memorito.Process
+            }
+
+            Loader{
+                id: dialogLoader
+                active: false
+                visible: active
+                sourceComponent: Popup{
+                    id:advanceSearchDialog
+                    x:AppStyle.ltr? advanceSearchBtn.x-advanceSearchDialog.width+advanceSearchBtn.width
+                                  : advanceSearchBtn.x
+                    y:advanceSearchBtn.height + advanceSearchBtn.y
+                    modal:true
+                    visible: true
+
+                    width:  (UsefulFunc.rootWindow.width - 100*AppStyle.size1W)  < 800*AppStyle.size1W ?(UsefulFunc.rootWindow.width - 100*AppStyle.size1W)
+                                                                                                       : 800*AppStyle.size1W
+                    height: (UsefulFunc.rootWindow.height - 500*AppStyle.size1H) < 800*AppStyle.size1H ? UsefulFunc.rootWindow.height - 500*AppStyle.size1H
+                                                                                                       : 800*AppStyle.size1H
+                    onClosed: {
+                        dialogLoader.active = false
+                    }
+
+                    Overlay.modal: Rectangle {
+                        color: AppStyle.appTheme?"#aa606060":"#80000000"
+                    }
+
+                    background: Rectangle{
+                        color: AppStyle.dialogBackgroundColor
+                        radius: 60*AppStyle.size1W
+                    }
+
+                    Flickable{
+                        id: mainFlick
+                        height: parent.height
+                        width:  parent.width
+                        clip:true
+                        contentHeight: item1.height
+                        anchors{
+                            right: parent.right
+                            top: parent.top
+                        }
+                        flickableDirection: Flickable.VerticalFlick
+                        onContentYChanged: {
+                            if(contentY<0 || contentHeight < mainFlick.height)
+                                contentY = 0
+                            else if(contentY > (contentHeight-mainFlick.height))
+                                contentY = contentHeight-mainFlick.height
+                        }
+                        onContentXChanged: {
+                            if(contentX<0 || contentWidth < mainFlick.width)
+                                contentX = 0
+                            else if(contentX > (contentWidth-mainFlick.width))
+                                contentX = (contentWidth-mainFlick.width)
+                        }
+                        ScrollBar.vertical: ScrollBar {
+                            hoverEnabled: true
+                            active: hovered || pressed || parent.flickingVertically
+                            visible: active
+                            orientation: Qt.Vertical
+                            anchors.right: mainFlick.right
+                            height: parent.height
+                            width: hovered || pressed?18*AppStyle.size1W:8*AppStyle.size1W
+                            contentItem: Rectangle {
+                                visible: parent.active
+                                radius: parent.pressed || parent.hovered ?20*AppStyle.size1W:8*AppStyle.size1W
+                                color: parent.pressed ?Material.color(AppStyle.primaryInt,Material.Shade900):Material.color(AppStyle.primaryInt,Material.Shade600)
+                            }
+                        }
+                        Flow{
+                            id:item1
+                            anchors{
+                                right: parent.right
+                                rightMargin: 10*AppStyle.size1W
+                                left: parent.left
+                                leftMargin:  10*AppStyle.size1W
+                            }
+
+
+                            Item{
+                                width: parent.width
+                                height: 100*AppStyle.size1H
+                                Image{
+                                    id: sortImg
+                                    source: "qrc:/sort.svg"
+                                    width: 40*AppStyle.size1W
+                                    height: width
+                                    sourceSize: Qt.size(width*2,height*2)
+                                    anchors{
+                                        right: parent.right
+                                        verticalCenter: parent.verticalCenter
+                                    }
+                                    visible: false
+                                }
+                                ColorOverlay{
+                                    anchors.fill: sortImg
+                                    source: sortImg
+                                    color: AppStyle.textColor
+                                }
+                                Text{
+                                    id: sortText
+                                    text: qsTr("مرتب‌سازی براساس")+": "
+
+                                    anchors{
+                                        right: sortImg.left
+                                        rightMargin: 15*AppStyle.size1W
+                                        bottom: parent.bottom
+                                        bottomMargin: 25*AppStyle.size1H
+                                    }
+                                    color:AppStyle.textColor
+                                    font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
+                                }
+                                AppComboBox{
+                                    id: sortCompbo
+                                    anchors{
+                                        right: sortText.left
+                                        rightMargin: 10*AppStyle.size1W
+                                        left: sortTypeBtn.right
+                                        leftMargin: 5*AppStyle.size1W
+                                        verticalCenter: parent.verticalCenter
+                                    }
+                                    textAlign: Qt.AlignHCenter
+                                    textRole: "text"
+                                    currentIndex: UsefulFunc.findInModel(queryList.orderBy,"query",sortCompbo.model).index
+                                    iconSize: AppStyle.size1W*50
+                                    hasClear: false
+                                    model: ListModel{
+                                        ListElement{
+                                            text: qsTr("الفبا")
+                                            query: "title"
+                                        }
+                                        ListElement{
+                                            text: qsTr("تاریخ ثبت")
+                                            query: "register_date"
+                                        }
+                                        ListElement{
+                                            text: qsTr("تاریخ آخرین ویرایش")
+                                            query: "modified_date"
+                                        }
+                                        ListElement{
+                                            text: qsTr("اولویت")
+                                            query: "priority_id"
+                                        }
+                                        ListElement{
+                                            text: qsTr("انرژی")
+                                            query: "energy_id"
+                                        }
+                                        ListElement{
+                                            text: qsTr("زمان موردنیاز")
+                                            query: "estimate_time"
+                                        }
+                                    }
+                                }
+                                AppButton{
+                                    id:sortTypeBtn
+                                    height: 90*AppStyle.size1H
+                                    width: height
+                                    checkable: true
+                                    Material.accent: "transparent"
+                                    Material.primary: "transparent"
+                                    Material.background: "transparent"
+                                    checked: queryList.orderType === "ASC"? true
+                                                                          :false
+                                    icon{
+                                        source: checked?"qrc:/sort-asc.svg":"qrc:/sort-desc.svg"
+                                        color: AppStyle.textColor
+                                        width: Qt.size(40*AppStyle.size1W,40*AppStyle.size1W).width
+                                        height: Qt.size(40*AppStyle.size1W,40*AppStyle.size1W).height
+                                    }
+                                    anchors{
+                                        bottom: parent.bottom
+                                        left: parent.left
+                                    }
+                                    hoverEnabled: true
+                                    property ToolTip toolTip : ToolTip{
+                                        text: sortTypeBtn.checked?qsTr("صعودی")
+                                                                 :qsTr("نزولی")
+                                        font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
+                                    }
+                                    onHoveredChanged: {
+
+                                        if(hovered)
+                                            toolTip.open()
+                                        else toolTip.hide()
+                                    }
+                                    onClicked: {
+
+                                    }
+                                }
+                            }
+
+                            Item{
+                                width: parent.width
+                                height: 100*AppStyle.size1H
+                                Image{
+                                    id: filterImg
+                                    source: "qrc:/filter.svg"
+                                    width: 40*AppStyle.size1W
+                                    height: width
+                                    sourceSize: Qt.size(width*2,height*2)
+                                    anchors{
+                                        right: parent.right
+                                        verticalCenter: parent.verticalCenter
+                                    }
+                                    visible: false
+                                }
+                                ColorOverlay{
+                                    anchors.fill: filterImg
+                                    source: filterImg
+                                    color: AppStyle.textColor
+                                }
+
+                                Text{
+                                    id: filterText
+                                    text: qsTr("محدود کردن نتایج جست و جو")
+                                    anchors{
+                                        right: filterImg.left
+                                        rightMargin: 15*AppStyle.size1W
+                                        verticalCenter: parent.verticalCenter
+                                    }
+                                    color:AppStyle.textColor
+                                    font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
+                                }
+                            }
+                            Text{
+                                text: qsTr("محل‌های انجام")+": "
+                                width: parent.width
+                                font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
+                                color:AppStyle.textColor
+                                rightPadding: 15*AppStyle.size1W
+                                Component.onCompleted: {
+
+                                    if (listId === Memorito.Contexts)
+                                    {
+                                        visible = false
+                                        height = 0
+                                    }
+                                }
+                            }
+                            Grid{
+                                width: parent.width
+                                layoutDirection: Qt.RightToLeft
+                                visible: (listId !== Memorito.Contexts)
+                                onHeightChanged: {
+                                    if(!visible)
+                                        height = 0
+                                }
+                                ButtonGroup{ id:contextGroup;exclusive: false}
+                                Repeater{
+                                    model: contextModel
+                                    delegate: AppCheckBox{
+                                        text: model.context_name
+                                        ButtonGroup.group: contextGroup
+                                        width: parent.width/2
+                                        checked: queryList.context_id.indexOf(model.id) !== -1
+                                    }
+                                }
+                            }
+
+                            Text{
+                                id: filesText
+                                text: qsTr("فایل")+": "
+                                width: parent.width
+                                font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
+                                color:AppStyle.textColor
+                                height: 75*AppStyle.size1H
+                                verticalAlignment: Text.AlignBottom
+                                rightPadding: 15*AppStyle.size1W
+                            }
+                            Grid{
+                                width: parent.width
+                                layoutDirection: Qt.RightToLeft
+                                ButtonGroup{ id:filesGroup}
+                                Repeater{
+                                    model: [qsTr("نداشته باشد"),qsTr("داشته باشد"),qsTr("مهم نیست")]
+                                    delegate: AppRadioButton{
+                                        property int id: index
+                                        text: modelData
+                                        ButtonGroup.group: filesGroup
+                                        checked: queryList.has_files === index
+                                        width: parent.width/3
+                                    }
+                                }
+                            }
+
+                            Text{
+                                id: prioritiesText
+                                text: qsTr("الویت‌ها")+": "
+                                width: parent.width
+                                font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
+                                color:AppStyle.textColor
+                                rightPadding: 15*AppStyle.size1W
+                                height: 75*AppStyle.size1H
+                                verticalAlignment: Text.AlignBottom
+                            }
+                            Grid{
+                                width: parent.width
+                                layoutDirection: Qt.RightToLeft
+                                rows: 2
+                                columns: 2
+                                ButtonGroup{ id:prioritiesGroup;exclusive: false}
+                                Repeater{
+                                    model: priorityModel
+                                    delegate: AppCheckBox{
+                                        text: "      "+model.Text
+                                        ButtonGroup.group: prioritiesGroup
+                                        checked: queryList.priority_id.indexOf(model.Id) !== -1
+                                        width: prioritiesText.width/2
+                                        Image {
+                                            source: model.iconSource
+                                            width: 40*AppStyle.size1W
+                                            height: width
+                                            sourceSize.width:width*2
+                                            sourceSize.height:height*2
+                                            anchors{
+                                                verticalCenter: parent.verticalCenter
+                                                right: parent.right
+                                                rightMargin: 50*AppStyle.size1W
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Text{
+                                id: energiesText
+                                text: qsTr("انرژی‌ها")+": "
+                                width: parent.width
+                                font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
+                                color:AppStyle.textColor
+                                rightPadding: 15*AppStyle.size1W
+                                height: 75*AppStyle.size1H
+                                verticalAlignment: Text.AlignBottom
+                            }
+                            Grid{
+                                width: parent.width
+                                layoutDirection: Qt.RightToLeft
+                                rows: 2
+                                columns: 2
+                                ButtonGroup{ id:energiesGroup;exclusive: false}
+                                Repeater{
+                                    model: energyModel
+                                    delegate: AppCheckBox{
+                                        text: "      "+model.Text
+                                        ButtonGroup.group: energiesGroup
+                                        width: energiesText.width/2
+                                        checked: queryList.energy_id.indexOf(model.Id) !== -1
+                                        Image {
+                                            source: model.iconSource
+                                            width: 40*AppStyle.size1W
+                                            height: width
+                                            sourceSize.width:width*2
+                                            sourceSize.height:height*2
+                                            anchors{
+                                                verticalCenter: parent.verticalCenter
+                                                right: parent.right
+                                                rightMargin: 50*AppStyle.size1W
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Text{
+                                id: timeText
+                                text: qsTr("زمان موردنیاز")+": "
+                                width: parent.width
+                                font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:true}
+                                color:AppStyle.textColor
+                                rightPadding: 15*AppStyle.size1W
+                                height: 75*AppStyle.size1H
+                                verticalAlignment: Text.AlignBottom
+                            }
+                            Item{
+                                width: parent.width
+                                height: 120*AppStyle.size1H
+                                AppComboBox{
+                                    id: timeCompbo
+                                    anchors{
+                                        right: parent.right
+                                        rightMargin: 10*AppStyle.size1W
+                                        verticalCenter: parent.verticalCenter
+                                    }
+                                    width: parent.width/2 - 10*AppStyle.size1W
+                                    textAlign: Qt.AlignHCenter
+                                    textRole: "text"
+                                    iconSize: AppStyle.size1W*50
+                                    hasClear: false
+                                    currentIndex: UsefulFunc.findInModel(queryList.estimate_type,"query",timeCompbo.model).index
+                                    model: ListModel{
+                                        ListElement{
+                                            text:qsTr("کمتر از")
+                                            query:"<"
+                                        }
+                                        ListElement{
+                                            text:qsTr("برابر با")
+                                            query:"="
+                                        }
+                                        ListElement{
+                                            text:qsTr("بیشتر از")
+                                            query:">"
+                                        }
+                                    }
+                                }
+                                AppTextField{
+                                    id:timeInput
+                                    anchors{
+                                        right: timeCompbo.left
+                                        rightMargin: 10*AppStyle.size1W
+                                        left: parent.left
+                                        leftMargin: 10*AppStyle.size1W
+                                        bottom: parent.bottom
+                                        bottomMargin: 2*AppStyle.size1H
+                                    }
+                                    text: queryList.estimate_time
+                                    font.bold: false
+                                    placeholder.visible: false
+                                    placeholderTextColor: AppStyle.textColor
+                                    height: AppStyle.size1H*100
+                                    horizontalAlignment: Text.AlignHCenter
+                                    placeholderText: qsTr("زمان تخمینی به دقیقه")
+                                    maximumLength: 3
+                                    validator: RegExpValidator {
+                                        regExp: /[0123456789۰۱۲۳۴۵۶۷۸۹]{3}/ig
+                                    }
+                                    onTextChanged: {
+                                        if (text.match(/[۰۱۲۳۴۵۶۷۸۹]/ig))
+                                            text = UsefulFunc.faToEnNumber(text)
+                                    }
+                                    Text{
+                                        anchors{
+                                            left: parent.left
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        text: qsTr("دقیقه")
+                                        font: parent.font
+                                        visible: parent.text.trim()!==""
+                                    }
+                                }
+                            }
+
+                            Item{
+                                width: parent.width
+                                height: 150*AppStyle.size1H
+                                AppButton{
+                                    id: applayFilter
+                                    anchors.centerIn: parent
+                                    text: qsTr("اعمال")
+                                    radius: 30*AppStyle.size1W
+                                    width: parent.width/2
+                                    icon{
+                                        source: "qrc:/check-circle.svg"
+                                        width: 40*AppStyle.size1W
+                                        height:  40*AppStyle.size1W
+                                        color: AppStyle.textOnPrimaryColor
+                                    }
+                                    onClicked: {
+                                        let i =0
+                                        let contextsSelected = []
+                                        for(i=0; i < contextModel.count; i++)
+                                            if(contextGroup.buttons[i].checked)
+                                                contextsSelected.push(contextModel.get(i).id)
+
+                                        let prioritiesSelected = []
+                                        for(i=0; i<priorityModel.count;i++)
+                                            if(prioritiesGroup.buttons[i].checked)
+                                                prioritiesSelected.push(priorityModel.get(i).Id)
+
+
+                                        let energiesSelected = []
+                                        for(i=0; i<energyModel.count;i++)
+                                            if(energiesGroup.buttons[i].checked)
+                                                energiesSelected.push(energyModel.get(i).Id)
+
+                                        if (contextsSelected.length)
+                                            queryList["context_id"] = (contextsSelected.join(","))
+
+                                        if (prioritiesSelected.length)
+                                            queryList["priority_id"] = (prioritiesSelected.join(","))
+
+                                        if (energiesSelected.length)
+                                            queryList["energy_id"] = (energiesSelected.join(","))
+
+                                        queryList["has_files"] = (filesGroup.checkedButton.id)
+
+                                        if (timeInput.text.trim())
+                                        {
+                                            queryList["estimate_time"] = Number(timeInput.text.trim())
+                                            queryList["estimate_type"] = timeCompbo.model.get(timeCompbo.currentIndex).query
+                                        }
+
+                                        queryList.orderBy   = sortCompbo.model.get(sortCompbo.currentIndex).query
+                                        queryList.orderType = sortTypeBtn.checked?"ASC":"DESC"
+
+                                        internalModel.clear()
+                                        internalModel.append(ThingsApi.getThingsByQuery(makeQuery()))
+
+                                        advanceSearchDialog.close()
+
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    Loader{
+        id: thingsLoader
+        active: internalModel.count > 0
+        width: parent.width
+        clip: true
+        anchors{
+            top: sortLoader.bottom
             topMargin: 15*AppStyle.size1H
             right: parent.right
             rightMargin: 20*AppStyle.size1W
@@ -494,9 +1166,6 @@ Item {
             left: parent.left
             leftMargin: 20*AppStyle.size1W
         }
-        width: parent.width
-        clip: true
-
         sourceComponent: GridView{
             id: control
             property real lastContentY: 0
@@ -668,7 +1337,7 @@ Item {
                         left: parent.left
                         leftMargin: 20*AppStyle.size1W
                     }
-                    sourceComponent:Flow{
+                    sourceComponent: Flow{
                         id: flow1
                         width: parent.width
                         height: parent.height
@@ -806,8 +1475,8 @@ Item {
                                 }
                                 Text {
                                     text:qsTr("فرد انجام دهنده") +": " + (model.friend_id?friendModel.count>0?UsefulFunc.findInModel(model.friend_id,"id",friendModel).value.friend_name
-                                                                                                                :""
-                                                                             :qsTr("ثبت نشده است"))
+                                                                                                             :""
+                                                                          :qsTr("ثبت نشده است"))
                                     anchors{
                                         verticalCenter: friendImg.verticalCenter
                                         right: friendImg.left
@@ -820,7 +1489,7 @@ Item {
                             }
                         }
                         Loader{
-                            active: model.list_id === Memorito.Calendar || model.due_date
+                            active: model.list_id === Memorito.Calendar || model.due_date !==""
                             width: parent.width
                             height: 50*AppStyle.size1H
                             visible: active
