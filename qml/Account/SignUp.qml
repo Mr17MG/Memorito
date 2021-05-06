@@ -62,7 +62,7 @@ Item {
                     id:usernameInput
                     placeholder.text: qsTr("نام کاربری")
                     validator: RegExpValidator{
-                        regExp: /[A-Za-z0-9_.]{50}/
+                        regExp: /[A-Za-z][A-Za-z0-9_.]{50}/
                     }
                     width: parent.width
                     height: parent.height
