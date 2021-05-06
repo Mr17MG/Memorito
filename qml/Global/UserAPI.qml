@@ -98,7 +98,7 @@ QtObject {
                     {
                         if(response.code === 200){
                             updateUser(response.result)
-                            UsefulFunc.showLog(qsTr("تصویر پروفایل شما با موفقیت بروزرسانی شد."),false)
+                            UsefulFunc.showLog(qsTr("پروفایل شما با موفقیت بروزرسانی شد."),false)
                         }
                         return true
                     }
@@ -360,7 +360,7 @@ QtObject {
         }
     }
 
-    function forgetPass(identifier)
+    function forgetPass(identifier,fromProfile)
     {
         let json = JSON.stringify(
                 {
@@ -412,7 +412,11 @@ QtObject {
                     {
                         if(response.code === 200)
                         {
-                            UsefulFunc.authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:true,email:response.result.email})
+                            if(fromProfile)
+                            {
+                                UsefulFunc.mainStackPush("qrc:/Account/Authentication.qml",qsTr("تغییر رمز ورود"),{isReset:true,email:response.result.email,fromProfile:true})
+                            }
+                            else UsefulFunc.authLoader.item.push("qrc:/Account/Authentication.qml",{isReset:true,email:response.result.email})
                         }
                     }
                     else {
@@ -436,7 +440,7 @@ QtObject {
         }
     }
 
-    function resetPass(identifier, otp, password)
+    function resetPass(identifier, otp, password,fromProfile)
     {
         let json = JSON.stringify(
                 {
@@ -482,10 +486,19 @@ QtObject {
                     {
                         if(response.code === 200)
                         {
-                            addUser(response.result)
-                            User.users.append(getUsers())
-                            UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
-                            User.set(getUserByUserId(User.users.get(0).id))
+                            if(fromProfile)
+                            {
+                                updateUser(response.result)
+                                User.users.append(getUsers())
+                                User.set(getUserByUserId(User.users.get(0).id))
+                                UsefulFunc.mainStackPop()
+                            }
+                            else{
+                                addUser(response.result)
+                                User.users.append(getUsers())
+                                UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
+                                User.set(getUserByUserId(User.users.get(0).id))
+                            }
                         }
                     }
                     else {
@@ -713,8 +726,8 @@ QtObject {
                         {
 
                             tx.executeSql(
-                                        "UPDATE Users SET username=?, email=?, hashed_password=?, avatar=?, register_date=?, modified_date=?, two_step=? WHERE id=?"
-                                        ,[user.username??"", user.email??"", user.hashed_password??"",user.avatar??"", user.register_date??"", user.modified_date??"", user.two_step??0, user.id]
+                                        "UPDATE Users SET username=?, email=?, hashed_password=?, auth_token=?, avatar=?, register_date=?, modified_date=?, two_step=? WHERE id=?"
+                                        ,[user.username??"", user.email??"", user.hashed_password??"",user.auth_token??"",user.avatar??"", user.register_date??"", user.modified_date??"", user.two_step??0, user.id]
                                         )
 
                             User.set(getUserByUserId(user.id),true)

@@ -8,6 +8,7 @@ Item {
     property int waitingSecond: defaultWaintingTime
     property int defaultWaintingTime: 180
     property bool isReset: false
+    property bool fromProfile: false
     function secondToMMSS(second)
     {
         var MM = 0
@@ -172,7 +173,7 @@ Item {
                             UsefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true)
                             return
                         }
-                        UserApi.resetPass(email, otpInput.text, passLoader.item.passInput.text)
+                        UserApi.resetPass(email, otpInput.text, passLoader.item.passInput.text,fromProfile)
                     }
                 }
             }
