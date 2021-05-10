@@ -66,7 +66,9 @@ Pane {
             bottomMargin: 70*AppStyle.size1H
             horizontalCenter: parent.horizontalCenter
         }
-        width: parent.width/3*2 > 800*AppStyle.size1W?800*AppStyle.size1W:parent.width/3*2
+        width: (parent.width/3*2 > 800*AppStyle.size1W) ? 800*AppStyle.size1W
+                                                     : (parent.width/3*2 > parent.width - 100 * AppStyle.size1H) ? parent.width/3*2
+                                                                                                                : parent.width-100*AppStyle.size1H
         contentHeight: flow1.height
         Rectangle{
             color: Material.color(AppStyle.primaryInt,Material.Shade50)
@@ -87,8 +89,13 @@ Pane {
                 height: 600*AppStyle.size1W
                 Rectangle{
                     id: root
-                    width: 500*AppStyle.size1W
-                    height: width
+                    anchors{
+                        right: parent.right
+                        rightMargin: 30*AppStyle.size1W
+                        left: parent.left
+                        leftMargin: 30*AppStyle.size1W
+                    }
+                    height: 30*AppStyle.size1H
                     radius: width
                     anchors.centerIn: parent
                     border.color: Material.color(AppStyle.primaryInt)

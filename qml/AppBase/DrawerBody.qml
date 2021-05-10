@@ -1,7 +1,7 @@
 import QtQuick 2.15 // Require For Listview
-import QtGraphicalEffects 1.14 // Require For ColorOverlay
-import QtQuick.Controls.Material 2.14
-import QtQuick.Controls 2.14 // Require For ScrollBar
+import QtGraphicalEffects 1.15 // Require For ColorOverlay
+import QtQuick.Controls.Material 2.15
+import QtQuick.Controls 2.15 // Require For ScrollBar
 import Components 1.0  // Require For AppButton
 import Global 1.0
 import MTools 1.0
@@ -46,7 +46,8 @@ Item{
     Rectangle{
         id: profileRect
         width: height
-        height: parent.width >= 300*AppStyle.size1H?300*AppStyle.size1H:parent.width-10*AppStyle.size1H
+        height: parent.width >= 300*AppStyle.size1H? 250*AppStyle.size1H
+                                                   : parent.width-10*AppStyle.size1H
         radius: width
         border.color: AppStyle.primaryColor
         border.width: 3*AppStyle.size1W
@@ -86,7 +87,7 @@ Item{
         }
 
         MouseArea{
-            id:profileMouse
+            id: profileMouse
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             onClicked: {
