@@ -40,6 +40,7 @@ Item {
             }
             Flickable{
                 id:flick
+                maximumFlickVelocity: AppStyle.size1H*3000
                 anchors{
                     topMargin: 25*AppStyle.size1W
                     bottomMargin: 25*AppStyle.size1W
@@ -72,8 +73,10 @@ Item {
                     }
                 }
 
-                Text{
+                TextEdit{
                     id: msg
+                    readOnly: true
+                    selectByMouse: true
                     width: parent.width
                     color: AppStyle.textColor
                     padding: 35*AppStyle.size1W
@@ -104,6 +107,7 @@ Item {
                     color: AppStyle.textOnPrimaryColor
 
                 }
+                enabled: main.currentPage > 1
                 onClicked: {
                     main.currentPage --;
                     flick.contentY = (main.currentPage - 1) * container.height
@@ -129,12 +133,14 @@ Item {
                     width: 25*AppStyle.size1W
                     height: 25*AppStyle.size1W
                     color: AppStyle.textOnPrimaryColor
-
                 }
+                enabled: main.currentPage < main.pageCount
                 onClicked: {
                     main.currentPage ++;
                     if( ( main.currentPage * container.height ) >= flick.contentHeight )
+                    {
                         flick.contentY = flick.contentHeight - container.height
+                    }
                     else
                         flick.contentY = ( main.currentPage - 1 ) * container.height
                 }
