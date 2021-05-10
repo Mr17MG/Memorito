@@ -115,54 +115,13 @@ Item {
         parent: UsefulFunc.mainLoader
         width: parent.width*0.8
         height: parent.height*0.8
-        Flickable{
-            id: mainFlick
+
+        Loader{
+            id: appSettingPage
+            active: setting.visible
+            width: parent.width
             height: parent.height
-            width:  parent.width
-            clip: true
-            contentHeight: appSettingPage.height*2
-            flickableDirection: Flickable.VerticalFlick
-
-            anchors{
-                right: parent.right
-                top: parent.top
-            }
-
-            onContentYChanged: {
-                if(contentY<0 || contentHeight < mainFlick.height)
-                    contentY = 0
-                else if(contentY > (contentHeight-mainFlick.height))
-                    contentY = contentHeight-mainFlick.height
-            }
-            onContentXChanged: {
-                if(contentX<0 || contentWidth < mainFlick.width)
-                    contentX = 0
-                else if(contentX > (contentWidth-mainFlick.width))
-                    contentX = (contentWidth-mainFlick.width)
-            }
-
-            ScrollBar.vertical: ScrollBar {
-                visible: mainFlick.height < mainFlick.contentHeight
-                hoverEnabled: true
-                active: (hovered || pressed || parent.flicking)
-                orientation: Qt.Vertical
-                anchors.right: mainFlick.right
-                height: parent.height
-                width: hovered || pressed?18*AppStyle.size1W:8*AppStyle.size1W
-                contentItem: Rectangle {
-                    visible: parent.active
-                    radius: parent.pressed || parent.hovered ?20*AppStyle.size1W:8*AppStyle.size1W
-                    color: parent.pressed ?Material.color(AppStyle.primaryInt,Material.Shade900):Material.color(AppStyle.primaryInt,Material.Shade600)
-                }
-            }
-
-            Loader{
-                id: appSettingPage
-                active: setting.visible
-                width: parent.width
-                height: 400*AppStyle.size1H
-                source: "qrc:/AppBase/AppSettings.qml"
-            }
+            source: "qrc:/AppBase/AppSettings.qml"
         }
     }
 
