@@ -4,10 +4,8 @@ import QtQuick.Window 2.14                // Require For Screen
 
 QtObject {
     id:root
-    property int screenWidth  : Qt.platform.os === "android" || Qt.platform.os === "ios" ? Screen.width
-                                                                                         : 768
-    property int screenHeight : Qt.platform.os === "android" || Qt.platform.os === "ios" ? Screen.height
-                                                                                         : 1366
+    property int screenWidth  : 768
+    property int screenHeight : 1366
 
     property int  windowHeight : {
         if(Qt.platform.os==="android" || Qt.platform.os==="ios") return Screen.width
