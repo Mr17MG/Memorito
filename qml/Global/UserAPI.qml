@@ -36,7 +36,8 @@ QtObject {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
-        xhr.open("GET", domain+"/api/v1/users/"+userId,true);
+        let query = "machine_unique_id= "+ sysInfo.getMachineUniqueId()
+        xhr.open("GET", domain+"/api/v1/users/"+userId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
         xhr.timeout = 10000;
@@ -105,7 +106,7 @@ QtObject {
                     else {
                         if(response.code === 401)
                         {
-                            console.trace();UsefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true)
@@ -619,6 +620,7 @@ QtObject {
                 try
                 {
                     let response = xhr.response
+
                     if(response.ok)
                     {
                         if(response.code === 200){
@@ -633,8 +635,9 @@ QtObject {
                             UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
                         }
 
-                        else
+                        else{
                             UsefulFunc.showLog(response.message,true)
+                        }
                     }
 
                 }
@@ -724,13 +727,13 @@ QtObject {
                     {
                         try
                         {
-
                             tx.executeSql(
                                         "UPDATE Users SET username=?, email=?, hashed_password=?, auth_token=?, avatar=?, register_date=?, modified_date=?, two_step=? WHERE id=?"
                                         ,[user.username??"", user.email??"", user.hashed_password??"",user.auth_token??"",user.avatar??"", user.register_date??"", user.modified_date??"", user.two_step??0, user.id]
                                         )
 
                             User.set(getUserByUserId(user.id),true)
+                            console.trace()
                         }
                         catch(e)
                         {
