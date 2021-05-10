@@ -44,9 +44,9 @@ ApplicationWindow {
 
     Component.onCompleted: {
         //For one Display
-        AppStyle.size1F= UiFunctions.getFontSize  (1)
-        AppStyle.size1W= UiFunctions.getWidthSize (1)
-        AppStyle.size1H= UiFunctions.getHeightSize(1)
+//        AppStyle.size1F= UiFunctions.getFontSize  (1) * AppStyle.scaleF
+//        AppStyle.size1W= UiFunctions.getWidthSize (1) * AppStyle.scaleW
+//        AppStyle.size1H= UiFunctions.getHeightSize(1) * AppStyle.scaleH
 
         UsefulFunc.setRootWindowVar(rootWindow)
     }

@@ -5,9 +5,9 @@ import Qt.labs.settings 1.1               // Require For SettingDrivers
 
 QtObject {
 
-    property real size1W//: UiFunctions.getWidthSize(1,Screen)
-    property real size1H//: UiFunctions.getHeightSize(1,Screen)
-    property real size1F//: UiFunctions.getFontSize(1,Screen)
+    property real size1W: UiFunctions.getFontSize  (1) * AppStyle.scaleW
+    property real size1H: UiFunctions.getWidthSize (1) * AppStyle.scaleH
+    property real size1F: UiFunctions.getHeightSize(1) * AppStyle.scaleF
 
     property int appTheme: Number(SettingDriver.value("AppTheme",0))
     onAppThemeChanged: { SettingDriver.setValue("AppTheme",appTheme) }
@@ -25,15 +25,15 @@ QtObject {
 
     function setFontSizes(scale)
     {
-        AppStyle.size1F = UiFunctions.getFontSize(1)*scale
+        AppStyle.scaleF = scale
     }
     function setWidthSizes(scale)
     {
-        AppStyle.size1W= UiFunctions.getWidthSize(1)*scale
+        AppStyle.scaleW = scale
     }
     function setHeightSizes(scale)
     {
-        AppStyle.size1H= UiFunctions.getHeightSize(1)*scale
+        AppStyle.scaleH = scale
     }
 
     property color textColor                : appTheme ?   "#FFFFFF"     : "#0F110F"
@@ -51,14 +51,36 @@ QtObject {
 
     property int textOnPrimaryInt : SettingDriver.value("TextOnPrimary",0)
     onTextOnPrimaryIntChanged: {
-        if(!languageChanged)
+        if(!languageChanged){
             SettingDriver.setValue("TextOnPrimary",textOnPrimaryInt)
+        }
     }
 
     property int primaryInt : SettingDriver.value("AppColor",5)
     onPrimaryIntChanged: {
-        if(!languageChanged)
-            SettingDriver.setValue("AppColor",primaryInt)
+        if(!languageChanged){
+            SettingDriver.setValue("AppColor",primaryInt)}
+    }
+
+    property real scaleF: SettingDriver.value("scaleF",1)
+    onScaleFChanged: {
+        if(!languageChanged) {
+            SettingDriver.setValue("scaleF",scaleF)
+        }
+    }
+
+    property real scaleW: SettingDriver.value("scaleW",1)
+    onScaleWChanged: {
+        if(!languageChanged) {
+            SettingDriver.setValue("scaleW",scaleW)
+        }
+    }
+
+    property real scaleH: SettingDriver.value("scaleH",1)
+    onScaleHChanged: {
+        if(!languageChanged) {
+            SettingDriver.setValue("scaleH",scaleH)
+        }
     }
 
     property bool ltr: translator?translator.getCurrentLanguage() === translator.getLanguages().ENG:false
