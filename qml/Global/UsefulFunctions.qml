@@ -1,7 +1,10 @@
 pragma Singleton
-import QtQuick 2.14 // Require For QtObject
+import QtQuick 2.15 // Require For QtObject
+import MSysInfo 1.0 // Require For SystemInfo
 
 QtObject {
+    property MSysInfo mSysInfo: MSysInfo{}
+
     property ListModel stackPages: ListModel{}
 
     property var rootWindow: null
@@ -99,7 +102,6 @@ QtObject {
             for(let i=0;i<logDetail.length;i++)
                 y += logDetail[i].height + 5
             logObj.y =y
-            logObj.open()
             logDetail.push({"index":logObj.index = (logDetail.length>0?logDetail[logDetail.length-1].index+1:0),"index2":logObj.index2 = (logDetail.length>0?logDetail[logDetail.length-1].index2+1:0),"height":logObj.height,"dialog":logObj})
             logObj.endTime = logObj.index?(logObj.index+1)*logObj.endTime:logObj.endTime
             logObj.callAfterClose = function(){
@@ -116,6 +118,7 @@ QtObject {
                 }
                 logDetail.splice(logObj.index, 1);
             }
+            logObj.open()
         }
         else
             console.error(component.errorString())
@@ -142,7 +145,7 @@ QtObject {
         return busy
     }
 
-    function showConfirm(title, text, callback)
+    function showConfirm(title, text, callback, cancelCallback)
     {
         var component = Qt.createComponent("qrc:/Components/ConfirmDialog.qml")
         if(component.status === Component.Ready)
@@ -151,12 +154,71 @@ QtObject {
             confirm.dialogTitle= title
             confirm.dialogText = text
             confirm.accepted = callback
+            confirm.rejected = cancelCallback
             confirm.open()
         }
         else
             console.error(component.errorString())
 
         return confirm
+    }
+
+    function showMessage(title, text, callback)
+    {
+        var component = Qt.createComponent("qrc:/Components/MessageDialog.qml")
+        if(component.status === Component.Ready)
+        {
+            var confirm = component.createObject(rootWindow)
+            confirm.msgTitle= title
+            confirm.text = text
+            confirm.callback = callback
+            confirm.open()
+        }
+        else
+            console.error(component.errorString())
+
+        return confirm
+    }
+
+    signal getAndroidAccessToFileResponsed(bool res)
+
+    function getAndroidAccessToFile()
+    {
+        if( !mSysInfo.getPermissionResult("android.permission.READ_EXTERNAL_STORAGE") || !mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE") )
+        {
+            UsefulFunc.showMessage( qsTr("مجوز"),
+                                   qsTr("برای ذخیره‌سازی و نمایش فایل‌هات نیاز به مجوز دارم، بهم میدی؟"),
+                                   function () {
+                                       if( mSysInfo.requestPermission("android.permission.READ_EXTERNAL_STORAGE") === 0 )
+                                       {
+                                           UsefulFunc.showConfirm( qsTr("مجوز") , qsTr("چون اجازه ندادی نمیتونم به فایل‌هات دسترسی داشته باشم و این ممکنه باعث بشه فایل‌هاتو در این دستگاه نبینی, میخوای دوباره امتحان کنی؟"),
+                                                                  function(){
+                                                                      if( !mSysInfo.requestPermission("android.permission.READ_EXTERNAL_STORAGE") )
+                                                                      {
+                                                                          UsefulFunc.showLog(qsTr("بازم که اجازه ندادی! :( "),true)
+                                                                          getAndroidAccessToFileResponsed(false)
+                                                                      }
+                                                                      else{
+                                                                          UsefulFunc.showLog(qsTr("خیلی ممنونم ازت :)"),false)
+                                                                          getAndroidAccessToFileResponsed(true)
+                                                                      }
+                                                                  },function(){
+                                                                      UsefulFunc.showLog(qsTr("اجازه ندادی که! :( "),true)
+                                                                      getAndroidAccessToFileResponsed(false)
+                                                                  })
+                                       }
+                                       else if( mSysInfo.requestPermission("android.permission.READ_EXTERNAL_STORAGE") === -1 )
+                                       {
+                                           UsefulFunc.showLog(qsTr("گفتی دیگه پیام درخواست مجوز بهت نشون داده نشه، لطفا از داخل تنظیمات یهم دسترسی یده"),true)
+                                           getAndroidAccessToFileResponsed(true)
+                                       }
+                                       else {
+                                           UsefulFunc.showLog(qsTr("خیلی ممنونم ازت :)"),false)
+                                           getAndroidAccessToFileResponsed(true)
+                                       }
+                                   } )
+        }
+        else return true;
     }
 
     function emailValidation(inputtext)

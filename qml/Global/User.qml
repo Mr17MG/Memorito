@@ -1,9 +1,10 @@
 pragma Singleton
-import QtQuick 2.14
+import QtQuick 2.15
 import MTools 1.0
-
+import MSysInfo 1.0 // Require For SystemInfo
 QtObject{
     property ListModel users: ListModel{}
+    property MSysInfo mSysInfo: MSysInfo{}
     property var myTools: MTools{}
 
     property int id : 0
@@ -38,12 +39,19 @@ QtObject{
 
         if(myTools.getPictures("profile-"+User.id))
         {
-             profile = myTools.getPictures("profile-"+User.id)
+            if( mSysInfo.getPermissionResult("android.permission.READ_EXTERNAL_STORAGE") && mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE"))
+                profile = myTools.getPictures("profile-"+User.id)
+            else{
+                profile= "qrc:/user.svg"
+            }
         }
 
         else if(User.avatar.length>10)
         {
-            profile= "file://" +encodeURIComponent( myTools.saveBase64asFile("profile-"+User.id,"jpeg",User.avatar))
+            if( mSysInfo.getPermissionResult("android.permission.READ_EXTERNAL_STORAGE") && mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE"))
+                profile= "file://" +encodeURIComponent( myTools.saveBase64asFile("profile-"+User.id,"jpeg",User.avatar))
+            else
+                profile= "qrc:/user.svg"
         }
         else{
             profile= "qrc:/user.svg"
@@ -62,4 +70,6 @@ QtObject{
         this.avatar          = "";
         this.isSet           = false;
     }
+
+
 }
