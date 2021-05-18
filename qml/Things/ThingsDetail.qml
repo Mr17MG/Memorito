@@ -1,6 +1,6 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import QtGraphicalEffects 1.14
 import QtQuick.Layouts 1.15
 
@@ -149,8 +149,8 @@ Item {
                     height: 80*AppStyle.size1H
                     Rectangle{
                         width: parent.width - 100*AppStyle.size1W
-                        height:2*AppStyle.size1H
-                        color: "#000000"
+                        height: 2*AppStyle.size1H
+                        color: "#0F110F"
                         anchors{
                             bottom: parent.bottom
                             bottomMargin: 10*AppStyle.size1H
@@ -165,9 +165,9 @@ Item {
                         top: titleText.bottom
                         topMargin: 40*AppStyle.size1W
                         right: parent.right
-                        rightMargin: 30*AppStyle.size1W
+                        rightMargin: 35*AppStyle.size1W
                         left: parent.left
-                        leftMargin: 30*AppStyle.size1W
+                        leftMargin: 35*AppStyle.size1W
                     }
                     clip:true
                     Repeater{
@@ -178,7 +178,7 @@ Item {
                             Repeater {
                                 clip: true
                                 model: root.width/3 // or any number of dots you want
-                                Rectangle {width: 5*AppStyle.size1W; height: 2*AppStyle.size1W; color: "#A5A5A5"}
+                                Rectangle {width: 5*AppStyle.size1W; height: 2*AppStyle.size1W;opacity: 0.5; color: "#A5A5A5"}
                             }
                         }
                     }
@@ -189,9 +189,9 @@ Item {
                         top: titleText.bottom
                         topMargin: 20*AppStyle.size1W
                         right: parent.right
-                        rightMargin: 30*AppStyle.size1W
+                        rightMargin: 35*AppStyle.size1W
                         left: parent.left
-                        leftMargin: 30*AppStyle.size1W
+                        leftMargin: 35*AppStyle.size1W
                     }
                     text: !prevPageModel?"":prevPageModel.detail ?? ""
                                                                     font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;}
@@ -206,9 +206,9 @@ Item {
                         top: detailText.bottom
                         topMargin: 20*AppStyle.size1W
                         right: parent.right
-                        rightMargin: 30*AppStyle.size1W
+                        rightMargin: 35*AppStyle.size1W
                         left: parent.left
-                        leftMargin: 30*AppStyle.size1W
+                        leftMargin: 35*AppStyle.size1W
                     }
                     layoutDirection: "RightToLeft"
                     spacing: 20*AppStyle.size1W
@@ -252,15 +252,14 @@ Item {
                     width: parent.width
                     layoutDirection: "RightToLeft"
                     Item{
-                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        width: Math.min(parent.width/2 , 350*AppStyle.size1W)
                         height: 70*AppStyle.size1H
                         Image {
                             id: priorityImg
                             source: !prevPageModel?"":prevPageModel.priority_id?UsefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).value.iconSource:"qrc:/priorities/none.svg"
                             width: 40*AppStyle.size1W
                             height: width
-                            sourceSize.width:width*2
-                            sourceSize.height:height*2
+                            sourceSize:Qt.size(width*2,height*2)
                             anchors{
                                 verticalCenter: parent.verticalCenter
                                 right: parent.right
@@ -274,21 +273,20 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("اولویت") +":     " + (prevPageModel.priority_id?UsefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است"))
+                            text: !prevPageModel?"":qsTr("اولویت") +": " + (prevPageModel.priority_id?UsefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است"))
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                         }
                     }
                     Item{
-                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        width: Math.min(parent.width/2 , 350*AppStyle.size1W)
                         height: 70*AppStyle.size1H
                         Image {
                             id: energyImg
                             source: !prevPageModel?"":prevPageModel.energy_id?UsefulFunc.findInModel(prevPageModel.energy_id,"Id",energyModel).value.iconSource:"qrc:/energies/none.svg"
                             width: 40*AppStyle.size1W
                             height: width
-                            sourceSize.width:width*2
-                            sourceSize.height:height*2
+                            sourceSize:Qt.size(width*2,height*2)
                             anchors{
                                 verticalCenter: parent.verticalCenter
                                 right: parent.right
@@ -308,15 +306,14 @@ Item {
                         }
                     }
                     Item{
-                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        width: Math.min(parent.width/2 , 350*AppStyle.size1W)
                         height: 70*AppStyle.size1H
                         Image {
                             id: contextImg
                             source: !prevPageModel?"":prevPageModel.context_id?"qrc:/map.svg":"qrc:/map-unknown.svg"
                             width: 40*AppStyle.size1W
                             height: width
-                            sourceSize.width:width*2
-                            sourceSize.height:height*2
+                            sourceSize:Qt.size(width*2,height*2)
                             anchors{
                                 verticalCenter: parent.verticalCenter
                                 right: parent.right
@@ -336,15 +333,14 @@ Item {
                         }
                     }
                     Item{
-                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        width: Math.min(parent.width/2 , 350*AppStyle.size1W)
                         height: 70*AppStyle.size1H
                         Image {
                             id: estimateImg
                             source: !prevPageModel?"":prevPageModel.estimate_time?"qrc:/clock-colorful.svg":"qrc:/clock-unknown.svg"
                             width: 40*AppStyle.size1W
                             height: width
-                            sourceSize.width:width*2
-                            sourceSize.height:height*2
+                            sourceSize:Qt.size(width*2,height*2)
                             anchors{
                                 verticalCenter: parent.verticalCenter
                                 right: parent.right
@@ -364,7 +360,7 @@ Item {
                         }
                     }
                     Loader{
-                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        width: Math.min(parent.width/2 , 350*AppStyle.size1W)
                         height: 70*AppStyle.size1H
                         active: true
                         sourceComponent: Item{
@@ -374,8 +370,7 @@ Item {
                                 source:"qrc:/list-colorful.svg"
                                 width: 40*AppStyle.size1W
                                 height: width
-                                sourceSize.width:width*2
-                                sourceSize.height:height*2
+                                sourceSize:Qt.size(width*2,height*2)
                                 anchors{
                                     verticalCenter: parent.verticalCenter
                                     right: parent.right
@@ -408,7 +403,7 @@ Item {
                         }
                     }
                     Loader{
-                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        width: Math.min(parent.width/2 , 350*AppStyle.size1W)
                         height: 70*AppStyle.size1H
                         active: prevPageModel?prevPageModel.category_id:false
                         visible: active
@@ -419,8 +414,7 @@ Item {
                                 source:prevPageModel?(prevPageModel.list_id === Memorito.Project ?"qrc:/project-colorful.svg":"qrc:/category-colorful.svg"):""
                                 width: 40*AppStyle.size1W
                                 height: width
-                                sourceSize.width:width*2
-                                sourceSize.height:height*2
+                                sourceSize:Qt.size(width*2,height*2)
                                 anchors{
                                     verticalCenter: parent.verticalCenter
                                     right: parent.right
@@ -442,7 +436,7 @@ Item {
                     }
                     Loader{
                         active: listId === Memorito.Waiting || (prevPageModel?prevPageModel.friend_id:0)
-                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        width: Math.min(parent.width/2 , 350*AppStyle.size1W)
                         visible: active
                         height: 70*AppStyle.size1H
                         sourceComponent: Item{
@@ -452,8 +446,7 @@ Item {
                                 source:"qrc:/friends-colorful.svg"
                                 width: 40*AppStyle.size1W
                                 height: width
-                                sourceSize.width:width*2
-                                sourceSize.height:height*2
+                                sourceSize:Qt.size(width*2,height*2)
                                 anchors{
                                     verticalCenter: parent.verticalCenter
                                     right: parent.right
@@ -476,7 +469,7 @@ Item {
                     }
                     Loader{
                         active: listId === Memorito.Calendar || (prevPageModel?prevPageModel.due_date:0)
-                        width: parent.width/2 > 350*AppStyle.size1W?parent.width/2:350*AppStyle.size1W
+                        width: parent.width
                         height: 70*AppStyle.size1H
                         visible: active
                         sourceComponent: Item{
@@ -523,12 +516,74 @@ Item {
                     }
                 }
                 Flow{
+                    id: buttonFlow
+                    property var doneableArray: [Memorito.NextAction,Memorito.Someday,Memorito.Waiting,Memorito.Calendar,Memorito.Project]
+                    width: doneableArray.indexOf(listId) !== -1?640*AppStyle.size1W:420*AppStyle.size1W
+                    spacing:  20*AppStyle.size1W
+                    anchors{
+                        top: conentFlow.bottom
+                        topMargin: 40*AppStyle.size1H
+                        horizontalCenter: parent.horizontalCenter
+                    }
+
+                    AppButton{
+                        id:deleteBtn
+                        width: 200*AppStyle.size1W
+                        text: qsTr("حذف")
+                        Material.background: Material.color(Material.Red,Material.Shade900)
+                        onClicked: {
+                            deleteLoader.active = true
+                            deleteLoader.item.open()
+                        }
+
+                    }
+                    AppButton{
+                        id:openBtn
+                        width: 200*AppStyle.size1W
+                        text: qsTr("ویرایش کردن")
+                        Material.background: Material.color(Material.LightBlue,Material.Shade900)
+                        onClicked: {
+                            UsefulFunc.mainStackPush("qrc:/Things/AddEditThing.qml",qsTr("پردازش"),{"thingLocalId":prevPageModel.local_id,listId:listId})
+                        }
+                    }
+                    AppButton{
+                        id: doneBtn
+                        visible: parent.doneableArray.indexOf(listId) !== -1
+                        width: 200*AppStyle.size1W
+                        text: qsTr("انجام شد")
+                        Material.background: Material.color(Material.Green,Material.Shade900)
+                        onClicked: {
+                            let json = JSON.stringify(
+                                    {
+                                        title           : prevPageModel.title                                                         ,
+                                        user_id         : User.id                                                                     ,
+                                        detail          : prevPageModel.detail                                                        ,
+                                        list_id         : prevPageModel.list_id                                                       ,
+                                        has_files       : parseInt(prevPageModel.has_files)                                           ,
+                                        energy_id       : prevPageModel.energy_id       === 0  ? null :  prevPageModel.energy_id      ,
+                                        context_id      : prevPageModel.context_id      === 0  ? null :  prevPageModel.context_id     ,
+                                        priority_id     : prevPageModel.priority_id     === 0  ? null :  prevPageModel.priority_id    ,
+                                        estimate_time   : prevPageModel.estimate_time   === 0  ? null :  prevPageModel.estimate_time  ,
+                                        due_date        : prevPageModel.due_date        === "" ? null :  prevPageModel.due_date       ,
+                                        friend_id       : prevPageModel.friend_id       === 0  ? null :  prevPageModel.friend_id      ,
+                                        category_id     : prevPageModel.category_id     === 0  ? null :  prevPageModel.category_id    ,
+                                        is_done         : 1
+                                    }, null, 1);
+
+                            if (prevPageModel)
+                                ThingsApi.editThing(prevPageModel.id,json,null)
+                        }
+                    }
+
+                }
+
+                Flow{
                     id: filesFlow
                     width: parent.width
                     layoutDirection: Qt.RightToLeft
                     property real cellWidth: width / (parseInt(width / parseInt(500*AppStyle.size1W))===0?1:(parseInt(width / parseInt(500*AppStyle.size1W))))
                     anchors{
-                        top: conentFlow.bottom
+                        top: buttonFlow.bottom
                         topMargin: 40*AppStyle.size1H
                         horizontalCenter: parent.horizontalCenter
                     }
@@ -542,7 +597,7 @@ Item {
                         Rectangle{
                             width: parent.width - 100*AppStyle.size1W
                             height:2*AppStyle.size1H
-                            color: "#000000"
+                            color: "#0F110F"
                             anchors{
                                 bottom: parent.bottom
                                 bottomMargin: 10*AppStyle.size1H
@@ -637,79 +692,15 @@ Item {
                         }
                     }
                 }
-                Flow{
-                    id: buttonFlow
-                    property var doneableArray: [Memorito.NextAction,Memorito.Someday,Memorito.Waiting,Memorito.Calendar,Memorito.Project]
-                    width: doneableArray.indexOf(listId) !== -1?640*AppStyle.size1W:420*AppStyle.size1W
-                    spacing:  20*AppStyle.size1W
-                    anchors{
-                        top: filesFlow.bottom
-                        topMargin: 40*AppStyle.size1H
-                        horizontalCenter: parent.horizontalCenter
-                    }
-
-                    AppButton{
-                        id:deleteBtn
-                        width: 200*AppStyle.size1W
-                        text: qsTr("حذف")
-                        Material.background: Material.color(Material.Red,Material.Shade900)
-                        onClicked: {
-                            deleteLoader.active = true
-                            deleteLoader.item.open()
-                        }
-
-                    }
-                    AppButton{
-                        id:openBtn
-                        width: 200*AppStyle.size1W
-                        text: qsTr("ویرایش کردن")
-                        Material.background: Material.color(Material.LightBlue,Material.Shade900)
-                        onClicked: {
-                            UsefulFunc.mainStackPush("qrc:/Things/AddEditThing.qml",qsTr("پردازش"),{"thingLocalId":prevPageModel.local_id,listId:listId})
-                        }
-                    }
-                    AppButton{
-                        id: doneBtn
-                        visible: parent.doneableArray.indexOf(listId) !== -1
-                        width: 200*AppStyle.size1W
-                        text: qsTr("انجام شد")
-                        Material.background: Material.color(Material.Green,Material.Shade900)
-                        onClicked: {
-                            let json = JSON.stringify(
-                                    {
-                                        title           : prevPageModel.title                                                         ,
-                                        user_id         : User.id                                                                     ,
-                                        detail          : prevPageModel.detail                                                        ,
-                                        list_id         : prevPageModel.list_id                                                       ,
-                                        has_files       : parseInt(prevPageModel.has_files)                                           ,
-                                        energy_id       : prevPageModel.energy_id       === 0  ? null :  prevPageModel.energy_id      ,
-                                        context_id      : prevPageModel.context_id      === 0  ? null :  prevPageModel.context_id     ,
-                                        priority_id     : prevPageModel.priority_id     === 0  ? null :  prevPageModel.priority_id    ,
-                                        estimate_time   : prevPageModel.estimate_time   === 0  ? null :  prevPageModel.estimate_time  ,
-                                        due_date        : prevPageModel.due_date        === "" ? null :  prevPageModel.due_date       ,
-                                        friend_id       : prevPageModel.friend_id       === 0  ? null :  prevPageModel.friend_id      ,
-                                        category_id     : prevPageModel.category_id     === 0  ? null :  prevPageModel.category_id    ,
-                                        is_done         : 1
-                                    }, null, 1);
-
-                            if (prevPageModel)
-                                ThingsApi.editThing(prevPageModel.id,json,null)
-                        }
-                    }
-
-                }
                 Flow {
                     id: logItem
                     width: parent.width
                     layoutDirection: Flow.TopToBottom
                     spacing: 15*AppStyle.size1H
                     anchors{
-                        top: buttonFlow.bottom
+                        top: filesFlow.bottom
                         topMargin: 20*AppStyle.size1H
-                        left: parent.left
-                        leftMargin: 20*AppStyle.size1W
-                        right: parent.right
-                        rightMargin: 20*AppStyle.size1W
+                        horizontalCenter: parent.horizontalCenter
                     }
                     Text {
                         id:logTitle
@@ -721,8 +712,8 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         Rectangle{
                             width: parent.width - 100*AppStyle.size1W
-                            height:2*AppStyle.size1H
-                            color: "#000000"
+                            height: 2*AppStyle.size1H
+                            color: "#0F110F"
                             anchors{
                                 bottom: parent.bottom
                                 bottomMargin: 10*AppStyle.size1H
@@ -745,7 +736,6 @@ Item {
                                 anchors{
                                     bottom: parent.bottom
                                 }
-
                             }
                             Text{
                                 id:logText
@@ -766,7 +756,7 @@ Item {
                             Text{
                                 id:registerDateText
                                 property date registerDate: !model?"":model.register_date?new Date(model.register_date):""
-                                text: !model?"":model.register_date?qsTr("ثبت شده در")+":  "
+                                text: !model?"":model.register_date? qsTr("ثبت شده در")+":  "
                                                                      +
                                                                      registerDate.getHours()+":"+registerDate.getMinutes()+":"+registerDate.getSeconds()
                                                                      +"  "+
@@ -788,7 +778,7 @@ Item {
                                 id: modifiedDateText
                                 visible: text !== ""
                                 property date modifiedDate: !model?"":model.modified_date?new Date(model.modified_date):""
-                                text:!model?"":model.modified_date?qsTr("ویرایش شده در")+":  "
+                                text:!model?"":model.modified_date? qsTr("ویرایش شده در") +":  "
                                                                     +
                                                                     modifiedDate.getHours()+":"+modifiedDate.getMinutes()+":"+modifiedDate.getSeconds()
                                                                     +"  "+
@@ -860,39 +850,48 @@ Item {
 
                     }
 
-                    RowLayout{
+                    Item{
                         height: 120*AppStyle.size1H
                         width: parent.width
                         AppTextInput {
                             id:commentInput
                             height: parent.height
                             fieldInPrimary: true
+                            controlPlaceHolder.color: "black"
                             placeholderText: qsTr("روند کار یا نظرات‌ِتو بنویس")
                             bgUnderItem: Material.color(AppStyle.primaryInt,Material.Shade50)
                             maximumLength: 50
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                        }
-                        AppButton {
-                            id: submitBtn
-                            text: qsTr("ثبت")
-                            radius: 20*AppStyle.size1W
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            Layout.maximumWidth: 200*AppStyle.size1W
-
-                            icon{
-                                source: "qrc:/check.svg"
-                                color: AppStyle.textOnPrimaryColor
-                                width: 25*AppStyle.size1W
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            color: "#0F110F"
+                            rightPadding: AppStyle.ltr?25*AppStyle.size1W+submitBtn.width:10*AppStyle.size1W
+                            leftPadding: AppStyle.ltr?10*AppStyle.size1W:25*AppStyle.size1W + submitBtn.width
+                            anchors{
+                                right: parent.right
+                                rightMargin: 35*AppStyle.size1W
+                                left: parent.left
+                                leftMargin: 35*AppStyle.size1W
                             }
-                            onClicked: {
-                                if(commentInput.text.trim() === "" )
-                                {
-                                    UsefulFunc.showLog(qsTr("نظرتو وارد نکردی."),true)
+                            AppButton {
+                                id: submitBtn
+                                radius: 20*AppStyle.size1W
+                                anchors{
+                                    left: parent.left
+                                    leftMargin: 20*AppStyle.size1W
+                                    verticalCenter: parent.verticalCenter
                                 }
-                                else LogsApi.addLog(commentInput.text.trim(), 1, prevPageModel.id, logModel)
-                                commentInput.clear()
+                                icon{
+                                    source: "qrc:/check.svg"
+                                    color: AppStyle.textOnPrimaryColor
+                                    width: 25*AppStyle.size1W
+                                }
+                                onClicked: {
+                                    if(commentInput.text.trim() === "" )
+                                    {
+                                        UsefulFunc.showLog(qsTr("نظرتو وارد نکردی."),true)
+                                    }
+                                    else LogsApi.addLog(commentInput.text.trim(), 1, prevPageModel.id, logModel)
+                                    commentInput.clear()
+                                }
                             }
                         }
                     }
