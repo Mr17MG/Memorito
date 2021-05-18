@@ -1,7 +1,7 @@
-import QtQuick 2.14
+import QtQuick 2.15
 import QtQuick.Dialogs 1.3
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import QtGraphicalEffects 1.14
 import Components 1.0
 import Global 1.0
@@ -186,7 +186,8 @@ Rectangle{
                             visible: model.file_source === "" && !myTools.checkFileExist(model.file_name,model.file_extension)
                             Material.background: Material.LightGreen
                             onClicked: {
-                                model.file_source = "file://"+myTools.saveBase64asFile(model.file_name,model.file_extension,model.file)
+                                if(UsefulFunc.getAndroidAccessToFile())
+                                    model.file_source = "file://"+myTools.saveBase64asFile(model.file_name,model.file_extension,model.file)
                             }
                         }
                     }
@@ -269,13 +270,18 @@ Rectangle{
             Loader{
                 id:fileLoader
                 active: false
-                sourceComponent: FileDialog{
+                sourceComponent: AppFilePicker{
                     id:fileDialog
                     selectMultiple: true
+                    width:UsefulFunc.rootWindow.width
+                    height: UsefulFunc.rootWindow.height
+                    parent: UsefulFunc.mainLoader
+                    x:0
+                    y:0
                     title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
-                    nameFilters: [ "All files (*)" ]
-                    folder: shortcuts.pictures
-                    sidebarVisible: false
+                    nameFilters:  ["*.*"]
+//                    folder: Shortcut.pictures
+//                    sidebarVisible: false
                     onAccepted: {
                         let files = fileDialog.fileUrls;
                         for(let i=0;i<files.length;i++)
@@ -338,8 +344,11 @@ Rectangle{
                     topMargin: -15*AppStyle.size1W
                 }
                 onClicked: {
-                    fileLoader.active = true
-                    fileLoader.item.open()
+                    if(UsefulFunc.getAndroidAccessToFile())
+                    {
+                        fileLoader.active = true
+                        fileLoader.item.open()
+                    }
                 }
                 Image {
                     id:plusIcon
