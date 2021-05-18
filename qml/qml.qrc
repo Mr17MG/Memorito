@@ -72,5 +72,12 @@
         <file>Things/YearButton.qml</file>
         <file>About/AboutBook.qml</file>
         <file>About/GTD-Farsi.md</file>
+        <file>About/GTD-English.md</file>
+        <file>Components/SplitView.qml</file>
+        <file>HomePage.qml</file>
+        <file>About/AboutApp.qml</file>
+        <file>About/About-Farsi.md</file>
+        <file>About/About-English.md</file>
+        <file>Components/FilePicker.qml</file>
     </qresource>
 </RCC>
