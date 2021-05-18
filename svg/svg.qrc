@@ -28,7 +28,6 @@
         <file>refrence.svg</file>
         <file>contexts.svg</file>
         <file>portfolio.svg</file>
-        <file>unprocess.svg</file>
         <file>nextAction.svg</file>
         <file>first-shot.svg</file>
         <file>first-shot-drop.svg</file>
@@ -154,9 +153,6 @@
         <file>tick.svg</file>
         <file>translate.svg</file>
         <file>previous.svg</file>
-        <file>day.svg</file>
-        <file>month.svg</file>
-        <file>year.svg</file>
         <file>search.svg</file>
         <file>sort-asc.svg</file>
         <file>sort-desc.svg</file>
@@ -164,5 +160,25 @@
         <file>priorities/full.svg</file>
         <file>filter.svg</file>
         <file>sort.svg</file>
+        <file>home.svg</file>
+        <file>paint.svg</file>
+        <file>homepage/book.svg</file>
+        <file>homepage/calendar.svg</file>
+        <file>homepage/collect.svg</file>
+        <file>homepage/contexts.svg</file>
+        <file>homepage/done.svg</file>
+        <file>homepage/friends.svg</file>
+        <file>homepage/memorito.svg</file>
+        <file>homepage/nextAction.svg</file>
+        <file>homepage/process.svg</file>
+        <file>homepage/profile.svg</file>
+        <file>homepage/projects.svg</file>
+        <file>homepage/references.svg</file>
+        <file>homepage/settings.svg</file>
+        <file>homepage/someday.svg</file>
+        <file>homepage/trash.svg</file>
+        <file>homepage/waiting.svg</file>
+        <file>file.svg</file>
+        <file>folder.svg</file>
     </qresource>
 </RCC>
