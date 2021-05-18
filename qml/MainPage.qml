@@ -1,5 +1,5 @@
-import QtQuick 2.14 // Require For Loader
-import QtQuick.Controls 2.14 // Require For Stackview
+import QtQuick 2.15 // Require For Loader
+import QtQuick.Controls 2.15 // Require For Stackview
 import QtGraphicalEffects 1.14 // Require For ColorOverlay
 import "qrc:/AppBase" as Base
 import Global 1.0
@@ -12,10 +12,41 @@ Loader{
         if(status === Loader.Loading)
         {
             UsefulFunc.setMainPageVar(mainPage)
-            UsefulFunc.stackPages.append({"page":"","title":qsTr("مموریتو")})
         }
     }
-
+    ListModel{
+        id: firstPageModel
+        ListElement{
+            title:qsTr("مموریتو")
+            pageSource :"qrc:/HomePage.qml"
+            listId: 0
+        }
+        ListElement{
+            title: qsTr("جمع‌آوری")
+            pageSource :"qrc:/Things/AddEditThing.qml"
+            listId: Memorito.Collect
+        }
+        ListElement{
+            title:qsTr("پردازش نشده‌ها")
+            pageSource: "qrc:/Things/ThingList.qml"
+            listId: Memorito.Process
+        }
+        ListElement{
+            title:qsTr("عملیات بعدی")
+            pageSource: "qrc:/Things/ThingList.qml"
+            listId: Memorito.NextAction
+        }
+        ListElement{
+            title:qsTr("تقویم")
+            pageSource: "qrc:/Things/ThingList.qml"
+            listId: Memorito.Calendar
+        }
+        ListElement{
+            title:qsTr("پروژه‌ها")
+            pageSource: "qrc:/Categories/CategoriesList.qml"
+            listId: Memorito.Project
+        }
+    }
     sourceComponent: Item {
         clip: true
         property alias mainStackView: mainStackView
@@ -37,8 +68,15 @@ Loader{
                 left: parent.left
                 bottom: parent.bottom
             }
+            Component.onCompleted: {
+                var page = UsefulFunc.findInModel(Number(SettingDriver.value("firstPage",0)),"listId",firstPageModel).value
+                UsefulFunc.stackPages.append({"page":page.pageSource,"title":page.title})
+                push( page.pageSource,{listId:page.listId,pageTitle:page.title} )
+                callWhenPush({listId:page.listId,pageTitle:page.title} )
+            }
+
             clip: true
-            initialItem: Item{}
+
 
             function callWhenPop(object)
             {
@@ -66,9 +104,12 @@ Loader{
             width: UsefulFunc.rootWindow.width*2/3
             height: mainStackView.height
             y: header.height
-            sourceComponent: Drawer{
-                y: header.height
 
+            sourceComponent: Drawer{
+                onOpened: {
+                    UsefulFunc.getAndroidAccessToFile()
+                }
+                y: header.height
                 Base.DrawerBody{isDrawer:true}
 
                 width: drawerLoader.width
