@@ -1,13 +1,12 @@
-import QtQuick 2.14 // Require For Item and Flow and ...
-import QtQuick.Controls 2.14 // Require for ItemDelegate
-import QtQuick.Controls.Material 2.14 // Require for
+import QtQuick 2.15 // Require For Item and Flow and ...
+import QtQuick.Controls 2.15 // Require for ItemDelegate
+import QtQuick.Controls.Material 2.15 // Require for
 import QtGraphicalEffects 1.14 // Require for  ColorOverlay
 import Components 1.0  // // Require for  Switch and
 import Global 1.0
 import QtQuick.Layouts 1.15
 
 Item {
-
     Rectangle{
         color: "transparent"
         anchors{
@@ -68,16 +67,16 @@ Item {
             RowLayout {
                 layoutDirection: Qt.RightToLeft
                 Layout.fillWidth: true
-                ToolTip{ id:langTooltip }
-                HoverHandler{
-                    acceptedDevices: PointerDevice.Mouse
-                    onHoveredChanged: {
-                        if(hovered)
-                            langTooltip.show("Alt+L")
-                        else langTooltip.hide()
-                    }
-                }
                 Text{
+                    ToolTip{ id:langTooltip }
+                    HoverHandler{
+                        acceptedDevices: PointerDevice.Mouse
+                        onHoveredChanged: {
+                            if(hovered)
+                                langTooltip.show("Alt + L")
+                            else langTooltip.hide()
+                        }
+                    }
                     id:languageText
                     text: qsTr("زبان") + " :"
                     font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
@@ -89,26 +88,38 @@ Item {
 
                 AppRadioButton{
                     text: "فارسی"
-                    checked: try{translator.getCurrentLanguage() === translator.getLanguages().FA && !AppStyle.languageChangedparent.width}catch(e){false}
+                    checked: try{
+                                 return translator.getCurrentLanguage() === translator.getLanguages().FA && !AppStyle.languageChanged
+                             }
+                             catch(e){return false}
                     onCheckedChanged: {
-                        if(translator.getCurrentLanguage() !== translator.getLanguages().FA)
-                        {
-                            AppStyle.languageChanged = true
-                            translator.updateLanguage(translator.getLanguages().FA)
-                            AppStyle.languageChanged = false
-                        }
+                        try{
+                            if(translator.getCurrentLanguage() !== translator.getLanguages().FA)
+                            {
+                                AppStyle.languageChanged = true
+                                translator.updateLanguage(translator.getLanguages().FA)
+                                AppStyle.languageChanged = false
+                            }
+                        }catch(e){}
                     }
                 }
                 AppRadioButton{
                     text: "English"
-                    checked: try{translator.getCurrentLanguage() === translator.getLanguages().ENG && !AppStyle.languageChanged}catch(e){false}
+                    checked: try{
+                                 return translator.getCurrentLanguage() === translator.getLanguages().ENG && !AppStyle.languageChanged
+                             }
+                             catch(e){
+                                 return false
+                             }
                     onCheckedChanged: {
-                        if(translator.getCurrentLanguage() !== translator.getLanguages().ENG)
-                        {
-                            AppStyle.languageChanged = true
-                            translator.updateLanguage(translator.getLanguages().ENG)
-                            AppStyle.languageChanged = false
-                        }
+                        try{
+                            if(translator.getCurrentLanguage() !== translator.getLanguages().ENG)
+                            {
+                                AppStyle.languageChanged = true
+                                translator.updateLanguage(translator.getLanguages().ENG)
+                                AppStyle.languageChanged = false
+                            }
+                        }catch(e){}
                     }
                 }
 
@@ -134,21 +145,93 @@ Item {
                     }
                 }
             }
-
             RowLayout {
                 layoutDirection: Qt.RightToLeft
                 spacing: 20*AppStyle.size1W
                 Layout.fillWidth: true
-                ToolTip{ id: textTooltip }
-                HoverHandler{
-                    acceptedDevices: PointerDevice.Mouse
-                    onHoveredChanged: {
-                        if(hovered)
-                            textTooltip.show(qsTr("قبلی")+": Alt + [\n"+qsTr("بعدی")+": Alt + ]")
-                        else textTooltip.hide()
+                Text{
+                    id:pageText
+                    text: qsTr("صفحه ابتدایی") + " :"
+                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
+                    color: AppStyle.textColor
+                    Layout.fillHeight: true
+                    Layout.minimumWidth: textColorText.width
+                    verticalAlignment: Text.AlignVCenter
+                }
+                AppComboBox{
+                    id: pageCombo
+                    hasClear: false
+                    placeholderText: qsTr("صفحات")
+                    Layout.preferredWidth: 270*AppStyle.size1W
+                    Layout.preferredHeight: 90*AppStyle.size1H
+                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F}
+                    textRole: "title"
+                    iconRole: "iconSrc"
+                    iconColor: AppStyle.textColor
+                    iconSize: AppStyle.size1W*40
+                    currentIndex: UsefulFunc.findInModel(Number(SettingDriver.value("firstPage",0)),"listId",model).index
+                    model: ListModel{
+                        ListElement{
+                            title:qsTr("خانه")
+                            pageSource :""
+                            iconSrc: "qrc:/home.svg"
+                            listId: 0
+                        }
+                        ListElement{
+                            title: qsTr("جمع‌آوری")
+                            pageSource :"qrc:/Things/AddEditThing.qml"
+                            iconSrc: "qrc:/collect.svg"
+                            listId: Memorito.Collect
+                        }
+                        ListElement{
+                            title:qsTr("پردازش نشده‌ها")
+                            iconSrc: "qrc:/process.svg"
+                            pageSource: "qrc:/Things/ThingList.qml"
+                            listId: Memorito.Process
+                        }
+                        ListElement{
+                            title:qsTr("عملیات بعدی")
+                            iconSrc: "qrc:/nextAction.svg"
+                            pageSource: "qrc:/Things/ThingList.qml"
+                            listId: Memorito.NextAction
+                        }
+                        ListElement{
+                            title:qsTr("تقویم")
+                            iconSrc: "qrc:/calendar.svg"
+                            pageSource: "qrc:/Things/ThingList.qml"
+                            listId: Memorito.Calendar
+                        }
+                        ListElement{
+                            title:qsTr("پروژه‌ها")
+                            iconSrc: "qrc:/project.svg"
+                            pageSource: "qrc:/Categories/CategoriesList.qml"
+                            listId: Memorito.Project
+                        }
+                    }
+                    onCurrentIndexChanged: {
+                        if(currentIndex!==-1 && !AppStyle.languageChanged) // Need For Do Not change Color When Language Changed
+                        {
+                            SettingDriver.setValue("firstPage",model.get(currentIndex).listId)
+                        }
                     }
                 }
+
+                Item{ Layout.fillWidth: true }
+            }
+            RowLayout {
+                layoutDirection: Qt.RightToLeft
+                spacing: 20*AppStyle.size1W
+                Layout.fillWidth: true
                 Text{
+                    ToolTip{ id: textTooltip }
+                    HoverHandler{
+                        acceptedDevices: PointerDevice.Mouse
+                        onHoveredChanged: {
+                            if(hovered)
+                                textTooltip.show(qsTr("قبلی")+": Alt + [\n"+qsTr("بعدی")+": Alt + ]")
+                            else textTooltip.hide()
+                        }
+                    }
                     id:colorText
                     text: qsTr("رنگ اصلی") + " :"
                     font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
@@ -165,6 +248,9 @@ Item {
                     currentIndex : AppStyle.primaryInt
                     Layout.preferredHeight: 90*AppStyle.size1H
                     font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F}
+                    placeholderIcon: "qrc:/paint.svg"
+                    iconColor: AppStyle.textColor
+                    iconSize: AppStyle.size1W*45
                     model: [
                         qsTr("قرمز"),
                         qsTr("صورتی"),
@@ -193,11 +279,29 @@ Item {
                         height: 120*AppStyle.size1H
                         Text{
                             text: modelData
-                            color: AppStyle.textOnPrimaryColor
+                            color:Material.color(index)
                             anchors.centerIn: parent
-                            font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F}
+                            font{family: AppStyle.appFont;pixelSize: 30*AppStyle.size1F;bold:true}
                         }
-                        background: Rectangle { color: Material.color(index) }
+//                        background: Rectangle { color: Material.color(index) }
+                        Image {
+                            id: iconImg
+                            visible: false
+                            anchors{
+                                verticalCenter: parent.verticalCenter
+                                right: parent.right
+                                rightMargin: 10*AppStyle.size1W
+                            }
+                            source: "qrc:/paint.svg"
+                            width: AppStyle.size1W*55
+                            height: width
+                            sourceSize: Qt.size(width,height)
+                        }
+                        ColorOverlay{
+                            source : iconImg
+                            anchors.fill: iconImg
+                            color: Material.color(index)
+                        }
                     }
                     onCurrentIndexChanged: {
                         if(currentIndex!==-1 && !AppStyle.languageChanged) // Need For Do Not change Color When Language Changed
@@ -214,16 +318,16 @@ Item {
                 layoutDirection: Qt.RightToLeft
                 Layout.fillWidth: true
                 spacing: 20*AppStyle.size1W
-                ToolTip{ id: themeTooltip}
-                HoverHandler{
-                    acceptedDevices: PointerDevice.Mouse
-                    onHoveredChanged: {
-                       if(hovered)
-                           themeTooltip.show("Alt + T")
-                       else themeTooltip.hide()
-                    }
-                }
                 Text{
+                    ToolTip{ id: themeTooltip}
+                    HoverHandler{
+                        acceptedDevices: PointerDevice.Mouse
+                        onHoveredChanged: {
+                            if(hovered)
+                                themeTooltip.show("Alt + T")
+                            else themeTooltip.hide()
+                        }
+                    }
                     id: themeText
                     color: AppStyle.textColor
                     text: qsTr("طرح زمینه") + " :"
@@ -263,9 +367,9 @@ Item {
                 HoverHandler{
                     acceptedDevices: PointerDevice.Mouse
                     onHoveredChanged: {
-                       if(hovered)
-                           pTextTooltip.show("Alt + Y")
-                       else pTextTooltip.hide()
+                        if(hovered)
+                            pTextTooltip.show("Alt + Y")
+                        else pTextTooltip.hide()
                     }
                 }
                 Text{
