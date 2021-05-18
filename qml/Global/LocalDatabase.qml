@@ -1,5 +1,5 @@
 pragma Singleton
-import QtQuick 2.14
+import QtQuick 2.15
 import Qt.labs.settings 1.1
 
 QtObject{

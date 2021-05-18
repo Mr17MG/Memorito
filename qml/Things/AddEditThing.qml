@@ -1,6 +1,6 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import QtGraphicalEffects 1.14
 import QtQuick.Layouts 1.15
 
@@ -141,7 +141,7 @@ Item {
                     }
                 }
             }
-            SplitView {
+            AppSplitView {
                 width: parent.width
                 height: 190 * AppStyle.size1H + Math.max( (mainFlick.height - titleItem.height - 415 * AppStyle.size1H),450 * AppStyle.size1H)
 
@@ -514,8 +514,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action5Text
-                    text: "⏺ " + qsTr(
-                              "این عمل کمتر از ۵ دقیقه انجام می‌شود") + ":"
+                    text: "⏺ " + qsTr("این عمل کمتر از ۵ دقیقه انجام می‌شود") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     height: 50 * AppStyle.size1H

@@ -1,6 +1,6 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import Global 1.0
 
 TextField{
@@ -16,10 +16,10 @@ TextField{
     Label {
         id: textFieldPlaceHolder
         text: textField.placeholderText
-        color: enabled?textField.focus || textField.text!=""?AppStyle.textColor: AppStyle.placeholderColor:textField.color
-        y: textField.focus || textField.text!=""?0:height-10*AppStyle.size1H
+        color: enabled?textField.activeFocus || textField.text!=""?AppStyle.textColor: AppStyle.placeholderColor:textField.color
+        y: textField.activeFocus || textField.text!=""?0:height/2
         anchors.right:  textField.right
-        font{family: AppStyle.appFont;pixelSize:( textField.focus || textField.text!=""?20*AppStyle.size1F:25*AppStyle.size1F);bold:textField.focus || textField.text}
+        font{family: AppStyle.appFont;pixelSize:( textField.activeFocus || textField.text!=""?20*AppStyle.size1F:25*AppStyle.size1F);bold:textField.activeFocus || textField.text}
         Behavior on y {
             NumberAnimation{ duration: 160}
         }

@@ -1,10 +1,11 @@
-import QtQuick 2.14                       // Require For MouseArea and other
-import QtQuick.Window 2.14                // Require For Screen
-import QtQuick.Controls 2.14              // Require For Drawer and other
-import QtQuick.Controls.Material 2.14     // Require For Material Theme
+import QtQuick 2.15                       // Require For MouseArea and other
+import QtQuick.Window 2.15                // Require For Screen
+import QtQuick.Controls 2.15              // Require For Drawer and other
+import QtQuick.Controls.Material 2.15     // Require For Material Theme
 import "qrc:/Splash/" as Splash           // Require For SplashLoader
 import Global 1.0
 import "qrc:/Responsive"
+
 ApplicationWindow {
     id:rootWindow
 
@@ -13,8 +14,8 @@ ApplicationWindow {
 
     visible: true
     title: qsTr("مموریتو")
-    width: Qt.platform.os === "android" || Qt.platform.os === "ios"?width:SettingDriver.value("AppWidth" ,640)
-    height: Qt.platform.os === "android" || Qt.platform.os === "ios"?height:SettingDriver.value("AppHeight",480)
+    width:  Qt.platform.os === "android" || Qt.platform.os === "ios"? width:SettingDriver.value("AppWidth" ,640)
+    height: Qt.platform.os === "android" || Qt.platform.os === "ios"? height:SettingDriver.value("AppHeight",480)
 
     minimumWidth:  Screen.width/ 5< 380? 380  : Screen.width/ 5
     minimumHeight: Screen.height/ 3< 480? 480: Screen.height/ 3
@@ -41,22 +42,16 @@ ApplicationWindow {
 
     /********************************************************************************/
     ///////////////////////////////// Responsive UI //////////////////////////////////
-
     Component.onCompleted: {
-        //For one Display
-//        AppStyle.size1F= UiFunctions.getFontSize  (1) * AppStyle.scaleF
-//        AppStyle.size1W= UiFunctions.getWidthSize (1) * AppStyle.scaleW
-//        AppStyle.size1H= UiFunctions.getHeightSize(1) * AppStyle.scaleH
-
         UsefulFunc.setRootWindowVar(rootWindow)
     }
 
     /********************************************************************************/
     ////////////////////////////// Application AppStyle ////////////////////////////////
 
-    Material.theme: AppStyle.appTheme
+    Material.theme:   AppStyle.appTheme
     Material.primary: AppStyle.primaryColor
-    Material.accent: AppStyle.primaryColor
+    Material.accent:  AppStyle.primaryColor
 
     /********************************************************************************/
     ////////////////////////////// useful Component ////////////////////////////////
@@ -68,7 +63,7 @@ ApplicationWindow {
         id:mainLoader
         anchors.fill: parent
         asynchronous: false
-        active: true
+        active: true        
         Component.onCompleted: {
             UsefulFunc.setMainLoaderVar(mainLoader)
         }
@@ -76,5 +71,4 @@ ApplicationWindow {
     }
     ////////////////////////////////////////////////////////////////////
     AppShortcut{}
-
 }

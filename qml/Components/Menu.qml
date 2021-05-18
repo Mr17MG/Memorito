@@ -1,19 +1,19 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Templates 2.14 as T
-import QtQuick.Controls.Material 2.14
-import QtQuick.Controls.Material.impl 2.14
-import QtQuick.Window 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Templates 2.15 as T
+import QtQuick.Controls.Material 2.15
+import QtQuick.Controls.Material.impl 2.15
+import QtQuick.Window 2.15
 import Global 1.0
 
 T.Menu {
     id: control
-    onVisibleChanged: {
-        try{
-        if(!visible)
-            destroy()
-        }catch(e){}
-    }
+//    onVisibleChanged: {
+//        try{
+//        if(!visible)
+//            destroy()
+//        }catch(e){}
+//    }
     Material.elevation: 8
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,

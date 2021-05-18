@@ -1,6 +1,6 @@
 pragma Singleton
-import QtQuick 2.14 // Require for Item and FontLoader
-import QtQuick.Controls.Material 2.14 // Require for Material.Color
+import QtQuick 2.15 // Require for Item and FontLoader
+import QtQuick.Controls.Material 2.15 // Require for Material.Color
 import Qt.labs.settings 1.1               // Require For SettingDrivers
 
 QtObject {

@@ -1,4 +1,4 @@
-import QtQuick 2.14
+import QtQuick 2.15
 import Qt.labs.calendar 1.0
 
 DayOfWeekRow {

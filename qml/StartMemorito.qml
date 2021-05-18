@@ -1,8 +1,8 @@
-import QtQuick 2.14
-import QtQuick.Window 2.14
+import QtQuick 2.15
+import QtQuick.Window 2.15
 import QtGraphicalEffects 1.14 // Require for ColorOverlay
-import QtQuick.Controls 2.14 // Require For Drawer and other
-import QtQuick.Controls.Material 2.14 // // Require For Material Theme
+import QtQuick.Controls 2.15 // Require For Drawer and other
+import QtQuick.Controls.Material 2.15 // // Require For Material Theme
 import "qrc:/AppBase" as Base
 import Components 1.0
 import Global 1.0
@@ -59,7 +59,7 @@ Page {
     property int nRow : UiFunctions.checkDisplayForNumberofRows(Screen)
 
 
-    SplitView{
+    AppSplitView{
         id:splitView
         anchors{ fill: parent }
         orientation: Qt.Horizontal
@@ -69,21 +69,6 @@ Page {
             target: splitView
             property: "staticDrawerWidth"
             value:  AppStyle.ltr?staticDrawer.width:staticDrawer2.width
-        }
-        /********************* Customise SplitHandle ************************/
-        handle: Rectangle {
-            implicitWidth : 5*AppStyle.size1W
-            implicitHeight: 5*AppStyle.size1H
-            color: SplitHandle.pressed ? Qt.darker(AppStyle.primaryColor,1.8)
-                                       :SplitHandle.hovered ? Qt.darker(AppStyle.primaryColor,1.4)
-                                                            : AppStyle.primaryColor
-            Rectangle {
-                color: parent.SplitHandle.hovered? Qt.darker(AppStyle.textColor,2.0): Qt.lighter(AppStyle.textColor,1.0)
-                width: parent.width*2
-                height: 100*AppStyle.size1W
-                radius: height
-                anchors{ centerIn: parent }
-            }
         }
         /************************ Save and restore state **********************/
 

@@ -1,6 +1,6 @@
 pragma Singleton
-import QtQuick 2.14
-import QtQuick.LocalStorage 2.14
+import QtQuick 2.15
+import QtQuick.LocalStorage 2.15
 import MSysInfo 1.0
 import MSecurity 1.0
 import MTools 1.0
@@ -733,7 +733,6 @@ QtObject {
                                         )
 
                             User.set(getUserByUserId(user.id),true)
-                            console.trace()
                         }
                         catch(e)
                         {

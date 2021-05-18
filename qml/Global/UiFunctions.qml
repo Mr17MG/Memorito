@@ -1,6 +1,6 @@
 pragma Singleton
-import QtQuick 2.14 // Require For QtObject
-import QtQuick.Window 2.14                // Require For Screen
+import QtQuick 2.15 // Require For QtObject
+import QtQuick.Window 2.15                // Require For Screen
 
 QtObject {
     id:root

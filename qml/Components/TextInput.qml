@@ -1,9 +1,9 @@
-import QtQuick 2.14
-import QtQuick.Templates 2.14 as T
-import QtQuick.Controls 2.14
-import QtQuick.Controls.impl 2.14
-import QtQuick.Controls.Material 2.14
-import QtQuick.Controls.Material.impl 2.14
+import QtQuick 2.15
+import QtQuick.Templates 2.15 as T
+import QtQuick.Controls 2.15
+import QtQuick.Controls.impl 2.15
+import QtQuick.Controls.Material 2.15
+import QtQuick.Controls.Material.impl 2.15
 import Global 1.0
 
 T.TextField {
@@ -13,7 +13,8 @@ T.TextField {
     property bool fieldInPrimary : false
     property alias borderColor : bgRect.border
     property color bgUnderItem
-    color: fieldInPrimary ? "black" : AppStyle.textColor
+    property alias controlPlaceHolder: controlPlaceHolder
+    color: fieldInPrimary ? AppStyle.textOnPrimaryColor : AppStyle.textColor
     padding: AppStyle.size1H*10
     font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*25;}
     placeholderText: ""
@@ -35,11 +36,15 @@ T.TextField {
     Label {
         id: controlPlaceHolder
         text: control.placeholderText
-        color: fieldInPrimary ? "black":control.focus || control.text!==""?AppStyle.textColor: AppStyle.placeholderColor
-        y: control.focus || control.text!==""?-10*AppStyle.size1H:height-10*AppStyle.size1H
+        color: fieldInPrimary ? (AppStyle.textOnPrimaryColor)
+
+                              :( control.activeFocus || control.text!==""? AppStyle.textColor
+                                                                         : AppStyle.placeholderColor)
+        y: control.activeFocus || control.text!==""?-10*AppStyle.size1H:height-10*AppStyle.size1H
         anchors.right:  control.right
         anchors.rightMargin: parent.padding + 10*AppStyle.size1W
-        font{family: AppStyle.appFont;pixelSize:( control.focus || control.text!=""?20*AppStyle.size1F:25*AppStyle.size1F);bold:control.focus || control.text}
+        elide: Qt.ElideRight
+        font{family: AppStyle.appFont;pixelSize:( control.activeFocus || control.text!=""?20*AppStyle.size1F:25*AppStyle.size1F);bold:control.activeFocus || control.text}
         Behavior on y {
             NumberAnimation{ duration: 160}
         }
@@ -52,7 +57,7 @@ T.TextField {
             color: filedInDialog? AppStyle.dialogBackgroundColor
                                 : fieldInPrimary ? bgUnderItem
                                                  : AppStyle.appBackgroundColor
-            visible: control.focus || control.text!==""
+            visible: control.activeFocus || control.text!==""
             radius: 15*AppStyle.size1W
         }
     }
@@ -82,9 +87,9 @@ T.TextField {
     background: Rectangle {
         id: bgRect
         anchors.fill: parent
-        border.color: control.focus? AppStyle.primaryColor
-                                   : fieldInPrimary ? AppStyle.borderColorOnPrimary
-                                                    : AppStyle.borderColor
+        border.color: control.activeFocus? AppStyle.primaryColor
+                                         : fieldInPrimary ? AppStyle.borderColorOnPrimary
+                                                          : AppStyle.borderColor
         radius: 15*AppStyle.size1W
         color: "transparent"
     }
