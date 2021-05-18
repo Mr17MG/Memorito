@@ -1,6 +1,6 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import QtGraphicalEffects 1.14
 import Components 1.0
 import Global 1.0
@@ -26,7 +26,6 @@ Dialog {
     property int btnWidth: AppStyle.size1W*300
     property string iconSource: "qrc:/check.svg"
     property alias dialogButton: dialogButton
-    property alias buttonIcon: buttonIcon
     Material.background: Material.White
     Shortcut {
         sequences: ["Esc", "Back"]
@@ -102,28 +101,13 @@ Dialog {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: AppStyle.size1H*35
-        font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30 }
-        Material.background: AppStyle.primaryColor
-        Material.foreground: "white"
         radius: 30*AppStyle.size1W
-        Image {
-            id: buttonIcon
+        icon{
             source: iconSource
-            width: AppStyle.size1W*40
-            height: width
-            sourceSize.width: width*2
-            sourceSize.height: height*2
-            anchors.right: parent.right
-            anchors.rightMargin: btnIconRightPadding
-            anchors.verticalCenter: parent.verticalCenter
-            visible: false
-        }
-        ColorOverlay{
-            anchors.fill: buttonIcon
-            source: buttonIcon
-            color: "white"
+            color: AppStyle.textOnPrimaryColor
+            width: AppStyle.size1W*30
+            height: AppStyle.size1W*30
         }
     }
-
 
 }

@@ -601,7 +601,8 @@ Item {
                 Layout.fillHeight: true
                 placeholderText: qsTr("جست و جو")
                 hasCounter: false
-                leftPadding: parent.height
+                leftPadding: AppStyle.ltr?20*AppStyle.size1W:parent.height
+                rightPadding: AppStyle.ltr?parent.height:20*AppStyle.size1W
                 text: queryList.searchText
                 onTextEdited: {
                     queryList.searchText = text.trim()

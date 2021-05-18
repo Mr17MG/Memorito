@@ -1,4 +1,4 @@
-import QtQuick 2.14 // require For Item and Image and Text
+import QtQuick 2.15 // require For Item and Image and Text
 import Global 1.0
 
 Item {
@@ -24,7 +24,7 @@ Item {
         anchors.top: sImage.bottom
         anchors.topMargin: AppStyle.size1H*5
         anchors.horizontalCenter: sImage.horizontalCenter
-        color: "White"// AppStyle.textColor
+        color: AppStyle.textOnPrimaryColor
         horizontalAlignment: Text.AlignHCenter
         font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*35;bold: false}
     }
