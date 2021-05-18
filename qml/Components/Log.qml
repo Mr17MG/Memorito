@@ -1,5 +1,5 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.14
 import Global 1.0
 
@@ -21,7 +21,6 @@ Drawer {
     modal: false
     closePolicy: Dialog.NoAutoClose
     width:  text.width + 80*AppStyle.size1W
-
     height: AppStyle.size1H*30 + text.height
     onClosed: {
         if(typeof callAfterClose === "function")
@@ -34,9 +33,23 @@ Drawer {
     }
 
     background: Rectangle{
-        color: isError?"#F44336":"#8BC34A"
+        color: isError?"#ff3333":"#4BB543"
         radius: AppStyle.size1W*10
         border.width: 0
+        Rectangle{
+            id:progress
+            opacity: 0.5
+            color: "#5c5c5c"
+            height: parent.height
+            PropertyAnimation {
+                    target: progress;
+                    properties: "width"
+                    from: 0;
+                    to: root.width
+                    duration: endTime - 800
+                    running: root.visible
+               }
+        }
     }
     Timer{
         id:timer2
