@@ -42,7 +42,7 @@ TabButton{
             fromDate.setMinutes(0)
             fromDate.setSeconds(0)
 
-            toDate.setYear(toDate.getFullYear+1)
+            toDate.setYear(toDate.getFullYear()+1)
             toDate.setMonth(0)
             toDate.setDate(1)
             toDate.setHours(00)
