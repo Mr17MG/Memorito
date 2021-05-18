@@ -23,6 +23,8 @@ AppSwitch                   1.0      Switch.qml
 AppSwitchIndicator          1.0      SwitchIndicator.qml
 AppTextField                1.0      TextField.qml
 AppTextInput                1.0      TextInput.qml
+AppSplitView                1.0      SplitView.qml
+AppFilePicker               1.0      FilePicker.qml
 
 singleton FriendsApi        1.0     ../Friends/FriendsAPI.qml
 singleton LogsApi           1.0     ../Things/LogsApi.qml
