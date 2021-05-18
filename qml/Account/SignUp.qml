@@ -1,7 +1,8 @@
-import QtQuick 2.14 // require for Item and ...
-import QtQuick.Controls.Material 2.14 // require for Material.foreground
-import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.14
+import QtQuick 2.15 // require for Item and ...
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15 // require for Material.foreground
+import QtGraphicalEffects 1.15
+
 import Components 1.0// Require for AppButton and ...
 import Global 1.0
 
@@ -137,39 +138,34 @@ Item {
                         NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
                         NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
                     }
-                    Image{
+                    AppButton{
                         id:visiblePasswordIcon
-                        LayoutMirroring.enabled: false
-                        width: 30*AppStyle.size1W
+                        width: 65*AppStyle.size1W
                         height: width
-                        source: "qrc:/view.svg"
-                        sourceSize.width: width*2
-                        sourceSize.height: height*2
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: false
-                        anchors.right: parent.right
-                    }
-                    ColorOverlay{
-                        id: visiblePasswordColor
-                        anchors.fill: visiblePasswordIcon
-                        source: visiblePasswordIcon
-                        color: AppStyle.textColor
-                        transform:rotation
-                        antialiasing: true
-                        visible: passwordInput.focus && passwordInput.text!=""
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: {
-                                if(passwordInput.echoMode === AppTextField.Normal)
-                                {
-                                    visiblePasswordIcon.source = "qrc:/view.svg"
-                                    passwordInput.echoMode= AppTextField.Password
-                                }
-                                else{
-                                    visiblePasswordIcon.source = "qrc:/hide.svg"
-                                    passwordInput.echoMode = AppTextField.Normal
-                                }
+                        flat: true
+                        icon{
+                            source: passwordInput.echoMode === AppTextField.Password?"qrc:/view.svg":"qrc:/hide.svg"
+                            color: AppStyle.textColor
+                        }
+                        anchors{
+                            right: AppStyle.ltr?undefined:parent.right
+                            left: AppStyle.ltr?parent.left:undefined
+                            verticalCenter: parent.verticalCenter
+                        }
+                        visible: passwordInput.text != "" && ( passwordInput.activeFocus || visiblePasswordIcon.activeFocus )
+                        onClicked: {
+                            if(passwordInput.echoMode === AppTextField.Normal)
+                            {
+                                passwordInput.echoMode= AppTextField.Password
                             }
+                            else{
+                                passwordInput.echoMode = AppTextField.Normal
+                            }
+                        }
+                        onVisibleChanged: {
+                            if(!visible)
+                                passwordInput.echoMode= AppTextField.Password
+
                         }
                     }
                 }
@@ -200,40 +196,34 @@ Item {
                         NumberAnimation { target: passwordConfirmInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
                     }
 
-                    Image{
+                    AppButton{
                         id:visiblePasswordConfirmIcon
-                        LayoutMirroring.enabled: false
-                        width: 30*AppStyle.size1W
+                        width: 65*AppStyle.size1W
                         height: width
-                        source: "qrc:/view.svg"
-                        sourceSize.width: width*2
-                        sourceSize.height: height*2
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: false
-                        anchors.right: parent.right
-                    }
-
-                    ColorOverlay{
-                        id: visiblePasswordConfirmColor
-                        anchors.fill: visiblePasswordConfirmIcon
-                        source: visiblePasswordConfirmIcon
-                        color: AppStyle.textColor
-                        transform:rotation
-                        antialiasing: true
-                        visible: passwordConfirmInput.focus && passwordConfirmInput.text!=""
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: {
-                                if(passwordConfirmInput.echoMode === AppTextField.Normal)
-                                {
-                                    visiblePasswordConfirmIcon.source = "qrc:/view.svg"
-                                    passwordConfirmInput.echoMode= AppTextField.Password
-                                }
-                                else{
-                                    visiblePasswordConfirmIcon.source = "qrc:/hide.svg"
-                                    passwordConfirmInput.echoMode = AppTextField.Normal
-                                }
+                        flat: true
+                        icon{
+                            source: passwordConfirmInput.echoMode === AppTextField.Password?"qrc:/view.svg":"qrc:/hide.svg"
+                            color: AppStyle.textColor
+                        }
+                        anchors{
+                            right: AppStyle.ltr?undefined:parent.right
+                            left: AppStyle.ltr?parent.left:undefined
+                            verticalCenter: parent.verticalCenter
+                        }
+                        visible: passwordConfirmInput.text != "" && ( passwordConfirmInput.activeFocus || visiblePasswordConfirmIcon.activeFocus )
+                        onClicked: {
+                            if(passwordConfirmInput.echoMode === AppTextField.Normal)
+                            {
+                                passwordConfirmInput.echoMode= AppTextField.Password
                             }
+                            else{
+                                passwordConfirmInput.echoMode = AppTextField.Normal
+                            }
+                        }
+                        onVisibleChanged: {
+                            if(!visible)
+                                passwordConfirmInput.echoMode= AppTextField.Password
+
                         }
                     }
                 }

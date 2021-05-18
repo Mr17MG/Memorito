@@ -1,5 +1,5 @@
-import QtQuick 2.14 // Rquire For Item
-import QtQuick.Controls.Material 2.14 // Require for Material.foreground
+import QtQuick 2.15 // Rquire For Item
+import QtQuick.Controls.Material 2.15 // Require for Material.foreground
 import QtGraphicalEffects 1.14
 import Components 1.0// Require for AppButton and ...
 import QtQuick.Window 2.15
@@ -7,7 +7,9 @@ import Global 1.0
 import QtQuick.Controls 2.15
 
 Item{
+
     id:root
+
     function getKeyType()
     {
         if( usernameInput.text.length > 0  && passwordInput.text.length > 0)
@@ -30,16 +32,15 @@ Item{
 
     Item{
         anchors{
-            topMargin: 150*AppStyle.size1H
+            top: parent.top
+            topMargin: 30*AppStyle.size1H
+            right: parent.right
             rightMargin: 100*AppStyle.size1W
-            bottomMargin: 30*AppStyle.size1H
+            left: parent.left
             leftMargin: 100*AppStyle.size1W
             bottom: accountItem.top
-            top: parent.top
-            left: parent.left
-            right: parent.right
+            bottomMargin: 30*AppStyle.size1H
         }
-
         Flow{
             width: parent.width
             anchors.centerIn: parent
@@ -54,7 +55,7 @@ Item{
             }
             Item{
                 width: parent.width
-                height: 100*AppStyle.size1H
+                height: 110*AppStyle.size1H
                 AppTextField{
                     id:usernameInput
                     placeholder.text: qsTr("ایمیل یا نام کاربری")
@@ -79,7 +80,7 @@ Item{
 
             Item{
                 width: parent.width
-                height: 100*AppStyle.size1H
+                height: 110*AppStyle.size1H
                 AppTextField{
                     id:passwordInput
                     placeholder.text: qsTr("رمز عبور")
@@ -101,39 +102,37 @@ Item{
                         NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
                         NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
                     }
-                    Image{
+                    AppButton{
                         id:visiblePasswordIcon
-                        LayoutMirroring.enabled: false
-                        width: 30*AppStyle.size1W
+                        flat: true
+                        width: visible?65*AppStyle.size1W:0
                         height: width
-                        source: "qrc:/view.svg"
-                        sourceSize.width: width*2
-                        sourceSize.height: height*2
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: false
-                        anchors.right: parent.right
-                    }
-                    ColorOverlay{
-                        id: visiblePasswordColor
-                        anchors.fill: visiblePasswordIcon
-                        source: visiblePasswordIcon
-                        color: AppStyle.textColor
-                        transform:rotation
-                        antialiasing: true
-                        visible: passwordInput.focus && passwordInput.text!=""
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: {
-                                if(passwordInput.echoMode === AppTextField.Normal)
-                                {
-                                    visiblePasswordIcon.source = "qrc:/view.svg"
-                                    passwordInput.echoMode= AppTextField.Password
-                                }
-                                else{
-                                    visiblePasswordIcon.source = "qrc:/hide.svg"
-                                    passwordInput.echoMode = AppTextField.Normal
-                                }
+                        visible: passwordInput.text != "" && ( passwordInput.focus || visiblePasswordIcon.focus )
+
+                        icon{
+                            color: AppStyle.textColor
+                            source: passwordInput.echoMode === AppTextField.Password ? "qrc:/view.svg" : "qrc:/hide.svg"
+                        }
+
+                        anchors{
+                            right: AppStyle.ltr?undefined:parent.right
+                            left: AppStyle.ltr?parent.left:undefined
+                            verticalCenter: parent.verticalCenter
+                        }
+
+                        onClicked: {
+                            if(passwordInput.echoMode === AppTextField.Normal)
+                            {
+                                passwordInput.echoMode= AppTextField.Password
                             }
+                            else{
+                                passwordInput.echoMode = AppTextField.Normal
+                            }
+                        }
+                        onVisibleChanged: {
+                            if(!visible)
+                                passwordInput.echoMode= AppTextField.Password
+
                         }
                     }
                 }

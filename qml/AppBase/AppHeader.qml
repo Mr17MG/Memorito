@@ -1,4 +1,4 @@
-import QtQuick 2.14 // Require For Loader and other ...
+import QtQuick 2.15 // Require For Loader and other ...
 import QtGraphicalEffects 1.14 // Require for ColorOverlay
 import Components 1.0  // Require for Button
 import Global 1.0
@@ -19,8 +19,9 @@ Loader{
         Text{
             anchors{
                 right: menuBtn.visible?menuBtn.left:parent.right
-                rightMargin: AppStyle.size1W*20
-                left : backButton.visible?backButton.right:parent.left
+                rightMargin: AppStyle.size1W*10
+                left : backButton.visible?backButton.right:menuBtn.visible?backButton.right:parent.left
+                leftMargin: AppStyle.size1W*10
                 verticalCenter: parent.verticalCenter
             }
             horizontalAlignment: Text.AlignHCenter
@@ -97,7 +98,7 @@ Loader{
             }
         }
         Shortcut {
-            sequences: ["Esc", "Back"]
+            sequences: ["Esc", "Back","Alt+Left"]
             onActivated: {
                 if(backButton.visible)
                     backButton.clicked(Qt.RightButton)

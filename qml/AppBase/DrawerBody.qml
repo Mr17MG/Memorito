@@ -16,7 +16,13 @@ Item{
         right: parent.right
         rightMargin: isDrawer?0:10*AppStyle.size1W
     }
-
+    Connections{
+        target: UsefulFunc
+        function onGetAndroidAccessToFileResponsed(res) {
+            if(res)
+                User.set(UserApi.getUserByUserId(User.id))
+        }
+    }
     Text {
         id: userNameText
         text: {
@@ -150,8 +156,7 @@ Item{
                 width: 50*AppStyle.size1W
                 height: width
                 source: model.iconSrc
-                sourceSize.width: width*2
-                sourceSize.height: height*2
+                sourceSize:Qt.size(width*2,height*2)
                 visible: false
                 anchors{
                     top: parent.top
@@ -167,8 +172,8 @@ Item{
                 id:iconColor
                 anchors.fill: icon
                 source:icon
-                color: UsefulFunc.stackPages.get(UsefulFunc.stackPages.count-1).title === model.title?AppStyle.primaryColor
-                                                                                                     :AppStyle.textColor
+                color: UsefulFunc.stackPages.get(UsefulFunc.stackPages.count-1).title === model.title ? AppStyle.primaryColor
+                                                                                                      : AppStyle.textColor
             }
 
             Text {

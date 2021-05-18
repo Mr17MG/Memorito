@@ -1,14 +1,14 @@
-import QtQuick 2.14
+import QtQuick 2.15
 import QtQml 2.15
 import QtGraphicalEffects 1.14
-import QtQuick.Controls.Material 2.14
-import QtQuick.Controls 2.14
+import QtQuick.Controls.Material 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.3
 import Components 1.0
 import Global 1.0
 import MTools 1.0
 
-Pane {
+Item {
     MTools{id:myTools}
     property bool modified: false
 
@@ -43,7 +43,7 @@ Pane {
             id:fileDialog
             selectMultiple: false
             title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
-            nameFilters: [ "All Images (*.png *.jpeg *jpg)" ]
+            nameFilters: [ "All Images (*.png *.jpeg *.jpg)" ]
             folder: shortcuts.pictures
             sidebarVisible: false
             onAccepted: {
@@ -59,21 +59,19 @@ Pane {
 
 
     Flickable{
-        anchors{
-            top: parent.top
-            bottom: parent.bottom
-            topMargin: 70*AppStyle.size1H
-            bottomMargin: 70*AppStyle.size1H
-            horizontalCenter: parent.horizontalCenter
-        }
-        width: (parent.width/3*2 > 800*AppStyle.size1W) ? 800*AppStyle.size1W
-                                                     : (parent.width/3*2 > parent.width - 100 * AppStyle.size1H) ? parent.width/3*2
-                                                                                                                : parent.width-100*AppStyle.size1H
-        contentHeight: flow1.height
+        clip: true
+        contentHeight: flow1.height + 150*AppStyle.size1H
+        anchors.fill: parent
         Rectangle{
+            anchors{
+                top: flow1.top
+                bottom: flow1.bottom
+                bottomMargin: -50*AppStyle.size1H
+                left: flow1.left
+                right: flow1.right
+            }
             color: Material.color(AppStyle.primaryInt,Material.Shade50)
             opacity: AppStyle.appTheme?0.2:0.5
-            anchors.fill: parent
             border{
                 color: Material.color(AppStyle.primaryInt,Material.Shade100)
                 width: 4*AppStyle.size1W
@@ -82,21 +80,21 @@ Pane {
         }
         Flow{
             id:flow1
-            width: parent.width
             spacing: 30*AppStyle.size1H
+            width: Math.min(parent.width - 50 * AppStyle.size1H, 800*AppStyle.size1W)
+            anchors{
+                top: parent.top
+                topMargin: 50*AppStyle.size1H
+                horizontalCenter: parent.horizontalCenter
+            }
             Item{
                 width: parent.width
                 height: 600*AppStyle.size1W
                 Rectangle{
                     id: root
-                    anchors{
-                        right: parent.right
-                        rightMargin: 30*AppStyle.size1W
-                        left: parent.left
-                        leftMargin: 30*AppStyle.size1W
-                    }
-                    height: 30*AppStyle.size1H
-                    radius: width
+                    width: 500*AppStyle.size1W>parent.width-100*AppStyle.size1W?parent.width-100*AppStyle.size1W:500*AppStyle.size1W
+                    height: width
+                    radius: height
                     anchors.centerIn: parent
                     border.color: Material.color(AppStyle.primaryInt)
                     border.width: 5*AppStyle.size1W
@@ -215,86 +213,24 @@ Pane {
                 spacing: 20*AppStyle.size1W
                 font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
                 rightPadding: 50*AppStyle.size1W
+                leftPadding: 50*AppStyle.size1W
                 onCheckedChanged: {
                     checkModify()
                 }
             }
 
-            AppButton{
-                id: password
-                width: parent.width
-                height: 100*AppStyle.size1H
-                radius: AppStyle.size1W*50
-                text: qsTr("تغییر رمز ورود")
-                rightPadding: 50*AppStyle.size1W
-                horizontalAlignment: Qt.AlignRight
-                flat: true
-                font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
-                icon{
-                    source: "qrc:/previous.svg"
-                    color: AppStyle.textColor
-                    width: AppStyle.size1W*20
-                    height: AppStyle.size1W*20
-                }
-
-                onClicked: {
-                    UsefulFunc.showConfirm(
-                                qsTr("تغییر رمز ورود"),
-                                qsTr("آیا مطمئن هستید که می‌خواهید رمز ورود به حساب خود را تغییر دهید؟"),
-                                function()
-                                {
-                                    UserApi.forgetPass(User.username,true)
-
-                                }
-                                )
-                }
-            }
-
-
-            AppButton{
-                id: logoutBtn
-                height: AppStyle.size1H*75
-                width: parent.width
-                radius: AppStyle.size1W*50
-                text: qsTr("خروج از حساب")
-                rightPadding: 50*AppStyle.size1W
-                icon{
-                    source: "qrc:/previous.svg"
-                    color: AppStyle.textColor
-                    width: AppStyle.size1W*20
-                    height: AppStyle.size1W*20
-                }
-                horizontalAlignment: Qt.AlignRight
-                flat: true
-                font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
-                onClicked: {
-                    UsefulFunc.showConfirm(
-                                qsTr("خروج از حساب"),
-                                qsTr("آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟"),
-                                function()
-                                {
-                                    myTools.deleteSaveDir();
-                                    UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
-                                    SettingDriver.setValue("last_date","")
-                                    User.clear()
-                                    UsefulFunc.stackPages.clear()
-                                }
-                                )
-                }
-            }
-
-
             Item{
                 width: parent.width
-                height: 200*AppStyle.size1H
+                height: 120*AppStyle.size1H
                 AppButton{
                     id: edit
                     enabled: modified
                     height: 100*AppStyle.size1H
-                    anchors.centerIn: parent
                     width: usernameInput.width
                     radius: AppStyle.size1W*50
                     text: qsTr("بروزرسانی اطلاعات")
+                    anchors.centerIn: parent
+                    contentMirorred: !AppStyle.ltr
                     font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
                     icon{
                         source: "qrc:/check-circle.svg"
@@ -334,8 +270,104 @@ Pane {
                     }
                 }
             }
+            AppButton{
+                id: password
+                width: parent.width
+                height: 100*AppStyle.size1H
+                radius: AppStyle.size1W*50
+                text: qsTr("تغییر رمز ورود")
+                rightPadding: 50*AppStyle.size1W
+                horizontalAlignment: Qt.AlignRight
+                flat: true
+                leftPadding: 50*AppStyle.size1W
+                contentMirorred: AppStyle.ltr
+                font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
+                icon{
+                    source: contentMirorred?"qrc:/next.svg":"qrc:/previous.svg"
+                    color: AppStyle.textColor
+                    width: AppStyle.size1W*20
+                    height: AppStyle.size1W*20
+                }
+                onClicked: {
+                    UsefulFunc.showConfirm(
+                                qsTr("تغییر رمز ورود"),
+                                qsTr("آیا مطمئن هستید که می‌خواهید رمز ورود به حساب خود را تغییر دهید؟"),
+                                function()
+                                {
+                                    UserApi.forgetPass(User.username,true)
+
+                                }
+                                )
+                }
+            }
 
 
+            AppButton{
+                id: logoutBtn
+                height: AppStyle.size1H*75
+                width: parent.width
+                radius: AppStyle.size1W*50
+                text: qsTr("خروج از حساب")
+                rightPadding: 50*AppStyle.size1W
+                leftPadding: 50*AppStyle.size1W
+                contentMirorred: AppStyle.ltr
+                horizontalAlignment: Qt.AlignRight
+                flat: true
+                font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
+                icon{
+                    source: contentMirorred?"qrc:/next.svg":"qrc:/previous.svg"
+                    color: AppStyle.textColor
+                    width: AppStyle.size1W*20
+                    height: AppStyle.size1W*20
+                }
+                onClicked: {
+                    UsefulFunc.showConfirm(
+                                qsTr("خروج از حساب"),
+                                qsTr("آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟"),
+                                function()
+                                {
+                                    myTools.deleteSaveDir();
+                                    UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
+                                    SettingDriver.setValue("last_date","")
+                                    User.clear()
+                                    UsefulFunc.stackPages.clear()
+                                }
+                                )
+                }
+            }
+            AppButton{
+                id: deleteBtn
+                height: AppStyle.size1H*75
+                width: parent.width
+                radius: AppStyle.size1W*50
+                text: qsTr("حذف حساب کاربری")
+                rightPadding: 50*AppStyle.size1W
+                leftPadding: 50*AppStyle.size1W
+                contentMirorred: AppStyle.ltr
+                horizontalAlignment: Qt.AlignRight
+                flat: true
+                font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
+                icon{
+                    source: contentMirorred?"qrc:/next.svg":"qrc:/previous.svg"
+                    color: AppStyle.textColor
+                    width: AppStyle.size1W*20
+                    height: AppStyle.size1W*20
+                }
+                onClicked: {
+                    UsefulFunc.showConfirm(
+                                qsTr("حذف حساب کاربری؟"),
+                                qsTr("آیا واقعا مطمئن هستید که می‌خواهید حساب خورا حذف کنید؟") + "\n "+ qsTr("در صورت حذف اطلاعات حساب شما قابل بازگشت نخواهد بود."),
+                                function()
+                                {
+                                    myTools.deleteSaveDir();
+                                    UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
+                                    SettingDriver.setValue("last_date","")
+                                    User.clear()
+                                    UsefulFunc.stackPages.clear()
+                                }
+                                )
+                }
+            }
         }
     }
 }

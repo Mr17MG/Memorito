@@ -1,5 +1,5 @@
-import QtQuick 2.14 // Rquire For Item
-import QtQuick.Controls.Material 2.14 // Require for Material.foreground
+import QtQuick 2.15 // Rquire For Item
+import QtQuick.Controls.Material 2.15 // Require for Material.foreground
 import Components 1.0// Require for AppButton and ...
 import Global 1.0
 
@@ -62,7 +62,7 @@ Item {
                   + email + " \n"
                   +qsTr("ارسال شد لطفا آن را در قسمت زیر وارد نمایید.")
             color: AppStyle.textColor
-            height: 100*AppStyle.size1H
+            height: 120*AppStyle.size1H
             wrapMode: Text.WordWrap
         }
         Item{
@@ -109,6 +109,28 @@ Item {
                     NumberAnimation { target: passInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
                     NumberAnimation { target: passInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
                 }
+                AppButton{
+                    id:visiblePasswordIcon
+                    width: 65*AppStyle.size1W
+                    height: width
+                    flat: true
+                    icon{
+                        source: passInput.echoMode === AppTextField.Password?"qrc:/view.svg":"qrc:/hide.svg"
+                        color: AppStyle.textColor
+                    }
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: passInput.right
+                    visible: passInput.text !== "" && ( passInput.activeFocus || visiblePasswordIcon.activeFocus )
+                    onClicked: {
+                        if(passInput.echoMode === AppTextField.Normal)
+                        {
+                            passInput.echoMode= AppTextField.Password
+                        }
+                        else{
+                            passInput.echoMode = AppTextField.Normal
+                        }
+                    }
+                }
             }
         }
         Loader{
@@ -140,6 +162,28 @@ Item {
                     NumberAnimation { target: confirmPassInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
                     NumberAnimation { target: confirmPassInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
                     NumberAnimation { target: confirmPassInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
+                }
+                AppButton{
+                    id:visiblePasswordIcon2
+                    width: 65*AppStyle.size1W
+                    height: width
+                    flat: true
+                    icon{
+                        source: confirmPassInput.echoMode === AppTextField.Password?"qrc:/view.svg":"qrc:/hide.svg"
+                        color: AppStyle.textColor
+                    }
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: confirmPassInput.right
+                    visible: confirmPassInput.text !== "" && ( confirmPassInput.activeFocus || visiblePasswordIcon2.activeFocus )
+                    onClicked: {
+                        if(confirmPassInput.echoMode === AppTextField.Normal)
+                        {
+                            confirmPassInput.echoMode= AppTextField.Password
+                        }
+                        else{
+                            confirmPassInput.echoMode = AppTextField.Normal
+                        }
+                    }
                 }
             }
         }

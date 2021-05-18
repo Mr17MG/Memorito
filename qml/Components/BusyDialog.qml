@@ -1,10 +1,10 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import Components 1.0
 import Global 1.0
 
-Dialog{
+AppDialog{
     id:busy
     property alias indicator: indicator
     property string message: ""
@@ -41,5 +41,7 @@ Dialog{
         text: message !== ""?message : qsTr("در حال بارگذاری")
         font { family: AppStyle.appFont ; pixelSize: AppStyle.size1F*35;bold:true}
         color: AppStyle.primaryColor
+        style: Text.Raised;
+        styleColor: AppStyle.textOnPrimaryColor
     }
 }
