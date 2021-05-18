@@ -1,8 +1,8 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
-import QtQuick.Templates 2.14 as T
-import QtQuick.Controls.Material.impl 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
+import QtQuick.Templates 2.15 as T
+import QtQuick.Controls.Material.impl 2.15
 import QtGraphicalEffects 1.14
 import Global 1.0
 
@@ -26,6 +26,7 @@ ComboBox {
     property string displayIcon:  iconRole?"":""
     property bool hasClear: true
     property real iconSize: AppStyle.size1W*35
+    property string iconColor
     Material.accent: AppStyle.primaryColor
 
     signal error();
@@ -53,53 +54,60 @@ ComboBox {
         sourceSize: Qt.size(width*4,height*4)
         visible: false
     }
+
     ColorOverlay{
         source: imageIndicator
         anchors.fill: imageIndicator
-        color: AppStyle.primaryColor
+        color: control.activeFocus ? control.Material.accentColor
+                                   : AppStyle.textColor
     }
-    Image {
+
+    AppButton {
         id: trashIcon
-        source: "qrc:/trash.svg"
-        width: iconSize
-        height: iconSize
-        sourceSize: Qt.size(width*4,height*4)
+        width: iconSize*2
+        height: iconSize*2
+        radius: iconSize*2
+        visible: control.currentIndex>=0 && hasClear
+        flat: true
+        icon {
+            source: "qrc:/trash.svg"
+            color: AppStyle.textColor
+            width: iconSize
+            height: iconSize
+        }
+
         anchors{
             left: parent.right
             verticalCenter: parent.verticalCenter
         }
-        visible: false
-    }
-    ColorOverlay{
-        source: trashIcon
-        anchors.fill: trashIcon
-        color: AppStyle.textColor
-        visible: control.currentIndex>=0 && hasClear
-        MouseArea{
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            onClicked: {
-                control.currentIndex = -1
-            }
+        onClicked: {
+            control.currentIndex = -1
         }
     }
+
     contentItem: Rectangle {
         id:contentItem
         anchors.fill: parent
         color: "transparent"
-        Label{
+        Text{
             id:contentItemText
-            text: parent.parent.displayText?parent.parent.displayText:placeholderText
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            anchors.fill: parent
+            text: control.displayText? control.displayText
+                                     : placeholderText
             font: control.font
+            height: parent.height
             color: AppStyle.textColor
-            elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
+            elide: AppStyle.ltr ? Text.ElideLeft
+                                : Text.ElideRight
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
             anchors{
                 left: parent.left
                 leftMargin: 55*AppStyle.size1W
-                right: parent.right
+                right: try{iconImg.visible || iconColor !== ""? iconImg.left
+                                                          : parent.right}catch(e){parent.right}
+                rightMargin: 5*AppStyle.size1W
             }
         }
         Rectangle{
@@ -117,32 +125,42 @@ ComboBox {
         }
         Image {
             id: iconImg
-            visible: source !== ""
+            visible: source !== "" && iconColor === ""
             anchors{
                 verticalCenter: parent.verticalCenter
                 right: parent.right
                 rightMargin: 10*AppStyle.size1W
             }
-            source: control.iconRole === ""?"":control.currentIndex === -1?placeholderIcon:control.model.get(control.currentIndex)[iconRole]
+            source: control.iconRole === "" ?
+                        (placeholderIcon ? placeholderIcon : "" )
+                      :(control.currentIndex === -1 ? placeholderIcon
+                                                    :control.model.get(control.currentIndex)[iconRole])
             width: iconSize
             height: iconSize
             sourceSize: Qt.size(width*4,height*4)
         }
+        ColorOverlay{
+            visible: iconColor !== ""
+            source : iconImg
+            anchors.fill: iconImg
+            color: iconColor
+        }
     }
+
     delegate: MenuItem {
         id: delegateItem
         width: parent?parent.width:0
         text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
-        Material.foreground: parent?control.currentIndex === index ? AppStyle.primaryColor: parent.Material.foreground:"white"
+        Material.foreground: parent?control.currentIndex === index ? AppStyle.primaryColor: parent.Material.foreground: AppStyle.textColor
         highlighted: control.highlightedIndex === index
         hoverEnabled: control.hoverEnabled
         font: control.font
-        height: AppStyle.size1H*85
+        height: AppStyle.size1H*90
         contentItem: Item{
             anchors.fill: parent
             Image {
                 id: displayIconImg
-                visible: source !== ""
+                visible: source !== "" && iconColor === ""
                 anchors{
                     verticalCenter: parent.verticalCenter
                     right: parent.right
@@ -152,7 +170,12 @@ ComboBox {
                 width: iconSize
                 height: iconSize
                 sourceSize: Qt.size(width*4,height*4)
-
+            }
+            ColorOverlay{
+                visible: iconColor !== ""
+                source : displayIconImg
+                anchors.fill: displayIconImg
+                color: iconColor
             }
             Text {
                 id: name
@@ -174,6 +197,7 @@ ComboBox {
             }
         }
     }
+
     popup: T.Popup {
         y: popupY
         x: popupCenter?(+(UsefulFunc.rootWindow.width-popupWidth)/2)-(popupX/2)-(control.x):popupX
