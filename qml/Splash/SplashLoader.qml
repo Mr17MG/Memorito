@@ -34,7 +34,7 @@ Item {
     Image {
         id:iconLogo
         source: "qrc:/icon.png"
-        width: 150*AppStyle.size1W
+        width: 400*AppStyle.size1W
         height: width
         anchors.centerIn: parent
     }
@@ -43,19 +43,36 @@ Item {
         anchors.fill: iconLogo
         horizontalOffset: 0*AppStyle.size1W
         verticalOffset: 0*AppStyle.size1H
-        radius: 50*AppStyle.size1W
-        samples: 30*AppStyle.size1W
-        color: Material.color(AppStyle.primaryInt,Material.Shade200)
+        radius: 30
+        samples: 20
+        color: AppStyle.appTheme?"#6F6F6F":"#0C0C0C"
         source: iconLogo
     }
+    AppButton {
 
-    Text {
         id: waitText
-        text: qsTr("ساخته شده با ♥")
-        font{family: AppStyle.appFont;pixelSize: 30*AppStyle.size1F;bold: true}
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 40*AppStyle.size1W
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: AppStyle.textColor
+
+        text: qsTr("ساخته شده با")
+        flat: true
+        spacing: 10*AppStyle.size1W
+        contentMirorred: AppStyle.ltr
+
+        font {
+            pixelSize: 30*AppStyle.size1F
+            bold: true
+        }
+
+        icon{
+            source: "qrc:/heart.svg"
+            width: 50*AppStyle.size1W
+            height:  50*AppStyle.size1W
+            color: AppStyle.textColor
+        }
+
+        anchors{
+            bottom: parent.bottom
+            bottomMargin: 40*AppStyle.size1W
+            horizontalCenter: parent.horizontalCenter
+        }
     }
 }
