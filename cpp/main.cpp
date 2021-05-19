@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
     //**************** App Style ****************//
     QQuickStyle::setStyle("Material");
-    app.setWindowIcon(QIcon(":/icon.png"));
+    app.setWindowIcon(QIcon(":/icon2.png"));
     //*******************************************//
 
 
