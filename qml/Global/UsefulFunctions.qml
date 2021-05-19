@@ -3,6 +3,9 @@ import QtQuick 2.15 // Require For QtObject
 import MSysInfo 1.0 // Require For SystemInfo
 
 QtObject {
+
+    property int connectionType: 1
+
     property MSysInfo mSysInfo: MSysInfo{}
 
     property ListModel stackPages: ListModel{}
@@ -123,7 +126,12 @@ QtObject {
         else
             console.error(component.errorString())
     }
+    function showConnectionError()
+    {
+        connectionType = 0
+        UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
 
+    }
     function showUnauthorizedError()
     {
         showLog(qsTr("نام کاربری شما مجاز شناخته نشد، ممکن حساب شما پاک شده باشد."),true,400*AppStyle.size1W)

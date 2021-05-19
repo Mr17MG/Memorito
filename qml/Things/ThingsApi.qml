@@ -254,7 +254,8 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                     }
                 }
                 catch(e) {
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                     return null
                 }
             }
@@ -333,7 +334,8 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             FilesApi.addFiles(filesModel,filesModel.count,-1)
 
                     LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                     UsefulFunc.mainStackPop({"localThingId":id,"changeType":Memorito.Insert})
 
                 }
@@ -403,7 +405,8 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             FilesApi.addFiles(filesModel,filesModel.count,thingId)
 
                     LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":2,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
                 if(local_id === null)
                     UsefulFunc.mainStackPop({"thingId":thingId,"chnageType":Memorito.Update})
@@ -459,7 +462,8 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                 catch(e) {
                     deleteThingLocalDatabase(thingId)
                     LocalDatabase.insertLocalChanges([ {"table_id":4,   "record_id":thingId,    "changes_type":3,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
                 if(local_id === null)
                     UsefulFunc.mainStackPop({"thingId":thingId,"changeType":Memorito.Delete})

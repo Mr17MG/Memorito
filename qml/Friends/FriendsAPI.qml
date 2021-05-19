@@ -211,7 +211,8 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                     }
                 }
                 catch(e) {
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                     return null
                 }
             }
@@ -274,7 +275,8 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                 catch(e) {
                     let id = insertFriends([{"id":-1, "friend_name":friendName, "user_id":User.id,"register_date" : "", "modified_date":"" }])
                     LocalDatabase.insertLocalChanges([ {"table_id":3,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -335,7 +337,8 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                     model.set(modelIndex,{"friend_name":friendName})
                     updateFriends( {"id":friendId,"friend_name":friendName,"user_id": User.id, "register_date":"","modified_date":""},local_id)
                     LocalDatabase.insertLocalChanges([ {"table_id":3,   "record_id":friendId,    "changes_type":2,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -390,7 +393,8 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                 catch(e) {
                     deleteFriendLocalDatabase(friendId)
                     LocalDatabase.insertLocalChanges([ {"table_id":3,   "record_id":friendId,    "changes_type":3,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }

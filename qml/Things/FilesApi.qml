@@ -218,7 +218,8 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     }
                 }
                 catch(e) {
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                     return null
                 }
             }
@@ -295,7 +296,8 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                 catch(e) {
                     let id = insertFiles(response.result)
                     LocalDatabase.insertLocalChanges([ {"table_id":5,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -349,7 +351,8 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                 catch(e) {
                     deleteFilesLocalDatabase(fileId)
                     LocalDatabase.insertLocalChanges([ {"table_id":5,   "record_id":fileId,    "changes_type":3,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }

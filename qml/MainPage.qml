@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15 // Require For Stackview
 import QtGraphicalEffects 1.14 // Require For ColorOverlay
 import "qrc:/AppBase" as Base
 import Global 1.0
-
+import Components 1.0
 Loader{
     id:mainPage
     active: true
@@ -59,11 +59,67 @@ Loader{
         }
 
         Base.AppHeader{ id: header }
+        Rectangle{
+            id: connectHeader
 
+            visible: UsefulFunc.connectionType !== 1
+
+            width: parent.width
+            height: header.height
+            color: "transparent"
+            anchors{
+                top: header.bottom
+            }
+            Text{
+                id: statusText
+                color: AppStyle.textColor
+                text: UsefulFunc.connectionType === 0 ? qsTr("ارتباط شما با سرور قطع می‌باشد")
+                                                      : qsTr("درحال بروزرسانی اطلاعات") + " ..."
+                height: parent.height
+                verticalAlignment: Text.AlignVCenter
+
+                font {
+                    family: AppStyle.appFont
+                    pixelSize: 30*AppStyle.size1F
+                    bold: true
+                }
+                anchors{
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: 40*AppStyle.size1W
+                }
+            }
+            AppBusyIndicator{
+                visible: UsefulFunc.connectionType === 2
+            }
+            AppButton{
+                text: qsTr("تلاش مجدد")
+                flat: true
+                icon{
+                    source: "qrc:/rotate-right"
+                    height: 40*AppStyle.size1W
+                    width: 40*AppStyle.size1W
+                }
+                font {
+                    family: AppStyle.appFont
+                    pixelSize: 30*AppStyle.size1F
+                }
+                anchors{
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: 40*AppStyle.size1W
+                }
+                onClicked: {
+                    let token = User.authToken ? User.authToken : "-1"
+                    let userId = User.id ? User.id : -1
+                    UserApi.validateToken( token, userId )
+                }
+            }
+        }
         StackView{
             id:mainStackView
             anchors{
-                top: header.bottom
+                top: connectHeader.visible?connectHeader.bottom:header.bottom
                 right: parent.right
                 left: parent.left
                 bottom: parent.bottom

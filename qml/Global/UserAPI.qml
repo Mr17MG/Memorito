@@ -113,7 +113,10 @@ QtObject {
                     }
                 }
                 catch(e) {
-                    console.trace();console.log(xhr.responseText);console.log(e)
+                    console.trace();
+                    console.log(xhr.responseText);
+                    console.log(e)
+                    UsefulFunc.showConnectionError()
                     return false
                 }
             }
@@ -196,7 +199,8 @@ QtObject {
                 }
                 catch(e) {
                     console.trace();console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -268,7 +272,8 @@ QtObject {
                 }
                 catch(e) {
                     console.trace();console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -355,7 +360,8 @@ QtObject {
                 }
                 catch(e) {
                     console.trace();console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -435,7 +441,8 @@ QtObject {
                 }
                 catch(e) {
                     console.trace();console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -525,7 +532,8 @@ QtObject {
                 }
                 catch(e) {
                     console.trace();console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -593,7 +601,8 @@ QtObject {
                 }
                 catch(e) {
                     console.trace();console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -625,6 +634,7 @@ QtObject {
                     {
                         if(response.code === 200){
                             UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
+                            UsefulFunc.connectionType = 1
                         }
                     }
                     else {
@@ -643,7 +653,7 @@ QtObject {
                 }
                 catch(e) {
                     console.trace();console.error(e);console.log(xhr.responseText)
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
                     UsefulFunc.mainLoader.source = User.isSet?"qrc:/StartMemorito.qml":"qrc:/Account/AccountMain.qml"
                 }
             }

@@ -215,7 +215,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                 }
                 catch(e) {
                     console.trace()
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
                     return null
                 }
             }
@@ -294,7 +294,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     console.trace()
                     let id = insertCategories([{"id":-1, "category_name":categoryName, "category_detail":categoryDetail,"list_id":listId,"user_id":User.id,"register_date" : "", "modified_date":"" }])
                     LocalDatabase.insertLocalChanges([ {"table_id":1,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
                 }
             }
         }
@@ -358,7 +358,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     model.set(modelIndex,{"category_name":categoryName})
                     updateCategories( {"id":categoryId,"category_name":categoryName, "category_detail":categoryDetail,"list_id":listId,"user_id": User.id, "register_date":"","modified_date":""},local_id)
                     LocalDatabase.insertLocalChanges([ {"table_id":1,   "record_id":categoryId,    "changes_type":2,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
                 }
             }
         }
@@ -411,7 +411,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     console.trace()
                     deleteCategoryLocalDatabase(categoryId)
                     LocalDatabase.insertLocalChanges([ {"table_id":3,   "record_id":categoryId,    "changes_type":3,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
                 }
             }
         }

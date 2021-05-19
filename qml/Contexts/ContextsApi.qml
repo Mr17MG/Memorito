@@ -213,7 +213,8 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     }
                 }
                 catch(e) {
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                     return null
                 }
             }
@@ -276,7 +277,8 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                 catch(e) {
                     let id = insertContexts([{"id":-1, "context_name":contextName, "user_id":User.id,"register_date" : "", "modified_date":"" }])
                     LocalDatabase.insertLocalChanges([ {"table_id":2,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -337,7 +339,8 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     model.set(modelIndex,{"context_name":contextName})
                     updateContexts( {"id":contextId,"context_name":contextName, "user_id": User.id ,"register_date":"", "modified_date":"" },local_id)
                     LocalDatabase.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":2,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
+
                 }
             }
         }
@@ -393,7 +396,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                 catch(e) {
                     deleteContextLocalDatabase(contextId)
                     LocalDatabase.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":3,  "user_id":User.id}] )
-                    UsefulFunc.showLog(qsTr("متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید"),true)
+                    UsefulFunc.showConnectionError()
                 }
             }
         }
