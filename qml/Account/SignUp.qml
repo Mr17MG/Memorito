@@ -269,7 +269,7 @@ Item {
                     }
 
                     // Let's send to server
-                    api.signUp(usernameInput.text,emailInput.text,passwordInput.text)
+                    UserApi.signUp(usernameInput.text,emailInput.text,passwordInput.text)
                 }
             }
         }
