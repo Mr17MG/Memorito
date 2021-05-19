@@ -10,6 +10,34 @@ Item {
         ContextsApi.getContexts(contextModel)
     }
 
+    Item {
+        anchors{ centerIn: parent }
+        visible: contextModel.count === 0
+        width:  600*AppStyle.size1W
+        height: width
+        Image {
+            width:  600*AppStyle.size1W
+            height: width*0.781962339
+            source: "qrc:/noplace/noplace-"+AppStyle.primaryInt+".svg"
+            sourceSize.width: width*2
+            sourceSize.height: height*2
+            anchors{
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: -30*AppStyle.size1H
+            }
+        }
+        Text{
+            text: qsTr("محلی برای انجام کارت نداری")
+            font{family: AppStyle.appFont;pixelSize:  40*AppStyle.size1F;bold:true}
+            color: AppStyle.textColor
+            anchors{
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+        }
+    }
+
     GridView{
         id: gridView
 

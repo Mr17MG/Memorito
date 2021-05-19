@@ -182,5 +182,43 @@
         <file>folder.svg</file>
         <file>icon2.png</file>
         <file>heart.svg</file>
+        <file>alone/alone-0.svg</file>
+        <file>alone/alone-1.svg</file>
+        <file>alone/alone-10.svg</file>
+        <file>alone/alone-11.svg</file>
+        <file>alone/alone-12.svg</file>
+        <file>alone/alone-13.svg</file>
+        <file>alone/alone-14.svg</file>
+        <file>alone/alone-15.svg</file>
+        <file>alone/alone-16.svg</file>
+        <file>alone/alone-17.svg</file>
+        <file>alone/alone-18.svg</file>
+        <file>alone/alone-2.svg</file>
+        <file>alone/alone-3.svg</file>
+        <file>alone/alone-4.svg</file>
+        <file>alone/alone-5.svg</file>
+        <file>alone/alone-6.svg</file>
+        <file>alone/alone-7.svg</file>
+        <file>alone/alone-8.svg</file>
+        <file>alone/alone-9.svg</file>
+        <file>noplace/noplace-0.svg</file>
+        <file>noplace/noplace-1.svg</file>
+        <file>noplace/noplace-10.svg</file>
+        <file>noplace/noplace-11.svg</file>
+        <file>noplace/noplace-12.svg</file>
+        <file>noplace/noplace-13.svg</file>
+        <file>noplace/noplace-14.svg</file>
+        <file>noplace/noplace-15.svg</file>
+        <file>noplace/noplace-16.svg</file>
+        <file>noplace/noplace-17.svg</file>
+        <file>noplace/noplace-18.svg</file>
+        <file>noplace/noplace-2.svg</file>
+        <file>noplace/noplace-3.svg</file>
+        <file>noplace/noplace-4.svg</file>
+        <file>noplace/noplace-5.svg</file>
+        <file>noplace/noplace-6.svg</file>
+        <file>noplace/noplace-7.svg</file>
+        <file>noplace/noplace-8.svg</file>
+        <file>noplace/noplace-9.svg</file>
     </qresource>
 </RCC>

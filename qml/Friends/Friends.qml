@@ -10,6 +10,34 @@ Item {
         FriendsAPI.getFriends(friendModel)
     }
 
+    Item {
+        anchors{ centerIn: parent }
+        visible: friendModel.count === 0
+        width:  600*AppStyle.size1W
+        height: width
+        Image {
+            width:  600*AppStyle.size1W
+            height: width*0.781962339
+            source: "qrc:/alone/alone-"+AppStyle.primaryInt+".svg"
+            sourceSize.width: width*2
+            sourceSize.height: height*2
+            anchors{
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: -30*AppStyle.size1H
+            }
+        }
+        Text{
+            text: qsTr("هیچ دوستی که اینجا نداری")
+            font{family: AppStyle.appFont;pixelSize:  40*AppStyle.size1F;bold:true}
+            color: AppStyle.textColor
+            anchors{
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+        }
+    }
+
     GridView{
         id: gridView
 
