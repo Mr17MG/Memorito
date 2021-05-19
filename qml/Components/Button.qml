@@ -9,7 +9,7 @@ import Global 1.0
 
 T.Button {
     id: control
-    property bool contentMirorred: false
+    property bool contentMirorred: !AppStyle.ltr
     property bool leftBorder: false
     property bool hasBottomChecker: false
     property bool disableLeftRadius: false

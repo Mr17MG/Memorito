@@ -1178,13 +1178,9 @@ Item {
 
                     if (friendCombo.currentIndex === -1) {
                         if (friendModel.count > 0)
-                            UsefulFunc.showLog(
-                                        qsTr("لطفا دوست خودتو انتخاب کن"),
-                                        true)
+                            UsefulFunc.showLog( qsTr("لطفا دوست خودتو انتخاب کن"), true)
                         else
-                            UsefulFunc.showLog(
-                                        qsTr("لطفااول دوستاتو اضافه کن بعد دوست خودتو انتخاب کن"),
-                                        true)
+                            UsefulFunc.showLog( qsTr("لطفااول دوستاتو اضافه کن بعد دوست خودتو انتخاب کن"), true)
                         return
                     }
 
@@ -1446,9 +1442,7 @@ Item {
                 onClicked: {
 
                     if (dateInput.selectedDate.toString() === "Invalid Date") {
-                        UsefulFunc.showLog(
-                                    qsTr("لطفا زمانی که میخوای این کار رو بکنی مشخص کن"),
-                                    true)
+                        UsefulFunc.showLog( qsTr("لطفا زمانی که میخوای این کار رو بکنی مشخص کن"), true)
                         return
                     }
                     let hasFiles = checking()
@@ -1783,9 +1777,7 @@ Item {
                 onClicked: {
                     if (projectCategoryCombo.currentIndex === -1)
                     {
-                        UsefulFunc.showLog(
-                                    qsTr("لطفا پروژه موردنظر را انتخاب کن"),
-                                    true)
+                        UsefulFunc.showLog( qsTr("لطفا پروژه موردنظر را انتخاب کن"), true)
                         return
                     }
                     let hasFiles = checking()

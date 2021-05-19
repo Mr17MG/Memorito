@@ -7,7 +7,7 @@ import "qrc:/AppBase" as Base
 import Components 1.0
 import Global 1.0
 
-Page {
+Item {
     id:page
     Component.onCompleted: {
         LocalDatabase.makeLocalTables()
@@ -55,9 +55,7 @@ Page {
         ListElement{ Id:4; Text:qsTr("خیلی زیاد")   ; iconSource: "qrc:/energies/higher.svg";   }
     }
 
-
     property int nRow : UiFunctions.checkDisplayForNumberofRows(Screen)
-
 
     AppSplitView{
         id:splitView
