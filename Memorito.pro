@@ -35,6 +35,7 @@ TRANSLATIONS += \
     ts/en.ts
 
 DESTDIR = $$PWD/../FinalExcutable
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH += $$PWD/qml
 QML_IMPORT_PATH += $$PWD/../FinalExcutable
@@ -49,15 +50,73 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 android{
     DISTFILES += \
-        android/AndroidManifest.xml \
-        android/build.gradle \
-        android/gradle/wrapper/gradle-wrapper.jar \
-        android/gradle/wrapper/gradle-wrapper.properties \
-        android/gradlew \
-        android/gradlew.bat \
-        android/res/values/libs.xml
+        app/android/AndroidManifest.xml \
+        app/android/build.gradle \
+        app/android/gradle/wrapper/gradle-wrapper.jar \
+        app/android/gradle/wrapper/gradle-wrapper.properties \
+        app/android/gradlew \
+        app/android/gradlew.bat \
+        app/android/res/values/libs.xml \
+        app/android/res/drawable-hdpi/icon.png \
+        app/android/res/drawable-ldpi/icon.png \
+        app/android/res/drawable-mdpi/icon.png \
+        app/android/res/drawable-xhdpi/icon.png \
+        app/android/res/drawable-xxhdpi/icon.png \
+        app/android/res/drawable-xxxhdpi/icon.png
 
-    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/app/android
     ANDROID_ABIS = armeabi-v7a
+}
+
+ios{
+
+DISTFILES += \
+    app/ios/Assets.xcassets/AppIcon.appiconset/100.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/1024.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/114.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/120.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/128.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/144.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/152.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/16.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/167.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/180.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/20.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/256.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/29.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/32.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/40.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/50.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/512.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/57.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/58.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/60.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/64.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/72.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/76.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/80.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/87.png \
+    app/ios/Assets.xcassets/AppIcon.appiconset/Contents.json
+
+    QMAKE_BUNDLE_DATA += ios_icon
+    QMAKE_INFO_PLIST = $$PWD/app/ios/Info.plist
+    ios_icon.files = $$files($$PWD/app/ios/AppIcon*.png)
+}
+
+win32{
+
+    DISTFILES += \
+        app/windows/icon.ico
+
+    RC_ICONS = app/windows/icon.ico
+
+}
+
+macx{
+
+}
+
+unix{
+    ICON = $$PWD/app/linux/icon.png
 }
 

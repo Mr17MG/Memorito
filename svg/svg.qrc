@@ -180,5 +180,7 @@
         <file>homepage/waiting.svg</file>
         <file>file.svg</file>
         <file>folder.svg</file>
+        <file>icon2.png</file>
+        <file>heart.svg</file>
     </qresource>
 </RCC>
