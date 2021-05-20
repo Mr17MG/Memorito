@@ -77,6 +77,7 @@ AppDialog {
             text: qsTr("بازگشت")
             flat: true
             enabled: canMoveUp()
+            Material.foreground: AppStyle.textOnPrimaryColor
 
             anchors{
                 right: closeButton.left
@@ -96,7 +97,7 @@ AppDialog {
 
             text: qsTr("بستن")
             flat: true
-
+            Material.foreground: AppStyle.textOnPrimaryColor
             anchors{
                 right: openButton.left
                 leftMargin: 10*AppStyle.size1W
@@ -113,6 +114,7 @@ AppDialog {
             text: qsTr("بازکردن")
             flat: true
             enabled: selectedFile.count > 0
+            Material.foreground: AppStyle.textOnPrimaryColor
 
             anchors{
                 right: parent.right
@@ -182,7 +184,7 @@ AppDialog {
                             id: t
                             width: 10*AppStyle.size1W
                             text: ">"
-                            color: AppStyle.textColor
+                            color: AppStyle.textOnPrimaryColor
                             font: pathBtn.font
                             height: parent.height
                             verticalAlignment: Text.AlignVCenter
@@ -196,6 +198,7 @@ AppDialog {
                             onTextChanged: path= "file:///"+(folderListModel.folder.toString().replace("file:///", "").split('/').slice(0,index+1).join('/'))
                             height: parent.height
                             flat: true
+                            Material.foreground: AppStyle.textOnPrimaryColor
                             anchors.left: t.right
                             font{
                                 family: AppStyle.appFont
@@ -213,19 +216,74 @@ AppDialog {
         }
     }
 
-    footer: TabBar{
+    footer: Flickable{
+
+        id: devicesFlick
+
         height: toolbarHeight
-        Repeater{
-            model:mTools.getMountedDevices()
-            delegate: TabButton{
-                text: modelData
-                width: 200*AppStyle.size1W
-                checked: String(folderListModel.folder).indexOf(text)!==-1
-                onClicked: {
-                    folderListModel.folder = "file://"+text
-                    console.log("file://"+text)
+        clip: true
+        contentWidth: devicesFlow.width
+        flickableDirection: Flickable.HorizontalFlick
+        onContentYChanged: {
+            if(contentY<0 || contentHeight < devicesFlick.height)
+                contentY = 0
+            else if(contentY > (contentHeight-devicesFlick.height))
+                contentY = contentHeight-devicesFlick.height
+        }
+        onContentXChanged: {
+            if(contentX<0 || contentWidth < devicesFlick.width)
+                contentX = 0
+            else if(contentX > (contentWidth-devicesFlick.width))
+                contentX = (contentWidth-devicesFlick.width)
+        }
+        ScrollBar.horizontal: ScrollBar {
+            width: parent.width
+            orientation: Qt.Horizontal
+            height:  hovered || pressed ? 20*AppStyle.size1W
+                                        : 10*AppStyle.size1W
+            anchors{
+                right: parent.right
+            }
+            contentItem: Rectangle {
+                visible: active
+                radius: parent.pressed || parent.hovered ? 20 * AppStyle.size1W
+                                                         : 8  * AppStyle.size1W
+                color: parent.pressed ? Material.color( AppStyle.primaryInt , Material.Shade300 )
+                                      : Material.color( AppStyle.primaryInt , Material.Shade100 )
+            }
+        }
+        Flow {
+
+            id: devicesFlow
+
+            height: parent.height
+            flow: Flow.LeftToRight
+
+            Repeater{
+
+                model:mTools.getMountedDevices()
+
+                delegate: AppButton{
+
+                    id: deviesBtn
+
+                    flat: true
+                    text: modelData
+                    height: parent.height
+                    width: 200*AppStyle.size1W
+                    Material.foreground: checked?AppStyle.textOnPrimaryColor
+                                                :AppStyle.textColor
+                    checked: String(folderListModel.folder).indexOf(text)!==-1
+                    font{
+                        family: AppStyle.appFont
+                        pixelSize: 25*AppStyle.size1F
+                    }
+                    onClicked: {
+                        folderListModel.folder = "file://"+text
+                    }
                 }
             }
+
         }
 
     }
@@ -240,6 +298,22 @@ AppDialog {
             bottom: parent.bottom
             left: parent.left
         }
+        ScrollBar.vertical: ScrollBar {
+            height: parent.height
+            orientation: Qt.Vertical
+            width:  hovered || pressed ? 20*AppStyle.size1W
+                                       : 10*AppStyle.size1W
+            anchors{
+                right: parent.right
+            }
+            contentItem: Rectangle {
+                visible: active
+                radius: parent.pressed || parent.hovered ? 20 * AppStyle.size1W
+                                                         : 8  * AppStyle.size1W
+                color: parent.pressed ? Material.color( AppStyle.primaryInt , Material.Shade300 )
+                                      : Material.color( AppStyle.primaryInt , Material.Shade100 )
+            }
+        }
 
         model: FolderListModel {
             id:  folderListModel
@@ -250,7 +324,18 @@ AppDialog {
             folder: picker.folder
             onFolderChanged: {
                 selectedFile.clear()
-                console.log(folder)
+            }
+        }
+        Popup{
+            id:popUp
+            property alias popImg: popImg.source
+            width: parent.width/2
+            height: width
+            Image{
+                id: popImg
+                anchors.fill: parent
+                sourceSize: Qt.size(width*4,height*4)
+                fillMode: Image.PreserveAspectCrop
             }
         }
 
@@ -266,9 +351,10 @@ AppDialog {
                 height: rowHeight
                 width: foldersListView.width
                 horizontalAlignment: Text.AlignLeft
-                Material.background: index % 2 === 1 ? Qt.darker(AppStyle.shadowColor,1.5)
+                Material.background: index % 2 === 1 ? Qt.darker(AppStyle.shadowColor,1.1)
                                                      : "transparent"
-
+                rightPadding: 25*AppStyle.size1W
+                leftPadding: 25*AppStyle.size1W
                 font{
                     family: AppStyle.appFont
                     pixelSize: 25*AppStyle.size1F
@@ -278,16 +364,28 @@ AppDialog {
                     width: buttonHeight
                     height: buttonHeight
                     color: (isFolder(text) || extensions.indexOf(model.fileSuffix.toLowerCase())=== -1) ? AppStyle.textColor
-                                                                                      : "transparent"
+                                                                                                        : "transparent"
                     source: isFolder(text) ? "qrc:/folder.svg"
-                                           :  extensions.indexOf(model.fileSuffix.toLowerCase())!== -1? "qrc:/pack/"+(model.fileSuffix.toLowerCase())+".svg"
-                                                                                                      : "qrc:/file.svg"
+                                           :  (extensions.indexOf(model.fileSuffix.toLowerCase())!== -1 ? (model.fileSuffix.toLowerCase().match(/svg|png|jpg|gif|jpeg/g) ? folderListModel.folder+"/"+model.fileName
+                                                                                                                                                                             : "qrc:/pack/"+(model.fileSuffix.toLowerCase())+".svg")
+                                                                                                        : "qrc:/file.svg")
 
                 }
 
+
+                onPressAndHold: {
+
+                    if (model.fileSuffix.toLowerCase().match(/svg|png|jpg|gif|jpeg/g))
+                    {
+                        popUp.popImg = folderListModel.folder+"/"+model.fileName
+                        popUp.open()
+
+                    }
+                }
                 onCheckedChanged: {
-                    if(checked)
+                    if(checked){
                         onItemClick(text)
+                    }
                     else {
                         selectedFile.remove({path:text})
                     }
