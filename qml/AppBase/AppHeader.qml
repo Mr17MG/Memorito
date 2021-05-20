@@ -1,5 +1,5 @@
 import QtQuick 2.15 // Require For Loader and other ...
-import QtGraphicalEffects 1.14 // Require for ColorOverlay
+import QtGraphicalEffects 1.15 // Require for ColorOverlay
 import Components 1.0  // Require for Button
 import Global 1.0
 

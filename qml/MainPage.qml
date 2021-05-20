@@ -1,6 +1,6 @@
 import QtQuick 2.15 // Require For Loader
 import QtQuick.Controls 2.15 // Require For Stackview
-import QtGraphicalEffects 1.14 // Require For ColorOverlay
+import QtGraphicalEffects 1.15 // Require For ColorOverlay
 import "qrc:/AppBase" as Base
 import Global 1.0
 import Components 1.0
@@ -158,7 +158,7 @@ Loader{
             id:drawerLoader
             active: nRow===1
             width: UsefulFunc.rootWindow.width*2/3
-            height: mainStackView.height
+            height: mainStackView.height + (connectHeader.visible?connectHeader.height:0)
             y: header.height
 
             sourceComponent: Drawer{

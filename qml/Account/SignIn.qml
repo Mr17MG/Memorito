@@ -1,6 +1,6 @@
 import QtQuick 2.15 // Rquire For Item
 import QtQuick.Controls.Material 2.15 // Require for Material.foreground
-import QtGraphicalEffects 1.14
+import QtGraphicalEffects 1.15
 import Components 1.0// Require for AppButton and ...
 import QtQuick.Window 2.15
 import Global 1.0

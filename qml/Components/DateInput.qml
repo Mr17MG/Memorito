@@ -2,7 +2,7 @@
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
-import QtGraphicalEffects 1.14
+import QtGraphicalEffects 1.15
 import QCustomDate 1.0
 import Global 1.0
 import QDateConvertor 1.0

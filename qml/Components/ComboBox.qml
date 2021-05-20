@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
 import QtQuick.Templates 2.15 as T
 import QtQuick.Controls.Material.impl 2.15
-import QtGraphicalEffects 1.14
+import QtGraphicalEffects 1.15
 import Global 1.0
 
 ComboBox {

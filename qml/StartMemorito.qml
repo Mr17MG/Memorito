@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtGraphicalEffects 1.14 // Require for ColorOverlay
+import QtGraphicalEffects 1.15 // Require for ColorOverlay
 import QtQuick.Controls 2.15 // Require For Drawer and other
 import QtQuick.Controls.Material 2.15 // // Require For Material Theme
 import "qrc:/AppBase" as Base

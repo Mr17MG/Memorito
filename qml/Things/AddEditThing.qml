@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
-import QtGraphicalEffects 1.14
+import QtGraphicalEffects 1.15
 import QtQuick.Layouts 1.15
 
 import Components 1.0
@@ -562,7 +562,7 @@ Item {
             color: "transparent"
             RowLayout {
                 anchors.fill: parent
-                layoutDirection: RowLayout.RightToLeft
+                layoutDirection: Qt.RightToLeft
                 AppButton {
                     id: submitBtn
                     property bool isUpdate: false

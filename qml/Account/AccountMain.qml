@@ -4,7 +4,7 @@ import QtQuick.Controls.Material 2.15 // Require For Material.color
 import QtQuick.Window 2.15 // Require for Screen
 import Global 1.0
 import Components 1.0// Require for AppButton and ...
-import QtGraphicalEffects 1.14
+import QtGraphicalEffects 1.15
 
 Pane {
     id:item1

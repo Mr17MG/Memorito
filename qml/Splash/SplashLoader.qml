@@ -1,5 +1,5 @@
 import QtQuick 2.15
-import QtGraphicalEffects 1.14 // Require for DropShadow
+import QtGraphicalEffects 1.15 // Require for DropShadow
 import QtQuick.Controls.Material 2.15 // // Require For Material Theme
 import MSysInfo 1.0                       // Require For SystemInfo
 import MSecurity 1.0                      // Require For MSecurity

@@ -1,7 +1,7 @@
 import QtQuick 2.15 // Require For Item and Flow and ...
 import QtQuick.Controls 2.15 // Require for ItemDelegate
 import QtQuick.Controls.Material 2.15 // Require for
-import QtGraphicalEffects 1.14 // Require for  ColorOverlay
+import QtGraphicalEffects 1.15 // Require for  ColorOverlay
 import Components 1.0  // // Require for  Switch and
 import Global 1.0
 import QtQuick.Layouts 1.15
