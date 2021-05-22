@@ -103,10 +103,10 @@ ComboBox {
             verticalAlignment: Text.AlignVCenter
 
             anchors{
-                left: parent.left
+                left:try{ parent.left}catch(e){}
                 leftMargin: 55*AppStyle.size1W
                 right: try{iconImg.visible || iconColor !== ""? iconImg.left
-                                                          : parent.right}catch(e){parent.right}
+                                                          : parent.right}catch(e){}
                 rightMargin: 5*AppStyle.size1W
             }
         }

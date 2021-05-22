@@ -125,7 +125,7 @@ Item{
 
                 ListElement{
                     title: qsTr("خلاصه کتاب جی تی دی")
-                    detail:qsTr("اگر با روش آشنایی نداری یا بخشی ازش رو فراموش کردی حتما مطالعه کن تا کمک خوبی بهت بکنه")
+                    detail:qsTr("اگه با این روش آشنایی نداری یا بخشی ازش رو فراموش کردی حتما مطالعه کن تا بهت تو انجام چیزهات کمک کنه")
                     iconSrc: "qrc:/homepage/book.svg"
                     backColor: "#9c27b0"
                     textColor: "#fcfcfc"
@@ -143,7 +143,7 @@ Item{
                 }
                 ListElement{
                     title: qsTr("جمع‌آوری")
-                    detail:qsTr("هرچیزی که تو ذهنت داری رو اینجا خالی کن ذهن تو بهتره فقط پردازنده باشه")
+                    detail:qsTr("هرچیزی که تو ذهنت داری رو اینجا خالی کن، ذهن تو فقط یک حافظه نیست پس بهتره بیشتر نقش یک پردازنده رو داشته باشه")
                     iconSrc: "qrc:/homepage/collect.svg"
                     backColor: "#7446c4"
                     textColor: "#ffffff"
@@ -161,7 +161,7 @@ Item{
                 }
                 ListElement{
                     title: qsTr("عملیات بعدی")
-                    detail:qsTr("حالا وقت انجام دادنشونه")
+                    detail:qsTr("حالا وقت انجام دادن کارهاست")
                     iconSrc: "qrc:/homepage/nextAction.svg"
                     backColor: "#2196f3"
                     textColor: "#fcfcfc"
@@ -171,7 +171,7 @@ Item{
                 ListElement{
                     title:qsTr("لیست انتظار")
                     iconSrc: "qrc:/homepage/waiting.svg"
-                    detail:qsTr("وقتی منتظری که چیزی که به دوستت محول کردی که انجام بده رو پیگیری کنی")
+                    detail:qsTr("کاری رو به دوستت محول کن که برات انجام بده و بعدا ازش پیگیری کن")
                     backColor: "#03a9f4"
                     textColor: "#fcfcfc"
                     pageSource: "qrc:/Things/ThingList.qml"
@@ -179,7 +179,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("تقویم")
-                    detail:qsTr("چیزهایی که مهمه تو روز مشخصش انجام بشه رو اینجا پیدا میکنی")
+                    detail:qsTr("اگه نیازه که کاری رو حتما در روز یا ساعت مشخصی انجام بدی")
                     iconSrc: "qrc:/homepage/calendar.svg"
                     backColor: "#009688"
                     textColor: "#fcfcfc"
@@ -188,7 +188,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("مرجع")
-                    detail:qsTr("یادداشت‌های مهمی که نباید از دستشون بدی و بعدا بهشون نیاز داری")
+                    detail:qsTr("یادداشت‌های مهمی که نباید از دستشون بدی و بعدا نیازشون داری")
                     iconSrc: "qrc:/homepage/references.svg"
                     backColor: "#00bcd4"
                     textColor: "#fcfcfc"
@@ -206,7 +206,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("پروژه‌ها")
-                    detail:qsTr("اون سری چیزهایی که نیازه چندتا چیز رو انجام بدی تا به پایان برسونی")
+                    detail:qsTr("اون سری چیزهایی که نیازه چندتا چیز رو انجام بدی تا به نتیجه نهایی برسه")
                     backColor: "#8bc34a"
                     textColor: "#fcfcfc"
                     iconSrc: "qrc:/homepage/projects.svg"
@@ -215,7 +215,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("انجام شده‌ها")
-                    detail:qsTr("اون چیزهایی که قبلا انجامشون دادی رو اینجا میبینی")
+                    detail:qsTr("اون چیزهایی که قبلا انجامشون دادی و تموم شده")
                     backColor: "#ffc107"
                     textColor: "#0C0C0C"
                     iconSrc: "qrc:/homepage/done.svg"
@@ -259,7 +259,7 @@ Item{
                 }
                 ListElement{
                     title: qsTr("تنظیمات")
-                    detail:qsTr("هرقسمتی که دوست داری تغییر بدی رو اینجا پیدا میکنی مثل تغییر صفحه‌ی اول و ...")
+                    detail:qsTr("هربخش از مموریتو رو با سلیقه‌ی خودت تنظیم کن ...")
                     backColor: "#fffbd6"
                     textColor: "#0C0C0C"
                     iconSrc: "qrc:/homepage/settings.svg"
