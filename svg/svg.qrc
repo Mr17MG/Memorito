@@ -10,7 +10,6 @@
         <file>plus.svg</file>
         <file>hide.svg</file>
         <file>view.svg</file>
-        <file>todo.svg</file>
         <file>close.svg</file>
         <file>arrow.svg</file>
         <file>check.svg</file>
@@ -83,7 +82,6 @@
         <file>pack/zip.svg</file>
         <file>pack/unknown.svg</file>
         <file>map.svg</file>
-        <file>garbage.svg</file>
         <file>calendar-colorful.svg</file>
         <file>clock-colorful.svg</file>
         <file>friends-colorful.svg</file>
@@ -220,5 +218,17 @@
         <file>noplace/noplace-7.svg</file>
         <file>noplace/noplace-8.svg</file>
         <file>noplace/noplace-9.svg</file>
+        <file>edit.svg</file>
+        <file>ThingsListIcon/calendar-item.svg</file>
+        <file>ThingsListIcon/context-item.svg</file>
+        <file>ThingsListIcon/done-item.svg</file>
+        <file>ThingsListIcon/friends-item.svg</file>
+        <file>ThingsListIcon/nextaction-item.svg</file>
+        <file>ThingsListIcon/process-item.svg</file>
+        <file>ThingsListIcon/project-item.svg</file>
+        <file>ThingsListIcon/reference-item.svg</file>
+        <file>ThingsListIcon/someday-item.svg</file>
+        <file>ThingsListIcon/trash-item.svg</file>
+        <file>ThingsListIcon/waiting-item.svg</file>
     </qresource>
 </RCC>

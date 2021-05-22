@@ -1161,11 +1161,11 @@ Item {
             top: sortLoader.bottom
             topMargin: 15*AppStyle.size1H
             right: parent.right
-            rightMargin: 20*AppStyle.size1W
+            rightMargin: 10*AppStyle.size1W
             bottom: parent.bottom
             bottomMargin: 15*AppStyle.size1H
             left: parent.left
-            leftMargin: 20*AppStyle.size1W
+            leftMargin: 30*AppStyle.size1W
         }
         sourceComponent: GridView{
             id: control
@@ -1200,44 +1200,20 @@ Item {
 
 
             /***********************************************/
-            delegate: Rectangle {
+            delegate: AppButton {
                 id:rootItem
                 radius: 15*AppStyle.size1W
                 width: control.cellWidth - 20*AppStyle.size1W
                 height:  control.cellHeight - 10*AppStyle.size1H
-                color: Material.color(AppStyle.primaryInt,Material.Shade50)
+                Material.background: Material.color(AppStyle.primaryInt,Material.Shade50)
                 clip: true
 
-                MouseArea{
-                    id: mouseArea
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    hoverEnabled: true
-                    onClicked: {
-                        console.time("Start")
-                        UsefulFunc.mainStackPush("qrc:/Things/ThingsDetail.qml",qsTr("جزئیات")+": "+model.title,{"thingLocalId":model.local_id, "listId": listId})
-                    }
+
+                onClicked: {
+                    console.time("Start")
+                    UsefulFunc.mainStackPush("qrc:/Things/ThingsDetail.qml",qsTr("جزئیات")+": "+model.title,{"thingLocalId":model.local_id, "listId": listId})
                 }
-                Ripple {
-                    clipRadius: 15*AppStyle.size1W
-                    z:1
-                    width: mouseArea.width
-                    height: mouseArea.height
-                    pressed: mouseArea.pressed
-                    anchor: mouseArea
-                    active: mouseArea.focus
-                    color: AppStyle.rippleColor
-                    OpacityMask {
-                        source: mouseArea
-                        maskSource: Rectangle {
-                            x: mouseArea.mouseX
-                            y: mouseArea.mouseY
-                            width: mouseArea.width
-                            height: mouseArea.height
-                            radius: 10*AppStyle.size1W
-                        }
-                    }
-                }
+
                 Rectangle{
                     id:topRect
                     width: parent.width
@@ -1252,7 +1228,17 @@ Item {
                     color: Material.color(AppStyle.primaryInt,Material.ShadeA700)
                     Image {
                         id: unprocessImg
-                        source: "qrc:/todo.svg"
+                        source: "qrc:/ThingsListIcon/" +(
+                                    listId === Memorito.Process?"process-item":
+                                                                 listId === Memorito.Refrence?"reference-item":
+                                                                                               listId === Memorito.Waiting?"waiting-item":
+                                                                                                                            listId === Memorito.Calendar?"calendar-item":
+                                                                                                                                                          listId === Memorito.Trash?"trash-item":
+                                                                                                                                                                                     listId === Memorito.Done?"done-item":
+                                                                                                                                                                                                               listId === Memorito.Someday?"someday-item":
+                                                                                                                                                                                                                                            listId === Memorito.Project?"project-item":
+                                                                                                                                                                                                                                                                         listId === Memorito.Contexts?"context-item":
+                                                                                                                                                                                                                                                                                                       listId === Memorito.Friends?"friends-item":"nextaction-item")+".svg"
                         width: 40*AppStyle.size1W
                         height: width
                         sourceSize.width: width*2
@@ -1573,7 +1559,14 @@ Item {
         leftPadding: 35*AppStyle.size1W
         rightPadding: 35*AppStyle.size1W
         onClicked: {
-            UsefulFunc.mainStackPush("qrc:/Things/AddEditThing.qml",text,{listId:listId,categoryId:categoryId})
+            if(listId === Memorito.Friends)
+                UsefulFunc.mainStackPush("qrc:/Things/AddEditThing.qml",text,{listId:Memorito.Waiting,categoryId:categoryId})
+            else if(listId === Memorito.Contexts)
+
+                UsefulFunc.mainStackPush("qrc:/Things/AddEditThing.qml",text,{listId:Memorito.NextAction,categoryId:categoryId})
+
+            else
+                UsefulFunc.mainStackPush("qrc:/Things/AddEditThing.qml",text,{listId:listId,categoryId:categoryId})
 
         }
         icon.width: 30*AppStyle.size1W

@@ -18,6 +18,7 @@ Item {
 
         anchors.fill: parent
         anchors.margins: 25*AppStyle.size1W
+        spacing: 25*AppStyle.size1H
 
         Rectangle {
             id: container
@@ -181,10 +182,9 @@ Item {
         }
 
         RowLayout {
-            Layout.preferredHeight: 100*AppStyle.size1H
-            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredHeight: 50*AppStyle.size1H
+            Layout.alignment: Qt.AlignCenter
             LayoutMirroring.enabled: false
-            layoutDirection: Qt.LeftToRight
             AppButton{
                 id:backBtn
                 width: AppStyle.size1W*200

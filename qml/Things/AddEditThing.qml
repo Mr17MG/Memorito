@@ -378,8 +378,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action3Text
-                    text: "⏺ " + qsTr(
-                              "این چیز با یک انجام یک عمل به پایان نمی‌رسد") + ":"
+                    text: "⏺ " + qsTr("این چیز با یک انجام یک عمل به پایان نمی‌رسد") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     height: 50 * AppStyle.size1H
@@ -435,8 +434,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action4Text
-                    text: "⏺ " + qsTr(
-                              "این عمل بیشتر از ۵ دقیقه زمان نیاز دارد") + ":"
+                    text: "⏺ " + qsTr("این عمل بیشتر از ۵ دقیقه زمان نیاز دارد") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     height: 50 * AppStyle.size1H
@@ -1521,6 +1519,21 @@ Item {
                     let hasFiles = checking()
                     if(hasFiles === 2)
                         return
+                    let json = JSON.stringify(
+                            {
+                                title : titleInput.text.trim(),
+                                user_id: User.id,
+                                detail : flickTextArea.text.trim(),
+                                list_id : Memorito.Trash,
+                                has_files: parseInt(hasFiles),
+                                priority_id : options["priorityId"]??null,
+                                estimate_time : options["estimateTime"]??null,
+                                context_id : options["contextId"]??null,
+                                energy_id : options["energyId"]??null,
+                                due_date : null,
+                                friend_id : null,
+                                category_id : null
+                            }, null, 1);
 
                     if (prevPageModel)
                         ThingsApi.editThing(prevPageModel.id,json,attachModel)

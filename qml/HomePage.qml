@@ -151,7 +151,7 @@ Item{
                     listId: Memorito.Collect
                 }
                 ListElement{
-                    title: qsTr("پردازش")
+                    title:qsTr("پردازش نشده‌ها")
                     detail:qsTr("هرچیزی که ثبت کردی رو حالا پردازش کن ببین باید باهاشون چیکار کنی")
                     iconSrc: "qrc:/homepage/process.svg"
                     backColor: "#3f51b5"
@@ -227,7 +227,7 @@ Item{
                     detail:qsTr("چیزهایی که قبلا جمع کردی ولی دیگه بهشون احتیاج نداری")
                     backColor: "#ffd34e"
                     textColor: "#0C0C0C"
-                    pageSource:"qrc:/Contexts/Contexts.qml"
+                    pageSource: "qrc:/Things/ThingList.qml"
                     iconSrc: "qrc:/homepage/trash.svg"
                     listId: Memorito.Trash
                 }

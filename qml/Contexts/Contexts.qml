@@ -168,7 +168,7 @@ Item {
     }
 
     AppButton{
-        text: qsTr("افزودن زمینه")
+        text: qsTr("افزودن محل")
         anchors{
             left: parent.left
             leftMargin: 20*AppStyle.size1W
@@ -217,12 +217,12 @@ Item {
                     addDialog.close()
                 }
                 else {
-                    UsefulFunc.showLog(qsTr("لطفا نام زمینه موردنظر خود را وارد نمایید"),true)
+                    UsefulFunc.showLog(qsTr("لطفا نام محل موردنظر خود را وارد نمایید"),true)
                 }
             }
             AppTextField{
                 id: contextName
-                placeholderText: qsTr("نام زمینه")
+                placeholderText: qsTr("نام محل")
                 anchors{
                     right: parent.right
                     rightMargin: 40*AppStyle.size1W

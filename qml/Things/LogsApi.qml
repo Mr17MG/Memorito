@@ -250,6 +250,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             if(local_id === null)
                             {
                                 model.append(response.result)
+                                UsefulFunc.showLog(qsTr("نظر شما با موفقیت افزوده شد."),false)
                                 insertLogs(Array(response.result))
                                 
                             }
@@ -280,7 +281,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
         }
     }
 
-    function editLog(logId,logText,typeId,rowId,model,modelIndex,local_id = null,change_id = null)
+    function editLog(logId,logText,model,modelIndex,local_id = null,change_id = null)
     {
         let json = JSON.stringify(
                 {
@@ -306,13 +307,14 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     busyDialog.close()
                 try
                 {
+                    console.log(xhr.responseText)
                     let response = xhr.response
                     if(response.ok)
                     {
                         if(response.code === 200){
                             if(local_id === null)        {
+                                UsefulFunc.showLog(qsTr("نظر شما با موفقیت به‌روزرسانی شد."),false)
                                 model.set(modelIndex,response.result)
-
                                 updateLogs(response.result)
                             }
                             else {
@@ -324,7 +326,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     else if(local_id === null) {
                         if(response.code === 401)
                         {
-                            console.trace();UsefulFunc.showUnauthorizedError()
+                            UsefulFunc.showUnauthorizedError()
                         }
                         else
                             UsefulFunc.showLog(response.message,true)
@@ -371,6 +373,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             if(local_id === null)
                             {
                                 model.remove(modelIndex)
+                                UsefulFunc.showLog(qsTr("نظر شما با موفقیت حذف شد."),false)
                                 deleteLogLocalDatabase(logId)
                                 
                             }

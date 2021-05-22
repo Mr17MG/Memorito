@@ -389,7 +389,7 @@ Item {
                                     {id:Memorito.Someday    ,name:qsTr("شاید یک‌روزی")},
                                     {id:Memorito.Project    ,name:qsTr("پروژه‌ها")}
                                 ]
-                                text: qsTr("در لیست")+": "+listName.find(list => list.id === (prevPageModel?prevPageModel.list_id:listId)).name
+                                text: qsTr("در لیست")+": "+ listName.find(list => list.id === (prevPageModel?prevPageModel.list_id:listId)).name
 
                                 anchors{
                                     verticalCenter: listImg.verticalCenter
@@ -454,8 +454,8 @@ Item {
                             }
                             Text {
                                 text:!prevPageModel?"":qsTr("فرد انجام دهنده") +": " + (prevPageModel.friend_id?friendModel.count>0?UsefulFunc.findInModel(prevPageModel.friend_id,"id",friendModel).value.friend_name
-                                                                                                                                      :""
-                                                                                           :qsTr("ثبت نشده است"))
+                                                                                                                                   :""
+                                                                                        :qsTr("ثبت نشده است"))
                                 anchors{
                                     verticalCenter: friendImg.verticalCenter
                                     right: friendImg.left
@@ -518,8 +518,9 @@ Item {
                 Flow{
                     id: buttonFlow
                     property var doneableArray: [Memorito.NextAction,Memorito.Someday,Memorito.Waiting,Memorito.Calendar,Memorito.Project]
-                    width: doneableArray.indexOf(listId) !== -1?640*AppStyle.size1W:420*AppStyle.size1W
-                    spacing:  20*AppStyle.size1W
+                    width: Math.min( parent.width-30*AppStyle.size1W ,doneableArray.indexOf(listId) !== -1 ? 630*AppStyle.size1W
+                                                                : 415*AppStyle.size1W)
+                    spacing:  15*AppStyle.size1W
                     anchors{
                         top: conentFlow.bottom
                         topMargin: 40*AppStyle.size1H
@@ -531,6 +532,17 @@ Item {
                         width: 200*AppStyle.size1W
                         text: qsTr("حذف")
                         Material.background: Material.color(Material.Red,Material.Shade900)
+                        Material.foreground: "White"
+                        spacing: 10*AppStyle.size1W
+                        radius: 20*AppStyle.size1W
+
+                        icon{
+                            source: "qrc:/close.svg"
+                            color:  "White"
+                            width: 30*AppStyle.size1W
+                            height: 30*AppStyle.size1W
+                        }
+
                         onClicked: {
                             deleteLoader.active = true
                             deleteLoader.item.open()
@@ -542,6 +554,15 @@ Item {
                         width: 200*AppStyle.size1W
                         text: qsTr("ویرایش کردن")
                         Material.background: Material.color(Material.LightBlue,Material.Shade900)
+                        Material.foreground: "White"
+                        spacing: 10*AppStyle.size1W
+                        radius: 20*AppStyle.size1W
+                        icon{
+                            source: "qrc:/edit.svg"
+                            color:  "White"
+                            width: 30*AppStyle.size1W
+                            height: 30*AppStyle.size1W
+                        }
                         onClicked: {
                             UsefulFunc.mainStackPush("qrc:/Things/AddEditThing.qml",qsTr("پردازش"),{"thingLocalId":prevPageModel.local_id,listId:listId})
                         }
@@ -552,6 +573,15 @@ Item {
                         width: 200*AppStyle.size1W
                         text: qsTr("انجام شد")
                         Material.background: Material.color(Material.Green,Material.Shade900)
+                        Material.foreground: "White"
+                        spacing: 10*AppStyle.size1W
+                        radius: 20*AppStyle.size1W
+                        icon{
+                            source: "qrc:/check.svg"
+                            color:  "White"
+                            width: 30*AppStyle.size1W
+                            height: 30*AppStyle.size1W
+                        }
                         onClicked: {
                             let json = JSON.stringify(
                                     {
@@ -727,31 +757,54 @@ Item {
                             Item{
 
                             id: rect1
-                            width:  parent.width
-                            height: 80*AppStyle.size1W + logText.height
+                            width: parent.width
+                            height: 120*AppStyle.size1H + logText.height
+                            RectangularGlow {
+                                id: effect
+                                anchors.fill: rect
+                                glowRadius: 10*AppStyle.size1W
+                                spread: 0.2
+                                color: Material.color(AppStyle.primaryInt,Material.Shade100)
+                                cornerRadius: rect.radius + glowRadius
+                            }
                             Rectangle{
-                                color: Material.color(AppStyle.primaryInt,Material.ShadeA700)
-                                width: parent.width
-                                height: 2*AppStyle.size1W
+                                id:rect
+                                color: Material.color(AppStyle.primaryInt,Material.Shade50)
+                                radius: 20*AppStyle.size1W
+
+                                border{
+                                    color: Material.color(AppStyle.primaryInt,Material.Shade100)
+                                    width: 2*AppStyle.size1W
+                                }
+
                                 anchors{
-                                    bottom: parent.bottom
+                                    fill: parent
+                                    leftMargin: 35*AppStyle.size1W
+                                    rightMargin: 35*AppStyle.size1W
                                 }
                             }
+
                             Text{
                                 id:logText
+
                                 text: model.log_text
                                 color: "black"
                                 verticalAlignment: Text.AlignVCenter
+                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
                                 anchors{
                                     right: parent.right
-                                    rightMargin: 15*AppStyle.size1W
+                                    rightMargin: 60*AppStyle.size1W
                                     left: parent.left
-                                    leftMargin: 15*AppStyle.size1W
-                                    top: parent.top
-                                    topMargin: 40*AppStyle.size1H
+                                    leftMargin: 60*AppStyle.size1W
+                                    top: menuImg.bottom
+                                    topMargin: 15*AppStyle.size1H
                                 }
-                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                                font{family: AppStyle.appFont;pixelSize:  20*AppStyle.size1F}
+
+                                font{
+                                    family: AppStyle.appFont
+                                    pixelSize:  25*AppStyle.size1F
+                                }
                             }
                             Text{
                                 id:registerDateText
@@ -765,14 +818,19 @@ Item {
                                                                    :""
                                 color: "black"
                                 verticalAlignment: Text.AlignVCenter
+                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
                                 anchors{
                                     right: parent.right
-                                    rightMargin: 15*AppStyle.size1W
+                                    rightMargin: 50*AppStyle.size1W
                                     top: parent.top
-                                    topMargin: 10*AppStyle.size1H
+                                    topMargin: 15*AppStyle.size1H
                                 }
-                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                                font{family: AppStyle.appFont;pixelSize:  18*AppStyle.size1F}
+
+                                font{
+                                    family: AppStyle.appFont
+                                    pixelSize:  18*AppStyle.size1F
+                                }
                             }
                             Text{
                                 id: modifiedDateText
@@ -789,12 +847,15 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 anchors{
                                     left: parent.left
-                                    leftMargin: 15*AppStyle.size1W
+                                    leftMargin: 50*AppStyle.size1W
                                     bottom: parent.bottom
-                                    bottomMargin: 10*AppStyle.size1H
+                                    bottomMargin: 15*AppStyle.size1H
                                 }
                                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                                font{family: AppStyle.appFont;pixelSize:  18*AppStyle.size1F;bold:true}
+                                font{
+                                    family: AppStyle.appFont
+                                    pixelSize:  18*AppStyle.size1F
+                                }
                             }
                             Image {
                                 id: menuImg
@@ -805,9 +866,9 @@ Item {
                                 sourceSize.height: height*2
                                 anchors{
                                     left: parent.left
-                                    leftMargin: 5*AppStyle.size1W
+                                    leftMargin: 50*AppStyle.size1W
                                     top: parent.top
-                                    topMargin: 5*AppStyle.size1W
+                                    topMargin: 15*AppStyle.size1W
                                 }
                                 MouseArea{
                                     anchors{
@@ -821,6 +882,7 @@ Item {
                                     onClicked: {
                                         menuLoader.active = true
                                         menuLoader.item.open()
+                                        console.log(JSON.stringify(logModel.get(0)))
                                     }
                                 }
                             }
@@ -834,13 +896,21 @@ Item {
                                     AppMenuItem{
                                         text: qsTr("ویرایش")
                                         onTriggered: {
-
+                                            editLogLoader.active = true
+                                            editLogLoader.item.modelIndex = index
+                                            editLogLoader.item.logId = model.id
+                                            editLogLoader.item.logText = model.log_text
+                                            editLogLoader.item.open()
                                         }
                                     }
                                     AppMenuItem{
                                         text: qsTr("حذف")
                                         onTriggered: {
-
+                                            deleteLogLoader.active = true
+                                            deleteLogLoader.item.modelIndex = index
+                                            deleteLogLoader.item.logId = model.id
+                                            deleteLogLoader.item.logText = model.log_text
+                                            deleteLogLoader.item.open()
                                         }
                                     }
                                 }
@@ -860,11 +930,13 @@ Item {
                             controlPlaceHolder.color: "black"
                             placeholderText: qsTr("روند کار یا نظرات‌ِتو بنویس")
                             bgUnderItem: Material.color(AppStyle.primaryInt,Material.Shade50)
-                            maximumLength: 50
+                            maximumLength: 300
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                             color: "#0F110F"
                             rightPadding: AppStyle.ltr?25*AppStyle.size1W+submitBtn.width:10*AppStyle.size1W
                             leftPadding: AppStyle.ltr?10*AppStyle.size1W:25*AppStyle.size1W + submitBtn.width
+                            Keys.onEnterPressed: submitBtn.clicked(Qt.RightButton)
+                            Keys.onReturnPressed:  submitBtn.clicked(Qt.RightButton)
                             anchors{
                                 right: parent.right
                                 rightMargin: 35*AppStyle.size1W
@@ -940,5 +1012,67 @@ Item {
             }
         }
     }
+    Loader{
+        id: editLogLoader
+        active: false
+        sourceComponent: AppDialog{
+            property int logId: -1
+            property string logText: ""
+            property int modelIndex: -1
 
+            parent: UsefulFunc.mainPage
+            height: 400*AppStyle.size1H
+            width: 600*AppStyle.size1W
+            hasButton: true
+            buttonTitle: qsTr("بروزرسانی")
+
+            dialogButton.onClicked: {
+                if( editLogArea.text.trim() )
+                {
+                    LogsApi.editLog(logId,editLogArea.text.trim(),logModel,modelIndex)
+                    close()
+                }
+                else
+                    UsefulFunc.showLog(qsTr("نظرتو وارد نکردی."),true)
+
+            }
+            onClosed: {
+                editLogLoader.active = false
+            }
+
+            AppFlickTextArea{
+                id:editLogArea
+                text: logText
+                placeholderText: qsTr("روند کار یا نظرات‌ِتو بنویس")
+                height: 250*AppStyle.size1H
+                areaInDialog: true
+                anchors{
+                    right: parent.right
+                    rightMargin: 35*AppStyle.size1W
+                    left: parent.left
+                    leftMargin: 35*AppStyle.size1W
+                }
+            }
+        }
+    }
+
+    Loader{
+        id: deleteLogLoader
+        active: false
+        sourceComponent: AppConfirmDialog{
+            property int logId: -1
+            property string logText: ""
+            property int modelIndex: -1
+
+            parent: UsefulFunc.mainPage
+            onClosed: {
+                deleteLogLoader.active = false
+            }
+            dialogTitle: qsTr("حذف")
+            dialogText: qsTr("آیا مایلید که") + " '" + logText  + "' " +qsTr("برای همیشه حذف کنید؟")
+            accepted: function() {
+                LogsApi.deleteLog(logId,logModel,modelIndex)
+            }
+        }
+    }
 }

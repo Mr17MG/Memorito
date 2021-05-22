@@ -40,7 +40,10 @@ Drawer {
             id:progress
             opacity: 0.5
             color: "#5c5c5c"
-            height: parent.height
+            height: 10*AppStyle.size1H
+            anchors{
+                bottom: parent.bottom
+            }
             PropertyAnimation {
                     target: progress;
                     properties: "width"
