@@ -354,18 +354,70 @@ Item {
                     height: AppStyle.size1W*20
                 }
                 onClicked: {
-                    UsefulFunc.showConfirm(
-                                qsTr("حذف حساب کاربری؟"),
-                                qsTr("آیا واقعا مطمئن هستید که می‌خواهید حساب خورا حذف کنید؟") + "\n "+ qsTr("در صورت حذف اطلاعات حساب شما قابل بازگشت نخواهد بود."),
-                                function()
-                                {
-                                    myTools.deleteSaveDir();
-                                    UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
-                                    SettingDriver.setValue("last_date","")
-                                    User.clear()
-                                    UsefulFunc.stackPages.clear()
-                                }
-                                )
+                    deleteAccountDialog.open()
+
+                }
+            }
+
+            AppDialog{
+                id: deleteAccountDialog
+                hasButton: true
+                buttonTitle: qsTr("حذف کن")
+                hasCloseIcon: true
+                height: AppStyle.size1H*600
+                width: 600*AppStyle.size1W
+                parent: UsefulFunc.mainLoader
+                dialogButton.onClicked: {
+                    if(passwordInput.text.trim())
+                        UserApi.deleteAccount(passwordInput.text.trim())
+                }
+
+                Text{
+                    id: titleText
+                    color: AppStyle.textColor
+                    text: qsTr("آیا واقعا مطمئن هستید که می‌خواهید حساب خورا حذف کنید؟")
+                    font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors{
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                        margins: 40*AppStyle.size1W
+                    }
+                }
+                AppTextInput{
+
+                    id: passwordInput
+
+                    placeholderText: qsTr("رمز عبور")
+                    height: 100*AppStyle.size1W
+                    maximumLength: 50
+                    hasCounter: false
+                    filedInDialog: true
+                    horizontalAlignment: Qt.AlignLeft
+                    font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*25}
+                    anchors{
+                        left: parent.left
+                        right: parent.right
+                        top: titleText.bottom
+                        margins: 25*AppStyle.size1W
+                        topMargin: 35*AppStyle.size1W
+                    }
+                }
+                Text{
+                    id: warningText
+                    color: Material.color(AppStyle.appTheme?Material.Yellow:Material.Oranges)
+                    text: qsTr("در صورت حذف حساب، اطلاعات حساب شما قابل بازگشت نخواهد بود.")
+                    font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*25;bold: true}
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors{
+                        left: parent.left
+                        right: parent.right
+                        top: passwordInput.bottom
+                        margins: 35*AppStyle.size1W
+                    }
                 }
             }
         }

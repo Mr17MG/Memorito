@@ -660,7 +660,62 @@ QtObject {
         }
     }
 
+    function deleteAccount(password)
+    {
+        let json = JSON.stringify(
+                {
+                    hashed_password : security.hashPass(password),
+                }, null, 1);
 
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.responseType = 'json';
+        xhr.open("POST", domain+"/api/v1/account/delete-account/"+User.id,true);
+        console.log(domain+"/api/v1/account/delete-account/"+User.id)
+        xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === XMLHttpRequest.DONE)
+            {
+                console.log(xhr.responseText)
+                try
+                {
+                    let response = xhr.response
+                    console.log(xhr.responseText)
+                    if(response.ok)
+                    {
+                        UsefulFunc.showLog(qsTr("حساب کاربری شما با موفقیت حذف شد، ناراحت شدم که از پیشم رفتی :("),false)
+                        myTools.deleteSaveDir();
+                        UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
+                        SettingDriver.setValue("last_date","")
+                        User.clear()
+                        UsefulFunc.stackPages.clear()
+                    }
+                    else {
+                        if(response.code === 403)
+                        {
+                            deleteUser(userId)
+                            LocalDatabase.dropAallLocalTables()
+                            UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
+                        }
+                        else if(response.code === 401)
+                        {
+                            UsefulFunc.showLog(qsTr("رمز عبور وارد شده صحبح نمی‌باشد."),true)
+
+                        }
+                        else{
+                            UsefulFunc.showLog(response.message,true)
+                        }
+                    }
+                }
+                catch(e) {
+                    UsefulFunc.showConnectionError()
+                }
+            }
+        }
+    }
 
 
     function getUsers(){
