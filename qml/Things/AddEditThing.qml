@@ -152,8 +152,7 @@ Item {
                     SplitView.preferredHeight: 240 * AppStyle.size1H
                     AppFlickTextArea {
                         id: flickTextArea
-                        placeholderText: qsTr(
-                                             "توضیحاتی از چیزی که تو ذهنته رو بنویس") + " (" + qsTr(
+                        placeholderText: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس") + " (" + qsTr(
                                              "اختیاری") + ")"
                         text: prevPageModel ? prevPageModel.detail ?? "" : ""
                         width: parent.width
@@ -300,7 +299,25 @@ Item {
                     id: somedayRadio
                     text: qsTr("شاید یک روزی این را انجام دادم")
                     width: parent.width
-                    rightPadding: 50 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 50 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 50 * AppStyle.size1W : 0
+                    Image {
+                        id: somedayIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/someday.svg"
+                        anchors {
+                            right: parent.right
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: somedayIcon
+                        source: somedayIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
                 Loader {
                     id: somedayLoader
@@ -322,7 +339,25 @@ Item {
                     text: qsTr(
                               "اطلاعات مفیدی است میخواهم بعدا به آن مراجعه کنم")
                     width: parent.width
-                    rightPadding: 50 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 50 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 50 * AppStyle.size1W : 0
+                    Image {
+                        id: refrenceIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/refrence.svg"
+                        anchors {
+                            right: parent.right
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: refrenceIcon
+                        source: refrenceIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
                 Loader {
                     id: refrenceLoader
@@ -343,7 +378,25 @@ Item {
                     id: trashRadio
                     text: qsTr("اطلاعات به درد نخوری است میخواهم به سطل آشغال بیاندازم")
                     width: parent.width
-                    rightPadding: 50 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 50 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 50 * AppStyle.size1W : 0
+                    Image {
+                        id: trashIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/trash.svg"
+                        anchors {
+                            right: parent.right
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: trashIcon
+                        source: trashIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
                 Loader {
                     id: trashLoader
@@ -394,7 +447,26 @@ Item {
                     id: projectRadio
                     text: qsTr("می‌خواهم یک پروژه جدید بسازم")
                     width: parent.width
-                    rightPadding: 80 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
+                    Image {
+                        id: projectIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/project.svg"
+                        anchors {
+                            right: parent.right
+                            rightMargin: 25*AppStyle.size1W
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: projectIcon
+                        source: projectIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
                 Loader {
                     id: projectLoader
@@ -415,7 +487,26 @@ Item {
                     id: projectCategoryRadio
                     text: qsTr("می‌خواهم این عمل را به پروژه های قدیمی اضافه کنم")
                     width: parent.width
-                    rightPadding: 80 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
+                    Image {
+                        id: projectCategoryIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/ThingsListIcon/project-item.svg"
+                        anchors {
+                            right: parent.right
+                            rightMargin: 25*AppStyle.size1W
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: projectCategoryIcon
+                        source: projectCategoryIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
                 Loader {
                     id: projectCategoryLoader
@@ -450,7 +541,26 @@ Item {
                     id: friendRadio
                     text: qsTr("می‌خواهم این را شخص دیگری انجام دهد")
                     width: parent.width
-                    rightPadding: 80 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
+                    Image {
+                        id: waitingIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/waiting.svg"
+                        anchors {
+                            right: parent.right
+                            rightMargin: 25*AppStyle.size1W
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: waitingIcon
+                        source: waitingIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
                 Loader {
                     id: friendLoader
@@ -471,7 +581,26 @@ Item {
                     id: calendarRadio
                     text: qsTr("می‌خواهم این عمل را در زمان مشخصی انجام دهم")
                     width: parent.width
-                    rightPadding: 80 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
+                    Image {
+                        id: calendarIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/calendar.svg"
+                        anchors {
+                            right: parent.right
+                            rightMargin: 25*AppStyle.size1W
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: calendarIcon
+                        source: calendarIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
                 Loader {
                     id: calendarLoader
@@ -492,7 +621,26 @@ Item {
                     id: nextRadio
                     text: qsTr("می‌خواهم این عمل را در بعدا انجام دهم")
                     width: parent.width
-                    rightPadding: 80 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
+                    Image {
+                        id: nextActionIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/nextAction.svg"
+                        anchors {
+                            right: parent.right
+                            rightMargin: 25*AppStyle.size1W
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: nextActionIcon
+                        source: nextActionIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
 
                 Loader {
@@ -529,7 +677,26 @@ Item {
                     id: doRadio
                     text: qsTr("می‌خواهم این عمل را در الان انجام دهم")
                     width: parent.width
-                    rightPadding: 80 * AppStyle.size1W
+                    rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
+                    leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
+                    Image {
+                        id: doneIcon
+                        width: 45 * AppStyle.size1W
+                        height: width
+                        source: "qrc:/done.svg"
+                        anchors {
+                            right: parent.right
+                            rightMargin: 25*AppStyle.size1W
+                            verticalCenter: parent.verticalCenter
+                        }
+                        sourceSize:Qt.size(width * 2,height * 2)
+                        visible: false
+                    }
+                    ColorOverlay {
+                        anchors.fill: doneIcon
+                        source: doneIcon
+                        color: Qt.lighter(AppStyle.primaryColor,AppStyle.appTheme?1.5:1.2)
+                    }
                 }
                 Loader {
                     id: doLoader
