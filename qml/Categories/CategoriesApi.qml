@@ -93,7 +93,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -181,7 +181,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         xhr.onabort =function(){
             busyDialog.close()
         }
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -241,7 +241,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -254,7 +254,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            UsefulFunc.showLog(qsTr("پروژه جدید با نام")+ " <b>' "+ categoryName+" '</b>" +qsTr("با موفقیت افزوده شد"),false,700*AppStyle.size1W)
+                            UsefulFunc.showLog(qsTr("پروژه جدید با نام")+ " <b>' "+ categoryName+" '</b>" +qsTr("با موفقیت افزوده شد."),false,700*AppStyle.size1W)
                             if(local_id !== null)
                             {
                                 updateCategories(response.result,local_id)
@@ -319,7 +319,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -376,7 +376,7 @@ JOIN Categories AS T2 ON record_id =T2.local_id  WHERE table_id = 1 AND T2.user_
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)

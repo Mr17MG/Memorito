@@ -90,7 +90,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -177,7 +177,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         xhr.onabort =function(){
             busyDialog.close()
         }
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -236,7 +236,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -299,7 +299,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -356,7 +356,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)

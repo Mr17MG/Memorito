@@ -531,7 +531,7 @@ QtObject{
         xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
 
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)

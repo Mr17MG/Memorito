@@ -91,7 +91,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(null);
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -179,7 +179,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         xhr.onabort =function(){
             busyDialog.close()
         }
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -228,17 +228,19 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     user_id: User.id,
                     context_name: contextName
                 }, null, 1);
+        console.log(json)
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
         xhr.open("POST", domain+"/api/v1/contexts",true);
+        console.log(domain+"/api/v1/contexts")
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -275,6 +277,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
 
                 }
                 catch(e) {
+                    console.log(xhr.responseText)
                     let id = insertContexts([{"id":-1, "context_name":contextName, "user_id":User.id,"register_date" : "", "modified_date":"" }])
                     LocalDatabase.insertLocalChanges([ {"table_id":2,   "record_id":id,    "changes_type":1,  "user_id":User.id}] )
                     UsefulFunc.showConnectionError()
@@ -296,12 +299,13 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         xhr.withCredentials = true;
         xhr.responseType = 'json';
         xhr.open("PATCH", domain+"/api/v1/contexts/"+contextId,true);
+        console.log(domain+"/api/v1/contexts/"+contextId)
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -336,6 +340,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
 
                 }
                 catch(e) {
+                    console.log(xhr.responseText)
                     model.set(modelIndex,{"context_name":contextName})
                     updateContexts( {"id":contextId,"context_name":contextName, "user_id": User.id ,"register_date":"", "modified_date":"" },local_id)
                     LocalDatabase.insertLocalChanges([ {"table_id":2,   "record_id":contextId,    "changes_type":2,  "user_id":User.id}] )
@@ -358,7 +363,7 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
         xhr.send(null);
         if(local_id === null)
             var busyDialog = UsefulFunc.showBusy("");
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)

@@ -40,7 +40,7 @@ QtObject {
         xhr.open("GET", domain+"/api/v1/users/"+userId+"?"+query,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(null);
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -87,7 +87,7 @@ QtObject {
         xhr.open("PATCH", domain+"/api/v1/users/"+userId,true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -147,25 +147,14 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/account/signup",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = UsefulFunc.showBusy("",
-                                             function()
-                                             {
-                                                 UsefulFunc.showConfirm(
-                                                             qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
-                                                             function()
-                                                             {
-                                                                 xhr.abort()
-                                                             }
-                                                             )
-                                             }
-                                             );
+        var busyDialog = UsefulFunc.showBusy("");
+
 
         xhr.onabort =function(){
             busyDialog.close()
         }
 
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -221,19 +210,8 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/account/validate-otp",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = UsefulFunc.showBusy("",
-                                             function()
-                                             {
-                                                 UsefulFunc.showConfirm(
-                                                             qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
-                                                             function()
-                                                             {
-                                                                 xhr.abort()
-                                                             }
-                                                             )
-                                             }
-                                             );
+        var busyDialog = UsefulFunc.showBusy("");
+
 
         xhr.onabort =function(){
             busyDialog.close()
@@ -250,6 +228,8 @@ QtObject {
                     {
                         if(response.code === 202){
                             addUser(response.result)
+                            console.log(JSON.stringify(response.result))
+                            console.log(JSON.stringify(JSON.parse(getUsers())))
                             User.users.append(getUsers())
                             UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
                             User.set(getUserByUserId(User.users.get(0).id))
@@ -302,24 +282,13 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/account/signin",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = UsefulFunc.showBusy("",
-                                             function()
-                                             {
-                                                 UsefulFunc.showConfirm(
-                                                             qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
-                                                             function()
-                                                             {
-                                                                 xhr.abort()
-                                                             }
-                                                             )
-                                             }
-                                             );
+        var busyDialog = UsefulFunc.showBusy("");
+
 
         xhr.onabort =function(){
             busyDialog.close()
         }
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -389,24 +358,13 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/password/forget-pass",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = UsefulFunc.showBusy("",
-                                             function()
-                                             {
-                                                 UsefulFunc.showConfirm(
-                                                             qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
-                                                             function()
-                                                             {
-                                                                 xhr.abort()
-                                                             }
-                                                             )
-                                             }
-                                             );
+        var busyDialog = UsefulFunc.showBusy("");
+
 
         xhr.onabort =function(){
             busyDialog.close()
         }
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -464,24 +422,13 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/password/reset-pass",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = UsefulFunc.showBusy("",
-                                             function()
-                                             {
-                                                 UsefulFunc.showConfirm(
-                                                             qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
-                                                             function()
-                                                             {
-                                                                 xhr.abort()
-                                                             }
-                                                             )
-                                             }
-                                             );
+        var busyDialog = UsefulFunc.showBusy("");
+
 
         xhr.onabort =function(){
             busyDialog.close()
         }
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
@@ -553,24 +500,13 @@ QtObject {
         xhr.open("POST", domain+"/api/v1/password/resend-otp",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
-        var busyDialog = UsefulFunc.showBusy("",
-                                             function()
-                                             {
-                                                 UsefulFunc.showConfirm(
-                                                             qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
-                                                             function()
-                                                             {
-                                                                 xhr.abort()
-                                                             }
-                                                             )
-                                             }
-                                             );
+        var busyDialog = UsefulFunc.showBusy("");
+
 
         xhr.onabort =function(){
             busyDialog.close()
         }
-        xhr.timeout = 10000;
+        xhr.timeout = 3000;
         xhr.onreadystatechange = function ()
         {
             if (xhr.readyState === XMLHttpRequest.DONE)
