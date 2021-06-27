@@ -228,13 +228,10 @@ JOIN Contexts AS T2 ON record_id =T2.local_id  WHERE table_id = 2 AND T2.user_id
                     user_id: User.id,
                     context_name: contextName
                 }, null, 1);
-        console.log(json)
-
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.responseType = 'json';
         xhr.open("POST", domain+"/api/v1/contexts",true);
-        console.log(domain+"/api/v1/contexts")
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Authorization", "Basic " +Qt.btoa(unescape(encodeURIComponent( User.email + ':' + User.authToken))) );
         xhr.send(json);

@@ -21,7 +21,7 @@ Item {
         id:root
         width: parent.width
         height: parent.height
-        radius: radius‌Btn
+        radius: radiusBtn
         border.color: flat?AppStyle.textColor:"transparent"
         border.width: AppStyle.size1W
         color: flat?"transparent":(buttonEnabled?buttonColor:"#cbcbcb")
