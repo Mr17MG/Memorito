@@ -30,7 +30,6 @@ Rectangle {
         }
     }
 
-    // TODO: This needs to be transparent
     Image {
         id: checkImage
         x: (parent.width - width) / 2

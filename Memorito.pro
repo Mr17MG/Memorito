@@ -3,7 +3,6 @@ QT += quick svg quickcontrols2
 CONFIG += c++11
 
 include(projects/openssl/openssl.pri)
-#include(projects/qt-quick-responsive-helper/src/src.pro)
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -48,6 +47,7 @@ APP_VERSION_CODE = 1
 DEFINES += APP_VERSION APP_VERSION_CODE
 
 android{
+    QT += androidextras
     DISTFILES += \
         app/android/AndroidManifest.xml \
         app/android/build.gradle \

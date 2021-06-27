@@ -1,11 +1,9 @@
 import QtQuick 2.15
-//import QtQuick.Controls 1.4 as OldControls
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
 import Qt.labs.folderlistmodel 2.15
 import Qt.labs.platform 1.1
 import QtQuick.Window 2.15
-//import "utils.js" as Utils
 import Global 1.0
 import MTools 1.0
 AppDialog {
@@ -22,7 +20,7 @@ AppDialog {
     property bool showHidden: false
     property bool showDirsFirst: true
     property string folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
-    property var nameFilters: "*.*"
+    property var nameFilters: ["*.*"]
     property bool selectMultiple: true
     property var fileUrls:[]
     property ListModel selectedFile: ListModel{

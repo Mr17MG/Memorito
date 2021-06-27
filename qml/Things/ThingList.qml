@@ -540,8 +540,8 @@ Item {
                             internalModel.clear()
                             internalModel.append(ThingsApi.getThingByDate(localFromDate,localToDate))
 
-                            queryList.due_date.fromDate = fromDate.toISOString()
-                            queryList.due_date.toDate = toDate.toISOString()
+                            queryList.due_date.fromDate = localFromDate.toISOString()
+                            queryList.due_date.toDate = localToDate.toISOString()
                         }
                         cancelButton.onClicked: okButton.clicked()
                     }
@@ -568,8 +568,8 @@ Item {
                             internalModel.clear()
                             internalModel.append(ThingsApi.getThingByDate(localFromDate,localToDate))
 
-                            queryList.due_date.fromDate = fromDate.toISOString()
-                            queryList.due_date.toDate = toDate.toISOString()
+                            queryList.due_date.fromDate = localFromDate.toISOString()
+                            queryList.due_date.toDate = localToDate.toISOString()
                         }
                         cancelButton.onClicked: okButton.clicked()
                     }

@@ -1,7 +1,7 @@
-﻿import QtQuick 2.12
+﻿import QtQuick 2.15
 import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.12
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import QtGraphicalEffects 1.15
 import QCustomDate 1.0
 import Global 1.0
@@ -286,7 +286,6 @@ Item {
                     }
                 } // row layout title
             } // title column layout
-            // TODO: Choose month and year easier
             QDateConvertor{id:dateConvertor}
 
             Popup{

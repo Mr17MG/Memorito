@@ -4,7 +4,6 @@ import QtQuick.Controls 2.15              // Require For Drawer and other
 import QtQuick.Controls.Material 2.15     // Require For Material Theme
 import "qrc:/Splash/" as Splash           // Require For SplashLoader
 import Global 1.0
-import "qrc:/Responsive"
 
 ApplicationWindow {
     id:rootWindow
