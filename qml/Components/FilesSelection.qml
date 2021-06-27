@@ -280,8 +280,6 @@ Rectangle{
                     y:0
                     title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
                     nameFilters:  ["*.*"]
-//                    folder: Shortcut.pictures
-//                    sidebarVisible: false
                     onAccepted: {
                         let files = fileDialog.fileUrls;
                         for(let i=0;i<files.length;i++)

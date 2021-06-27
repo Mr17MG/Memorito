@@ -39,7 +39,7 @@ QtObject{
 
         if(myTools.getPictures("profile-"+User.id))
         {
-            if( mSysInfo.getPermissionResult("android.permission.READ_EXTERNAL_STORAGE") && mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE"))
+            if(mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE"))
                 profile = myTools.getPictures("profile-"+User.id)
             else{
                 profile= "qrc:/user.svg"
@@ -48,7 +48,7 @@ QtObject{
 
         else if(User.avatar.length>10)
         {
-            if( mSysInfo.getPermissionResult("android.permission.READ_EXTERNAL_STORAGE") && mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE"))
+            if(mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE"))
                 profile= "file://" +encodeURIComponent( myTools.saveBase64asFile("profile-"+User.id,"jpeg",User.avatar))
             else
                 profile= "qrc:/user.svg"

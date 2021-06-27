@@ -366,7 +366,7 @@ AppDialog {
                     color: (isFolder(text) || extensions.indexOf(model.fileSuffix.toLowerCase())=== -1) ? AppStyle.textColor
                                                                                                         : "transparent"
                     source: isFolder(text) ? "qrc:/folder.svg"
-                                           :  (extensions.indexOf(model.fileSuffix.toLowerCase())!== -1 ? (model.fileSuffix.toLowerCase().match(/svg|png|jpg|gif|jpeg/g) ? folderListModel.folder+"/"+model.fileName
+                                           :  (extensions.indexOf(model.fileSuffix.toLowerCase())!== -1 ? (model.fileSuffix.toLowerCase().match(/svg|png|jpg|gif|jpeg/ig) ? folderListModel.folder+"/"+model.fileName
                                                                                                                                                                              : "qrc:/pack/"+(model.fileSuffix.toLowerCase())+".svg")
                                                                                                         : "qrc:/file.svg")
 

@@ -39,15 +39,18 @@ Item {
     Loader{
         id:fileLoader
         active: false
-        sourceComponent: FileDialog{
+        sourceComponent: AppFilePicker{
             id:fileDialog
             selectMultiple: false
-            title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
-            nameFilters: [ "All Images (*.png *.jpeg *.jpg)" ]
-            folder: shortcuts.pictures
-            sidebarVisible: false
+            width:UsefulFunc.rootWindow.width
+            height: UsefulFunc.rootWindow.height
+            parent: UsefulFunc.mainLoader
+            x:0
+            y:0
+            title: qsTr("لطفا عکس خود را انتخاب نمایید")
+            nameFilters: [ "*.png","*.jpeg","*.jpg)" ]
             onAccepted: {
-                let file = fileDialog.fileUrl;
+                let file = fileDialog.fileUrls[0];
                 UsefulFunc.mainStackPush("qrc:/Components/ImageEditor.qml",qsTr("ویرایش‌گر تصویر"),{imageSource:file})
                 fileLoader.active = false
             }
