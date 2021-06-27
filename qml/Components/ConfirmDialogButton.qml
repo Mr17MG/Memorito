@@ -11,7 +11,7 @@ Item {
     property string buttonColor: ""
     property string buttonTextColor: "white"
     property bool buttonEnabled: true
-    property int radius‌Btn: AppStyle.size1H*15
+    property int radiusBtn: AppStyle.size1H*15
     property int fontSize: AppStyle.size1F*25
     property alias icon: itemImage
     width: AppStyle.size1W*200

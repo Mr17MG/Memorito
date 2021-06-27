@@ -39,10 +39,11 @@ Item {
             bottomMargin: 60*AppStyle.size1H
         }
         contentHeight: flow1.height
+        contentWidth: flow1.width
         clip: true
         ColumnLayout{
             id:flow1
-            width: flick.width
+            width: Math.max(flick.width,600*AppStyle.size1W)
             spacing: 20*AppStyle.size1H
             layoutDirection: Qt.RightToLeft
             RowLayout {
