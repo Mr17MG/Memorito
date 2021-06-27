@@ -118,7 +118,7 @@ Item {
             TextEdit{
                 id: msg
                 readOnly: true
-                selectByMouse: true
+                selectByMouse: Qt.platform.os !== "android" && Qt.platform.os !== "ios"?true:false
                 width: parent.width
                 color: AppStyle.textColor
                 padding: 35*AppStyle.size1W
