@@ -39,7 +39,7 @@ Item {
     {
         if(titleInput.text.trim() === "")
         {
-            UsefulFunc.showLog(qsTr("لطفا قسمت 'چی تو دهنته؟' رو پر کن"),true)
+            UsefulFunc.showLog(qsTr("لطفا قسمت 'چی تو ذهنته؟' رو پر کن"),true)
             titleMoveAnimation.start()
             return 2
         }
@@ -152,8 +152,7 @@ Item {
                     SplitView.preferredHeight: 240 * AppStyle.size1H
                     AppFlickTextArea {
                         id: flickTextArea
-                        placeholderText: qsTr("توضیحاتی از چیزی که تو ذهنته رو بنویس") + " (" + qsTr(
-                                             "اختیاری") + ")"
+                        placeholderText: qsTr("بیشتر در مورد چیزی که تو ذهنته بگو") + " (" + qsTr("اختیاری") + ")"
                         text: prevPageModel ? prevPageModel.detail ?? "" : ""
                         width: parent.width
                         anchors.top: parent.top
@@ -276,6 +275,19 @@ Item {
                 }
                 spacing: 10 * AppStyle.size1H
 
+                Text {
+                    text: qsTr("بهتره که پردازش رو الان انجام ندی و بزاری برای بعد، چون الان ذهنت به این موضوع خیلی اهمیت میده و واقع‌بینانه نیست.")
+                    width: parent.width
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    visible: listId === Memorito.Collect
+                    horizontalAlignment: Text.AlignHCenter
+                    color: Material.color(AppStyle.appTheme?Material.Yellow:Material.Oranges)
+                    font {
+                        family: AppStyle.appFont
+                        pixelSize: AppStyle.size1F * 25
+                        bold: true
+                    }
+                }
                 Loader {
                     id: optionsLoader
                     width: parent.width
@@ -297,7 +309,7 @@ Item {
 
                 AppRadioButton {
                     id: somedayRadio
-                    text: qsTr("شاید یک روزی این را انجام دادم")
+                    text: qsTr("شاید یک‌روزی انحامش دادم.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 50 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 50 * AppStyle.size1W : 0
@@ -336,8 +348,7 @@ Item {
                 /*********************************/
                 AppRadioButton {
                     id: refrenceRadio
-                    text: qsTr(
-                              "اطلاعات مفیدی است میخواهم بعدا به آن مراجعه کنم")
+                    text: qsTr("اطلاعات مغیدیه میخوام بعدا بهش مراجعه کنم.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 50 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 50 * AppStyle.size1W : 0
@@ -376,7 +387,7 @@ Item {
                 /*********************************/
                 AppRadioButton {
                     id: trashRadio
-                    text: qsTr("اطلاعات به درد نخوری است میخواهم به سطل آشغال بیاندازم")
+                    text: qsTr("به درد نمیخوره، میندازمش سطل آشغال.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 50 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 50 * AppStyle.size1W : 0
@@ -431,7 +442,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action3Text
-                    text: "⏺ " + qsTr("این چیز با یک انجام یک عمل به پایان نمی‌رسد") + ":"
+                    text: "⏺ " + qsTr("این کار با انجام یک عمل به پایان نمی‌رسد") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     height: 50 * AppStyle.size1H
@@ -445,7 +456,7 @@ Item {
                 }
                 AppRadioButton {
                     id: projectRadio
-                    text: qsTr("می‌خواهم یک پروژه جدید بسازم")
+                    text: qsTr("میخوام یک پروژه جدید بسازم.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
@@ -485,7 +496,7 @@ Item {
                 /*********************************/
                 AppRadioButton {
                     id: projectCategoryRadio
-                    text: qsTr("می‌خواهم این عمل را به پروژه های قدیمی اضافه کنم")
+                    text: qsTr("میخوام این عمل رو به پروژه های قبلیم اضافه کنم.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
@@ -525,7 +536,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action4Text
-                    text: "⏺ " + qsTr("این عمل بیشتر از ۵ دقیقه زمان نیاز دارد") + ":"
+                    text: "⏺ " + qsTr("این عمل بیش از ۵ دقیقه زمان نیاز دارد") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     height: 50 * AppStyle.size1H
@@ -539,7 +550,7 @@ Item {
                 }
                 AppRadioButton {
                     id: friendRadio
-                    text: qsTr("می‌خواهم این را شخص دیگری انجام دهد")
+                    text: qsTr("میخوام اینو یکی دیگه انجام بده.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
@@ -579,7 +590,7 @@ Item {
                 /*********************************/
                 AppRadioButton {
                     id: calendarRadio
-                    text: qsTr("می‌خواهم این عمل را در زمان مشخصی انجام دهم")
+                    text: qsTr("میخوام تو زمان مشخصی انجامش بدم.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
@@ -619,7 +630,7 @@ Item {
                 /*********************************/
                 AppRadioButton {
                     id: nextRadio
-                    text: qsTr("می‌خواهم این عمل را در بعدا انجام دهم")
+                    text: qsTr("میخوام بعدا انجامش بدم.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
@@ -675,7 +686,7 @@ Item {
 
                 AppRadioButton {
                     id: doRadio
-                    text: qsTr("می‌خواهم این عمل را در الان انجام دهم")
+                    text: qsTr("میخوام الان انجامش بدم.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
@@ -731,7 +742,7 @@ Item {
                 AppButton {
                     id: submitBtn
                     property bool isUpdate: false
-                    text: qsTr("بفرست به پردازش نشده ها")
+                    text: qsTr("بفرست به پردازش نشده‌ها")
 
                     Layout.fillWidth: true
                     Layout.rightMargin: 25 * AppStyle.size1W
@@ -872,6 +883,22 @@ Item {
                         bold: true
                     }
                 }
+                AppButton{
+                    anchors {
+                        right: contextText.left
+                        rightMargin: 15 * AppStyle.size1W
+                        left: parent.left
+                        leftMargin: 15 * AppStyle.size1W
+                        bottom: contextText.bottom
+                        bottomMargin: -20 * AppStyle.size1W
+                    }
+                    text: qsTr("ثبت اولین محل‌انجام")
+                    visible: !contextInput.visible
+                    onClicked: {
+                        UsefulFunc.mainStackPush("qrc:/Contexts/Contexts.qml",qsTr("محل‌های انجام"),{})
+                    }
+                }
+
                 AppComboBox {
                     id: contextInput
                     anchors {
@@ -882,10 +909,10 @@ Item {
                         bottom: contextText.bottom
                         bottomMargin: -20 * AppStyle.size1W
                     }
+                    visible: contextModel.count>0
                     font.pixelSize: AppStyle.size1F * 28
                     textRole: "context_name"
-                    placeholderText: qsTr("محل انجام") + " (" + qsTr(
-                                         "اختیاری") + ")"
+                    placeholderText: qsTr("محل انجام") + " (" + qsTr("اختیاری") + ")"
                     currentIndex: prevPageModel ? contextModel.count > 0 ? prevPageModel.context_id ? UsefulFunc.findInModel(prevPageModel.context_id, "id", contextModel).index : -1 : -1 : -1
                     model: contextModel
                     onCurrentIndexChanged: {
@@ -935,8 +962,7 @@ Item {
                     textRole: "Text"
                     iconRole: "iconSource"
                     font.pixelSize: AppStyle.size1F * 28
-                    placeholderText: qsTr("اولویت") + " (" + qsTr(
-                                         "اختیاری") + ")"
+                    placeholderText: qsTr("اولویت") + " (" + qsTr("اختیاری") + ")"
                     currentIndex: prevPageModel ? prevPageModel.priority_id ? UsefulFunc.findInModel(prevPageModel.priority_id, "Id", priorityModel).index : -1 : -1
                     model: priorityModel
                     onCurrentIndexChanged: {
@@ -982,8 +1008,7 @@ Item {
                     textRole: "Text"
                     iconRole: "iconSource"
                     font.pixelSize: AppStyle.size1F * 28
-                    placeholderText: qsTr("سطح انرژی") + " (" + qsTr(
-                                         "اختیاری") + ")"
+                    placeholderText: qsTr("سطح انرژی") + " (" + qsTr("اختیاری") + ")"
                     model: energyModel
                     currentIndex: prevPageModel ? prevPageModel.energy_id ? UsefulFunc.findInModel(prevPageModel.energy_id, "Id", energyModel).index : -1 : -1
                     onCurrentIndexChanged: {
@@ -1028,8 +1053,7 @@ Item {
                     placeholderTextColor: AppStyle.textColor
                     verticalAlignment: Text.AlignBottom
                     Material.accent: AppStyle.primaryColor
-                    placeholderText: qsTr("تخمین به دقیقه") + " (" + qsTr(
-                                         "اختیاری") + ")"
+                    placeholderText: qsTr("تخمین به دقیقه") + " (" + qsTr("اختیاری") + ")"
                     horizontalAlignment: Text.AlignHCenter
                     validator: RegExpValidator {
                         regExp: /[0123456789۰۱۲۳۴۵۶۷۸۹]{3}/ig
@@ -1124,8 +1148,7 @@ Item {
                     centerIn: parent
                 }
                 text: prevPageModel
-                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr(
-                                                           "بفرست به عملیات بعدی")
+                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به عملیات بعدی")
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
                 rightPadding: 35 * AppStyle.size1W
@@ -1227,8 +1250,7 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: prevPageModel
-                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr(
-                                                           "بفرست به مرجع")
+                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به مرجع")
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
                 rightPadding: 35 * AppStyle.size1W
@@ -1303,7 +1325,7 @@ Item {
                 id: friendCombo
                 textRole: "friend_name"
                 font.pixelSize: AppStyle.size1F * 28
-                placeholderText: qsTr("دوست موردنظر را انتخاب کنید")
+                placeholderText: qsTr("دوست موردنظرت رو انتخاب کن.")
                 currentIndex: prevPageModel ? friendModel.count > 0 ? prevPageModel.friend_id ? UsefulFunc.findInModel(prevPageModel.friend_id, "id", friendModel).index : -1 : -1 : -1
                 anchors {
                     top: parent.top
@@ -1334,8 +1356,7 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: prevPageModel
-                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr(
-                                                           "بفرست به لیست انتظار")
+                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به لیست انتظار")
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
                 rightPadding: 35 * AppStyle.size1W
@@ -1343,9 +1364,9 @@ Item {
 
                     if (friendCombo.currentIndex === -1) {
                         if (friendModel.count > 0)
-                            UsefulFunc.showLog( qsTr("لطفا دوست خودتو انتخاب کن"), true)
+                            UsefulFunc.showLog( qsTr("لطفا دوست خودتو انتخاب کن."), true)
                         else
-                            UsefulFunc.showLog( qsTr("لطفااول دوستاتو اضافه کن بعد دوست خودتو انتخاب کن"), true)
+                            UsefulFunc.showLog( qsTr("لطفااول دوستاتو اضافه کن، بعد دوست خودتو انتخاب کن."), true)
                         return
                     }
 
@@ -1553,7 +1574,7 @@ Item {
             AppDateInput {
                 id: dateInput
                 visible: suggestionTab.currentIndex === 0
-                placeholderText: qsTr("زمان مورد نظر را انتخاب نمایید")
+                placeholderText: qsTr("زمان مورد نظرت رو انتخاب کن.")
                 hasTime: clockCheck.checked
                 minSelectedDate: new Date()
                 selectedDate: calendarItem.dueDate
@@ -1599,8 +1620,7 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: prevPageModel
-                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr(
-                                                           "بفرست به تقویم")
+                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به تقویم")
 
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
@@ -1677,8 +1697,7 @@ Item {
                     centerIn: parent
                 }
                 text: prevPageModel
-                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr(
-                                                           "بفرست به سطل آشغال")
+                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به سطل آشغال")
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
                 rightPadding: 35 * AppStyle.size1W
@@ -1740,8 +1759,7 @@ Item {
                     centerIn: parent
                 }
                 text: prevPageModel
-                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr(
-                                                           "بفرست به انجام شده ها")
+                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به انجام شده ها")
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
                 rightPadding: 35 * AppStyle.size1W
@@ -1811,8 +1829,7 @@ Item {
                 id: somedayCategoryCombo
                 textRole: "category_name"
                 font.pixelSize: AppStyle.size1F * 28
-                placeholderText: qsTr("دسته بندی") + " (" + qsTr(
-                                     "اختیاری") + ")"
+                placeholderText: qsTr("دسته بندی") + " (" + qsTr("اختیاری") + ")"
                 currentIndex: prevPageModel ? somedayCategoryModel.count > 0 ? prevPageModel.category_id ? UsefulFunc.findInModel(prevPageModel.category_id, "id", somedayCategoryModel).index : -1 : -1 : -1
                 anchors {
                     top: parent.top
@@ -1845,8 +1862,7 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: prevPageModel
-                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr(
-                                                           "بفرست به شاید یک روزی")
+                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به شاید یک روزی")
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
                 rightPadding: 35 * AppStyle.size1W
@@ -1918,7 +1934,7 @@ Item {
                 id: projectCategoryCombo
                 textRole: "category_name"
                 font.pixelSize: AppStyle.size1F * 28
-                placeholderText: qsTr("پروژه موردنظر را انتخاب کنید")
+                placeholderText: qsTr("پروژه موردنظر رو انتخاب کن.")
                 currentIndex: prevPageModel ? projectCategoryModel.count > 0 ? prevPageModel.category_id ? UsefulFunc.findInModel(prevPageModel.category_id, "id", projectCategoryModel).index : -1 : -1 : categoryId !== -1 ? UsefulFunc.findInModel(categoryId, "id", projectCategoryModel).index : -1
                 anchors {
                     top: parent.top
@@ -1949,15 +1965,14 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: prevPageModel
-                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr(
-                                                           "بفرست به پروژه")
+                      && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به پروژه")
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
                 rightPadding: 35 * AppStyle.size1W
                 onClicked: {
                     if (projectCategoryCombo.currentIndex === -1)
                     {
-                        UsefulFunc.showLog( qsTr("لطفا پروژه موردنظر را انتخاب کن"), true)
+                        UsefulFunc.showLog( qsTr("لطفا پروژه موردنظر رو انتخاب کن."), true)
                         return
                     }
                     let hasFiles = checking()

@@ -192,16 +192,17 @@ QtObject {
 
     function getAndroidAccessToFile()
     {
-        if( !mSysInfo.getPermissionResult("android.permission.READ_EXTERNAL_STORAGE") || !mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE") )
+        if( !mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE") )
         {
+
             UsefulFunc.showMessage( qsTr("مجوز"),
                                    qsTr("برای ذخیره‌سازی و نمایش فایل‌هات نیاز به مجوز دارم، بهم میدی؟"),
                                    function () {
-                                       if( mSysInfo.requestPermission("android.permission.READ_EXTERNAL_STORAGE") === 0 )
+                                       if( !mSysInfo.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") )
                                        {
                                            UsefulFunc.showConfirm( qsTr("مجوز") , qsTr("چون اجازه ندادی نمیتونم به فایل‌هات دسترسی داشته باشم و این ممکنه باعث بشه فایل‌هاتو در این دستگاه نبینی, میخوای دوباره امتحان کنی؟"),
                                                                   function(){
-                                                                      if( !mSysInfo.requestPermission("android.permission.READ_EXTERNAL_STORAGE") )
+                                                                      if( !mSysInfo.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") )
                                                                       {
                                                                           UsefulFunc.showLog(qsTr("بازم که اجازه ندادی! :( "),true)
                                                                           getAndroidAccessToFileResponsed(false)
@@ -215,7 +216,7 @@ QtObject {
                                                                       getAndroidAccessToFileResponsed(false)
                                                                   })
                                        }
-                                       else if( mSysInfo.requestPermission("android.permission.READ_EXTERNAL_STORAGE") === -1 )
+                                       else if( mSysInfo.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") === -1 )
                                        {
                                            UsefulFunc.showLog(qsTr("گفتی دیگه پیام درخواست مجوز بهت نشون داده نشه، لطفا از داخل تنظیمات یهم دسترسی یده"),true)
                                            getAndroidAccessToFileResponsed(true)

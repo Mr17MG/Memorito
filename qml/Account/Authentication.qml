@@ -207,14 +207,14 @@ Item {
                         {
                             passLoader.item.passwordMoveAnimation.start()
                             passLoader.item.passInput.forceActiveFocus()
-                            UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true)
+                            UsefulFunc.showLog(qsTr("لطفا رمزعبورتو به صورت صحیح وارد کن."),true)
                             return
                         }
                         if ( confirmPassLoader.item.confirmPassInput.text === "" || confirmPassLoader.item.confirmPassInput.text !== passLoader.item.passInput.text)
                         {
                             confirmPassLoader.item.passwordConfirmMoveAnimation.start()
                             confirmPassLoader.item.confirmPassInput.forceActiveFocus()
-                            UsefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true)
+                            UsefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور یکی نیست."),true)
                             return
                         }
                         UserApi.resetPass(email, otpInput.text, passLoader.item.passInput.text,fromProfile)

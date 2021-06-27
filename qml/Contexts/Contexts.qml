@@ -235,6 +235,7 @@ Item {
                 Keys.onReturnPressed: dialogButton.clicked(Qt.RightButton)
                 Keys.onEnterPressed: dialogButton.clicked(Qt.RightButton)
                 height: 100*AppStyle.size1H
+                maximumLength: 25
             }
 
         }
@@ -252,7 +253,7 @@ Item {
             property int contextId: -1
             property int modelIndex: -1
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " " + contextName + " " + qsTr("را حذف کنید؟")
+            dialogText: qsTr("مایلی که") + " " + contextName + " " + qsTr("رو حذف کنی؟")
             accepted: function() {
                 ContextsApi.deleteContext(contextId,contextModel,modelIndex)
             }

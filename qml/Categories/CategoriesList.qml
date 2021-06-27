@@ -43,7 +43,7 @@ Item {
             }
         }
         Text{
-            text: qsTr("هنوز دسته بندی‌ای ایجاد نکردی")
+            text: qsTr("هنوز دسته بندی‌ای ایجاد نکردی.")
             font{family: AppStyle.appFont;pixelSize:  40*AppStyle.size1F;bold:true}
             color: AppStyle.textColor
             anchors{
@@ -125,7 +125,7 @@ Item {
                     wrapMode: Text.WordWrap
                 }
                 Text{
-                    text: (listId ===Memorito.Project?qsTr("هدف پروژه"):qsTr("توضیحات"))  + ": " +((model.category_detail??(listId ===Memorito.Project?qsTr("هدفی"):qsTr("توضیحاتی")) +" "+ qsTr("ثبت نشده است"))) +""
+                    text: (listId ===Memorito.Project?qsTr("هدف پروژه"):qsTr("توضیحات"))  + ": " +((model.category_detail??(listId ===Memorito.Project?qsTr("هدفی"):qsTr("توضیحاتی")) +" "+ qsTr("ثبت نشده است."))) +""
                     font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;}
                     anchors{
                         top:  categoryText.bottom
@@ -259,7 +259,7 @@ Item {
                     addDialog.close()
                 }
                 else {
-                    UsefulFunc.showLog(qsTr("لطفا نام پروژه خود را وارد نمایید"),true)
+                    UsefulFunc.showLog(qsTr("لطفا نام پروژه رو وارد کن."),true)
                 }
             }
             AppTextInput{
@@ -309,7 +309,7 @@ Item {
             property int categoryId: -1
             property int modelIndex: -1
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " '" + categoryName + "' " + qsTr("را حذف کنید؟")
+            dialogText: qsTr("مایلی که") + " '" + categoryName + "' " + qsTr("رو حذف کنی؟")
             accepted: function() {
                 CategoriesApi.deleteCategory(categoryId,internalModel,modelIndex)
             }

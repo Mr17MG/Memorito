@@ -981,7 +981,7 @@ Item {
                 deleteLoader.active = false
             }
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " '" + prevPageModel.title  + "' " + (prevPageModel.list_id === Memorito.Trash?qsTr("برای همیشه حذف کنید؟"):qsTr("را به سطل آشغال انتفال دهید؟"))
+            dialogText: qsTr("آیا مایلید که") + " '" + prevPageModel.title  + "' " + (prevPageModel.list_id === Memorito.Trash?qsTr("برای همیشه حذف کنید؟"):qsTr("را به سطل آشغال انتقال دهید؟"))
             accepted: function() {
 
 

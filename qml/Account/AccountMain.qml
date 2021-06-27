@@ -32,7 +32,7 @@ Pane {
                 authLoader.item.pop();
 
             else
-                UsefulFunc.showConfirm( qsTr("خروج؟") , qsTr("آیا مایلید از نرم‌افزار خارج شوید؟"), function(){Qt.quit()} )
+                UsefulFunc.showConfirm( qsTr("خروج؟") , qsTr("میخوای از برنامه خارج بشی؟"), function(){Qt.quit()} )
         }
     }
 
