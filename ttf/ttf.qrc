@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Shabnam.ttf</file>
-        <file>Gilroy.otf</file>
-        <file>Nahid.ttf</file>
-    </qresource>
-</RCC>
