@@ -171,7 +171,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                                              {
                                                  UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
+                                                             qsTr("میخوای درخواستت لغو بشه؟"),
                                                              function()
                                                              {
                                                                  xhr.abort()
@@ -279,7 +279,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            UsefulFunc.showLog(qsTr("فایل‌ها با موفقیت افزوده شد"),false)
+                            UsefulFunc.showLog(qsTr("فایل‌ها با موفقیت اضافه شد"),false)
                             insertFiles(response.result)
                         }
                     }

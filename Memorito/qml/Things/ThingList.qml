@@ -92,7 +92,7 @@ Item {
         else
             ThingsApi.getThings(internalModel,listId,categoryId)
 
-        addBtn.text = qsTr("افزودن چیز به") +" "+ (object.pageTitle??"")
+        addBtn.text = qsTr("اضافه کردن چیز جدید به") +" "+ (object.pageTitle??"")
 
         if(listId === Memorito.Waiting ||listId === Memorito.Done)
             FriendsApi.getFriends(friendModel)
@@ -916,7 +916,7 @@ Item {
                                 layoutDirection: Qt.RightToLeft
                                 ButtonGroup{ id:filesGroup}
                                 Repeater{
-                                    model: [qsTr("نداشته باشد"),qsTr("داشته باشد"),qsTr("مهم نیست")]
+                                    model: [qsTr("نداشته باشه"),qsTr("داشته باشه"),qsTr("مهم نیست")]
                                     delegate: AppRadioButton{
                                         property int id: index
                                         text: modelData
@@ -1297,7 +1297,7 @@ Item {
                 }
                 Text{
                     id: detailText
-                    text: qsTr("توضیحات") + ": " + (model.detail? model.detail : qsTr("توضیحاتی ثبت نشده است"))
+                    text: qsTr("توضیحات") + ": " + (model.detail? model.detail : qsTr("توضیحاتی ثبت نشده"))
                     font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;}
                     anchors{
                         top:  topRect.bottom
@@ -1352,7 +1352,7 @@ Item {
                                     rightMargin: 10*AppStyle.size1W
                                     left: parent.left
                                 }
-                                text: qsTr("اولویت") +": " + (model.priority_id?UsefulFunc.findInModel(model.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است"))
+                                text: qsTr("اولویت") +": " + (model.priority_id?UsefulFunc.findInModel(model.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده"))
                                 elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                                 font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                             }
@@ -1380,7 +1380,7 @@ Item {
                                     rightMargin: 10*AppStyle.size1W
                                     left: parent.left
                                 }
-                                text: qsTr("سطح انرژی") +": " + (model.energy_id?UsefulFunc.findInModel(model.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده است"))
+                                text: qsTr("سطح انرژی") +": " + (model.energy_id?UsefulFunc.findInModel(model.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده"))
                                 elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                                 font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                             }
@@ -1408,7 +1408,7 @@ Item {
                                     rightMargin: 10*AppStyle.size1W
                                     left: parent.left
                                 }
-                                text: qsTr("محل انجام") +": " + (model.context_id?contextModel.count>0?UsefulFunc.findInModel(model.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده است"))
+                                text: qsTr("محل انجام") +": " + (model.context_id?contextModel.count>0?UsefulFunc.findInModel(model.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده"))
                                 font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                                 elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             }
@@ -1436,7 +1436,7 @@ Item {
                                     rightMargin: 10*AppStyle.size1W
                                     left: parent.left
                                 }
-                                text: qsTr("تخمین زمانی") +": " + (model.estimate_time?model.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده است"))
+                                text: qsTr("تخمین زمانی") +": " + (model.estimate_time?model.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده"))
                                 font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                                 elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             }
@@ -1463,7 +1463,7 @@ Item {
                                 Text {
                                     text:qsTr("فرد انجام دهنده") +": " + (model.friend_id?friendModel.count>0?UsefulFunc.findInModel(model.friend_id,"id",friendModel).value.friend_name
                                                                                                              :""
-                                                                          :qsTr("ثبت نشده است"))
+                                                                          :qsTr("ثبت نشده"))
                                     anchors{
                                         verticalCenter: friendImg.verticalCenter
                                         right: friendImg.left
@@ -1499,7 +1499,7 @@ Item {
                                     text:qsTr("زمان مشخص شده") +": "
                                          +( dueDate ?AppStyle.ltr? dueDate.getFullYear()+"/"+(dueDate.getMonth()+1)+"/"+dueDate.getDate()
                                                                  :(dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate())).slice(0,3).join("/")
-                                           : qsTr("ثبت نشده است"))
+                                           : qsTr("ثبت نشده"))
 
                                     anchors{
                                         verticalCenter: dateImg.verticalCenter
@@ -1528,7 +1528,7 @@ Item {
                     }
                 }
                 Text{
-                    text: qsTr("فایل دارد")
+                    text: qsTr("فایل داره")
                     visible: model.has_files
                     font{family: AppStyle.appFont;pixelSize:  20*AppStyle.size1F;bold:false}
                     wrapMode: Text.WordWrap

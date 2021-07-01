@@ -103,7 +103,7 @@ Loader{
                 if(backButton.visible)
                     backButton.clicked(Qt.RightButton)
                 else
-                    UsefulFunc.showConfirm( qsTr("خروج؟") , qsTr("آیا مایلید از نرم‌افزار خارج شوید؟"), function(){Qt.quit()} )
+                    UsefulFunc.showConfirm( qsTr("خروج؟") , qsTr("میخوای از برنامه بری بیرون؟"), function(){Qt.quit()} )
             }
         }
     }

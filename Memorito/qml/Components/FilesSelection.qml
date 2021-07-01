@@ -237,13 +237,13 @@ Rectangle{
                         let file = myTools.getFileInfo(decodeURIComponent((files[i].trim())))
                         if(UsefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
                         {
-                            UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true)
+                            UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده"),true)
                             continue
                         }
 
                         if(file.file_size > 10485760) // Bigger than 10 Megabyte
                         {
-                            UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true)
+                            UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایته"),true)
                             continue
                         }
 
@@ -278,7 +278,7 @@ Rectangle{
                     parent: UsefulFunc.mainLoader
                     x:0
                     y:0
-                    title: qsTr("لطفا فایل‌های خود را انتخاب نمایید")
+                    title: qsTr("فایل‌هاتو انتخاب کن")
                     nameFilters:  ["*.*"]
                     onAccepted: {
                         let files = fileDialog.fileUrls;
@@ -287,12 +287,12 @@ Rectangle{
                             let file = myTools.getFileInfo(decodeURIComponent((files[i].trim())))
                             if(UsefulFunc.findInModel("file://"+file.file_source,"file_source",backRect.model).index !== null)
                             {
-                                UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده است"),true)
+                                UsefulFunc.showLog(qsTr("فایل")+"' "+file.file_name+" '"+qsTr("قبلا به لیست اضافه شده"),true)
                                 continue
                             }
                             if(file.file_size > 10485760) // Bigger than 10 Megabyte
                             {
-                                UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr(" بیشتر از ۱۰ مگابایت است"),true)
+                                UsefulFunc.showLog(qsTr("حجم فایل")+"' "+file.file_name+" '"+qsTr("بیشتر از ۱۰ مگابایته"),true)
                                 continue
                             }
 

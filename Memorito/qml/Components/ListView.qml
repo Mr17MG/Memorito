@@ -6,7 +6,7 @@ import Global 1.0
 ListView {
     property bool isEmpty:!model.count
     property bool isLoading: false
-    property string emptyListText: qsTr("داده‌ای ثبت نشده‌است")
+    property string emptyListText: qsTr("داده‌ای ثبت نشده")
     property string emptyListColor: AppStyle.textColor
     property bool hasOverScroll: false
     id:control

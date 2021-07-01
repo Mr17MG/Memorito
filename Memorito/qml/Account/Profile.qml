@@ -47,7 +47,7 @@ Item {
             parent: UsefulFunc.mainLoader
             x:0
             y:0
-            title: qsTr("لطفا عکس خود را انتخاب نمایید")
+            title: qsTr("عکستو انتخاب کن")
             nameFilters: [ "*.png","*.jpeg","*.jpg)" ]
             onAccepted: {
                 let file = fileDialog.fileUrls[0];
@@ -246,7 +246,7 @@ Item {
 
                         if(usernameInput.text.trim()==="" || emailInput.text.trim()==="")
                         {
-                            UsefulFunc.showLog(qsTr("اطلاعات وارد شده صحیح نمی‌باشد."),true)
+                            UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل نباید خالی باشه."),true)
                             if(usernameInput.text.trim()==="")
                                 usernameMoveAnimation.start()
                             if(emailInput.text.trim()==="")
@@ -258,7 +258,7 @@ Item {
                         {
                             emailMoveAnimation.start()
                             emailInput.forceActiveFocus()
-                            UsefulFunc.showLog(qsTr("لطفا ایمیل خود را به صورت صحیح وارد نمایید"),true)
+                            UsefulFunc.showLog(qsTr("ایمیلی که نوشتی درست نیست."),true)
                             return
                         }
 
@@ -294,7 +294,7 @@ Item {
                 onClicked: {
                     UsefulFunc.showConfirm(
                                 qsTr("تغییر رمز ورود"),
-                                qsTr("آیا مطمئن هستید که می‌خواهید رمز ورود به حساب خود را تغییر دهید؟"),
+                                qsTr("مطمئنی که میخوای رمز وردتو تغییر بدی؟"),
                                 function()
                                 {
                                     UserApi.forgetPass(User.username,true)
@@ -326,7 +326,7 @@ Item {
                 onClicked: {
                     UsefulFunc.showConfirm(
                                 qsTr("خروج از حساب"),
-                                qsTr("آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟"),
+                                qsTr("مطمئنی که میخوای از حسابت بری بیرون؟"),
                                 function()
                                 {
                                     myTools.deleteSaveDir();
@@ -378,7 +378,7 @@ Item {
                 Text{
                     id: titleText
                     color: AppStyle.textColor
-                    text: qsTr("آیا واقعا مطمئن هستید که می‌خواهید حساب خورا حذف کنید؟")
+                    text: qsTr("واقعا میخوای حسابتو حذف کنی؟!")
                     font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*30;bold:true}
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     horizontalAlignment: Text.AlignHCenter
@@ -411,7 +411,7 @@ Item {
                 Text{
                     id: warningText
                     color: Material.color(AppStyle.appTheme?Material.Yellow:Material.Oranges)
-                    text: qsTr("در صورت حذف حساب، اطلاعات حساب شما قابل بازگشت نخواهد بود.")
+                    text: qsTr("با حذف شدن حساب اطلاعات قابل بازگشت نیست.")
                     font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*25;bold: true}
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     horizontalAlignment: Text.AlignHCenter

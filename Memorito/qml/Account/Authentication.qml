@@ -58,7 +58,7 @@ Item {
             leftPadding: 40*AppStyle.size1W
             horizontalAlignment: Text.AlignHCenter
             font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;}
-            text: qsTr("کد تایید حساب شما به ایمیل") + ": "
+            text: qsTr("کد تایید به ایمیل") + ": "
                   + email + " \n"
                   +qsTr("ارسال شد لطفا آن را در قسمت زیر وارد نمایید.")
             color: AppStyle.textColor

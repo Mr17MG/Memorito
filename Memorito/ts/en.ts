@@ -13,10 +13,6 @@
         <source>میخوای از برنامه خارج بشی؟</source>
         <translation type="unfinished">Do you want to leave the app?</translation>
     </message>
-    <message>
-        <source>آیا مایلید از نرم‌افزار خارج شوید؟</source>
-        <translation type="vanished">Do you want to leave the app?</translation>
-    </message>
 </context>
 <context>
     <name>AddEditThing</name>
@@ -26,16 +22,12 @@
         <translation>What is in your mind?</translation>
     </message>
     <message>
-        <source>توضیحاتی از چیزی که تو ذهنته رو بنویس</source>
-        <translation type="vanished">Enter details of things that are in your mind</translation>
-    </message>
-    <message>
         <location filename="../qml/Things/AddEditThing.qml" line="155"/>
         <location filename="../qml/Things/AddEditThing.qml" line="915"/>
         <location filename="../qml/Things/AddEditThing.qml" line="965"/>
         <location filename="../qml/Things/AddEditThing.qml" line="1011"/>
         <location filename="../qml/Things/AddEditThing.qml" line="1056"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1832"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1867"/>
         <source>اختیاری</source>
         <translation>Optional</translation>
     </message>
@@ -45,63 +37,9 @@
         <translation>This is not actionable</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="432"/>
-        <source>این چیز انجام شدنی است</source>
-        <translation type="unfinished">This is actionable</translation>
-    </message>
-    <message>
-        <source>این چیز با یک انجام یک عمل به پایان نمی‌رسد</source>
-        <translation type="obsolete">It will not end with one action</translation>
-    </message>
-    <message>
-        <source>این عمل بیشتر از ۵ دقیقه زمان نیاز دارد</source>
-        <translation type="obsolete">This action needs more than 5 miuntes to be done</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="674"/>
-        <source>این عمل کمتر از ۵ دقیقه انجام می‌شود</source>
-        <translation type="unfinished">This thing will be done in less than 5 minutes</translation>
-    </message>
-    <message>
         <location filename="../qml/Things/AddEditThing.qml" line="42"/>
         <source>لطفا قسمت &apos;چی تو ذهنته؟&apos; رو پر کن</source>
         <translation type="unfinished">Please fill &apos;what is in your mind&apos; section</translation>
-    </message>
-    <message>
-        <source>اطلاعات به درد نخوری است میخواهم به سطل آشغال بیاندازم.</source>
-        <translation type="obsolete">This information is not useful, I want to put it to trash bin.</translation>
-    </message>
-    <message>
-        <source>می‌خواهم یک پروژه جدید بسازم.</source>
-        <translation type="obsolete">I want to make a new project.</translation>
-    </message>
-    <message>
-        <source>شاید یک روزی این رو انجام دادم.</source>
-        <translation type="obsolete">Maybe I will do it someday.</translation>
-    </message>
-    <message>
-        <source>اطلاعات مفیدی است میخواهم بعدا به آن مروجعه کنم.</source>
-        <translation type="obsolete">This information is useful, I want to refer to it later.</translation>
-    </message>
-    <message>
-        <source>می‌خواهم این عمل رو به پروژه های قدیمی اضافه کنم.</source>
-        <translation type="obsolete">I want to add it to existing projects.</translation>
-    </message>
-    <message>
-        <source>می‌خواهم این رو شخص دیگری انجام دهد.</source>
-        <translation type="obsolete">I want another person to do it.</translation>
-    </message>
-    <message>
-        <source>می‌خواهم این عمل رو در زمان مشخصی انجام دهم.</source>
-        <translation type="obsolete">I want to do it at a certain time.</translation>
-    </message>
-    <message>
-        <source>می‌خواهم این عمل رو در بعدا انجام دهم.</source>
-        <translation type="obsolete">I want to do it later.</translation>
-    </message>
-    <message>
-        <source>بفرست به پردازش نشده ها</source>
-        <translation type="vanished">Send to unproccessed.</translation>
     </message>
     <message>
         <location filename="../qml/Things/AddEditThing.qml" line="801"/>
@@ -147,13 +85,13 @@
     </message>
     <message>
         <location filename="../qml/Things/AddEditThing.qml" line="1151"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1253"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1359"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1623"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1700"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1762"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1865"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1968"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1269"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1395"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1658"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1735"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1797"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1900"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="2003"/>
         <source>بروزرسانی</source>
         <translation>Update</translation>
     </message>
@@ -164,58 +102,39 @@
     </message>
     <message>
         <location filename="../qml/Things/AddEditThing.qml" line="1203"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1221"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1814"/>
-        <location filename="../qml/Things/AddEditThing.qml" line="1832"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1237"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1849"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1867"/>
         <source>دسته بندی</source>
         <translation>Category</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1253"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1269"/>
         <source>بفرست به مرجع</source>
         <translation>Send to references</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1309"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1325"/>
         <source>انتخاب دوست</source>
         <translation>Choose friend</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1328"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1364"/>
         <source>دوست موردنظرت رو انتخاب کن.</source>
         <translation type="unfinished">Choose the friend you want.</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1577"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1612"/>
         <source>زمان مورد نظرت رو انتخاب کن.</source>
         <translation type="unfinished">Choose the time you want.</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1937"/>
-        <source>پروژه موردنظر رو انتخاب کن.</source>
-        <translation type="unfinished">Please choose the project you want.</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1975"/>
-        <source>لطفا پروژه موردنظر رو انتخاب کن.</source>
-        <translation type="unfinished">Please choose the project you want.</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1367"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1403"/>
         <source>لطفا دوست خودتو انتخاب کن.</source>
         <translation type="unfinished">Please choose your friend.</translation>
     </message>
     <message>
-        <source>می‌خواهم این عمل رو الان انجام دهم.</source>
-        <translation type="obsolete">I want to do it now.</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1369"/>
-        <source>لطفااول دوستاتو اضافه کن، بعد دوست خودتو انتخاب کن.</source>
-        <translation type="unfinished">Add your friends first, then choose your friend.</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1359"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1395"/>
         <source>بفرست به لیست انتظار</source>
         <translation>Send to waiting list</translation>
     </message>
@@ -245,11 +164,6 @@
         <translation type="unfinished">This information is not useful, I want to put it to trash bin.</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="445"/>
-        <source>این کار با انجام یک عمل به پایان نمی‌رسد</source>
-        <translation type="unfinished">It will not end with one action</translation>
-    </message>
-    <message>
         <location filename="../qml/Things/AddEditThing.qml" line="459"/>
         <source>میخوام یک پروژه جدید بسازم.</source>
         <translation type="unfinished">I want to make a new project.</translation>
@@ -258,11 +172,6 @@
         <location filename="../qml/Things/AddEditThing.qml" line="499"/>
         <source>میخوام این عمل رو به پروژه های قبلیم اضافه کنم.</source>
         <translation type="unfinished">I want to add it to existing projects.</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="539"/>
-        <source>این عمل بیش از ۵ دقیقه زمان نیاز دارد</source>
-        <translation type="unfinished">This action needs more than 5 miuntes to be done</translation>
     </message>
     <message>
         <location filename="../qml/Things/AddEditThing.qml" line="553"/>
@@ -275,9 +184,29 @@
         <translation type="unfinished">I want to do it at a certain time.</translation>
     </message>
     <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="432"/>
+        <source>این چیز انجام شدنیه</source>
+        <translation type="unfinished">This is actionable</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="445"/>
+        <source>این چیز با انجام یک کاری به پایان نمی‌رسه</source>
+        <translation type="unfinished">It will not end with one action</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="539"/>
+        <source>این چیز نیاز به بیشتر از ۵ دقیقه داره</source>
+        <translation type="unfinished">This action needs more than 5 miuntes to be done</translation>
+    </message>
+    <message>
         <location filename="../qml/Things/AddEditThing.qml" line="633"/>
-        <source>میخوام بعدا انجامش بدم.</source>
+        <source>میخوام تو اولین فرصت انجامش بدم.</source>
         <translation type="unfinished">I want to do it later.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="674"/>
+        <source>این چیز کمتر از ۵ دقیقه انجام میشه</source>
+        <translation type="unfinished">This thing will be done in less than 5 minutes</translation>
     </message>
     <message>
         <location filename="../qml/Things/AddEditThing.qml" line="689"/>
@@ -300,84 +229,115 @@
         <translation type="unfinished">Contexts</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1443"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1226"/>
+        <source>ثبت اولین دسته‌بندی</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="1229"/>
+        <source>مرجع</source>
+        <translation type="unfinished">Refrence</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="1349"/>
+        <source>ثبت اولین دوست</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="1352"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1353"/>
+        <source>لیست انتظار</source>
+        <translation type="unfinished">Waiting list</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="1478"/>
         <source>زمان دلخواه</source>
         <translation>ideal time</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1447"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1482"/>
         <source>فردا</source>
         <translation>tomorrow</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1459"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1494"/>
         <source>پس فردا</source>
         <translation>the day after tomorrow</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1471"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1506"/>
         <source>آخرهفته</source>
         <translation>weekend</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1483"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1518"/>
         <source>اول هفته‌ی بعد</source>
         <translation>Early next week</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1495"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1530"/>
         <source>آخر ماه</source>
         <translation>at the end of the month</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1527"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1562"/>
         <source>اول ماه بعد</source>
         <translation>early next month</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1569"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1604"/>
         <source>تعیین ساعت</source>
         <translation>set the time</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1599"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1634"/>
         <source>زمان انتخاب شده</source>
         <translation>chosen time</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1623"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1658"/>
         <source>بفرست به تقویم</source>
         <translation>Send to the calendar</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1630"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1665"/>
         <source>لطفا زمانی که میخوای این کار رو بکنی مشخص کن</source>
         <translation>Choose the time you want to do this task</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1700"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1735"/>
         <source>بفرست به سطل آشغال</source>
         <translation>Send to trash</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1762"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1797"/>
         <source>بفرست به انجام شده ها</source>
         <translation>Send to Done</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1865"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1900"/>
         <source>بفرست به شاید یک روزی</source>
         <translation>Send to maybe someday</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1919"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1954"/>
         <source>انتخاب پروژه</source>
         <translation>Choosing the project</translation>
     </message>
     <message>
-        <location filename="../qml/Things/AddEditThing.qml" line="1968"/>
+        <location filename="../qml/Things/AddEditThing.qml" line="1972"/>
+        <source>پروژه موردنظرت رو انتخاب کن.</source>
+        <translation type="unfinished">Please choose the project you want.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="2003"/>
         <source>بفرست به پروژه</source>
         <translation>Send to project list</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/AddEditThing.qml" line="2010"/>
+        <source>لطفا پروژه موردنظرت رو انتخاب کن.</source>
+        <translation type="unfinished">Please choose the project you want.</translation>
     </message>
 </context>
 <context>
@@ -389,8 +349,8 @@
     </message>
     <message>
         <location filename="../qml/AppBase/AppHeader.qml" line="106"/>
-        <source>آیا مایلید از نرم‌افزار خارج شوید؟</source>
-        <translation>Do you want to leave the app?</translation>
+        <source>میخوای از برنامه بری بیرون؟</source>
+        <translation type="unfinished">Do you want to leave the app?</translation>
     </message>
 </context>
 <context>
@@ -625,7 +585,7 @@
     </message>
     <message>
         <location filename="../qml/Account/Authentication.qml" line="61"/>
-        <source>کد تایید حساب شما به ایمیل</source>
+        <source>کد تایید به ایمیل</source>
         <translation type="unfinished">The verification code is sent to</translation>
     </message>
     <message>
@@ -664,14 +624,6 @@
         <translation type="unfinished">The confirmation password is not the same as password.</translation>
     </message>
     <message>
-        <source>لطفا رمزعبور خود را به صورت صحیح وارد نمایید</source>
-        <translation type="vanished">Please enter the correct password.</translation>
-    </message>
-    <message>
-        <source>تکرار رمز عبور با رمزعبور برابر نمی‌باشند.</source>
-        <translation type="vanished">The confirmation password is not the same as password.</translation>
-    </message>
-    <message>
         <location filename="../qml/Account/Authentication.qml" line="238"/>
         <source>کد رو دریافت نکردی؟</source>
         <translation>Didn&apos;t get the code?</translation>
@@ -704,30 +656,22 @@
     </message>
     <message>
         <location filename="../qml/Categories/CategoriesApi.qml" line="173"/>
-        <source>آیا مایلید که درخواست شما لغو گردد؟</source>
-        <translation>Do you want to cancel your request?</translation>
+        <source>میخوای درخواستت لغو بشه؟</source>
+        <translation type="unfinished">Do you want to cancel your request?</translation>
+    </message>
+    <message>
+        <location filename="../qml/Categories/CategoriesApi.qml" line="257"/>
+        <source>با موفقیت اضافه شد.</source>
+        <translation type="unfinished">is successfully added.</translation>
     </message>
     <message>
         <location filename="../qml/Categories/CategoriesApi.qml" line="257"/>
         <source>پروژه جدید با نام</source>
         <translation>The new project named</translation>
     </message>
-    <message>
-        <location filename="../qml/Categories/CategoriesApi.qml" line="257"/>
-        <source>با موفقیت افزوده شد.</source>
-        <translation type="unfinished">is successfully added.</translation>
-    </message>
-    <message>
-        <source>با موفقیت افزوده شد</source>
-        <translation type="vanished">is successfully added.</translation>
-    </message>
 </context>
 <context>
     <name>CategoriesList</name>
-    <message>
-        <source>هنوز دسته بندی‌ای ایجاد نکردی</source>
-        <translation type="vanished">You haven&apos;t added any categories yet.</translation>
-    </message>
     <message>
         <location filename="../qml/Categories/CategoriesList.qml" line="46"/>
         <source>هنوز دسته بندی‌ای ایجاد نکردی.</source>
@@ -775,8 +719,18 @@
         <translation type="unfinished">is not submitted.</translation>
     </message>
     <message>
+        <location filename="../qml/Categories/CategoriesList.qml" line="211"/>
+        <source>اضافه کردن پروژه</source>
+        <translation type="unfinished">Add new project</translation>
+    </message>
+    <message>
+        <location filename="../qml/Categories/CategoriesList.qml" line="211"/>
+        <source>اضافه کردن دسته‌بندی</source>
+        <translation type="unfinished">Add new category</translation>
+    </message>
+    <message>
         <location filename="../qml/Categories/CategoriesList.qml" line="262"/>
-        <source>لطفا نام پروژه رو وارد کن.</source>
+        <source>نام پروژه رو مشخص نکردی.</source>
         <translation type="unfinished">Write your new project name here.</translation>
     </message>
     <message>
@@ -790,10 +744,6 @@
         <translation type="unfinished">from your list?</translation>
     </message>
     <message>
-        <source>ثبت نشده است</source>
-        <translation type="vanished">is not submitted.</translation>
-    </message>
-    <message>
         <location filename="../qml/Categories/CategoriesList.qml" line="177"/>
         <source>ویرایش</source>
         <translation>Edit</translation>
@@ -805,16 +755,6 @@
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../qml/Categories/CategoriesList.qml" line="211"/>
-        <source>افزودن پروژه</source>
-        <translation>Add new project</translation>
-    </message>
-    <message>
-        <location filename="../qml/Categories/CategoriesList.qml" line="211"/>
-        <source>افزودن دسته‌بندی</source>
-        <translation>Add new category</translation>
-    </message>
-    <message>
         <location filename="../qml/Categories/CategoriesList.qml" line="250"/>
         <source>اضافه کن</source>
         <translation>Add</translation>
@@ -823,10 +763,6 @@
         <location filename="../qml/Categories/CategoriesList.qml" line="250"/>
         <source>تغییرش بده</source>
         <translation>Edit</translation>
-    </message>
-    <message>
-        <source>لطفا نام پروژه خود را وارد نمایید</source>
-        <translation type="vanished">Write your new project name here</translation>
     </message>
     <message>
         <location filename="../qml/Categories/CategoriesList.qml" line="267"/>
@@ -848,14 +784,6 @@
         <source>اختیاری</source>
         <translation>optional</translation>
     </message>
-    <message>
-        <source>آیا مایلید که</source>
-        <translation type="vanished">Do you want to delete the</translation>
-    </message>
-    <message>
-        <source>را حذف کنید؟</source>
-        <translation type="vanished">from your list?</translation>
-    </message>
 </context>
 <context>
     <name>ConfirmDialog</name>
@@ -873,68 +801,60 @@
 <context>
     <name>Contexts</name>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="31"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="30"/>
         <source>محلی برای انجام کارت نداری</source>
         <translation>Don&apos;t you have a context for your action?</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="82"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="81"/>
         <source>محل انجام</source>
         <translation>Area</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="140"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="139"/>
         <source>ویرایش</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="152"/>
-        <location filename="../qml/Contexts/Contexts.qml" line="255"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="151"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="254"/>
         <source>حذف</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="171"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="170"/>
         <source>افزودن محل</source>
         <translation>Add context</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="220"/>
-        <source>لطفا نام محل موردنظر خود را وارد نمایید</source>
-        <translation>Please write your context name</translation>
+        <location filename="../qml/Contexts/Contexts.qml" line="219"/>
+        <source>لطفا نام محل موردنظرتو وارد کن</source>
+        <translation type="unfinished">Please write your context name</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="225"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="224"/>
         <source>نام محل</source>
         <translation>context name</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="256"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="255"/>
         <source>مایلی که</source>
         <translation type="unfinished">Do you want to delete</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="256"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="255"/>
         <source>رو حذف کنی؟</source>
         <translation type="unfinished">from your context list?</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="208"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="207"/>
         <source>اضافه کن</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../qml/Contexts/Contexts.qml" line="208"/>
+        <location filename="../qml/Contexts/Contexts.qml" line="207"/>
         <source>تغییرش بده</source>
         <translation>Edit</translation>
-    </message>
-    <message>
-        <source>آیا مایلید که</source>
-        <translation type="vanished">Do you want to delete</translation>
-    </message>
-    <message>
-        <source>را حذف کنید؟</source>
-        <translation type="vanished">from your context list?</translation>
     </message>
 </context>
 <context>
@@ -946,35 +866,35 @@
     </message>
     <message>
         <location filename="../qml/Contexts/ContextsApi.qml" line="171"/>
-        <source>آیا مایلید که درخواست شما لغو گردد؟</source>
-        <translation>Do you want to cancel your request?</translation>
+        <source>میخوای درخواستت لغو بشه؟</source>
+        <translation type="unfinished">Do you want to cancel your request?</translation>
     </message>
 </context>
 <context>
     <name>DateInput</name>
     <message>
-        <location filename="../qml/Components/DateInput.qml" line="527"/>
-        <location filename="../qml/Components/DateInput.qml" line="1113"/>
+        <location filename="../qml/Components/DateInput.qml" line="526"/>
+        <location filename="../qml/Components/DateInput.qml" line="1112"/>
         <source>انصراف</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../qml/Components/DateInput.qml" line="503"/>
+        <location filename="../qml/Components/DateInput.qml" line="502"/>
         <source>امروز</source>
         <translation>Today</translation>
     </message>
     <message>
-        <location filename="../qml/Components/DateInput.qml" line="488"/>
+        <location filename="../qml/Components/DateInput.qml" line="487"/>
         <source>تایید</source>
         <translation>Confirm</translation>
     </message>
     <message>
-        <location filename="../qml/Components/DateInput.qml" line="839"/>
+        <location filename="../qml/Components/DateInput.qml" line="838"/>
         <source>اکنون</source>
         <translation>Now</translation>
     </message>
     <message>
-        <location filename="../qml/Components/DateInput.qml" line="1130"/>
+        <location filename="../qml/Components/DateInput.qml" line="1129"/>
         <source>تائید</source>
         <translation>Confirm</translation>
     </message>
@@ -1068,17 +988,17 @@
 <context>
     <name>FilePicker</name>
     <message>
-        <location filename="../qml/Components/FilePicker.qml" line="77"/>
+        <location filename="../qml/Components/FilePicker.qml" line="75"/>
         <source>بازگشت</source>
         <translation>Back</translation>
     </message>
     <message>
-        <location filename="../qml/Components/FilePicker.qml" line="98"/>
+        <location filename="../qml/Components/FilePicker.qml" line="96"/>
         <source>بستن</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../qml/Components/FilePicker.qml" line="114"/>
+        <location filename="../qml/Components/FilePicker.qml" line="112"/>
         <source>بازکردن</source>
         <translation>Open</translation>
     </message>
@@ -1092,13 +1012,13 @@
     </message>
     <message>
         <location filename="../qml/Things/FilesApi.qml" line="174"/>
-        <source>آیا مایلید که درخواست شما لغو گردد؟</source>
-        <translation>Do you want to cancel it?</translation>
+        <source>میخوای درخواستت لغو بشه؟</source>
+        <translation type="unfinished">Do you want to cancel your request?</translation>
     </message>
     <message>
         <location filename="../qml/Things/FilesApi.qml" line="282"/>
-        <source>فایل‌ها با موفقیت افزوده شد</source>
-        <translation>Files are added successfully.</translation>
+        <source>فایل‌ها با موفقیت اضافه شد</source>
+        <translation type="unfinished">Files are added successfully</translation>
     </message>
 </context>
 <context>
@@ -1133,25 +1053,29 @@
     <message>
         <location filename="../qml/Components/FilesSelection.qml" line="240"/>
         <location filename="../qml/Components/FilesSelection.qml" line="290"/>
-        <source>قبلا به لیست اضافه شده است</source>
-        <translation>has already been on the list</translation>
+        <source>قبلا به لیست اضافه شده</source>
+        <translation type="unfinished">has already been on the list</translation>
+    </message>
+    <message>
+        <location filename="../qml/Components/FilesSelection.qml" line="246"/>
+        <source> بیشتر از ۱۰ مگابایته</source>
+        <translation type="unfinished"> is more than 10MB</translation>
+    </message>
+    <message>
+        <location filename="../qml/Components/FilesSelection.qml" line="281"/>
+        <source>فایل‌هاتو انتخاب کن</source>
+        <translation type="unfinished">Choose the files you want</translation>
+    </message>
+    <message>
+        <location filename="../qml/Components/FilesSelection.qml" line="295"/>
+        <source>بیشتر از ۱۰ مگابایته</source>
+        <translation type="unfinished">is more than 10MB</translation>
     </message>
     <message>
         <location filename="../qml/Components/FilesSelection.qml" line="246"/>
         <location filename="../qml/Components/FilesSelection.qml" line="295"/>
         <source>حجم فایل</source>
         <translation>The size of</translation>
-    </message>
-    <message>
-        <location filename="../qml/Components/FilesSelection.qml" line="246"/>
-        <location filename="../qml/Components/FilesSelection.qml" line="295"/>
-        <source> بیشتر از ۱۰ مگابایت است</source>
-        <translation> is more than 10MB</translation>
-    </message>
-    <message>
-        <location filename="../qml/Components/FilesSelection.qml" line="281"/>
-        <source>لطفا فایل‌های خود را انتخاب نمایید</source>
-        <translation>Choose the files you want</translation>
     </message>
     <message>
         <location filename="../qml/Components/FilesSelection.qml" line="318"/>
@@ -1194,8 +1118,28 @@
     </message>
     <message>
         <location filename="../qml/Friends/Friends.qml" line="193"/>
-        <source>افزودن دوست</source>
-        <translation>Add friend</translation>
+        <source>اضافه کردن دوست</source>
+        <translation type="unfinished">Add friend</translation>
+    </message>
+    <message>
+        <location filename="../qml/Friends/Friends.qml" line="242"/>
+        <source>اسم دوستتو وارد نکردی</source>
+        <translation type="unfinished">Please Enter your friend&apos;s name</translation>
+    </message>
+    <message>
+        <location filename="../qml/Friends/Friends.qml" line="247"/>
+        <source>نام دوستت</source>
+        <translation type="unfinished">Your friend&apos;s name</translation>
+    </message>
+    <message>
+        <location filename="../qml/Friends/Friends.qml" line="277"/>
+        <source>میخوای</source>
+        <translation type="unfinished">Do you want delete</translation>
+    </message>
+    <message>
+        <location filename="../qml/Friends/Friends.qml" line="277"/>
+        <source>رو حذف کنی.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Friends/Friends.qml" line="230"/>
@@ -1207,26 +1151,6 @@
         <source>تغییرش بده</source>
         <translation>Edit</translation>
     </message>
-    <message>
-        <location filename="../qml/Friends/Friends.qml" line="242"/>
-        <source>لطفا نام دوست خود را وارد نمایید</source>
-        <translation>Please Enter your friend&apos;s name</translation>
-    </message>
-    <message>
-        <location filename="../qml/Friends/Friends.qml" line="247"/>
-        <source>نام دوست شما</source>
-        <translation>Your friend&apos;s name</translation>
-    </message>
-    <message>
-        <location filename="../qml/Friends/Friends.qml" line="277"/>
-        <source>آیا مایلید که</source>
-        <translation>Do you want delete</translation>
-    </message>
-    <message>
-        <location filename="../qml/Friends/Friends.qml" line="277"/>
-        <source>را حذف کنید؟</source>
-        <translation>From your friend list?</translation>
-    </message>
 </context>
 <context>
     <name>FriendsAPI</name>
@@ -1237,8 +1161,8 @@
     </message>
     <message>
         <location filename="../qml/Friends/FriendsAPI.qml" line="169"/>
-        <source>آیا مایلید که درخواست شما لغو گردد؟</source>
-        <translation>Do you want to cancel it?</translation>
+        <source>میخوای درخواستت لغو بشه؟</source>
+        <translation type="unfinished">Do you want to cancel your request?</translation>
     </message>
 </context>
 <context>
@@ -1309,9 +1233,9 @@
         <translation>Done</translation>
     </message>
     <message>
-        <location filename="../qml/HomePage.qml" line="128"/>
-        <source>اگه با این روش آشنایی نداری یا بخشی ازش رو فراموش کردی حتما مطالعه کن تا بهت تو انجام چیزهات کمک کنه</source>
-        <translation>If you are not familiar with this way or has forgotten some parts, please read it to help you with your actions.</translation>
+        <location filename="../qml/HomePage.qml" line="245"/>
+        <source>لیستی از اون دوستات که باهاشون درارتباطی و بهشون چیزی رو دادی که انجام بدن</source>
+        <translation type="unfinished">A list of your friends whom you are in contact with and devolve some things to them</translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="146"/>
@@ -1329,10 +1253,14 @@
         <translation>Now, it&apos;s time to do the works.</translation>
     </message>
     <message>
+        <location filename="../qml/HomePage.qml" line="128"/>
+        <source>اگه با این روش آشنایی نداری یا بخشی ازش رو فراموش کردی حتما مطالعه کن تا بهت، تو انجام دادن چیزهات کمک کنه.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/HomePage.qml" line="174"/>
-        <source>کاری رو به دوستت محول کن که برات انجام بده و بعدا ازش پیگیری کن</source>
-        <translatorcomment>اینجا چون جنسیت شخص سوم مشخص نیست من him/her گذاشتم</translatorcomment>
-        <translation>Leave it to your friend to do it for you and then follow up with him/her.</translation>
+        <source>کاری رو به دوستت بسپار که انجام بده و بعد ازش پیگیری کن.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="182"/>
@@ -1380,11 +1308,6 @@
         <translation>Friends</translation>
     </message>
     <message>
-        <location filename="../qml/HomePage.qml" line="245"/>
-        <source>لیستی از اون دوستات که باهاشون درارتباطی و بهشون چیزی رو محول میکنی</source>
-        <translation>A list of your friends whom you are in contact with and devolve some things to them</translation>
-    </message>
-    <message>
         <location filename="../qml/HomePage.qml" line="253"/>
         <source>پروفایل</source>
         <translation>Profile</translation>
@@ -1409,8 +1332,8 @@
     <name>ListView</name>
     <message>
         <location filename="../qml/Components/ListView.qml" line="9"/>
-        <source>داده‌ای ثبت نشده‌است</source>
-        <translation>No Data Available</translation>
+        <source>داده‌ای ثبت نشده</source>
+        <translation type="unfinished">No Data Available</translation>
     </message>
     <message>
         <location filename="../qml/Components/ListView.qml" line="46"/>
@@ -1427,23 +1350,23 @@
     </message>
     <message>
         <location filename="../qml/Things/LogsApi.qml" line="171"/>
-        <source>آیا مایلید که درخواست شما لغو گردد؟</source>
-        <translation>Do you want to cancel it?</translation>
+        <source>میخوای درخواستت لغو بشه؟</source>
+        <translation type="unfinished">Do you want to cancel your request?</translation>
     </message>
     <message>
         <location filename="../qml/Things/LogsApi.qml" line="253"/>
-        <source>نظر شما با موفقیت افزوده شد.</source>
-        <translation>Your comment is submitted successfully.</translation>
+        <source>نظرت با موفقیت اضافه شد.</source>
+        <translation type="unfinished">Your comment is submitted successfully.</translation>
     </message>
     <message>
         <location filename="../qml/Things/LogsApi.qml" line="316"/>
-        <source>نظر شما با موفقیت به‌روزرسانی شد.</source>
-        <translation>Your comment is upgraded successfully.</translation>
+        <source>نظرت با موفقیت به‌روزرسانی شد.</source>
+        <translation type="unfinished">Your comment is upgraded successfully.</translation>
     </message>
     <message>
         <location filename="../qml/Things/LogsApi.qml" line="376"/>
-        <source>نظر شما با موفقیت حذف شد.</source>
-        <translation>Your comment is deleted successfully.</translation>
+        <source>نظرت با موفقیت حذف شد.</source>
+        <translation type="unfinished">Your comment is deleted successfully.</translation>
     </message>
 </context>
 <context>
@@ -1480,19 +1403,19 @@
     </message>
     <message>
         <location filename="../qml/MainPage.qml" line="76"/>
-        <source>ارتباط شما با سرور قطع می‌باشد</source>
-        <translation>Your connection to the server is lost.</translation>
+        <source>ارتباطت با سرور قطع شده</source>
+        <translation type="unfinished">Your connection to the server is lost</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainPage.qml" line="96"/>
+        <source>برقراری دوباره</source>
+        <translation type="unfinished">Try again</translation>
     </message>
     <message>
         <location filename="../qml/MainPage.qml" line="77"/>
         <source>درحال بروزرسانی اطلاعات</source>
-        <translatorcomment>این سه نقطه داشته باشه بهتره به نظرم (اگه میخواد یه فرآیند رو نشون بده)</translatorcomment>
-        <translation>Upgrading information ...</translation>
-    </message>
-    <message>
-        <location filename="../qml/MainPage.qml" line="96"/>
-        <source>تلاش مجدد</source>
-        <translation>Try again</translation>
+        <translatorcomment>این سه نقطه داشته باشه بهتره به نظرم (اگه میخواد یه فرآیند رو نشون بده) - تو کد هست بعدش</translatorcomment>
+        <translation type="unfinished">Upgrading information</translation>
     </message>
 </context>
 <context>
@@ -1559,8 +1482,9 @@
 <context>
     <name>Profile</name>
     <message>
-        <source>لطفا فایل‌های خود را انتخاب نمایید</source>
-        <translation type="vanished">Choose the files you want</translation>
+        <location filename="../qml/Account/Profile.qml" line="50"/>
+        <source>عکستو انتخاب کن</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Account/Profile.qml" line="54"/>
@@ -1588,6 +1512,26 @@
         <translation>Update information</translation>
     </message>
     <message>
+        <location filename="../qml/Account/Profile.qml" line="249"/>
+        <source>نام کاربری یا ایمیل نباید خالی باشه.</source>
+        <translation type="unfinished">Please write your email correctly.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/Profile.qml" line="261"/>
+        <source>ایمیلی که نوشتی درست نیست.</source>
+        <translation type="unfinished">Please write your email correctly.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/Profile.qml" line="297"/>
+        <source>مطمئنی که میخوای رمز وردتو تغییر بدی؟</source>
+        <translation type="unfinished">Are you sure you want to change your password?</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/Profile.qml" line="329"/>
+        <source>مطمئنی که میخوای از حسابت بری بیرون؟</source>
+        <translation type="unfinished">Are you sure you want to log out of your account?</translation>
+    </message>
+    <message>
         <location filename="../qml/Account/Profile.qml" line="346"/>
         <source>حذف حساب کاربری</source>
         <translation>Delete Account</translation>
@@ -1598,34 +1542,19 @@
         <translation>Delete</translation>
     </message>
     <message>
+        <location filename="../qml/Account/Profile.qml" line="381"/>
+        <source>واقعا میخوای حسابتو حذف کنی؟!</source>
+        <translation type="unfinished">Are you sure you want to delete your account?</translation>
+    </message>
+    <message>
         <location filename="../qml/Account/Profile.qml" line="396"/>
         <source>رمز عبور</source>
         <translation>Password</translation>
     </message>
     <message>
         <location filename="../qml/Account/Profile.qml" line="414"/>
-        <source>در صورت حذف حساب، اطلاعات حساب شما قابل بازگشت نخواهد بود.</source>
-        <translation>Your account information will not be accessible if you delete your account.</translation>
-    </message>
-    <message>
-        <location filename="../qml/Account/Profile.qml" line="381"/>
-        <source>آیا واقعا مطمئن هستید که می‌خواهید حساب خورا حذف کنید؟</source>
-        <translation>Are you sure you want to delete your account?</translation>
-    </message>
-    <message>
-        <location filename="../qml/Account/Profile.qml" line="50"/>
-        <source>لطفا عکس خود را انتخاب نمایید</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/Account/Profile.qml" line="249"/>
-        <source>اطلاعات وارد شده صحیح نمی‌باشد.</source>
-        <translation>The entered information is incorrect</translation>
-    </message>
-    <message>
-        <location filename="../qml/Account/Profile.qml" line="261"/>
-        <source>لطفا ایمیل خود را به صورت صحیح وارد نمایید</source>
-        <translation>Please write your email correctly</translation>
+        <source>با حذف شدن حساب اطلاعات قابل بازگشت نیست.</source>
+        <translation type="unfinished">Your account information will not be accessible if you delete your account.</translation>
     </message>
     <message>
         <location filename="../qml/Account/Profile.qml" line="281"/>
@@ -1634,20 +1563,10 @@
         <translation>Change password</translation>
     </message>
     <message>
-        <location filename="../qml/Account/Profile.qml" line="297"/>
-        <source>آیا مطمئن هستید که می‌خواهید رمز ورود به حساب خود را تغییر دهید؟</source>
-        <translation>Are you sure you want to change your password?</translation>
-    </message>
-    <message>
         <location filename="../qml/Account/Profile.qml" line="313"/>
         <location filename="../qml/Account/Profile.qml" line="328"/>
         <source>خروج از حساب</source>
         <translation>Log out</translation>
-    </message>
-    <message>
-        <location filename="../qml/Account/Profile.qml" line="329"/>
-        <source>آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟</source>
-        <translation>Are you sure you want to log out of your account?</translation>
     </message>
 </context>
 <context>
@@ -1675,13 +1594,18 @@
     <message>
         <location filename="../qml/Account/SignIn.qml" line="153"/>
         <location filename="../qml/Account/SignIn.qml" line="190"/>
-        <source>نام کاربری باید بیشتراز ۴ حرف باشد</source>
-        <translation>The username must be more than 4 letters.</translation>
+        <source>نام کاربری باید بیشتراز ۴ حرف باشه.</source>
+        <translation type="unfinished">The username must be more than 4 letters.</translation>
     </message>
     <message>
         <location filename="../qml/Account/SignIn.qml" line="160"/>
-        <source>لطفا رمزعبور خود را وارد نمایید</source>
-        <translation>Please enter your password in the box</translation>
+        <source>لطفا رمزعبورتو وارد کن</source>
+        <translation type="unfinished">Please enter your password in the box.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="223"/>
+        <source>یکی بساز</source>
+        <translation type="unfinished">Sign Up</translation>
     </message>
     <message>
         <location filename="../qml/Account/SignIn.qml" line="174"/>
@@ -1698,11 +1622,6 @@
         <source>حساب نداری؟</source>
         <translation>Don&apos;t have an account?</translation>
     </message>
-    <message>
-        <location filename="../qml/Account/SignIn.qml" line="223"/>
-        <source>ثبت نام کن</source>
-        <translation>Sign Up</translation>
-    </message>
 </context>
 <context>
     <name>SignUp</name>
@@ -1718,9 +1637,8 @@
     </message>
     <message>
         <location filename="../qml/Account/SignUp.qml" line="74"/>
-        <source>فقط از حروف a تا z و A تا Z و 0 تا 9 و _ و . استفاده کنید</source>
-        <translatorcomment>اینو خودت چک کن</translatorcomment>
-        <translation>Just use a - z and A - Z and 0 to 9 and &apos;_&apos; and &apos;.&apos; in your username</translation>
+        <source>فقط از حروف a تا z و A تا Z و 0 تا 9 و _ و . استفاده کن.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Account/SignUp.qml" line="98"/>
@@ -1744,23 +1662,23 @@
     </message>
     <message>
         <location filename="../qml/Account/SignUp.qml" line="246"/>
-        <source>نام کاربری باید بیشتراز ۴ حرف باشد</source>
-        <translation>The username must be more than 4 letters</translation>
+        <source>نام کاربری باید بیشتراز ۴ حرف باشه.</source>
+        <translation type="unfinished">The username must be more than 4 letters.</translation>
     </message>
     <message>
         <location filename="../qml/Account/SignUp.qml" line="253"/>
-        <source>لطفا ایمیل خود را به صورت صحیح وارد نمایید</source>
-        <translation>Please write your email in the box correctly</translation>
+        <source>لطفا ایمیلتو به صورت صحیح وارد کن.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Account/SignUp.qml" line="260"/>
-        <source>لطفا رمزعبور خود را به صورت صحیح وارد نمایید</source>
-        <translation>Please write your password in the box correctly</translation>
+        <source>لطفا رمزعبورتو به صورت صحیح وارد کن.</source>
+        <translation type="unfinished">Please enter the correct password.</translation>
     </message>
     <message>
         <location filename="../qml/Account/SignUp.qml" line="267"/>
-        <source>تکرار رمز عبور با رمزعبور برابر نمی‌باشند.</source>
-        <translation>The confirmation password is not the same as the password.</translation>
+        <source>تکرار رمز عبور با رمزعبور یکی نیست.</source>
+        <translation type="unfinished">The confirmation password is not the same as password.</translation>
     </message>
     <message>
         <location filename="../qml/Account/SignUp.qml" line="292"/>
@@ -1815,18 +1733,13 @@
 <context>
     <name>StartPage</name>
     <message>
-        <location filename="../qml/StartPage.qml" line="16"/>
+        <location filename="../qml/StartPage.qml" line="15"/>
         <source>مموریتو</source>
         <translation>Memorito</translation>
     </message>
 </context>
 <context>
     <name>ThingList</name>
-    <message>
-        <location filename="../qml/Things/ThingList.qml" line="95"/>
-        <source>افزودن چیز به</source>
-        <translation>Add new thing to</translation>
-    </message>
     <message>
         <location filename="../qml/Things/ThingList.qml" line="159"/>
         <source>تو این لیست که چیزی نیست</source>
@@ -1959,19 +1872,24 @@
         <translation>File</translation>
     </message>
     <message>
-        <location filename="../qml/Things/ThingList.qml" line="919"/>
-        <source>نداشته باشد</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/ThingList.qml" line="919"/>
-        <source>داشته باشد</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qml/Things/ThingList.qml" line="1531"/>
+        <source>فایل داره</source>
+        <translation type="unfinished">Has some files</translation>
     </message>
     <message>
         <location filename="../qml/Things/ThingList.qml" line="919"/>
         <source>مهم نیست</source>
         <translation>is not important.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/ThingList.qml" line="919"/>
+        <source>نداشته باشه</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/ThingList.qml" line="919"/>
+        <source>داشته باشه</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Things/ThingList.qml" line="932"/>
@@ -2019,25 +1937,10 @@
         <translation>Descriptions</translation>
     </message>
     <message>
-        <location filename="../qml/Things/ThingList.qml" line="1300"/>
-        <source>توضیحاتی ثبت نشده است</source>
-        <translation>Not registered any description-yet</translation>
-    </message>
-    <message>
         <location filename="../qml/Things/ThingList.qml" line="785"/>
         <location filename="../qml/Things/ThingList.qml" line="1355"/>
         <source>اولویت</source>
         <translation>Priority</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/ThingList.qml" line="1355"/>
-        <location filename="../qml/Things/ThingList.qml" line="1383"/>
-        <location filename="../qml/Things/ThingList.qml" line="1411"/>
-        <location filename="../qml/Things/ThingList.qml" line="1439"/>
-        <location filename="../qml/Things/ThingList.qml" line="1466"/>
-        <location filename="../qml/Things/ThingList.qml" line="1502"/>
-        <source>ثبت نشده است</source>
-        <translation>any goals</translation>
     </message>
     <message>
         <location filename="../qml/Things/ThingList.qml" line="1383"/>
@@ -2061,6 +1964,26 @@
         <translation>Minute</translation>
     </message>
     <message>
+        <location filename="../qml/Things/ThingList.qml" line="95"/>
+        <source>اضافه کردن چیز جدید به</source>
+        <translation type="unfinished">Add new thing to</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/ThingList.qml" line="1300"/>
+        <source>توضیحاتی ثبت نشده</source>
+        <translation type="unfinished">Not registered any description-yet</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/ThingList.qml" line="1355"/>
+        <location filename="../qml/Things/ThingList.qml" line="1383"/>
+        <location filename="../qml/Things/ThingList.qml" line="1411"/>
+        <location filename="../qml/Things/ThingList.qml" line="1439"/>
+        <location filename="../qml/Things/ThingList.qml" line="1466"/>
+        <location filename="../qml/Things/ThingList.qml" line="1502"/>
+        <source>ثبت نشده</source>
+        <translation type="unfinished">any goals</translation>
+    </message>
+    <message>
         <location filename="../qml/Things/ThingList.qml" line="1464"/>
         <source>فرد انجام دهنده</source>
         <translation>Assigned to</translation>
@@ -2075,11 +1998,6 @@
         <source>توضیحات بیشتر</source>
         <translation>More details</translation>
     </message>
-    <message>
-        <location filename="../qml/Things/ThingList.qml" line="1531"/>
-        <source>فایل دارد</source>
-        <translation>Has some files</translation>
-    </message>
 </context>
 <context>
     <name>ThingsApi</name>
@@ -2090,18 +2008,18 @@
     </message>
     <message>
         <location filename="../qml/Things/ThingsApi.qml" line="212"/>
-        <source>آیا مایلید که درخواست شما لغو گردد؟</source>
-        <translation>Do you want to cancel your request?</translation>
+        <source>میخوای درخواستت لغو بشه؟</source>
+        <translation type="unfinished">Do you want to cancel your request?</translation>
     </message>
     <message>
         <location filename="../qml/Things/ThingsApi.qml" line="302"/>
-        <source>با موفقیت افزوده شد</source>
-        <translation>added successfully</translation>
+        <source>با موفقیت اضافه شد</source>
+        <translation type="unfinished">added successfully.</translation>
     </message>
     <message>
         <location filename="../qml/Things/ThingsApi.qml" line="376"/>
-        <source>با موفقیت بروزرسانی شد</source>
-        <translation>Updated successfully</translation>
+        <source>با موفقیت بروزرسانی شد.</source>
+        <translation type="unfinished">added successfully.</translation>
     </message>
 </context>
 <context>
@@ -2122,16 +2040,6 @@
         <location filename="../qml/Things/ThingsDetail.qml" line="276"/>
         <source>اولویت</source>
         <translation>Priority</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/ThingsDetail.qml" line="276"/>
-        <location filename="../qml/Things/ThingsDetail.qml" line="303"/>
-        <location filename="../qml/Things/ThingsDetail.qml" line="330"/>
-        <location filename="../qml/Things/ThingsDetail.qml" line="357"/>
-        <location filename="../qml/Things/ThingsDetail.qml" line="458"/>
-        <location filename="../qml/Things/ThingsDetail.qml" line="501"/>
-        <source>ثبت نشده است</source>
-        <translation type="unfinished">any goals</translation>
     </message>
     <message>
         <location filename="../qml/Things/ThingsDetail.qml" line="303"/>
@@ -2235,7 +2143,19 @@
     </message>
     <message>
         <location filename="../qml/Things/ThingsDetail.qml" line="984"/>
-        <source>را به سطل آشغال انتقال دهید؟</source>
+        <location filename="../qml/Things/ThingsDetail.qml" line="1072"/>
+        <source>میخوای که</source>
+        <translation type="unfinished">Do you want to delete the</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/ThingsDetail.qml" line="984"/>
+        <location filename="../qml/Things/ThingsDetail.qml" line="1072"/>
+        <source>برای همیشه حذف بشه؟</source>
+        <translation type="unfinished">permanently?</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/ThingsDetail.qml" line="984"/>
+        <source>بره تو سطل آشغال؟</source>
         <translation type="unfinished">temporarily?</translation>
     </message>
     <message>
@@ -2250,6 +2170,16 @@
         <location filename="../qml/Things/ThingsDetail.qml" line="1071"/>
         <source>حذف</source>
         <translation>Delete</translation>
+    </message>
+    <message>
+        <location filename="../qml/Things/ThingsDetail.qml" line="276"/>
+        <location filename="../qml/Things/ThingsDetail.qml" line="303"/>
+        <location filename="../qml/Things/ThingsDetail.qml" line="330"/>
+        <location filename="../qml/Things/ThingsDetail.qml" line="357"/>
+        <location filename="../qml/Things/ThingsDetail.qml" line="458"/>
+        <location filename="../qml/Things/ThingsDetail.qml" line="501"/>
+        <source>ثبت نشده</source>
+        <translation type="unfinished">any goals</translation>
     </message>
     <message>
         <location filename="../qml/Things/ThingsDetail.qml" line="555"/>
@@ -2288,35 +2218,9 @@
         <source>نظرتو وارد نکردی.</source>
         <translation>You haven&apos;t written your comment/log in the box.</translation>
     </message>
-    <message>
-        <location filename="../qml/Things/ThingsDetail.qml" line="984"/>
-        <location filename="../qml/Things/ThingsDetail.qml" line="1072"/>
-        <source>آیا مایلید که</source>
-        <translation>Do you want to delete the</translation>
-    </message>
-    <message>
-        <location filename="../qml/Things/ThingsDetail.qml" line="984"/>
-        <location filename="../qml/Things/ThingsDetail.qml" line="1072"/>
-        <source>برای همیشه حذف کنید؟</source>
-        <translation>permanently?</translation>
-    </message>
-    <message>
-        <source>را به سطل آشغال انتفال دهید؟</source>
-        <translation type="vanished">temporarily?</translation>
-    </message>
 </context>
 <context>
     <name>UsefulFunctions</name>
-    <message>
-        <location filename="../qml/Global/UsefulFunctions.qml" line="132"/>
-        <source>متاسفانه در ارتباط با سرور مشکلی پیش آمده است لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید و مجدد تلاش نمایید</source>
-        <translation>Sorry, you couldn&apos;t connect to the serve, please check your network connection and try again.</translation>
-    </message>
-    <message>
-        <location filename="../qml/Global/UsefulFunctions.qml" line="137"/>
-        <source>نام کاربری شما مجاز شناخته نشد، ممکن حساب شما پاک شده باشد.</source>
-        <translation>Your username was not authenticated, your account may have been deleted.</translation>
-    </message>
     <message>
         <location filename="../qml/Global/UsefulFunctions.qml" line="198"/>
         <location filename="../qml/Global/UsefulFunctions.qml" line="203"/>
@@ -2329,9 +2233,19 @@
         <translation>I need permission to save and show your files, will you give?</translation>
     </message>
     <message>
+        <location filename="../qml/Global/UsefulFunctions.qml" line="132"/>
+        <source>متاسفانه تو ارتباط با سرور مشکلی پیش اومده، اتصال به اینترنتتو بررسی کن و مجدد تلاش کن.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Global/UsefulFunctions.qml" line="137"/>
+        <source>نام کاربریت مجاز شناخته نشد، ممکن حسابت پاک شده باشه.</source>
+        <translation type="unfinished">Your username was not authenticated, your account may have been deleted.</translation>
+    </message>
+    <message>
         <location filename="../qml/Global/UsefulFunctions.qml" line="203"/>
-        <source>چون اجازه ندادی نمیتونم به فایل‌هات دسترسی داشته باشم و این ممکنه باعث بشه فایل‌هاتو در این دستگاه نبینی, میخوای دوباره امتحان کنی؟</source>
-        <translation>You didn&apos;t grant permission and it may lead to not seeing files in this device, would you like to try again?</translation>
+        <source>چون اجازه ندادی نمیتونم به فایل‌هات دسترسی داشته باشم و این ممکنه باعث بشه فایل‌هاتو تو این دستگاه نبینی, میخوای دوباره امتحان کنی؟</source>
+        <translation type="unfinished">You didn&apos;t grant permission and it may lead to not seeing files in this device, would you like to try again?</translation>
     </message>
     <message>
         <location filename="../qml/Global/UsefulFunctions.qml" line="207"/>
@@ -2359,73 +2273,64 @@
     <name>UserAPI</name>
     <message>
         <location filename="../qml/Global/UserAPI.qml" line="102"/>
-        <source>پروفایل شما با موفقیت بروزرسانی شد.</source>
-        <translation>Your profile updated successfully.</translation>
-    </message>
-    <message>
-        <source>لغو</source>
-        <translation type="vanished">Cancel</translation>
-    </message>
-    <message>
-        <source>آیا مایلید که درخواست شما لغو گردد؟</source>
-        <translation type="vanished">Do you want to cancel it?</translation>
+        <source>پروفایلت با موفقیت بروزرسانی شد.</source>
+        <translation type="unfinished">Your profile updated successfully.</translation>
     </message>
     <message>
         <location filename="../qml/Global/UserAPI.qml" line="177"/>
-        <source>نام کاربری که انتخاب کرده اید، توسط شخص دیگری استفاده شده است. لطفا نام کاربری دیگری انتخاب نمایید.</source>
-        <translation>The username you selected has been used by someone else. Please select another username.</translation>
+        <source>نام کاربری که انتخاب کردی، قبلا توسط یکنفر دیگه انتخاب شده، لطفا نام کاربری دیگه‌ای انتخاب کن.</source>
+        <translation type="unfinished">The username you selected has been used by someone else. Please select another username.</translation>
     </message>
     <message>
         <location filename="../qml/Global/UserAPI.qml" line="181"/>
-        <source>حسابی با ایمیلی که وارد کرده‌اید، وجود دارید در صورتی که از ایمیل خود مطمئن هستید از بخش ورود به حساب، وارد حساب خود شوید.</source>
-        <translation>You have an account with the email you entered. If you are sure of your email, log in to your account from the login section.</translation>
+        <source>یک حساب با ایمیلی که وارد کردی وجود داره اگه مال خودته از بخش ورود به حساب، وارد حسابت شو.</source>
+        <translation type="unfinished">You have an account with the email you entered. If you are sure of your email, log in to your account from the login section.</translation>
     </message>
     <message>
         <location filename="../qml/Global/UserAPI.qml" line="241"/>
-        <source>ایمیل شما توسط شخص دیگری ثبت گردید لطفا مجدد امتحان نمایید.</source>
-        <translation>Your email is registered by someone else. Please try again.</translation>
+        <source>با این ایمیل حساب وجود داره، دوباره امتحان کن.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Global/UserAPI.qml" line="245"/>
-        <source>کد تائیدی که ارسال کرده اید، اشتباه است لطفا مجدد ارسال نمایید</source>
-        <translatorcomment>معمولا کد تایید رو وارد میکنن ، ارسال نمیکنن !</translatorcomment>
-        <translation>The verification code you sent is incorrect. Please resubmit</translation>
+        <source>کد تائیدی که ارسال کردی، اشتباه بود لطفا دوباره ارسال کن</source>
+        <translation type="unfinished">The verification code you sent is incorrect. Please resubmit</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="318"/>
-        <location filename="../qml/Global/UserAPI.qml" line="392"/>
-        <location filename="../qml/Global/UserAPI.qml" line="464"/>
-        <location filename="../qml/Global/UserAPI.qml" line="530"/>
-        <source>نام کاربری یا ایمیل وارد شده اشتباه می‌باشد.</source>
-        <translation>The username or the email entered is wrong.</translation>
+        <location filename="../qml/Global/UserAPI.qml" line="320"/>
+        <location filename="../qml/Global/UserAPI.qml" line="394"/>
+        <location filename="../qml/Global/UserAPI.qml" line="466"/>
+        <location filename="../qml/Global/UserAPI.qml" line="532"/>
+        <source>نام کاربری یا ایمیلی که وارد کردی اشتباهه.</source>
+        <translation type="unfinished">The username or the email entered is wrong.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="322"/>
-        <source>رمزعبور وارد شده اشتباه می‌باشد.</source>
-        <translation>The password is wrong.</translation>
+        <location filename="../qml/Global/UserAPI.qml" line="324"/>
+        <source>رمزعبوری که وارد کردی اشتباهه.</source>
+        <translation type="unfinished">The password is wrong.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="382"/>
+        <location filename="../qml/Global/UserAPI.qml" line="384"/>
         <source>تغییر رمز ورود</source>
         <translation>Change password</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="471"/>
-        <source>کد تائید وارد شده اشتباه می‌باشد.</source>
-        <translation>The entered verification code is wrong.</translation>
+        <location filename="../qml/Global/UserAPI.qml" line="473"/>
+        <source>کد تائیدی که ارسال کردی، اشتباهه دوباره تلاش کن.</source>
+        <translation type="unfinished">The entered verification code is wrong.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="522"/>
-        <source>کد تایید مجدد به ایمیل شما ارسال شد.</source>
-        <translation>The verification code was resent to your email.</translation>
+        <location filename="../qml/Global/UserAPI.qml" line="524"/>
+        <source>کد تایید دوباره به ایمیلت ارسال شد.</source>
+        <translation type="unfinished">The verification code was resent to your email.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="625"/>
-        <source>حساب کاربری شما با موفقیت حذف شد، ناراحت شدم که از پیشم رفتی :(</source>
-        <translation>Your account was deleted successfully. Sorry to see you go :(</translation>
+        <location filename="../qml/Global/UserAPI.qml" line="627"/>
+        <source>حساب کاربریت با موفقیت حذف شد، ناراحت شدم که از پیشم رفتی :(</source>
+        <translation type="unfinished">Your account was deleted successfully. Sorry to see you go :(</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="641"/>
+        <location filename="../qml/Global/UserAPI.qml" line="643"/>
         <source>رمز عبور وارد شده صحبح نمی‌باشد.</source>
         <translation type="unfinished">The entered password is incorrect.</translation>
     </message>

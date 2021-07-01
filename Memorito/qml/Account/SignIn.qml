@@ -150,14 +150,14 @@ Item{
                     {
                         usernameMoveAnimation.start()
                         usernameInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true)
+                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشه."),true)
                         return
                     }
                     if(passwordInput.text === "" )
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را وارد نمایید"),true)
+                        UsefulFunc.showLog(qsTr("لطفا رمزعبورتو وارد کن"),true)
                         return
                     }
                     UserApi.signIn(usernameInput.text,passwordInput.text)
@@ -187,7 +187,7 @@ Item{
                         {
                             usernameMoveAnimation.start()
                             usernameInput.forceActiveFocus()
-                            UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true)
+                            UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشه."),true)
                             return
                         }
                         UserApi.forgetPass(usernameInput.text)
@@ -220,7 +220,7 @@ Item{
             flat: true
             anchors.right: accountText.left
             anchors.verticalCenter: parent.verticalCenter
-            text: "<u>" + qsTr("ثبت نام کن") +"<u/>"
+            text: "<u>" + qsTr("یکی بساز") +"<u/>"
             Material.foreground: AppStyle.primaryInt
             onClicked: {
                 isSignIn = false

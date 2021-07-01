@@ -208,7 +208,7 @@ Item {
 
     AppButton{
         id:addBtn
-        text: listId === Memorito.Project?qsTr("افزودن پروژه"):qsTr("افزودن دسته‌بندی")
+        text: listId === Memorito.Project?qsTr("اضافه کردن پروژه"):qsTr("اضافه کردن دسته‌بندی")
         anchors{
             left: parent.left
             leftMargin: 20*AppStyle.size1W
@@ -259,7 +259,7 @@ Item {
                     addDialog.close()
                 }
                 else {
-                    UsefulFunc.showLog(qsTr("لطفا نام پروژه رو وارد کن."),true)
+                    UsefulFunc.showLog(qsTr("نام پروژه رو مشخص نکردی."),true)
                 }
             }
             AppTextInput{

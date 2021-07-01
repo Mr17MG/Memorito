@@ -125,7 +125,7 @@ Item{
 
                 ListElement{
                     title: qsTr("خلاصه کتاب جی تی دی")
-                    detail:qsTr("اگه با این روش آشنایی نداری یا بخشی ازش رو فراموش کردی حتما مطالعه کن تا بهت تو انجام چیزهات کمک کنه")
+                    detail:qsTr("اگه با این روش آشنایی نداری یا بخشی ازش رو فراموش کردی حتما مطالعه کن تا بهت، تو انجام دادن چیزهات کمک کنه.")
                     iconSrc: "qrc:/homepage/book.svg"
                     backColor: "#9c27b0"
                     textColor: "#fcfcfc"
@@ -171,7 +171,7 @@ Item{
                 ListElement{
                     title:qsTr("لیست انتظار")
                     iconSrc: "qrc:/homepage/waiting.svg"
-                    detail:qsTr("کاری رو به دوستت محول کن که برات انجام بده و بعدا ازش پیگیری کن")
+                    detail:qsTr("کاری رو به دوستت بسپار که انجام بده و بعد ازش پیگیری کن.")
                     backColor: "#03a9f4"
                     textColor: "#fcfcfc"
                     pageSource: "qrc:/Things/ThingList.qml"
@@ -242,7 +242,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("دوستان")
-                    detail:qsTr("لیستی از اون دوستات که باهاشون درارتباطی و بهشون چیزی رو محول میکنی")
+                    detail:qsTr("لیستی از اون دوستات که باهاشون درارتباطی و بهشون چیزی رو دادی که انجام بدن")
                     backColor: "#fff389"
                     textColor: "#0C0C0C"
                     iconSrc: "qrc:/homepage/friends.svg"

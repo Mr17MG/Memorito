@@ -209,7 +209,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                                              {
                                                  UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
+                                                             qsTr("میخوای درخواستت لغو بشه؟"),
                                                              function()
                                                              {
                                                                  xhr.abort()
@@ -299,7 +299,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                                     insertThings(Array(response.result))
                                 }
 
-                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت افزوده شد"),false)
+                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت اضافه شد"),false)
 
                                 if(filesModel)
                                     if(filesModel.count > 0)
@@ -373,7 +373,7 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                             {
                                 updateThings(response.result)
 
-                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت بروزرسانی شد"),false)
+                                UsefulFunc.showLog(" <b>'"+ response.result.title+" '</b>" +qsTr("با موفقیت بروزرسانی شد."),false)
                                 if(filesModel)
                                     if(filesModel.count > 0)
                                         FilesApi.addFiles(filesModel,filesModel.count,response.result.id)

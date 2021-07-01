@@ -273,7 +273,7 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("اولویت") +": " + (prevPageModel.priority_id?UsefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده است"))
+                            text: !prevPageModel?"":qsTr("اولویت") +": " + (prevPageModel.priority_id?UsefulFunc.findInModel(prevPageModel.priority_id,"Id",priorityModel).value.Text:qsTr("ثبت نشده"))
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                         }
@@ -300,7 +300,7 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("سطح انرژی") +": " + (prevPageModel.energy_id?UsefulFunc.findInModel(prevPageModel.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده است"))
+                            text: !prevPageModel?"":qsTr("سطح انرژی") +": " + (prevPageModel.energy_id?UsefulFunc.findInModel(prevPageModel.energy_id,"Id",energyModel).value.Text:qsTr("ثبت نشده"))
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                         }
@@ -327,7 +327,7 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("محل انجام") +": " + (prevPageModel.context_id?contextModel.count>0?UsefulFunc.findInModel(prevPageModel.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده است"))
+                            text: !prevPageModel?"":qsTr("محل انجام") +": " + (prevPageModel.context_id?contextModel.count>0?UsefulFunc.findInModel(prevPageModel.context_id,"id",contextModel).value.context_name:"":qsTr("ثبت نشده"))
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                         }
@@ -354,7 +354,7 @@ Item {
                                 rightMargin: 10*AppStyle.size1W
                                 left: parent.left
                             }
-                            text: !prevPageModel?"":qsTr("تخمین زمانی") +": " + (prevPageModel.estimate_time?prevPageModel.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده است"))
+                            text: !prevPageModel?"":qsTr("تخمین زمانی") +": " + (prevPageModel.estimate_time?prevPageModel.estimate_time+ " " + qsTr("دقیقه"):qsTr("ثبت نشده"))
                             font{family: AppStyle.appFont;pixelSize:  23*AppStyle.size1F;bold:false}
                             elide: AppStyle.ltr?Text.ElideLeft:Text.ElideRight
                         }
@@ -455,7 +455,7 @@ Item {
                             Text {
                                 text:!prevPageModel?"":qsTr("فرد انجام دهنده") +": " + (prevPageModel.friend_id?friendModel.count>0?UsefulFunc.findInModel(prevPageModel.friend_id,"id",friendModel).value.friend_name
                                                                                                                                    :""
-                                                                                        :qsTr("ثبت نشده است"))
+                                                                                        :qsTr("ثبت نشده"))
                                 anchors{
                                     verticalCenter: friendImg.verticalCenter
                                     right: friendImg.left
@@ -498,7 +498,7 @@ Item {
                                                         (
                                                             dueDate?AppStyle.ltr? dueDate.getFullYear()+"/"+(dueDate.getMonth()+1)+"/"+dueDate.getDate()
                                                                                 : dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate()).slice(0,3).join("/")
-                                                            :qsTr("ثبت نشده است"))
+                                                            :qsTr("ثبت نشده"))
                                                         )
 
 
@@ -981,7 +981,7 @@ Item {
                 deleteLoader.active = false
             }
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " '" + prevPageModel.title  + "' " + (prevPageModel.list_id === Memorito.Trash?qsTr("برای همیشه حذف کنید؟"):qsTr("را به سطل آشغال انتقال دهید؟"))
+            dialogText: qsTr("میخوای که") + " '" + prevPageModel.title  + "' " + (prevPageModel.list_id === Memorito.Trash?qsTr("برای همیشه حذف بشه؟"):qsTr("بره تو سطل آشغال؟"))
             accepted: function() {
 
 
@@ -1069,7 +1069,7 @@ Item {
                 deleteLogLoader.active = false
             }
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " '" + logText  + "' " +qsTr("برای همیشه حذف کنید؟")
+            dialogText: qsTr("میخوای که") + " '" + logText  + "' " +qsTr("برای همیشه حذف بشه؟")
             accepted: function() {
                 LogsApi.deleteLog(logId,logModel,modelIndex)
             }

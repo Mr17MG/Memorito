@@ -71,7 +71,7 @@ Item {
                     onFocusChanged: {
                         if(focus && text.length === 0)
                         {
-                            ToolTip.show(qsTr("فقط از حروف a تا z و A تا Z و 0 تا 9 و _ و . استفاده کنید"),5000)
+                            ToolTip.show(qsTr("فقط از حروف a تا z و A تا Z و 0 تا 9 و _ و . استفاده کن."),5000)
                         }
                     }
                     inputMethodHints: Qt.ImhPreferLowercase
@@ -243,28 +243,28 @@ Item {
                     {
                         usernameMoveAnimation.start()
                         usernameInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشد"),true)
+                        UsefulFunc.showLog(qsTr("نام کاربری باید بیشتراز ۴ حرف باشه."),true)
                         return
                     }
                     if(UsefulFunc.emailValidation(emailInput.text) === false)
                     {
                         emailMoveAnimation.start()
                         emailInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("لطفا ایمیل خود را به صورت صحیح وارد نمایید"),true)
+                        UsefulFunc.showLog(qsTr("لطفا ایمیلتو به صورت صحیح وارد کن."),true)
                         return
                     }
                     if(passwordInput.text === "" )
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("لطفا رمزعبور خود را به صورت صحیح وارد نمایید"),true)
+                        UsefulFunc.showLog(qsTr("لطفا رمزعبورتو به صورت صحیح وارد کن."),true)
                         return
                     }
                     if ( passwordConfirmInput.text === "" || passwordConfirmInput.text !== passwordInput.text)
                     {
                         passwordConfirmMoveAnimation.start()
                         passwordConfirmInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور برابر نمی‌باشند."),true)
+                        UsefulFunc.showLog(qsTr("تکرار رمز عبور با رمزعبور یکی نیست."),true)
                         return
                     }
 

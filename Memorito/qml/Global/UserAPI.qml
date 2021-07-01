@@ -99,7 +99,7 @@ QtObject {
                     {
                         if(response.code === 200){
                             updateUser(response.result)
-                            UsefulFunc.showLog(qsTr("پروفایل شما با موفقیت بروزرسانی شد."),false)
+                            UsefulFunc.showLog(qsTr("پروفایلت با موفقیت بروزرسانی شد."),false)
                         }
                         return true
                     }
@@ -174,11 +174,11 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری که انتخاب کرده اید، توسط شخص دیگری استفاده شده است. لطفا نام کاربری دیگری انتخاب نمایید."),true)
+                                UsefulFunc.showLog(qsTr("نام کاربری که انتخاب کردی، قبلا توسط یکنفر دیگه انتخاب شده، لطفا نام کاربری دیگه‌ای انتخاب کن."),true)
                             }
                             else if(response.message.includes("email"))
                             {
-                                UsefulFunc.showLog(qsTr("حسابی با ایمیلی که وارد کرده‌اید، وجود دارید در صورتی که از ایمیل خود مطمئن هستید از بخش ورود به حساب، وارد حساب خود شوید."),true)
+                                UsefulFunc.showLog(qsTr("یک حساب با ایمیلی که وارد کردی وجود داره اگه مال خودته از بخش ورود به حساب، وارد حسابت شو."),true)
                             }
                         }
                         else
@@ -238,11 +238,11 @@ QtObject {
                     else {
                         if(response.code === 401)
                         {
-                            UsefulFunc.showLog(qsTr("ایمیل شما توسط شخص دیگری ثبت گردید لطفا مجدد امتحان نمایید."),true)
+                            UsefulFunc.showLog(qsTr("با این ایمیل حساب وجود داره، دوباره امتحان کن."),true)
                         }
                         else if(response.code === 403)
                         {
-                            UsefulFunc.showLog(qsTr("کد تائیدی که ارسال کرده اید، اشتباه است لطفا مجدد ارسال نمایید"),true)
+                            UsefulFunc.showLog(qsTr("کد تائیدی که ارسال کردی، اشتباه بود لطفا دوباره ارسال کن"),true)
                         }
 
                         else
@@ -283,6 +283,7 @@ QtObject {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = UsefulFunc.showBusy("");
+        console.log(json)
 
 
         xhr.onabort =function(){
@@ -296,6 +297,7 @@ QtObject {
                 busyDialog.close()
                 try
                 {
+                    console.log(xhr.responseText)
                     let response = xhr.response
                     if(response.ok)
                     {
@@ -315,11 +317,11 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیلی که وارد کردی اشتباهه."),true)
                             }
                             else if (response.message.includes("password"))
                             {
-                                UsefulFunc.showLog(qsTr("رمزعبور وارد شده اشتباه می‌باشد."),true)
+                                UsefulFunc.showLog(qsTr("رمزعبوری که وارد کردی اشتباهه."),true)
                             }
                         }
                         else
@@ -389,7 +391,7 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیلی که وارد کردی اشتباهه."),true)
                             }
                         }
                         else
@@ -461,14 +463,14 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیلی که وارد کردی اشتباهه."),true)
                             }
                         }
                         else if(response.code === 403)
                         {
                             if(response.message.includes("OTP"))
                             {
-                                UsefulFunc.showLog(qsTr("کد تائید وارد شده اشتباه می‌باشد."),true)
+                                UsefulFunc.showLog(qsTr("کد تائیدی که ارسال کردی، اشتباهه دوباره تلاش کن."),true)
                             }
                         }
 
@@ -519,7 +521,7 @@ QtObject {
                     {
                         if(response.code === 200)
                         {
-                            UsefulFunc.showLog(qsTr("کد تایید مجدد به ایمیل شما ارسال شد."),false)
+                            UsefulFunc.showLog(qsTr("کد تایید دوباره به ایمیلت ارسال شد."),false)
                         }
                     }
                     else {
@@ -527,7 +529,7 @@ QtObject {
                         {
                             if(response.message.includes("username"))
                             {
-                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیل وارد شده اشتباه می‌باشد."),true)
+                                UsefulFunc.showLog(qsTr("نام کاربری یا ایمیلی که وارد کردی اشتباهه."),true)
                             }
                         }
                         else
@@ -622,7 +624,7 @@ QtObject {
                     console.log(xhr.responseText)
                     if(response.ok)
                     {
-                        UsefulFunc.showLog(qsTr("حساب کاربری شما با موفقیت حذف شد، ناراحت شدم که از پیشم رفتی :("),false)
+                        UsefulFunc.showLog(qsTr("حساب کاربریت با موفقیت حذف شد، ناراحت شدم که از پیشم رفتی :("),false)
                         myTools.deleteSaveDir();
                         UsefulFunc.mainLoader.source = "qrc:/Account/AccountMain.qml"
                         SettingDriver.setValue("last_date","")

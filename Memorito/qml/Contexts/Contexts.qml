@@ -216,7 +216,7 @@ Item {
                     addDialog.close()
                 }
                 else {
-                    UsefulFunc.showLog(qsTr("لطفا نام محل موردنظر خود را وارد نمایید"),true)
+                    UsefulFunc.showLog(qsTr("لطفا نام محل موردنظرتو وارد کن"),true)
                 }
             }
             AppTextField{

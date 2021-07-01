@@ -190,7 +190,7 @@ Item {
     }
 
     AppButton{
-        text: qsTr("افزودن دوست")
+        text: qsTr("اضافه کردن دوست")
         anchors{
             left: parent.left
             leftMargin: 20*AppStyle.size1W
@@ -239,12 +239,12 @@ Item {
                     addDialog.close()
                 }
                 else {
-                    UsefulFunc.showLog(qsTr("لطفا نام دوست خود را وارد نمایید"),true)
+                    UsefulFunc.showLog(qsTr("اسم دوستتو وارد نکردی"),true)
                 }
             }
             AppTextField{
                 id: friendName
-                placeholderText: qsTr("نام دوست شما")
+                placeholderText: qsTr("نام دوستت")
                 anchors{
                     right: parent.right
                     rightMargin: 40*AppStyle.size1W
@@ -274,7 +274,7 @@ Item {
             property int friendId: -1
             property int modelIndex: -1
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("آیا مایلید که") + " " + friendName + " " + qsTr("را حذف کنید؟")
+            dialogText: qsTr("میخوای") + " " + friendName + " " + qsTr("رو حذف کنی.")
             accepted: function() {
                 FriendsAPI.deleteFriend(friendId,friendModel,modelIndex)
             }

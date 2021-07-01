@@ -166,7 +166,7 @@ JOIN Friends AS T2 ON record_id =T2.local_id  WHERE table_id = 3 AND T2.user_id 
                                              {
                                                  UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
+                                                             qsTr("میخوای درخواستت لغو بشه؟"),
                                                              function()
                                                              {
                                                                  xhr.abort()

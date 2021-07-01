@@ -429,7 +429,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action2Text
-                    text: "⏺ " + qsTr("این چیز انجام شدنی است") + ":"
+                    text: "⏺ " + qsTr("این چیز انجام شدنیه") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     font {
@@ -442,7 +442,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action3Text
-                    text: "⏺ " + qsTr("این کار با انجام یک عمل به پایان نمی‌رسد") + ":"
+                    text: "⏺ " + qsTr("این چیز با انجام یک کاری به پایان نمی‌رسه") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     height: 50 * AppStyle.size1H
@@ -536,7 +536,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action4Text
-                    text: "⏺ " + qsTr("این عمل بیش از ۵ دقیقه زمان نیاز دارد") + ":"
+                    text: "⏺ " + qsTr("این چیز نیاز به بیشتر از ۵ دقیقه داره") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     height: 50 * AppStyle.size1H
@@ -630,7 +630,7 @@ Item {
                 /*********************************/
                 AppRadioButton {
                     id: nextRadio
-                    text: qsTr("میخوام بعدا انجامش بدم.")
+                    text: qsTr("میخوام تو اولین فرصت انجامش بدم.")
                     width: parent.width
                     rightPadding: AppStyle.ltr ? 0 : 80 * AppStyle.size1W
                     leftPadding:  AppStyle.ltr ? 80 * AppStyle.size1W : 0
@@ -671,7 +671,7 @@ Item {
                 /*********************************/
                 Text {
                     id: action5Text
-                    text: "⏺ " + qsTr("این عمل کمتر از ۵ دقیقه انجام می‌شود") + ":"
+                    text: "⏺ " + qsTr("این چیز کمتر از ۵ دقیقه انجام میشه") + ":"
                     width: parent.width
                     color: AppStyle.textColor
                     height: 50 * AppStyle.size1H
@@ -889,8 +889,8 @@ Item {
                         rightMargin: 15 * AppStyle.size1W
                         left: parent.left
                         leftMargin: 15 * AppStyle.size1W
-                        bottom: contextText.bottom
-                        bottomMargin: -20 * AppStyle.size1W
+                        verticalCenter: contextText.verticalCenter
+
                     }
                     text: qsTr("ثبت اولین محل‌انجام")
                     visible: !contextInput.visible
@@ -1214,8 +1214,24 @@ Item {
                 }
                 color: AppStyle.textColor
             }
+            AppButton{
+                anchors {
+                    right: refrenceCategoryText.left
+                    rightMargin: 15 * AppStyle.size1W
+                    left: parent.left
+                    leftMargin: 15 * AppStyle.size1W
+                    verticalCenter: refrenceCategoryText.verticalCenter
+                }
+                radius: 10 * AppStyle.size1W
+                text: qsTr("ثبت اولین دسته‌بندی")
+                visible: !refrenceCategoryCombo.visible
+                onClicked: {
+                    UsefulFunc.mainStackPush("qrc:/Categories/CategoriesList.qml",qsTr("مرجع"),{listId: Memorito.Refrence,pageTitle:qsTr("مرجع")})
+                }
+            }
             AppComboBox {
                 id: refrenceCategoryCombo
+                visible: refrenceCategoryModel.count>0
                 textRole: "category_name"
                 font.pixelSize: AppStyle.size1F * 28
                 placeholderText: qsTr("دسته بندی")
@@ -1243,7 +1259,7 @@ Item {
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
-
+                visible: refrenceCategoryCombo.visible
                 anchors {
                     top: refrenceCategoryCombo ? refrenceCategoryCombo.visible ? refrenceCategoryCombo.bottom : parent.top : undefined
                     topMargin: 25 * AppStyle.size1W
@@ -1321,8 +1337,28 @@ Item {
                 }
                 color: AppStyle.textColor
             }
+            AppButton{
+                anchors {
+                    right: friendCategoryText.left
+                    rightMargin: 15 * AppStyle.size1W
+                    left: parent.left
+                    leftMargin: 15 * AppStyle.size1W
+                    verticalCenter: friendCategoryText.verticalCenter
+                }
+                radius: 10 * AppStyle.size1W
+                text: qsTr("ثبت اولین دوست")
+                visible: !friendCombo.visible
+                onClicked: {
+                    UsefulFunc.mainStackPush("qrc:/Things/ThingList.qml",qsTr("لیست انتظار"),{listId: Memorito.Waiting,pageTitle:qsTr("لیست انتظار")})
+                    title:qsTr("لیست انتظار")
+                    iconSrc: "qrc:/waiting.svg"
+                    pageSource: "qrc:/Things/ThingList.qml"
+                    listId: Memorito.Waiting
+                }
+            }
             AppComboBox {
                 id: friendCombo
+                visible: friendModel.count >0
                 textRole: "friend_name"
                 font.pixelSize: AppStyle.size1F * 28
                 placeholderText: qsTr("دوست موردنظرت رو انتخاب کن.")
@@ -1349,7 +1385,7 @@ Item {
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
-
+                visible: !friendCombo.visible
                 anchors {
                     top: friendCombo ? friendCombo.visible ? friendCombo.bottom : parent.top : undefined
                     topMargin: 25 * AppStyle.size1W
@@ -1363,11 +1399,10 @@ Item {
                 onClicked: {
 
                     if (friendCombo.currentIndex === -1) {
-                        if (friendModel.count > 0)
+                        if (friendModel.count > 0){
                             UsefulFunc.showLog( qsTr("لطفا دوست خودتو انتخاب کن."), true)
-                        else
-                            UsefulFunc.showLog( qsTr("لطفااول دوستاتو اضافه کن، بعد دوست خودتو انتخاب کن."), true)
-                        return
+                            return
+                        }
                     }
 
                     let hasFiles = checking()
@@ -1934,7 +1969,7 @@ Item {
                 id: projectCategoryCombo
                 textRole: "category_name"
                 font.pixelSize: AppStyle.size1F * 28
-                placeholderText: qsTr("پروژه موردنظر رو انتخاب کن.")
+                placeholderText: qsTr("پروژه موردنظرت رو انتخاب کن.")
                 currentIndex: prevPageModel ? projectCategoryModel.count > 0 ? prevPageModel.category_id ? UsefulFunc.findInModel(prevPageModel.category_id, "id", projectCategoryModel).index : -1 : -1 : categoryId !== -1 ? UsefulFunc.findInModel(categoryId, "id", projectCategoryModel).index : -1
                 anchors {
                     top: parent.top
@@ -1972,7 +2007,7 @@ Item {
                 onClicked: {
                     if (projectCategoryCombo.currentIndex === -1)
                     {
-                        UsefulFunc.showLog( qsTr("لطفا پروژه موردنظر رو انتخاب کن."), true)
+                        UsefulFunc.showLog( qsTr("لطفا پروژه موردنظرت رو انتخاب کن."), true)
                         return
                     }
                     let hasFiles = checking()

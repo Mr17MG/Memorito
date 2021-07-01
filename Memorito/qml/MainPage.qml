@@ -73,7 +73,7 @@ Loader{
             Text{
                 id: statusText
                 color: AppStyle.textColor
-                text: UsefulFunc.connectionType === 0 ? qsTr("ارتباط شما با سرور قطع می‌باشد")
+                text: UsefulFunc.connectionType === 0 ? qsTr("ارتباطت با سرور قطع شده")
                                                       : qsTr("درحال بروزرسانی اطلاعات") + " ..."
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
@@ -93,7 +93,7 @@ Loader{
                 visible: UsefulFunc.connectionType === 2
             }
             AppButton{
-                text: qsTr("تلاش مجدد")
+                text: qsTr("برقراری دوباره")
                 flat: true
                 icon{
                     source: "qrc:/rotate-right"

@@ -168,7 +168,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                                              {
                                                  UsefulFunc.showConfirm(
                                                              qsTr("لغو"),
-                                                             qsTr("آیا مایلید که درخواست شما لغو گردد؟"),
+                                                             qsTr("میخوای درخواستت لغو بشه؟"),
                                                              function()
                                                              {
                                                                  xhr.abort()
@@ -250,7 +250,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             if(local_id === null)
                             {
                                 model.append(response.result)
-                                UsefulFunc.showLog(qsTr("نظر شما با موفقیت افزوده شد."),false)
+                                UsefulFunc.showLog(qsTr("نظرت با موفقیت اضافه شد."),false)
                                 insertLogs(Array(response.result))
                                 
                             }
@@ -313,7 +313,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                     {
                         if(response.code === 200){
                             if(local_id === null)        {
-                                UsefulFunc.showLog(qsTr("نظر شما با موفقیت به‌روزرسانی شد."),false)
+                                UsefulFunc.showLog(qsTr("نظرت با موفقیت به‌روزرسانی شد."),false)
                                 model.set(modelIndex,response.result)
                                 updateLogs(response.result)
                             }
@@ -373,7 +373,7 @@ JOIN Logs AS T2 ON record_id =T2.local_id  WHERE table_id = 7 AND T2.user_id = ?
                             if(local_id === null)
                             {
                                 model.remove(modelIndex)
-                                UsefulFunc.showLog(qsTr("نظر شما با موفقیت حذف شد."),false)
+                                UsefulFunc.showLog(qsTr("نظرت با موفقیت حذف شد."),false)
                                 deleteLogLocalDatabase(logId)
                                 
                             }
