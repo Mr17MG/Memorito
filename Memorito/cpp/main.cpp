@@ -31,17 +31,17 @@ int main(int argc, char *argv[])
     //******************************************************//
 
     //**************** in Debug App ****************//
-    #ifdef QT_DEBUG
+#ifdef QT_DEBUG
     bool isDebug = true;
-    #else
+#else
     bool isDebug = false;
-    #endif
+#endif
     engine.rootContext()->setContextProperty("isDebug",isDebug);
 
     //******************************************************//
     QString domain = isDebug?app.platformName() == "android"?"http://192.168.0.117"
-                                                                :"http://memorito.local"
-                                   :"https://memorito.ir";
+                                                            :"http://memorito.local"
+                            :"https://memorito.ir";
     engine.rootContext()->setContextProperty("domain",domain);
 
     engine.addImportPath("qrc:/");

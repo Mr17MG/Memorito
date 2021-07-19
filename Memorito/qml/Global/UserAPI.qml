@@ -283,8 +283,6 @@ QtObject {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(json);
         var busyDialog = UsefulFunc.showBusy("");
-        console.log(json)
-
 
         xhr.onabort =function(){
             busyDialog.close()
