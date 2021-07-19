@@ -274,7 +274,7 @@ Item {
             property int friendId: -1
             property int modelIndex: -1
             dialogTitle: qsTr("حذف")
-            dialogText: qsTr("میخوای") + " " + friendName + " " + qsTr("رو حذف کنی.")
+            dialogText: qsTr("میخوای") + " " + friendName + " " + qsTr("رو حذف کنی")+"?"
             accepted: function() {
                 FriendsAPI.deleteFriend(friendId,friendModel,modelIndex)
             }

@@ -1017,8 +1017,8 @@
     </message>
     <message>
         <location filename="../qml/Things/FilesApi.qml" line="282"/>
-        <source>فایل‌ها با موفقیت اضافه شد</source>
-        <translation type="unfinished">Files are added successfully</translation>
+        <source>فایل‌ها با موفقیت اضافه شد.</source>
+        <translation type="unfinished">Files are added successfully.</translation>
     </message>
 </context>
 <context>
@@ -1138,8 +1138,8 @@
     </message>
     <message>
         <location filename="../qml/Friends/Friends.qml" line="277"/>
-        <source>رو حذف کنی.</source>
-        <translation type="unfinished"></translation>
+        <source>رو حذف کنی</source>
+        <translation type="unfinished">forever</translation>
     </message>
     <message>
         <location filename="../qml/Friends/Friends.qml" line="230"/>
@@ -1178,24 +1178,19 @@
         <translation>About Memorito</translation>
     </message>
     <message>
-        <location filename="../qml/HomePage.qml" line="137"/>
-        <source>هرچیزی که لازمه درباره‌ی مموریتو بدونی</source>
-        <translation>Everything you need to know about Memorito</translation>
-    </message>
-    <message>
         <location filename="../qml/HomePage.qml" line="145"/>
         <source>جمع‌آوری</source>
         <translation>Collect</translation>
     </message>
     <message>
-        <location filename="../qml/HomePage.qml" line="155"/>
-        <source>هرچیزی که ثبت کردی رو حالا پردازش کن ببین باید باهاشون چیکار کنی</source>
-        <translation>Process everything you have submitted until now to see what you must do with them.</translation>
-    </message>
-    <message>
         <location filename="../qml/HomePage.qml" line="163"/>
         <source>عملیات بعدی</source>
         <translation>Next action</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="164"/>
+        <source>حالا وقت انجام دادن کارهاست.</source>
+        <translation type="unfinished">Now, it&apos;s time to do the works.</translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="172"/>
@@ -1208,9 +1203,19 @@
         <translation>Calendar</translation>
     </message>
     <message>
+        <location filename="../qml/HomePage.qml" line="182"/>
+        <source>اگه نیازه که کاری رو حتما در روز یا ساعت مشخصی انجام بدی.</source>
+        <translation type="unfinished">If it is essential to do some actions at a certain hour or day.</translation>
+    </message>
+    <message>
         <location filename="../qml/HomePage.qml" line="190"/>
         <source>مرجع</source>
         <translation>Refrence</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="191"/>
+        <source>یادداشت‌های مهمی که نباید از دستشون بدی و بعدا نیازشون داری.</source>
+        <translation type="unfinished">Important notes which you mustn&apos;t leave them and need them in future.</translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="199"/>
@@ -1219,8 +1224,18 @@
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="201"/>
-        <source>ایده‌ها و چیزهایی که شاید یک‌روزی رفتی سراغشون که انجام بدی</source>
-        <translation>Ideas and things that you may refer to them someday to do them</translation>
+        <source>ایده‌ها و چیزهایی که شاید یک‌روزی رفتی سراغشون که انجام بدی.</source>
+        <translation type="unfinished">Ideas and things that you may refer to them someday to do them.</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="218"/>
+        <source>اون چیزهایی که قبلا انجامشون دادی و تموم شده.</source>
+        <translation type="unfinished">those things which you have done before and are finished.</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="227"/>
+        <source>چیزهایی که قبلا جمع کردی ولی دیگه بهشون احتیاج نداری.</source>
+        <translation type="unfinished">those things which you have collected before, but you don&apos;t need them now.</translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="208"/>
@@ -1228,19 +1243,14 @@
         <translation>Projects</translation>
     </message>
     <message>
+        <location filename="../qml/HomePage.qml" line="209"/>
+        <source>اون سری چیزهایی که نیازه چندتا چیز رو انجام بدی تا به نتیجه نهایی برسه.</source>
+        <translation type="unfinished">Those things which you have to do some things to end them.</translation>
+    </message>
+    <message>
         <location filename="../qml/HomePage.qml" line="217"/>
         <source>انجام شده‌ها</source>
         <translation>Done</translation>
-    </message>
-    <message>
-        <location filename="../qml/HomePage.qml" line="245"/>
-        <source>لیستی از اون دوستات که باهاشون درارتباطی و بهشون چیزی رو دادی که انجام بدن</source>
-        <translation type="unfinished">A list of your friends whom you are in contact with and devolve some things to them</translation>
-    </message>
-    <message>
-        <location filename="../qml/HomePage.qml" line="146"/>
-        <source>هرچیزی که تو ذهنت داری رو اینجا خالی کن، ذهن تو فقط یک حافظه نیست پس بهتره بیشتر نقش یک پردازنده رو داشته باشه</source>
-        <translation>Leave everything that is in your mind here, Your mind is not only a storage, so it is better for your mind to be processor.</translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="154"/>
@@ -1248,14 +1258,24 @@
         <translation>Unprocessed</translation>
     </message>
     <message>
-        <location filename="../qml/HomePage.qml" line="164"/>
-        <source>حالا وقت انجام دادن کارهاست</source>
-        <translation>Now, it&apos;s time to do the works.</translation>
-    </message>
-    <message>
         <location filename="../qml/HomePage.qml" line="128"/>
         <source>اگه با این روش آشنایی نداری یا بخشی ازش رو فراموش کردی حتما مطالعه کن تا بهت، تو انجام دادن چیزهات کمک کنه.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="137"/>
+        <source>هرچیزی که لازمه درباره‌ی مموریتو بدونی.</source>
+        <translation type="unfinished">Everything you need to know about Memorito.</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="146"/>
+        <source>هرچیزی که تو ذهنت داری رو اینجا خالی کن، ذهن تو فقط یک حافظه نیست پس بهتره بیشتر نقش یک پردازنده رو داشته باشه.</source>
+        <translation type="unfinished">Leave everything that is in your mind here, Your mind is not only a storage, so it is better for your mind to be processor.</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="155"/>
+        <source>هرچیزی که ثبت کردی رو حالا پردازش کن ببین باید باهاشون چیکار کنی.</source>
+        <translation type="unfinished">Process everything you have submitted until now to see what you must do with them.</translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="174"/>
@@ -1263,34 +1283,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/HomePage.qml" line="182"/>
-        <source>اگه نیازه که کاری رو حتما در روز یا ساعت مشخصی انجام بدی</source>
-        <translation>If it is essential to do some actions at a certain hour or day</translation>
-    </message>
-    <message>
-        <location filename="../qml/HomePage.qml" line="191"/>
-        <source>یادداشت‌های مهمی که نباید از دستشون بدی و بعدا نیازشون داری</source>
-        <translation>Important notes which you mustn&apos;t leave them and need them in future</translation>
-    </message>
-    <message>
-        <location filename="../qml/HomePage.qml" line="209"/>
-        <source>اون سری چیزهایی که نیازه چندتا چیز رو انجام بدی تا به نتیجه نهایی برسه</source>
-        <translation>Those things which you have to do some things to end them</translation>
-    </message>
-    <message>
-        <location filename="../qml/HomePage.qml" line="218"/>
-        <source>اون چیزهایی که قبلا انجامشون دادی و تموم شده</source>
-        <translation>those things which you have done before and are finished</translation>
-    </message>
-    <message>
         <location filename="../qml/HomePage.qml" line="226"/>
         <source>سطل زباله</source>
         <translation>Trash</translation>
-    </message>
-    <message>
-        <location filename="../qml/HomePage.qml" line="227"/>
-        <source>چیزهایی که قبلا جمع کردی ولی دیگه بهشون احتیاج نداری</source>
-        <translation>those things which you have collected before, but you don&apos;t need them now</translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="235"/>
@@ -1306,6 +1301,11 @@
         <location filename="../qml/HomePage.qml" line="244"/>
         <source>دوستان</source>
         <translation>Friends</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="245"/>
+        <source>لیستی از اون دوستات که باهاشون درارتباطی و بهشون چیزی رو دادی که انجام بدن.</source>
+        <translation type="unfinished">A list of your friends whom you are in contact with and devolve some things to them.</translation>
     </message>
     <message>
         <location filename="../qml/HomePage.qml" line="253"/>
@@ -1598,11 +1598,6 @@
         <translation type="unfinished">The username must be more than 4 letters.</translation>
     </message>
     <message>
-        <location filename="../qml/Account/SignIn.qml" line="160"/>
-        <source>لطفا رمزعبورتو وارد کن</source>
-        <translation type="unfinished">Please enter your password in the box.</translation>
-    </message>
-    <message>
         <location filename="../qml/Account/SignIn.qml" line="223"/>
         <source>یکی بساز</source>
         <translation type="unfinished">Sign Up</translation>
@@ -1611,6 +1606,11 @@
         <location filename="../qml/Account/SignIn.qml" line="174"/>
         <source>رمزتو فراموش کردی؟</source>
         <translation>Forgot your password?</translation>
+    </message>
+    <message>
+        <location filename="../qml/Account/SignIn.qml" line="160"/>
+        <source>لطفا رمزعبورتو وارد کن.</source>
+        <translation type="unfinished">Please enter your password in the box.</translation>
     </message>
     <message>
         <location filename="../qml/Account/SignIn.qml" line="183"/>
@@ -2013,8 +2013,8 @@
     </message>
     <message>
         <location filename="../qml/Things/ThingsApi.qml" line="302"/>
-        <source>با موفقیت اضافه شد</source>
-        <translation type="unfinished">added successfully.</translation>
+        <source>با موفقیت اضافه شد.</source>
+        <translation type="unfinished">is successfully added.</translation>
     </message>
     <message>
         <location filename="../qml/Things/ThingsApi.qml" line="376"/>
@@ -2293,44 +2293,44 @@
     </message>
     <message>
         <location filename="../qml/Global/UserAPI.qml" line="245"/>
-        <source>کد تائیدی که ارسال کردی، اشتباه بود لطفا دوباره ارسال کن</source>
-        <translation type="unfinished">The verification code you sent is incorrect. Please resubmit</translation>
+        <source>کد تائیدی که ارسال کردی، اشتباه بود لطفا دوباره ارسال کن.</source>
+        <translation type="unfinished">The verification code you sent is incorrect. Please resubmit.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="320"/>
-        <location filename="../qml/Global/UserAPI.qml" line="394"/>
-        <location filename="../qml/Global/UserAPI.qml" line="466"/>
-        <location filename="../qml/Global/UserAPI.qml" line="532"/>
+        <location filename="../qml/Global/UserAPI.qml" line="318"/>
+        <location filename="../qml/Global/UserAPI.qml" line="392"/>
+        <location filename="../qml/Global/UserAPI.qml" line="464"/>
+        <location filename="../qml/Global/UserAPI.qml" line="530"/>
         <source>نام کاربری یا ایمیلی که وارد کردی اشتباهه.</source>
         <translation type="unfinished">The username or the email entered is wrong.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="324"/>
+        <location filename="../qml/Global/UserAPI.qml" line="322"/>
         <source>رمزعبوری که وارد کردی اشتباهه.</source>
         <translation type="unfinished">The password is wrong.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="384"/>
+        <location filename="../qml/Global/UserAPI.qml" line="382"/>
         <source>تغییر رمز ورود</source>
         <translation>Change password</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="473"/>
+        <location filename="../qml/Global/UserAPI.qml" line="471"/>
         <source>کد تائیدی که ارسال کردی، اشتباهه دوباره تلاش کن.</source>
         <translation type="unfinished">The entered verification code is wrong.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="524"/>
+        <location filename="../qml/Global/UserAPI.qml" line="522"/>
         <source>کد تایید دوباره به ایمیلت ارسال شد.</source>
         <translation type="unfinished">The verification code was resent to your email.</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="627"/>
+        <location filename="../qml/Global/UserAPI.qml" line="625"/>
         <source>حساب کاربریت با موفقیت حذف شد، ناراحت شدم که از پیشم رفتی :(</source>
         <translation type="unfinished">Your account was deleted successfully. Sorry to see you go :(</translation>
     </message>
     <message>
-        <location filename="../qml/Global/UserAPI.qml" line="643"/>
+        <location filename="../qml/Global/UserAPI.qml" line="641"/>
         <source>رمز عبور وارد شده صحبح نمی‌باشد.</source>
         <translation type="unfinished">The entered password is incorrect.</translation>
     </message>

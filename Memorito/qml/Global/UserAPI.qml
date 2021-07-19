@@ -242,7 +242,7 @@ QtObject {
                         }
                         else if(response.code === 403)
                         {
-                            UsefulFunc.showLog(qsTr("کد تائیدی که ارسال کردی، اشتباه بود لطفا دوباره ارسال کن"),true)
+                            UsefulFunc.showLog(qsTr("کد تائیدی که ارسال کردی، اشتباه بود لطفا دوباره ارسال کن."),true)
                         }
 
                         else

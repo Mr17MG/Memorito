@@ -279,7 +279,7 @@ JOIN Files AS T2 ON record_id =T2.local_id  WHERE table_id = 5 AND T2.user_id = 
                     if(response.ok)
                     {
                         if(response.code === 201){
-                            UsefulFunc.showLog(qsTr("فایل‌ها با موفقیت اضافه شد"),false)
+                            UsefulFunc.showLog(qsTr("فایل‌ها با موفقیت اضافه شد."),false)
                             insertFiles(response.result)
                         }
                     }

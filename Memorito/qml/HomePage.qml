@@ -134,7 +134,7 @@ Item{
                 }
                 ListElement{
                     title: qsTr("درباه‌ی مموریتو")
-                    detail:qsTr("هرچیزی که لازمه درباره‌ی مموریتو بدونی")
+                    detail:qsTr("هرچیزی که لازمه درباره‌ی مموریتو بدونی.")
                     iconSrc: "qrc:/homepage/memorito.svg"
                     backColor: "#e91e63"
                     textColor: "#fcfcfc"
@@ -143,7 +143,7 @@ Item{
                 }
                 ListElement{
                     title: qsTr("جمع‌آوری")
-                    detail:qsTr("هرچیزی که تو ذهنت داری رو اینجا خالی کن، ذهن تو فقط یک حافظه نیست پس بهتره بیشتر نقش یک پردازنده رو داشته باشه")
+                    detail:qsTr("هرچیزی که تو ذهنت داری رو اینجا خالی کن، ذهن تو فقط یک حافظه نیست پس بهتره بیشتر نقش یک پردازنده رو داشته باشه.")
                     iconSrc: "qrc:/homepage/collect.svg"
                     backColor: "#7446c4"
                     textColor: "#ffffff"
@@ -152,7 +152,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("پردازش نشده‌ها")
-                    detail:qsTr("هرچیزی که ثبت کردی رو حالا پردازش کن ببین باید باهاشون چیکار کنی")
+                    detail:qsTr("هرچیزی که ثبت کردی رو حالا پردازش کن ببین باید باهاشون چیکار کنی.")
                     iconSrc: "qrc:/homepage/process.svg"
                     backColor: "#3f51b5"
                     textColor: "#fcfcfc"
@@ -161,7 +161,7 @@ Item{
                 }
                 ListElement{
                     title: qsTr("عملیات بعدی")
-                    detail:qsTr("حالا وقت انجام دادن کارهاست")
+                    detail:qsTr("حالا وقت انجام دادن کارهاست.")
                     iconSrc: "qrc:/homepage/nextAction.svg"
                     backColor: "#2196f3"
                     textColor: "#fcfcfc"
@@ -179,7 +179,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("تقویم")
-                    detail:qsTr("اگه نیازه که کاری رو حتما در روز یا ساعت مشخصی انجام بدی")
+                    detail:qsTr("اگه نیازه که کاری رو حتما در روز یا ساعت مشخصی انجام بدی.")
                     iconSrc: "qrc:/homepage/calendar.svg"
                     backColor: "#009688"
                     textColor: "#fcfcfc"
@@ -188,7 +188,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("مرجع")
-                    detail:qsTr("یادداشت‌های مهمی که نباید از دستشون بدی و بعدا نیازشون داری")
+                    detail:qsTr("یادداشت‌های مهمی که نباید از دستشون بدی و بعدا نیازشون داری.")
                     iconSrc: "qrc:/homepage/references.svg"
                     backColor: "#00bcd4"
                     textColor: "#fcfcfc"
@@ -198,7 +198,7 @@ Item{
                 ListElement{
                     title:qsTr("شاید یک‌روزی")
                     iconSrc: "qrc:/homepage/someday.svg"
-                    detail:qsTr("ایده‌ها و چیزهایی که شاید یک‌روزی رفتی سراغشون که انجام بدی")
+                    detail:qsTr("ایده‌ها و چیزهایی که شاید یک‌روزی رفتی سراغشون که انجام بدی.")
                     backColor: "#4caf50"
                     textColor: "#fcfcfc"
                     pageSource: "qrc:/Categories/CategoriesList.qml"
@@ -206,7 +206,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("پروژه‌ها")
-                    detail:qsTr("اون سری چیزهایی که نیازه چندتا چیز رو انجام بدی تا به نتیجه نهایی برسه")
+                    detail:qsTr("اون سری چیزهایی که نیازه چندتا چیز رو انجام بدی تا به نتیجه نهایی برسه.")
                     backColor: "#8bc34a"
                     textColor: "#fcfcfc"
                     iconSrc: "qrc:/homepage/projects.svg"
@@ -215,7 +215,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("انجام شده‌ها")
-                    detail:qsTr("اون چیزهایی که قبلا انجامشون دادی و تموم شده")
+                    detail:qsTr("اون چیزهایی که قبلا انجامشون دادی و تموم شده.")
                     backColor: "#ffc107"
                     textColor: "#0C0C0C"
                     iconSrc: "qrc:/homepage/done.svg"
@@ -224,7 +224,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("سطل زباله")
-                    detail:qsTr("چیزهایی که قبلا جمع کردی ولی دیگه بهشون احتیاج نداری")
+                    detail:qsTr("چیزهایی که قبلا جمع کردی ولی دیگه بهشون احتیاج نداری.")
                     backColor: "#ffd34e"
                     textColor: "#0C0C0C"
                     pageSource: "qrc:/Things/ThingList.qml"
@@ -242,7 +242,7 @@ Item{
                 }
                 ListElement{
                     title:qsTr("دوستان")
-                    detail:qsTr("لیستی از اون دوستات که باهاشون درارتباطی و بهشون چیزی رو دادی که انجام بدن")
+                    detail:qsTr("لیستی از اون دوستات که باهاشون درارتباطی و بهشون چیزی رو دادی که انجام بدن.")
                     backColor: "#fff389"
                     textColor: "#0C0C0C"
                     iconSrc: "qrc:/homepage/friends.svg"

@@ -157,7 +157,7 @@ Item{
                     {
                         passwordMoveAnimation.start()
                         passwordInput.forceActiveFocus()
-                        UsefulFunc.showLog(qsTr("لطفا رمزعبورتو وارد کن"),true)
+                        UsefulFunc.showLog(qsTr("لطفا رمزعبورتو وارد کن."),true)
                         return
                     }
                     UserApi.signIn(usernameInput.text,passwordInput.text)
