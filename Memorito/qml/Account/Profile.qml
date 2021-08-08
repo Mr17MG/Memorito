@@ -367,7 +367,7 @@ Item {
                 hasButton: true
                 buttonTitle: qsTr("حذف کن")
                 hasCloseIcon: true
-                height: AppStyle.size1H*600
+                height: AppStyle.size1H*550
                 width: 600*AppStyle.size1W
                 parent: UsefulFunc.mainLoader
                 dialogButton.onClicked: {
@@ -389,23 +389,70 @@ Item {
                         margins: 40*AppStyle.size1W
                     }
                 }
-                AppTextInput{
-
-                    id: passwordInput
-
-                    placeholderText: qsTr("رمز عبور")
-                    height: 100*AppStyle.size1W
-                    maximumLength: 50
-                    hasCounter: false
-                    filedInDialog: true
-                    horizontalAlignment: Qt.AlignLeft
-                    font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*25}
+                Item{
+                    id: passwordItem
+                    height: 100*AppStyle.size1H
                     anchors{
                         left: parent.left
                         right: parent.right
                         top: titleText.bottom
                         margins: 25*AppStyle.size1W
                         topMargin: 35*AppStyle.size1W
+                    }
+                    AppTextInput{
+                        id: passwordInput
+                        placeholderText: qsTr("رمز عبور")
+                        inputMethodHints: Qt.ImhHiddenText
+                        echoMode: AppTextField.Password
+                        horizontalAlignment: Qt.AlignLeft
+                        passwordMaskDelay: 200
+                        width: parent.width
+                        height: parent.height
+                        maximumLength: 50
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        EnterKey.type: Qt.EnterKeyGo
+                        Keys.onReturnPressed:  deleteAccountDialog.dialogButton.clicked(Qt.RightButton)
+                        Keys.onEnterPressed: deleteAccountDialog.dialogButton.clicked(Qt.RightButton)
+                        rightPadding: visiblePasswordIcon.width
+                        filedInDialog: true
+                        SequentialAnimation {
+                            id:passwordMoveAnimation
+                            running: false
+                            loops: 3
+                            NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: -10; duration: 50}
+                            NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: 10; duration: 100}
+                            NumberAnimation { target: passwordInput; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50}
+                        }
+                        AppButton{
+                            id:visiblePasswordIcon
+                            width: 65*AppStyle.size1W
+                            height: width
+                            flat: true
+                            icon{
+                                source: passwordInput.echoMode === AppTextField.Password?"qrc:/view.svg":"qrc:/hide.svg"
+                                color: AppStyle.textColor
+                            }
+                            anchors{
+                                right: AppStyle.ltr?undefined:parent.right
+                                left: AppStyle.ltr?parent.left:undefined
+                                verticalCenter: parent.verticalCenter
+                            }
+                            visible: passwordInput.text != "" && ( passwordInput.activeFocus || visiblePasswordIcon.activeFocus )
+                            onClicked: {
+                                if(passwordInput.echoMode === AppTextField.Normal)
+                                {
+                                    passwordInput.echoMode= AppTextField.Password
+                                }
+                                else{
+                                    passwordInput.echoMode = AppTextField.Normal
+                                }
+                            }
+                            onVisibleChanged: {
+                                if(!visible)
+                                    passwordInput.echoMode= AppTextField.Password
+
+                            }
+                        }
                     }
                 }
                 Text{
@@ -418,7 +465,7 @@ Item {
                     anchors{
                         left: parent.left
                         right: parent.right
-                        top: passwordInput.bottom
+                        top: passwordItem.bottom
                         margins: 35*AppStyle.size1W
                     }
                 }
