@@ -5,7 +5,7 @@ import Components 1.0
 import Global 1.0
 
 Item {
-    Component.onCompleted: {
+    function cameInToPage(object) {
         ContextsApi.getContexts(contextModel)
     }
 

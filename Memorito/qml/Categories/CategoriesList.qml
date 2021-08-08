@@ -8,7 +8,8 @@ import Global 1.0
 Item {
     property int listId : -1
     ListModel{ id:internalModel }
-    Component.onCompleted: {
+    function cameInToPage(object)
+    {
         if(listId === Memorito.Project)
         {
             internalModel.clear()

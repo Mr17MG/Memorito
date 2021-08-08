@@ -227,7 +227,7 @@ Item{
                 }
             }
 
-            Component.onCompleted: {
+            function cameInToPage(object) {
                 x = 0
                 y = 0
             }
