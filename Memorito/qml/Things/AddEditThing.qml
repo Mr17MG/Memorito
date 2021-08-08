@@ -1323,7 +1323,6 @@ Item {
             Text {
                 id: friendCategoryText
                 text: qsTr("انتخاب دوست") + ":"
-                visible: friendModel.count !== 0
                 anchors {
                     right: parent.right
                     rightMargin: 20 * AppStyle.size1W
@@ -1350,10 +1349,6 @@ Item {
                 visible: !friendCombo.visible
                 onClicked: {
                     UsefulFunc.mainStackPush("qrc:/Things/ThingList.qml",qsTr("لیست انتظار"),{listId: Memorito.Waiting,pageTitle:qsTr("لیست انتظار")})
-                    title:qsTr("لیست انتظار")
-                    iconSrc: "qrc:/waiting.svg"
-                    pageSource: "qrc:/Things/ThingList.qml"
-                    listId: Memorito.Waiting
                 }
             }
             AppComboBox {
@@ -1385,7 +1380,7 @@ Item {
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
-                visible: !friendCombo.visible
+                visible: friendCombo.visible
                 anchors {
                     top: friendCombo ? friendCombo.visible ? friendCombo.bottom : parent.top : undefined
                     topMargin: 25 * AppStyle.size1W
@@ -1477,10 +1472,18 @@ Item {
                 TabButton{
                     text: qsTr("زمان دلخواه")
                     width: 200 * AppStyle.size1W
+                    font {
+                        family: AppStyle.appFont
+                        pixelSize: AppStyle.size1F * 25
+                    }
                 }
                 TabButton{
                     text: qsTr("فردا")
                     width: 200 * AppStyle.size1W
+                    font {
+                        family: AppStyle.appFont
+                        pixelSize: AppStyle.size1F * 25
+                    }
                     onCheckedChanged: {
                         if(checked)
                         {
@@ -1493,6 +1496,10 @@ Item {
                 TabButton{
                     text: qsTr("پس فردا")
                     width: 200 * AppStyle.size1W
+                    font {
+                        family: AppStyle.appFont
+                        pixelSize: AppStyle.size1F * 25
+                    }
                     onCheckedChanged: {
                         if(checked)
                         {
@@ -1505,6 +1512,10 @@ Item {
                 TabButton{
                     text: qsTr("آخرهفته")
                     width: 200 * AppStyle.size1W
+                    font {
+                        family: AppStyle.appFont
+                        pixelSize: AppStyle.size1F * 25
+                    }
                     onCheckedChanged: {
                         if(checked)
                         {
@@ -1517,6 +1528,10 @@ Item {
                 TabButton{
                     text: qsTr("اول هفته‌ی بعد")
                     width: 200 * AppStyle.size1W
+                    font {
+                        family: AppStyle.appFont
+                        pixelSize: AppStyle.size1F * 25
+                    }
                     onCheckedChanged: {
                         if(checked)
                         {
@@ -1529,6 +1544,10 @@ Item {
                 TabButton{
                     text: qsTr("آخر ماه")
                     width: 200 * AppStyle.size1W
+                    font {
+                        family: AppStyle.appFont
+                        pixelSize: AppStyle.size1F * 25
+                    }
                     onCheckedChanged: {
                         if(checked)
                         {
@@ -1561,6 +1580,10 @@ Item {
                 TabButton{
                     text: qsTr("اول ماه بعد")
                     width: 200 * AppStyle.size1W
+                    font {
+                        family: AppStyle.appFont
+                        pixelSize: AppStyle.size1F * 25
+                    }
                     onCheckedChanged: {
                         if(checked)
                         {
@@ -1863,6 +1886,7 @@ Item {
             AppComboBox {
                 id: somedayCategoryCombo
                 textRole: "category_name"
+
                 font.pixelSize: AppStyle.size1F * 28
                 placeholderText: qsTr("دسته بندی") + " (" + qsTr("اختیاری") + ")"
                 currentIndex: prevPageModel ? somedayCategoryModel.count > 0 ? prevPageModel.category_id ? UsefulFunc.findInModel(prevPageModel.category_id, "id", somedayCategoryModel).index : -1 : -1 : -1
@@ -1874,6 +1898,7 @@ Item {
                     left: parent.left
                     leftMargin: 20 * AppStyle.size1W
                 }
+                visible: somedayCategoryModel.count !== 0
                 model: ListModel{id: somedayCategoryModel}
                 Component.onCompleted: {
                     CategoriesApi.getCategories(
@@ -1881,7 +1906,21 @@ Item {
                                 Memorito.Someday) // 9 = شاید یک روزی
                 }
             }
-
+            AppButton{
+                anchors {
+                    right: somedayCategoryText.left
+                    rightMargin: 15 * AppStyle.size1W
+                    left: parent.left
+                    leftMargin: 15 * AppStyle.size1W
+                    verticalCenter: somedayCategoryText.verticalCenter
+                }
+                radius: 10 * AppStyle.size1W
+                text: qsTr("ثبت اولین دسته‌بندی")
+                visible: !somedayCategoryCombo.visible
+                onClicked: {
+                    UsefulFunc.mainStackPush("qrc:/Categories/CategoriesList.qml",qsTr("شاید یک‌روزی"),{listId: Memorito.Someday,pageTitle:qsTr("شاید یک‌روزی")})
+                }
+            }
             AppButton {
                 id: somedayBtn
                 width: 410 * AppStyle.size1W
@@ -1890,7 +1929,7 @@ Item {
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
-
+                visible: somedayCategoryCombo.visible
                 anchors {
                     top: somedayCategoryCombo ? somedayCategoryCombo.visible ? somedayCategoryCombo.bottom : parent.top : undefined
                     topMargin: 25 * AppStyle.size1W
@@ -1965,6 +2004,21 @@ Item {
                 }
                 color: AppStyle.textColor
             }
+            AppButton{
+                anchors {
+                    right: projectCategoryText.left
+                    rightMargin: 15 * AppStyle.size1W
+                    left: parent.left
+                    leftMargin: 15 * AppStyle.size1W
+                    verticalCenter: projectCategoryText.verticalCenter
+                }
+                radius: 10 * AppStyle.size1W
+                text: qsTr("ثبت اولین پروژه")
+                visible: !projectCategoryCombo.visible
+                onClicked: {
+                    UsefulFunc.mainStackPush("qrc:/Categories/CategoriesList.qml",qsTr("پروژه‌ها"),{listId: Memorito.Project,pageTitle:qsTr("پروژه‌ها")})
+                }
+            }
             AppComboBox {
                 id: projectCategoryCombo
                 textRole: "category_name"
@@ -1979,6 +2033,7 @@ Item {
                     left: parent.left
                     leftMargin: 20 * AppStyle.size1W
                 }
+                visible: projectCategoryCombo.count > 0
                 model: ListModel{ id: projectCategoryModel}
                 Component.onCompleted: {
                     CategoriesApi.getCategories(projectCategoryModel,
@@ -1999,6 +2054,7 @@ Item {
                     topMargin: 25 * AppStyle.size1W
                     horizontalCenter: parent.horizontalCenter
                 }
+                visible: projectCategoryCombo.visible
                 text: prevPageModel
                       && listId !== Memorito.Process ? qsTr("بروزرسانی") : qsTr("بفرست به پروژه")
                 radius: 10 * AppStyle.size1W
