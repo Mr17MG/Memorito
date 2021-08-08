@@ -228,8 +228,6 @@ QtObject {
                     {
                         if(response.code === 202){
                             addUser(response.result)
-                            console.log(JSON.stringify(response.result))
-                            console.log(JSON.stringify(JSON.parse(getUsers())))
                             User.users.append(getUsers())
                             UsefulFunc.mainLoader.source = "qrc:/StartMemorito.qml"
                             User.set(getUserByUserId(User.users.get(0).id))
