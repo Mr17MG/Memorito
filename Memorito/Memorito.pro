@@ -41,9 +41,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 
-VERSION = 1.0.0
-APP_VERSION = \\\"$$VERSION\\\"
-APP_VERSION_CODE = 1
+VERSION = 0.9.0
+APP_VERSION = $$VERSION
+APP_VERSION_CODE = 0
 DEFINES += APP_VERSION APP_VERSION_CODE
 
 android{
@@ -67,8 +67,8 @@ android{
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/app/android
     ANDROID_ABIS = armeabi-v7a
-    ANDROID_VERSION_NAME = $$(APP_VERSION)
-    ANDROID_VERSION_CODE = $$(APP_VERSION_CODE)
+    ANDROID_VERSION_NAME = $$APP_VERSION
+    ANDROID_VERSION_CODE = $$APP_VERSION_CODE
 }
 
 ios{

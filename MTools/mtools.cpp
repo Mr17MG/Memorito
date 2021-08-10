@@ -195,6 +195,7 @@ QVariantList MTools::getMountedDevices()
 
                 if(storagePath.path().contains(rx) && storagePath.isReadable())
                 {
+                    if( storage.rootPath() != "/storage/emulated" )
                         list << storage.rootPath();
                 }
             }

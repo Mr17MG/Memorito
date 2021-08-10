@@ -97,9 +97,11 @@ Item {
                     placeholder.text: qsTr("رمز عبور جدید")
                     inputMethodHints: Qt.ImhHiddenText
                     echoMode: AppTextField.Password
+                    passwordMaskDelay: 200
                     EnterKey.type: getKeyType()
                     Keys.onReturnPressed:  getNextFocus()
                     Keys.onEnterPressed:  getNextFocus()
+                    rightPadding: visiblePasswordIcon.width
                 }
                 SequentialAnimation {
                     id:passwordMoveAnimation
@@ -118,8 +120,11 @@ Item {
                         source: passInput.echoMode === AppTextField.Password?"qrc:/view.svg":"qrc:/hide.svg"
                         color: AppStyle.textColor
                     }
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: passInput.right
+                    anchors{
+                        right: AppStyle.ltr?undefined:parent.right
+                        left: AppStyle.ltr?parent.left:undefined
+                        verticalCenter: parent.verticalCenter
+                    }
                     visible: passInput.text !== "" && ( passInput.activeFocus || visiblePasswordIcon.activeFocus )
                     onClicked: {
                         if(passInput.echoMode === AppTextField.Normal)
@@ -151,9 +156,11 @@ Item {
                     placeholder.text: qsTr("تکرار رمز عبور جدید")
                     inputMethodHints: Qt.ImhHiddenText
                     echoMode: AppTextField.Password
+                    passwordMaskDelay: 200
                     EnterKey.type: getKeyType()
                     Keys.onReturnPressed:  getNextFocus()
                     Keys.onEnterPressed:  getNextFocus()
+                    rightPadding: visiblePasswordIcon2.width
                 }
                 SequentialAnimation {
                     id:passwordConfirmMoveAnimation
@@ -172,8 +179,12 @@ Item {
                         source: confirmPassInput.echoMode === AppTextField.Password?"qrc:/view.svg":"qrc:/hide.svg"
                         color: AppStyle.textColor
                     }
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: confirmPassInput.right
+
+                    anchors{
+                        right: AppStyle.ltr?undefined:parent.right
+                        left: AppStyle.ltr?parent.left:undefined
+                        verticalCenter: parent.verticalCenter
+                    }
                     visible: confirmPassInput.text !== "" && ( confirmPassInput.activeFocus || visiblePasswordIcon2.activeFocus )
                     onClicked: {
                         if(confirmPassInput.echoMode === AppTextField.Normal)
