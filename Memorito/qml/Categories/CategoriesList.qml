@@ -241,7 +241,7 @@ Item {
             property int modelIndex: -1
             parent: UsefulFunc.mainPage
             width: 600*AppStyle.size1W
-            height: 570*AppStyle.size1H
+            height: 590*AppStyle.size1H
             onClosed: {
                 dialogLoader.active = false
             }
@@ -272,7 +272,7 @@ Item {
                     left: parent.left
                     leftMargin: 25*AppStyle.size1W
                     top: parent.top
-                    topMargin: 30*AppStyle.size1W
+                    topMargin: 45*AppStyle.size1W
                 }
                 EnterKey.type: Qt.EnterKeyGo
                 Keys.onReturnPressed: categoryDetailArea.focus = true
