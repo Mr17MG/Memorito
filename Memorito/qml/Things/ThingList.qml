@@ -1161,7 +1161,7 @@ Item {
             top: sortLoader.bottom
             topMargin: 15*AppStyle.size1H
             right: parent.right
-            rightMargin: 10*AppStyle.size1W
+            rightMargin: 30*AppStyle.size1W
             bottom: parent.bottom
             bottomMargin: 15*AppStyle.size1H
             left: parent.left
