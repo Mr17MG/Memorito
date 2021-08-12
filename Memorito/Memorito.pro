@@ -41,10 +41,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 
-VERSION = 0.9.0
-APP_VERSION = $$VERSION
-APP_VERSION_CODE = 0
-DEFINES += APP_VERSION APP_VERSION_CODE
+VERSION=0.9
+DEFINES += APP_VERSION=$$VERSION
+DEFINES += APP_VERSION_CODE=0
 
 android{
     QT += androidextras

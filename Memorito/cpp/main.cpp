@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setOrganizationName("MrMG");
     app.setApplicationName("Memorito");
-    app.setApplicationVersion(QString(APP_VERSION));
+    app.setApplicationVersion(QString::number(APP_VERSION));
     app.setApplicationDisplayName("Memorito");
     app.setDesktopFileName("Memorito");
     app.setOrganizationDomain("Memorito.ir");
