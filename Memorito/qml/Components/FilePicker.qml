@@ -65,7 +65,8 @@ AppDialog {
 
     header: Rectangle {
         id: toolbar
-
+        LayoutMirroring.enabled: false
+        LayoutMirroring.childrenInherit: true
         height: toolbarHeight
         color: AppStyle.primaryColor
 
