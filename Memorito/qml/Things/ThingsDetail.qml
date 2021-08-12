@@ -1021,7 +1021,7 @@ Item {
             property int modelIndex: -1
 
             parent: UsefulFunc.mainPage
-            height: 400*AppStyle.size1H
+            height: 410*AppStyle.size1H
             width: 600*AppStyle.size1W
             hasButton: true
             buttonTitle: qsTr("بروزرسانی")
@@ -1051,6 +1051,8 @@ Item {
                     rightMargin: 35*AppStyle.size1W
                     left: parent.left
                     leftMargin: 35*AppStyle.size1W
+                    top: parent.top
+                    topMargin: 15*AppStyle.size1H
                 }
             }
         }

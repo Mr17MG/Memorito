@@ -43,7 +43,7 @@ Item {
             id: detailInput
             rightPadding: 30*AppStyle.size1W
             leftPadding: 12*AppStyle.size1W
-            topPadding: 20*AppStyle.size1H
+            topPadding: 30*AppStyle.size1H
             bottomPadding: 20*AppStyle.size1H
             font{family: AppStyle.appFont;pixelSize:  25*AppStyle.size1F;bold:false}
             color: AppStyle.textColor

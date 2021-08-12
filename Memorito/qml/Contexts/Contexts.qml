@@ -197,7 +197,7 @@ Item {
             property int modelIndex: -1
             parent: UsefulFunc.mainPage
             width: 600*AppStyle.size1W
-            height: 300*AppStyle.size1H
+            height: 310*AppStyle.size1H
             onClosed: {
                 dialogLoader.active = false
             }
@@ -228,12 +228,12 @@ Item {
                     left: parent.left
                     leftMargin: 40*AppStyle.size1W
                     top: parent.top
-                    topMargin: 30*AppStyle.size1W
+                    topMargin: 45*AppStyle.size1W
                 }
                 EnterKey.type: Qt.EnterKeyGo
                 Keys.onReturnPressed: dialogButton.clicked(Qt.RightButton)
                 Keys.onEnterPressed: dialogButton.clicked(Qt.RightButton)
-                height: 100*AppStyle.size1H
+                height: 120*AppStyle.size1H
                 maximumLength: 25
             }
 

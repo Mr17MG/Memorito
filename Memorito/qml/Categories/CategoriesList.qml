@@ -50,7 +50,7 @@ Item {
             anchors{
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
-                horizontalCenterOffset: 35*AppStyle.size1W
+                horizontalCenterOffset: AppStyle.ltr?0:35*AppStyle.size1W
             }
         }
     }

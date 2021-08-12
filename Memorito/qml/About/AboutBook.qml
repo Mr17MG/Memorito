@@ -90,7 +90,7 @@ Item {
                                               : Material.color( AppStyle.primaryInt , Material.Shade600 )
                         Popup{
                             id: pop
-                            width: 80*AppStyle.size1W
+                            width: 100*AppStyle.size1W
                             height: 50*AppStyle.size1W
                             closePolicy: Popup.NoAutoClose
                             visible: listScroll.pressed || flick.moving

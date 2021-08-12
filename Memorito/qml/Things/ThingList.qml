@@ -194,7 +194,7 @@ Item {
                         anchors{
                             bottom: parent.bottom
                         }
-                        height: parent.radius
+                        height: 40*AppStyle.size1W
                     }
                     layer.enabled: topTab.Material.elevation > 0
                     layer.effect: ElevationEffect {
@@ -885,17 +885,19 @@ Item {
                                 width: parent.width
                                 layoutDirection: Qt.RightToLeft
                                 visible: (listId !== Memorito.Contexts)
-                                onHeightChanged: {
-                                    if(!visible)
-                                        height = 0
-                                }
+//                                onHeightChanged: {
+//                                    if(!visible)
+//                                        height = 0
+//                                }
+                                columns: 2
+                                horizontalItemAlignment: Qt.AlignRight
                                 ButtonGroup{ id:contextGroup;exclusive: false}
                                 Repeater{
                                     model: contextModel
                                     delegate: AppCheckBox{
                                         text: model.context_name
                                         ButtonGroup.group: contextGroup
-                                        width: parent.width/2
+                                        width: (parent.width/2)-15*AppStyle.size1W
                                         checked: queryList.context_id.indexOf(model.id) !== -1
                                     }
                                 }
