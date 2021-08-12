@@ -211,7 +211,7 @@ Item{
                     textColor: "#fcfcfc"
                     iconSrc: "qrc:/homepage/projects.svg"
                     pageSource: "qrc:/Categories/CategoriesList.qml"
-                    listId: Memorito.Someday
+                    listId: Memorito.Project
                 }
                 ListElement{
                     title:qsTr("انجام شده‌ها")
