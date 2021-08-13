@@ -9,8 +9,9 @@ SUBDIRS = \
           QCustomDate	\
           QDateConvertor \
           Memorito
-
-TARGET = ../FinalExcutable
+unix{
+    TARGET = ../FinalExcutable
+}
 # where to find the sub projects - give the folders
 MSecurity.subdir = ./MSecurity
 MSystemInfo.subdir  = ./MSystemInfo

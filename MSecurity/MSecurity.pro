@@ -6,7 +6,9 @@ CONFIG -= android_install
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = MSecurity
 
-DESTDIR = $$PWD/../FinalExcutable/MSecurity
+unix{
+    DESTDIR = $$PWD/../FinalExcutable/MSecurity
+}
 # Input
 SOURCES += \
         msecurity_plugin.cpp \

@@ -6,7 +6,9 @@ CONFIG += plugin c++11
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = QCustomDate
 
-DESTDIR = $$PWD/../FinalExcutable/QCustomDate
+unix{
+    DESTDIR = $$PWD/../FinalExcutable/QCustomDate
+}
 
 # Input
 SOURCES += \

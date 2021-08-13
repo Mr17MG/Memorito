@@ -6,7 +6,9 @@ CONFIG += plugin c++11
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = MTools
 
-DESTDIR = $$PWD/../FinalExcutable/MTools
+unix{
+    DESTDIR = $$PWD/../FinalExcutable/MTools
+}
 
 # Input
 SOURCES += \

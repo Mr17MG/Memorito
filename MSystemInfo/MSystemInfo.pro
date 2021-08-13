@@ -6,7 +6,9 @@ CONFIG += plugin c++11
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = MSysInfo
 
-DESTDIR = $$PWD/../FinalExcutable/MSysInfo
+unix{
+    DESTDIR = $$PWD/../FinalExcutable/MSysInfo
+}
 # Input
 SOURCES += \
         msysteminfo_plugin.cpp \

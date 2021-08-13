@@ -6,7 +6,9 @@ CONFIG += plugin c++11
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = QDateConvertor
 
-DESTDIR = $$PWD/../FinalExcutable/QDateConvertor
+unix{
+    DESTDIR = $$PWD/../FinalExcutable/QDateConvertor
+}
 
 # Input
 SOURCES += \
