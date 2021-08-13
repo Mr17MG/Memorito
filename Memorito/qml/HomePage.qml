@@ -181,7 +181,7 @@ Item{
                     title:qsTr("تقویم")
                     detail:qsTr("اگه نیازه که کاری رو حتما در روز یا ساعت مشخصی انجام بدی.")
                     iconSrc: "qrc:/homepage/calendar.svg"
-                    backColor: "#009688"
+                    backColor: "#00bcd4"
                     textColor: "#fcfcfc"
                     pageSource: "qrc:/Things/ThingList.qml"
                     listId: Memorito.Calendar
@@ -190,7 +190,7 @@ Item{
                     title:qsTr("مرجع")
                     detail:qsTr("یادداشت‌های مهمی که نباید از دستشون بدی و بعدا نیازشون داری.")
                     iconSrc: "qrc:/homepage/references.svg"
-                    backColor: "#00bcd4"
+                    backColor: "#009688"
                     textColor: "#fcfcfc"
                     pageSource: "qrc:/Categories/CategoriesList.qml"
                     listId: Memorito.Refrence
