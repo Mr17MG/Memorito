@@ -32,7 +32,6 @@ T.TextField {
     selectByMouse: true
     verticalAlignment: TextInput.AlignVCenter
     cursorDelegate: CursorDelegate { }
-    horizontalAlignment: Text.AlignRight
     Label {
         id: controlPlaceHolder
         text: control.placeholderText
