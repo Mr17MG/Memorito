@@ -374,7 +374,7 @@ AppDialog {
 
                 onPressAndHold: {
 
-                    if (model.fileSuffix.toLowerCase().match(/svg|png|jpg|gif|jpeg/g))
+                    if (model.fileSuffix.toLowerCase().match(/svg|png|jpg|gif|jpeg/ig))
                     {
                         popUp.popImg = folderListModel.folder+"/"+model.fileName
                         popUp.open()
@@ -393,7 +393,7 @@ AppDialog {
         }
     }
     property var extensions: ["aac","ace","ai","aut","avi","bin","bmp","cad","cdr","css","db","dmg","doc","docx","dwf","dwg","eps",
-        "exe","flac","gif","hlp","htm","html","ini","iso","java","jpg","js","mkv","mov","mp3","mp4","mpg","pdf","php","png","ppt",
+        "exe","flac","gif","hlp","htm","html","ini","iso","java","jpg","jpeg","js","mkv","mov","mp3","mp4","mpg","pdf","php","png","ppt",
         "ps","psd","rar","rss","rtf","svg","swf","sys","tiff","txt","xls","xlsx","zip",
     ]
 }
