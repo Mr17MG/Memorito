@@ -48,7 +48,7 @@ Item {
             x:0
             y:0
             title: qsTr("عکستو انتخاب کن")
-            nameFilters: [ "*.png","*.jpeg","*.jpg)" ]
+            nameFilters: [ "*.png","*.jpeg","*.jpg" ]
             onAccepted: {
                 let file = fileDialog.fileUrls[0];
                 UsefulFunc.mainStackPush("qrc:/Components/ImageEditor.qml",qsTr("ویرایش‌گر تصویر"),{imageSource:file})
