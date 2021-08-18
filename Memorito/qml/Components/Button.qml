@@ -36,7 +36,9 @@ T.Button {
     Material.elevation: flat ? control.down || control.hovered ? 2 : 0
     : control.down ? 8 : 2
     Material.background: flat ? "transparent"       : AppStyle.primaryInt
-    Material.foreground: control.checked ? AppStyle.textOnPrimaryColor : flat ? AppStyle.textColor  : AppStyle.textOnPrimaryColor
+    Material.foreground: flat? (control.checked?AppStyle.primaryColor
+                                               :AppStyle.textColor)
+                             : AppStyle.textOnPrimaryColor
     font{
         pixelSize: 25*AppStyle.size1F
         capitalization: Font.MixedCase
