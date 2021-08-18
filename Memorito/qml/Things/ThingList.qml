@@ -59,7 +59,6 @@ Item {
         if( categoryId !== -1)
             query.push("category_id"+"="+categoryId)
 
-
         if(listId===Memorito.Calendar)
         {
             query.push("datetime(due_date) BETWEEN datetime('" + queryList.due_date.fromDate + "') AND datetime('" + queryList.due_date.toDate + "')")
@@ -69,6 +68,9 @@ Item {
         {
             query.push("(lower(title) LIKE '%"+ queryList.searchText.toLowerCase() +"%' OR "+"lower(detail) LIKE '%"+ queryList.searchText.toLowerCase() +"%')")
         }
+
+        if(listId !== Memorito.Done)
+            query.push("is_done=0")
 
         var conditions = query.length?"WHERE "+query.join(" AND "):""
         var order = ("ORDER BY lower(" + queryList.orderBy + ") " + queryList.orderType)
@@ -89,8 +91,9 @@ Item {
             ThingsApi.getThings(["__"],listId,categoryId)
         }
 
-        else
+        else{
             ThingsApi.getThings(internalModel,listId,categoryId)
+        }
 
         addBtn.text = qsTr("اضافه کردن چیز جدید به") +" "+ (object.pageTitle??"")
 
@@ -1497,9 +1500,9 @@ Item {
                                     }
                                 }
                                 Text {
-                                    property date dueDate: new Date(model.due_date)
+                                    property date dueDate:new Date(model.due_date)
                                     text:qsTr("زمان مشخص شده") +": "
-                                         +( dueDate ?AppStyle.ltr? dueDate.getFullYear()+"/"+(dueDate.getMonth()+1)+"/"+dueDate.getDate()
+                                         +( model.due_date ?AppStyle.ltr? dueDate.getFullYear()+"/"+(dueDate.getMonth()+1)+"/"+dueDate.getDate()
                                                                  :(dateConverter.toJalali(dueDate.getFullYear(),dueDate.getMonth()+1,dueDate.getDate())).slice(0,3).join("/")
                                            : qsTr("ثبت نشده"))
 

@@ -500,7 +500,8 @@ JOIN Things AS T2 ON record_id =T2.local_id  WHERE table_id = 4 AND T2.user_id =
                                                        ,[Memorito.NextAction,Memorito.Project,Memorito.Calendar,fromDate,toDate])
                             }
                             else
-                                result = tx.executeSql("SELECT * FROM Things WHERE list_id = ? AND is_done != 1 ORDER By id ASC",listId)
+                                result = tx.executeSql("SELECT * FROM Things WHERE list_id = ? AND is_done = 0 ORDER By id ASC",listId)
+
                             for(var i=0;i<result.rows.length;i++)
                             {
                                 valuesThings.push(result.rows.item(i))
