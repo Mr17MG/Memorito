@@ -10,12 +10,18 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     app.setOrganizationName("MrMG");
-    app.setApplicationName("Memorito");
     app.setApplicationVersion(QString::number(APP_VERSION));
+#ifdef QT_DEBUG
+    app.setApplicationDisplayName("Memorito-debug");
+    app.setApplicationName("Memorito-debug");
+    app.setDesktopFileName("Memorito-debug");
+    app.setOrganizationDomain("Memorito-debug");
+#else
+    app.setApplicationName("Memorito");
     app.setApplicationDisplayName("Memorito");
     app.setDesktopFileName("Memorito");
-    app.setOrganizationDomain("Memorito.ir");
-
+    app.setOrganizationDomain("Memorito");
+#endif
     QQmlApplicationEngine engine;
 
     //**************** App Style ****************//
