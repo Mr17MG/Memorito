@@ -810,10 +810,9 @@ Item {
                     Layout.maximumHeight: 70 * AppStyle.size1H
 
                     checkable: true
-                    Material.accent: "transparent"
-                    Material.primary: "transparent"
                     Material.background: checked ? AppStyle.primaryInt : "transparent"
-                    Material.foreground: checked ? AppStyle.textOnPrimaryColor : AppStyle.primaryInt
+                    Material.foreground: checked ? AppStyle.textOnPrimaryColor
+                                                 : AppStyle.textColor
 
                     checked: isDual
                     onCheckedChanged: {
@@ -844,7 +843,7 @@ Item {
                                                         === 3 ? 90 : 180) : (nRow === 3 ? 270 : 0)
                         anchors.fill: processIcon
                         source: processIcon
-                        color: processBtn.checked ? AppStyle.textOnPrimaryColor : AppStyle.primaryColor
+                        color:     parent.Material.foreground
                     }
                 }
             }
@@ -1095,7 +1094,6 @@ Item {
                 id: projectBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
@@ -1107,6 +1105,9 @@ Item {
                 radius: 10 * AppStyle.size1W
                 leftPadding: 35 * AppStyle.size1W
                 onClicked: {
+                    let hasFiles = checking()
+                    if(hasFiles === 2)
+                        return
 
                     if (listId === Memorito.Process)
                         CategoriesApi.addCategory(titleInput.text.trim(),
@@ -1139,7 +1140,6 @@ Item {
                 id: nextBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
@@ -1255,7 +1255,7 @@ Item {
                 id: refrenceBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
+
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
@@ -1376,7 +1376,7 @@ Item {
                 id: friendBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
+
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
@@ -1667,7 +1667,7 @@ Item {
                 id: calendarBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
+
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
@@ -1746,7 +1746,7 @@ Item {
                 id: trashBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
+
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
@@ -1808,7 +1808,7 @@ Item {
                 id: doBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
+
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
@@ -1925,7 +1925,7 @@ Item {
                 id: somedayBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
+
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
@@ -2044,7 +2044,7 @@ Item {
                 id: projectCategoryBtn
                 width: 410 * AppStyle.size1W
                 height: 70 * AppStyle.size1H
-                checkable: true
+
                 Material.accent: "transparent"
                 Material.primary: "transparent"
                 Material.background: AppStyle.primaryInt
