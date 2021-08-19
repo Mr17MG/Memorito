@@ -1,0 +1,2 @@
+"GTD task management"
+A cross-platform task and time management application based on GTD method.
