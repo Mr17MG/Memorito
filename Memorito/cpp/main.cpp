@@ -5,12 +5,15 @@
 #include <QIcon> // Require For icon
 #include <QSettings> // Require For settings
 #include "translator.h" // Require For Translator
+#include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     app.setOrganizationName("MrMG");
     app.setApplicationVersion(QString::number(APP_VERSION));
+
+
 #ifdef QT_DEBUG
     app.setApplicationDisplayName("Memorito-debug");
     app.setApplicationName("Memorito-debug");
@@ -29,6 +32,12 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":/icon2.png"));
     //*******************************************//
 
+    //**************** Command Line Options ****************//
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.process(app);
+    //*****************************************************//
 
     //**************** Load Language of App ****************//
     QSettings settings;
