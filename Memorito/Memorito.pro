@@ -43,7 +43,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 
-VERSION=0.9
+VERSION=0.93
 DEFINES += APP_VERSION=$$VERSION
 DEFINES += APP_VERSION_CODE=1
 
