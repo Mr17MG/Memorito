@@ -6,9 +6,11 @@ CONFIG += plugin c++11
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = QCustomDate
 
-unix{
     DESTDIR = $$PWD/../FinalExcutable/QCustomDate
-}
+    cpqmldir.files = qmldir
+    cpqmldir.path = $$DESTDIR
+    COPIES += cpqmldir
+
 
 # Input
 SOURCES += \
@@ -38,7 +40,3 @@ unix {
     target.path = $$installPath
     INSTALLS += target qmldir
 }
-
-cpqmldir.files = qmldir
-cpqmldir.path = $$DESTDIR
-COPIES += cpqmldir

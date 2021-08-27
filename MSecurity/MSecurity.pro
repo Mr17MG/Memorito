@@ -6,9 +6,11 @@ CONFIG -= android_install
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = MSecurity
 
-unix{
     DESTDIR = $$PWD/../FinalExcutable/MSecurity
-}
+    cpqmldir.files = qmldir
+    cpqmldir.path = $$DESTDIR
+    COPIES += cpqmldir
+
 # Input
 SOURCES += \
         msecurity_plugin.cpp \
@@ -36,6 +38,4 @@ unix {
     INSTALLS += target qmldir
 }
 
-cpqmldir.files = qmldir
-cpqmldir.path = $$DESTDIR
-COPIES += cpqmldir
+

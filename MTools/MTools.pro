@@ -6,9 +6,11 @@ CONFIG += plugin c++11
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = MTools
 
-unix{
     DESTDIR = $$PWD/../FinalExcutable/MTools
-}
+    cpqmldir.files = qmldir
+    cpqmldir.path = $$DESTDIR
+    COPIES += cpqmldir
+
 
 # Input
 SOURCES += \
@@ -39,6 +41,3 @@ unix {
     INSTALLS += target qmldir
 }
 
-cpqmldir.files = qmldir
-cpqmldir.path = $$DESTDIR
-COPIES += cpqmldir

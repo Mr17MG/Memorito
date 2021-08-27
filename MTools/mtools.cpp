@@ -8,7 +8,7 @@ MTools::MTools(QQuickItem *parent)
     // following line and re-implement updatePaintNode()
 
     // setFlag(ItemHasContents, true);
-    saveDir = (QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+QDir::separator()+"Memorito Data"+QDir::separator());
+    saveDir = (QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/Memorito Data/");
 
     QDir folder(this->saveDir);
     if(!folder.exists())
@@ -81,7 +81,7 @@ QVariantMap MTools::getFileInfo(QString filePath)
 
 bool MTools::checkFileExist(QString fileName, QString fileExtension)
 {
-    QFileInfo fileInfo(QUrl(getSaveDirectory()+QDir::separator()+fileName+"."+fileExtension).toString());
+    QFileInfo fileInfo(QUrl(getSaveDirectory()+"/"+fileName+"."+fileExtension).toString());
     return fileInfo.exists();
 }
 
@@ -110,7 +110,11 @@ QString MTools::getPictures(QString fileName)
 {
     if(checkFileExist(fileName,"jpeg"))
     {
+#ifdef Q_OS_WINDOWS
+        return "file:\\" +getSaveDirectory()+fileName+".jpeg";
+#else
         return "file://" +getSaveDirectory()+fileName+".jpeg";
+#endif
     }
     else return "";
 }

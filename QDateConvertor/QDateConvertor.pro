@@ -6,9 +6,12 @@ CONFIG += plugin c++11
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = QDateConvertor
 
-unix{
+
     DESTDIR = $$PWD/../FinalExcutable/QDateConvertor
-}
+    cpqmldir.files = qmldir
+    cpqmldir.path = $$DESTDIR
+    COPIES += cpqmldir
+
 
 # Input
 SOURCES += \
@@ -37,6 +40,3 @@ unix {
     INSTALLS += target qmldir
 }
 
-cpqmldir.files = qmldir
-cpqmldir.path = $$DESTDIR
-COPIES += cpqmldir

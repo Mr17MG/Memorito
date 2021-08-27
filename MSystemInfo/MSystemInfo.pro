@@ -6,9 +6,11 @@ CONFIG += plugin c++11
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = MSysInfo
 
-unix{
     DESTDIR = $$PWD/../FinalExcutable/MSysInfo
-}
+    cpqmldir.files = qmldir
+    cpqmldir.path = $$DESTDIR
+    COPIES += cpqmldir
+
 # Input
 SOURCES += \
         msysteminfo_plugin.cpp \
@@ -39,6 +41,4 @@ unix {
 android {
     QT += androidextras
 }
-cpqmldir.files = qmldir
-cpqmldir.path = $$DESTDIR
-COPIES += cpqmldir
+

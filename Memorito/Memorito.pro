@@ -26,9 +26,7 @@ RESOURCES += \
 TRANSLATIONS += \
     ts/en.ts
 
-unix{
     DESTDIR = $$PWD/../FinalExcutable
-}
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH += $$PWD/qml
