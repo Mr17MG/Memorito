@@ -5,7 +5,7 @@
 ***
 
 __Momorito__ designed to help you do your things stress-free, based on **__GTD: The Art of Stress-Free Productivity__** by David Allen.
-At first, Memorito was just my academic project to graduate with a bachelor. But there wasn't any reason to had fewer features than its similar software.
+At first, Memorito was just my academic project to graduate with a bachelor in The Quchan university of technology . But there wasn't any reason to had fewer features than its similar software.
 ***
 Memorito is built with C++, Javascript, PHP, QML, and the Qt software framework and made based on the MVC programming architecture.
 ***
@@ -25,7 +25,8 @@ Then thanks to Mr. Ali Baniasadi for translating the software into English and h
 In the end, thanks to Ms. Zahra Amirahmadi for preparing the book's summary and her good ideas about improving the user experiences.
 ***
 ***
-
+The Quchan university of technology: **__QIET.AC.IR/en__**
+***
 Website: **__Memorito.ir__**
 ***
 Email: **__MemoritoApp@gmail.com__**
