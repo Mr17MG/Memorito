@@ -1,5 +1,0 @@
-<i>Memorito</i> is a cross-platform task management app based on GTD method. It tries to be minimal and fast, letting you easiliy access your GTD list. It’s also customizable, so you can adjust it to your taste. It lets you follow the things your friends should do for you. A built-in file manager helps you picking files related to your tasks.
-
-Currently, the user interface of <i>Memorito</i> supports Persian and English. It comes with a light and a dark theme.
-
-<i>Memorito</i> is also available for Linux and Windows.

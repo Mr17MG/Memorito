@@ -1,0 +1,1 @@
+ICON = $$PWD/icon.png

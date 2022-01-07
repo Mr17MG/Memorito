@@ -1,0 +1,10 @@
+module Memorito.Global
+singleton User                  User.qml
+singleton Memorito              Enums.qml
+singleton AppStyle              AppStyle.qml
+singleton UsefulFunc            UsefulFunctions.qml
+singleton UiFunctions           UiFunctions.qml
+singleton SettingDriver         SettingDriver.qml
+
+AppShortcut                     AppShortcut.qml
+
