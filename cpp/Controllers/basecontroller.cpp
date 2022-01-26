@@ -112,10 +112,13 @@ QJsonObject BaseController::parseToJsonObject(QByteArray rawData)
     return jsonObj;
 }
 
-void BaseController::sendRequest(QNetworkAccessManager::Operation method, QNetworkRequest request, QJsonDocument *data)
+void BaseController::sendRequest(QNetworkAccessManager::Operation method, QNetworkRequest request, QJsonDocument *data, bool hasBusyLoaderInGui)
 {
-    Logger *logger = Logger::getInstance();
-    emit logger->loading("");
+    if(hasBusyLoaderInGui)
+    {
+        Logger *logger = Logger::getInstance();
+        emit logger->loading("");
+    }
 
     switch (method)
     {

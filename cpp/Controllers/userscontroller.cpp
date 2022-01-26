@@ -153,7 +153,7 @@ void UsersController::validateToken()
     QJsonDocument doc(json);
 
     QNetworkRequest postReq = baseApi->createRequest("validate-token");
-    baseApi->sendRequest(QNetworkAccessManager::PostOperation,postReq,&doc);
+    baseApi->sendRequest(QNetworkAccessManager::PostOperation,postReq,&doc,false);
 }
 
 void UsersController::deleteAccount(int userId, QString password)

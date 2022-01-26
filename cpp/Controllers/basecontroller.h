@@ -43,7 +43,7 @@ public:
     BaseController();
 
     QNetworkRequest createRequest(QString path = "", QUrlQuery *query = nullptr);
-    void sendRequest(QNetworkAccessManager::Operation method, QNetworkRequest request, QJsonDocument *data = nullptr);
+    void sendRequest(QNetworkAccessManager::Operation method, QNetworkRequest request, QJsonDocument *data = nullptr, bool hasBusyLoaderInGui = true);
 
     const QString &getApiName() const;
     void setApiName(const QString &newApiName);
