@@ -131,6 +131,11 @@ Item {
                                    : mTools.readFile(":/About/About-Farsi.md")
                 font{ family: AppStyle.appFont; pixelSize: 27*AppStyle.size1F }
 
+                onLinkActivated: {
+                    if(link)
+                        Qt.openUrlExternally(link)
+                }
+
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.RightButton

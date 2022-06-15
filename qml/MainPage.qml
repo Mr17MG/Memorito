@@ -36,7 +36,7 @@ Loader{
             }
 
             Component.onCompleted: {
-                var page = UsefulFunc.findInModel(Number(SettingDriver.value("firstPage",0)),"listId",AppStyle.firstPageModel).value
+                var page = UsefulFunc.findInModel(Number(SettingDriver.value("firstPage",0)),"listId",Constants.firstPageModel).value
                 UsefulFunc.stackPages.append({"page":page.pageSource,"title":page.title})
                 push( page.pageSource/*,{listId:page.listId,pageTitle:page.title}*/ )
                 callWhenPush({listId:page.listId,pageTitle:page.title} )

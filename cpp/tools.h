@@ -17,6 +17,10 @@
 #include <QStorageInfo>
 #include <QRegularExpression>
 
+#ifdef Q_OS_ANDROID
+#include <QtCore/private/qandroidextras_p.h>
+#endif
+
 #include "exif.h"
 #include "qdatepicker.h"
 
@@ -28,6 +32,15 @@
 
 #include "Controllers/friendscontroller.h"
 #include "Models/friendsmodel.h"
+
+#include "Controllers/thingscontroller.h"
+#include "Models/thingsmodel.h"
+
+#include "Controllers/logscontroller.h"
+#include "Models/logsmodel.h"
+
+#include "Controllers/filescontroller.h"
+#include "Models/filesmodel.h"
 
 class Tools : public QObject
 {
@@ -52,6 +65,13 @@ public:
     Q_INVOKABLE QString checkOrientation(QString filePath);
     Q_INVOKABLE QString readFile(QString filePath);
     Q_INVOKABLE QVariantList getMountedDevices();
+
+
+    // Method to request permissions
+    Q_INVOKABLE int requestPermission(QString permissionName);
+
+    // Method to get the permission granted state
+    Q_INVOKABLE bool getPermissionResult(QString permissionName);
 
 signals:
 

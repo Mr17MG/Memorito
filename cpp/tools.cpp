@@ -27,6 +27,15 @@ void Tools::registerClassesToQML()
 
     qmlRegisterType<FriendsController>("Memorito.Friends", 1, 0, "FriendsController");
     qmlRegisterType<FriendsModel>("Memorito.Friends", 1, 0, "FriendsModel");
+
+    qmlRegisterType<ThingsController>("Memorito.Things", 1, 0, "ThingsController");
+    qmlRegisterType<ThingsModel>("Memorito.Things", 1, 0, "ThingsModel");
+
+    qmlRegisterType<LogsController>("Memorito.Logs", 1, 0, "LogsController");
+    qmlRegisterType<LogsModel>("Memorito.Logs", 1, 0, "LogsModel");
+
+    qmlRegisterType<FilesController>("Memorito.Files", 1, 0, "FilesController");
+    qmlRegisterType<FilesModel>("Memorito.Files", 1, 0, "FilesModel");
 }
 
 void Tools::setContexts(QQmlContext *root)
@@ -232,4 +241,45 @@ QVariantList Tools::getMountedDevices()
     }
     return list;
 
+}
+
+
+
+int Tools::requestPermission(QString permissionName)
+{
+#if defined(Q_OS_ANDROID)
+
+   QFuture<QtAndroidPrivate::PermissionResult> request = QtAndroidPrivate::checkPermission(permissionName);
+    if (request.result() == QtAndroidPrivate::PermissionResult::Denied )
+    {
+        QtAndroidPrivate::requestPermission(permissionName);
+        request = QtAndroidPrivate::checkPermission(permissionName);
+
+        if (request.result() == QtAndroidPrivate::PermissionResult::Denied)
+        {
+
+//            if (QtAndroidPrivate::shouldShowRequestPermissionRationale(permissionName))
+//            {
+//                return 0;
+//            }
+            /*else*/ return -1;
+        }
+        else return 1;
+    }
+    else
+        return 1;
+#else
+    Q_UNUSED(permissionName)
+#endif
+    return 1;
+}
+
+bool Tools::getPermissionResult(QString permissionName)
+{
+#if defined(Q_OS_ANDROID)
+    return (QtAndroidPrivate::checkPermission(permissionName).result() == QtAndroidPrivate::PermissionResult::Authorized);
+#else
+    Q_UNUSED(permissionName)
+    return true;
+#endif
 }

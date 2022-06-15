@@ -4,12 +4,14 @@ import Memorito.Components
 import Memorito.Global
 
 ListView {
+    id:control
+
     property bool isEmpty:!model.count
     property bool isLoading: false
     property string emptyListText: qsTr("داده‌ای ثبت نشده")
     property string emptyListColor: AppStyle.textColor
     property bool hasOverScroll: false
-    id:control
+
     onContentYChanged: {
         if(!hasOverScroll)
         {
@@ -28,6 +30,7 @@ ListView {
                 contentX = (contentWidth-control.width)
         }
     }
+
     Text {
         visible: isEmpty && !isLoading
         text: emptyListText
@@ -37,6 +40,7 @@ ListView {
         color: emptyListColor
         font { family: AppStyle.appFont; pixelSize: AppStyle.size1F*15;bold:true}
     }
+
     Item{
         anchors.centerIn: parent
         width: parent.width
@@ -58,7 +62,6 @@ ListView {
         }
 
     }
-
 
     cacheBuffer: Qt.platform.os=="android"?1000:500
     maximumFlickVelocity: AppStyle.size1H*3000

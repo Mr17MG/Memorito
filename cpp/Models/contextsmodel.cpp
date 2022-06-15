@@ -11,12 +11,19 @@ QVariant ContextsModel::getAllContexts()
     return QVariant::fromValue(this->getAll());
 }
 
-QVariant ContextsModel::getContextById(int id)
+QVariant ContextsModel::getContextByLocalId(int localId)
 {
     QVariantMap map;
-    map[":local_id"] = id;
-    map[":server_id"] = id;
-    QList rows = this->getAllByCondition("local_id=:local_id OR server_id=:server_id",map);
+    map[":local_id"] = localId;
+    QList rows = this->getAllByCondition("local_id=:local_id",map);
+    return QVariant::fromValue(rows[0]);
+}
+
+QVariant ContextsModel::getContextByServerId(int serverId)
+{
+    QVariantMap map;
+    map[":server_id"] = serverId;
+    QList rows = this->getAllByCondition("server_id=:server_id",map);
     return QVariant::fromValue(rows[0]);
 }
 

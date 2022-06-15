@@ -16,6 +16,7 @@ class ContextsController : public QObject
 public:
     explicit ContextsController(QObject *parent = nullptr);
 
+    Q_INVOKABLE void getAllContexts();
     Q_INVOKABLE void getContexts(QString idList="");
     Q_INVOKABLE void getContextById(int contextId);
     Q_INVOKABLE void addNewContext(QString contextName);

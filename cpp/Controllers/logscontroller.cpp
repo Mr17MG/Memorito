@@ -17,6 +17,33 @@ LogsController::LogsController(QObject *parent)
     baseApi->setHasAuthentication(true);
 }
 
+void LogsController::getAllLogs()
+{
+    QNetworkRequest getReq = baseApi->createRequest();
+    baseApi->sendRequest(QNetworkAccessManager::GetOperation,getReq);
+}
+
+void LogsController::getLogsByListOfId(QString list)
+{
+    QUrlQuery query;
+    query.addQueryItem("log_id_list",list);
+    QNetworkRequest getReq = baseApi->createRequest("",&query);
+    baseApi->sendRequest(QNetworkAccessManager::GetOperation,getReq);
+}
+
+void LogsController::getLogById(int id)
+{
+    QNetworkRequest getReq = baseApi->createRequest(QString::number(id));
+    baseApi->sendRequest(QNetworkAccessManager::GetOperation,getReq);
+}
+
+void LogsController::addNewLog(QString rawJson)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(rawJson.toUtf8());
+    QNetworkRequest postReq = baseApi->createRequest();
+    baseApi->sendRequest(QNetworkAccessManager::PostOperation,postReq,&doc);
+}
+
 void LogsController::addNewLog(int thingId, QString logText)
 {
     QJsonObject json
@@ -29,6 +56,19 @@ void LogsController::addNewLog(int thingId, QString logText)
 
     QNetworkRequest postReq = baseApi->createRequest();
     baseApi->sendRequest(QNetworkAccessManager::PostOperation,postReq,&doc);
+}
+
+void LogsController::updateLog(int id, QString rawJson)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(rawJson.toUtf8());
+    QNetworkRequest patchReq = baseApi->createRequest(QString::number(id));
+    baseApi->sendRequest(QNetworkAccessManager::CustomOperation,patchReq ,&doc);
+}
+
+void LogsController::deleteLog(int id)
+{
+    QNetworkRequest deleteReq = baseApi->createRequest(QString::number(id));
+    baseApi->sendRequest(QNetworkAccessManager::DeleteOperation,deleteReq);
 }
 
 
@@ -54,7 +94,7 @@ void LogsController::onRequestSuccess(int statusCode, QJsonObject data,QNetworkA
                 foreach(QJsonValue row, result){
                     data.append(row.toObject().toVariantMap());
                 }
-                logsModel->addMulltiLog(data);
+                logsModel->addMulltiLogs(data);
             }
         }
     }
@@ -67,17 +107,24 @@ void LogsController::onRequestSuccess(int statusCode, QJsonObject data,QNetworkA
     }
     else if(method == QNetworkAccessManager::CustomOperation)
     {
+        ThingsModel thingsModel;
+
         QJsonObject result = data["result"].toObject();
+
         result["server_id"] = result["id"];
+        result["thing_id_server"] = result["thing_id"];
+        result["thing_id_local"] = thingsModel.getThingByServerId(result["thing_id"].toInt()).toMap().value("local_id").toInt();
+
         result.remove("id");
+        result.remove("thing_id");
 
         logsModel->updateLogByServerId(path.toInt(),result.toVariantMap());
-        emit logUpdated(path.toInt(),result["log_name"].toString());
+        emit logUpdated(path.toInt());
         emit logger->successLog(tr("لاگ مورد نظر بروزرسانی شد."));
     }
     else if(method == QNetworkAccessManager::DeleteOperation)
     {
-        logsModel->deleteLogByServerId(path.toInt());
+        logsModel->deleteLogsByServerId(path);
         emit this->logDeleted(path.toInt());
         emit logger->successLog(tr("لاگ مورد نظر حذف شد."));
     }

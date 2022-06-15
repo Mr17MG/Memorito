@@ -3,6 +3,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import QDatePicker
+import Memorito.Global
+import Memorito.Components
 
 Item {
     id: root
@@ -10,23 +12,65 @@ Item {
     required width
     required height
 
-    required property string locale
-    required property string calendar
+    property string locale: AppStyle.appLocale
+    property string calendar: AppStyle.appCalendar
 
-    required property ApplicationWindow mainWindow
+    property ApplicationWindow mainWindow: UsefulFunc.rootWindow
 
     property alias cancelButton: cancelBtn
     property alias okButton: okBtn
 
     property string placeholderText: ""
     property string selectedDateText: ""
-    required property color primaryColor
+    property color primaryColor: AppStyle.primaryColor
 
     property date selectedDate
     property date minDate
     property date maxDate
 
     property bool hasTimeSelection: false
+
+    onSelectedDateChanged: {
+        let date = UsefulFunc.convertDateToLocale(selectedDate)
+        if(hasTimeSelection === false)
+        {
+            root.selectedDateText = ("%1 %2 %3 %4")
+            .arg(date[3])
+            .arg(date[2])
+            .arg((date[4]))
+            .arg(date[0])
+        }
+        else {
+            root.selectedDateText = ("%1 %2 %3 %4 - %5:%6")
+            .arg(date[3])
+            .arg(date[2])
+            .arg((date[4]))
+            .arg(date[0])
+            .arg(root.selectedDate.getHours().toString().replace(/^(\d)$/, '0$1'))
+            .arg(root.selectedDate.getMinutes().toString().replace(/^(\d)$/, '0$1'))
+        }
+    }
+
+    onHasTimeSelectionChanged: {
+        let date = UsefulFunc.convertDateToLocale(root.selectedDate)
+        if(hasTimeSelection === false)
+        {
+            root.selectedDateText = ("%1 %2 %3 %4")
+            .arg(date[3])
+            .arg(date[2])
+            .arg((date[4]))
+            .arg(date[0])
+        }
+        else {
+            root.selectedDateText = ("%1 %2 %3 %4 - %5:%6")
+            .arg(date[3])
+            .arg(date[2])
+            .arg((date[4]))
+            .arg(date[0])
+            .arg(root.selectedDate.getHours().toString().replace(/^(\d)$/, '0$1'))
+            .arg(root.selectedDate.getMinutes().toString().replace(/^(\d)$/, '0$1'))
+        }
+    }
 
     function reset()
     {
@@ -161,6 +205,7 @@ Item {
                 Label{
                     text: headerRect.selectedYear
                     horizontalAlignment: Text.AlignHCenter
+                    color: AppStyle.textOnPrimaryColor
                 }
                 Label{
                     text:("%1 %2 %3").arg(headerRect.selectedDayWeekName)
@@ -168,6 +213,7 @@ Item {
                     .arg(headerRect.selectedMonthName)
 
                     horizontalAlignment: Text.AlignHCenter
+                    color: AppStyle.textOnPrimaryColor
                 }
             }
 
@@ -182,15 +228,15 @@ Item {
 
                 ButtonGroup { id: groupTime }
 
-                Button{
+                AppButton{
                     text: dateTimeDialog.tempSelectedDate.getHours().toString().replace(/^(\d)$/, '0$1')
                     flat: true
                     checkable: true
                     checked: !dateTimeDialog.isMinuteSelction
                     ButtonGroup.group: groupTime
-
+                    Material.foreground: checked?AppStyle.textOnPrimaryColor:"gray"
                     font{
-                        pixelSize: 14
+                        pixelSize: 25*AppStyle.size1F
                         bold: true
                     }
 
@@ -200,20 +246,22 @@ Item {
                 Label {
                     id: colonLbl
                     text: ":"
+                    color: AppStyle.textOnPrimaryColor
                     font{
-                        pixelSize: 14
+                        pixelSize: 25*AppStyle.size1F
                         bold: true
                     }
                 }
-                Button{
+                AppButton{
                     text: dateTimeDialog.tempSelectedDate.getMinutes().toString().replace(/^(\d)$/, '0$1')
                     flat: true
                     checkable: true
                     checked: dateTimeDialog.isMinuteSelction
                     ButtonGroup.group: groupTime
+                    Material.foreground: checked?AppStyle.textOnPrimaryColor:"gray"
                     font{
-                        pixelSize: 14
-                        bold: true
+                        pixelSize: 25*AppStyle.size1F
+                        bold: checked
                     }
                     onClicked: dateTimeDialog.isMinuteSelction = true
                 }
@@ -227,8 +275,8 @@ Item {
             x: (monthTxt.width - width)/2
             y:monthTxt.height
             parent: monthTxt
-            width: 100
-            height: 300
+            width: 200*AppStyle.size1W
+            height: 600*AppStyle.size1H
             enabled: !dateTimeDialog.isTimeSelection
 
             Flickable{
@@ -242,7 +290,7 @@ Item {
                     Repeater{
                         model: qDatePicker.calendar!=="" ? qDatePicker.getShortMonthsName()
                                                          : []
-                        delegate: Button{
+                        delegate: AppButton{
                             text: modelData
                             enabled: dateTimeDialog.isDateInRange (
                                          qDatePicker.localeToGregorianDate (headerRect.selectedYear,
@@ -250,8 +298,9 @@ Item {
                                                                             headerRect.selectedDay
                                                                             )
                                          )
-                            height: 60
+                            height: 100*AppStyle.size1H
                             width: parent.width
+                            radius: 40*AppStyle.size1W
                             flat: !highlighted
                             highlighted: text === headerRect.selectedMonthName
                             onClicked: {
@@ -273,8 +322,8 @@ Item {
             x: (yearTxt.width - width)/2
             y:yearTxt.height
             parent: yearTxt
-            width: 100
-            height: 300
+            width: 200*AppStyle.size1W
+            height: 600*AppStyle.size1H
             enabled: !dateTimeDialog.isTimeSelection
 
             Flickable{
@@ -287,15 +336,16 @@ Item {
                     width: parent.width
                     Repeater{
                         model: [-3,-2,-1,0,1,2,3]
-                        delegate: Button{
+                        delegate: AppButton{
                             text: headerRect.selectedYear + modelData
                             enabled: dateTimeDialog.isDateInRange (
                                          qDatePicker.localeToGregorianDate (Number(text),
                                                                             headerRect.selectedMonth,
                                                                             headerRect.selectedDay)
                                          )
-                            height: 60
+                            height: 100*AppStyle.size1H
                             width: parent.width
+                            radius: 40*AppStyle.size1W
                             flat: !highlighted
                             highlighted: Number(text) === headerRect.selectedYear
                             onClicked: {
@@ -318,7 +368,7 @@ Item {
                 height: parent.height - btnsLayout.height
                 enabled: !dateTimeDialog.isTimeSelection
                 visible: enabled
-                spacing: 5
+                spacing: 5*AppStyle.size1W
 
                 RowLayout{
                     id: dateRow
@@ -326,10 +376,11 @@ Item {
                     height: 30
                     layoutDirection: Qt.locale(qDatePicker.locale).textDirection
 
-                    RoundButton {
+                    AppButton {
                         text: dateRow.layoutDirection === Qt.RightToLeft? ">":"<"
                         flat: true
                         highlighted: true
+                        radius: 40*AppStyle.size1W
                         font{
                             bold: true
                         }
@@ -345,31 +396,34 @@ Item {
                         }
                     }
 
-                    RoundButton {
+                    AppButton {
                         id: monthTxt
                         text: headerRect.selectedMonthName
                         Layout.fillWidth: true
+                        radius: 40*AppStyle.size1W
                         flat: true
                         onClicked: {
                             monthSelectorPopup.open()
                         }
                     }
 
-                    RoundButton {
+                    AppButton {
                         id: yearTxt
                         text: headerRect.selectedYear
                         flat: true
                         Layout.fillWidth: true
+                        radius: 40*AppStyle.size1W
                         onClicked: {
                             yearSelectorPopup.open()
                         }
                     }
 
-                    RoundButton {
+                    AppButton {
                         text: dateRow.layoutDirection  === Qt.RightToLeft? "<":">"
                         flat: true
                         highlighted: true
                         LayoutMirroring.enabled: true
+                        radius: 40*AppStyle.size1W
                         enabled: dateTimeDialog.isDateInRange(qDatePicker.localeToGregorianDate(headerRect.selectedYear,
                                                                                                 headerRect.selectedMonth+1,
                                                                                                 headerRect.selectedDay
@@ -416,12 +470,13 @@ Item {
 
                     Repeater{
                         model: qDatePicker.getGridDaysOfMonth(headerRect.selectedYear,headerRect.selectedMonth)
-                        delegate: RoundButton{
+                        delegate: AppButton{
                             property date gregorianDate: qDatePicker.localeToGregorianDate(headerRect.selectedYear,headerRect.selectedMonth,Number(modelData))
                             text: modelData === "0"? "": modelData
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             flat: !highlighted
+                            radius: 40*AppStyle.size1W
                             highlighted: Number(modelData) === headerRect.selectedDay
 
                             font{
@@ -497,12 +552,13 @@ Item {
                             rotation: index * 30
                             transformOrigin: Item.Bottom
 
-                            RoundButton {
+                            AppButton {
                                 x: 0
                                 y: hourContainer.hour >= 12 ? clockPlate.height*0.10
                                                             : clockPlate.height*0.01
-                                width: 40
+                                width: 80*AppStyle.size1W
                                 height: width
+                                radius: 80*AppStyle.size1W
                                 text: String(hourContainer.hour).replace(/^(\d)$/, '0$1')
                                 rotation: 360 - index * 30
                                 flat: !highlighted
@@ -555,12 +611,13 @@ Item {
                                 anchors.topMargin: 4
                             }
 
-                            RoundButton {
+                            AppButton {
                                 x: 0
                                 y: minuteContainer.minute%5===0? clockPlate.height*0.01
                                                                : clockPlate.height*0.02
                                 width: minuteContainer.minute%5===0?40:25
                                 height: width
+                                radius: 40*AppStyle.size1W
                                 text: minuteContainer.minute%5 === 0?minuteContainer.minute:""
                                 rotation: 360 - index * 6
                                 flat: !highlighted
@@ -606,7 +663,7 @@ Item {
                     }
 
                     Rectangle {
-                        width: 2
+                        width: 5*AppStyle.size1W
                         height: minuteNeedle.height * 0.35
                         color: !dateTimeDialog.isMinuteSelction?"gray": root.primaryColor
                         antialiasing: true
@@ -636,7 +693,7 @@ Item {
                     }
 
                     Rectangle {
-                        width: 2
+                        width: 5*AppStyle.size1W
                         height: hourNeedle.height * 0.25
                         color: dateTimeDialog.isMinuteSelction?"gray":root.primaryColor
                         anchors {
@@ -651,15 +708,16 @@ Item {
             RowLayout{
                 id: btnsLayout
                 width: parent.width
-                height: 50
+                height: 90*AppStyle.size1H
                 layoutDirection: Qt.locale(qDatePicker.locale).textDirection
 
-                RoundButton {
+                AppButton {
                     id: cancelBtn
-                    text: dateTimeDialog.isTimeSelection ? qsTr("Back")
-                                                         : qsTr("Cancel")
+                    text: dateTimeDialog.isTimeSelection ? qsTr("بازگشت")
+                                                         : qsTr("لغو")
                     flat: true
                     Layout.fillWidth: true
+                    radius: 40*AppStyle.size1W
                     onClicked: {
                         if(hasTimeSelection === true && dateTimeDialog.isTimeSelection)
                         {
@@ -670,44 +728,34 @@ Item {
                     }
                 }
 
-                RoundButton {
+                AppButton {
                     id: nowBtn
-                    text: dateTimeDialog.isTimeSelection ? qsTr("Now")
-                                                         : qsTr("Today")
+                    text: dateTimeDialog.isTimeSelection ? qsTr("الان")
+                                                         : qsTr("امروز")
                     flat: true
                     Layout.fillWidth: true
+                    radius: 40*AppStyle.size1W
                     onClicked: {
                         dateTimeDialog.tempSelectedDate = new Date()
                     }
                 }
 
-                RoundButton {
+                AppButton {
                     id: okBtn
-                    text: qsTr("Ok")
+                    text: qsTr("انتخاب")
                     flat: true
                     Layout.fillWidth: true
+                    radius: 40*AppStyle.size1W
                     onClicked: {
                         if(hasTimeSelection === false)
                         {
                             root.selectedDate = dateTimeDialog.tempSelectedDate
-                            root.selectedDateText = ("%1 %2 %3 %4")
-                            .arg(headerRect.selectedDayWeekName)
-                            .arg(headerRect.selectedDay)
-                            .arg((headerRect.selectedMonthName))
-                            .arg(headerRect.selectedYear)
 
                             dateTimeDialog.close()
                         }
                         else if(dateTimeDialog.isTimeSelection === true)
                         {
                             root.selectedDate = dateTimeDialog.tempSelectedDate
-                            root.selectedDateText = ("%1 %2 %3 %4 - %5:%6")
-                            .arg(headerRect.selectedDayWeekName)
-                            .arg(headerRect.selectedDay)
-                            .arg((headerRect.selectedMonthName))
-                            .arg(headerRect.selectedYear)
-                            .arg(dateTimeDialog.tempSelectedDate.getHours().toString().replace(/^(\d)$/, '0$1'))
-                            .arg(dateTimeDialog.tempSelectedDate.getMinutes().toString().replace(/^(\d)$/, '0$1'))
 
                             dateTimeDialog.close()
                         }

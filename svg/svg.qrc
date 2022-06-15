@@ -229,7 +229,7 @@
         <file>ThingsListIcon/reference-item.svg</file>
         <file>ThingsListIcon/someday-item.svg</file>
         <file>ThingsListIcon/trash-item.svg</file>
-        <file>ThingsListIcon/waiting-item.svg</file>
+        <file>ThingsListIcon/coop-item.svg</file>
         <file>info.svg</file>
     </qresource>
 </RCC>

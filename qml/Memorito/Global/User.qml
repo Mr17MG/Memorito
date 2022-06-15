@@ -4,7 +4,6 @@ import Memorito.Tools
 
 QtObject{
     property ListModel users: ListModel{}
-//    property MSysInfo mSysInfo: MSysInfo{}
     property var myTools: MTools{}
 
     property int id : 0

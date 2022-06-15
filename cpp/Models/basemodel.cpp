@@ -196,6 +196,29 @@ QList<QVariantMap> BaseModel::getAllByCondition(QString condition, QVariantMap d
     return dataList;
 }
 
+QList<QVariantMap> BaseModel::getByQuery(QString query)
+{
+    QSqlQuery sqlQuery(this->db);
+
+    sqlQuery.prepare(query);
+
+    QList <QVariantMap> dataList;
+    if(sqlQuery.exec() == true)
+    {
+        while (sqlQuery.next())
+        {
+            QSqlRecord record = sqlQuery.record();
+            QVariantMap data;
+            for(int i= 0; i< record.count();i++)
+            {
+                data[record.fieldName(i)] = record.value(i);
+            }
+            dataList.append(data);
+        }
+    }
+    return dataList;
+}
+
 const QString &BaseModel::getTableName() const
 {
     return tableName;

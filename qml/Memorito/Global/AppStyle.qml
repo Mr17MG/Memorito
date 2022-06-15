@@ -85,39 +85,11 @@ QtObject {
     property bool ltr: translator?translator.getCurrentLanguage() === translator.getLanguages().ENG:false
 
     property var font: FontLoader{ source: ltr?"qrc:/Mulish-Regular.ttf":"qrc:/Nahid.ttf" }
-    property string appFont: font.name
+    property var headerFont: FontLoader{ source: ltr?"qrc:/Wonderbar.ttf":"qrc:/Afsaneh.ttf" }
 
-    property ListModel firstPageModel: ListModel{
-        id: firstPageModel
-        ListElement{
-            title:qsTr("مموریتو")
-            pageSource :"qrc:/HomePage.qml"
-            listId: 0
-        }
-        ListElement{
-            title: qsTr("جمع‌آوری")
-            pageSource :"qrc:/Things/AddEditThing.qml"
-            listId: Memorito.Collect
-        }
-        ListElement{
-            title:qsTr("پردازش نشده‌ها")
-            pageSource: "qrc:/Things/ThingList.qml"
-            listId: Memorito.Process
-        }
-        ListElement{
-            title:qsTr("عملیات بعدی")
-            pageSource: "qrc:/Things/ThingList.qml"
-            listId: Memorito.NextAction
-        }
-        ListElement{
-            title:qsTr("تقویم")
-            pageSource: "qrc:/Things/ThingList.qml"
-            listId: Memorito.Calendar
-        }
-        ListElement{
-            title:qsTr("پروژه‌ها")
-            pageSource: "qrc:/Categories/CategoriesList.qml"
-            listId: Memorito.Project
-        }
-    }
+    property string appFont: font.name
+    property string appHeaderFont: headerFont.name
+
+    property string appLocale: "fa_IR"
+    property string appCalendar: "Jalali"
 }

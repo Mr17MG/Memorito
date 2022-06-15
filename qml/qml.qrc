@@ -59,5 +59,16 @@
         <file>StartMemorito.qml</file>
         <file>MainPage.qml</file>
         <file>HomePage.qml</file>
+        <file>Things/ThingsList.qml</file>
+        <file>Things/ThingsListDelegate.qml</file>
+        <file>Things/Header/Search.qml</file>
+        <file>Things/ThingsHeader.qml</file>
+        <file>Things/Header/Calendar.qml</file>
+        <file>Things/Header/CalendarButtons/Day.qml</file>
+        <file>Things/Header/CalendarButtons/Month.qml</file>
+        <file>Things/Header/CalendarButtons/Year.qml</file>
+        <file>Things/ThingsDetail.qml</file>
+        <file>Memorito/Global/Constants.qml</file>
+        <file>Things/AddEditThing.qml</file>
     </qresource>
 </RCC>

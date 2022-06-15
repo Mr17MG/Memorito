@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>Nahid.ttf</file>
         <file>Mulish-Regular.ttf</file>
+        <file>Afsaneh.ttf</file>
+        <file>Wonderbar.ttf</file>
     </qresource>
 </RCC>

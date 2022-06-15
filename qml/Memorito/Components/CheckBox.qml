@@ -1,7 +1,8 @@
 import QtQuick 
 import QtQuick.Templates  as T
 import QtQuick.Controls.Material 
-import QtQuick.Controls.Material.impl 
+import QtQuick.Controls.Material.impl
+
 import Memorito.Components
 import Memorito.Global
 
@@ -46,7 +47,7 @@ T.CheckBox {
         color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
         elide: Text.ElideRight
         visible: control.text
-        horizontalAlignment: Text.AlignLeft
+        horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
     }
 }

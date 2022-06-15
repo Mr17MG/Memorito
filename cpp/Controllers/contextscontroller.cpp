@@ -17,6 +17,12 @@ ContextsController::ContextsController(QObject *parent)
     baseApi->setHasAuthentication(true);
 }
 
+void ContextsController::getAllContexts()
+{
+    QNetworkRequest getReq = baseApi->createRequest();
+    baseApi->sendRequest(QNetworkAccessManager::GetOperation,getReq);
+}
+
 void ContextsController::getContexts(QString idList)
 {
     QUrlQuery query;

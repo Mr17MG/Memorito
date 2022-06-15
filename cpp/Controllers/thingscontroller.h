@@ -15,20 +15,22 @@ class ThingsController : public QObject
 public:
     explicit ThingsController(QObject *parent = nullptr);
 
-    void getAllThings();
-    void getThingsByListOfId(QString list);
-    void getThingById(int id);
+    Q_INVOKABLE void getAllThings();
+    Q_INVOKABLE void getThingsByListOfId(QString list);
+    Q_INVOKABLE void getThingById(int id);
 
-    void addNewThing(QString rawJson);
-    void updateThing(int id, QString rawJson);
-    void deleteThing(int id);
+    Q_INVOKABLE void addNewThing(QString rawJson);
+    Q_INVOKABLE void updateThing(int id, QString rawJson);
+    Q_INVOKABLE void deleteThing(int id);
 
 public slots:
     void onRequestError(int statusCode, QNetworkReply::NetworkError error, QByteArray rawData,QNetworkAccessManager::Operation method, QUrl url);
     void onRequestSuccess(int statusCode, QJsonObject data,QNetworkAccessManager::Operation method, QUrl url);
 
 signals:
-
+    void newThingAdded(int);
+    void thingUpdated(int);
+    void thingDeleted(int);
 };
 
 #endif // THINGSCONTROLLER_H

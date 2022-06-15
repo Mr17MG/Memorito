@@ -7,9 +7,17 @@ import Memorito.Global
 import QtQuick.Layouts 1.15
 
 Item {
+
     Rectangle{
         color: "transparent"
-        anchors{
+        radius: 30*AppStyle.size1W
+
+        border {
+            color: Material.color(AppStyle.primaryInt,Material.Shade100)
+            width: 4*AppStyle.size1W
+        }
+
+        anchors {
             top: parent.top
             topMargin: 20*AppStyle.size1H
             right: parent.right
@@ -19,15 +27,15 @@ Item {
             bottom: parent.bottom
             bottomMargin: 20*AppStyle.size1H
         }
-        border{
-            color: Material.color(AppStyle.primaryInt,Material.Shade100)
-            width: 4*AppStyle.size1W
-        }
-        radius: 30*AppStyle.size1W
     }
 
-    Flickable{
+    Flickable {
         id:flick
+
+        clip: true
+        contentWidth: flow1.width
+        contentHeight: flow1.height
+
         anchors{
             top: parent.top
             topMargin: 60*AppStyle.size1H
@@ -38,22 +46,27 @@ Item {
             bottom: parent.bottom
             bottomMargin: 60*AppStyle.size1H
         }
-        contentHeight: flow1.height
-        contentWidth: flow1.width
-        clip: true
-        ColumnLayout{
+
+        ColumnLayout {
             id:flow1
-            width: Math.max(flick.width,600*AppStyle.size1W)
+
             spacing: 20*AppStyle.size1H
             layoutDirection: Qt.RightToLeft
+            width: Math.max(flick.width,600*AppStyle.size1W)
+
             RowLayout {
                 layoutDirection: Qt.RightToLeft
                 Layout.fillWidth: true
-                Text{
+
+                Text {
                     text: qsTr("تغییر زبان")
-                    font{family: AppStyle.appFont;pixelSize: 30*AppStyle.size1F;bold:false}
                     color: AppStyle.textColor
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 30*AppStyle.size1F;
+                    }
                 }
+
                 MenuSeparator{
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -66,10 +79,13 @@ Item {
             }
 
             RowLayout {
-                layoutDirection: Qt.RightToLeft
                 Layout.fillWidth: true
+                layoutDirection: Qt.RightToLeft
+
                 Text{
+                    id:languageText
                     ToolTip{ id:langTooltip }
+
                     HoverHandler{
                         acceptedDevices: PointerDevice.Mouse
                         onHoveredChanged: {
@@ -78,21 +94,29 @@ Item {
                             else langTooltip.hide()
                         }
                     }
-                    id:languageText
+
                     text: qsTr("زبان") + " :"
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
-                    verticalAlignment: Text.AlignVCenter
                     Layout.fillHeight: true
                     color: AppStyle.textColor
+                    verticalAlignment: Text.AlignVCenter
                     Layout.minimumWidth: textColorText.width
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F;
+                    }
                 }
 
                 AppRadioButton{
                     text: "فارسی"
-                    checked: try{
-                                 return translator.getCurrentLanguage() === translator.getLanguages().FA && !AppStyle.languageChanged
-                             }
-                             catch(e){return false}
+                    checked:{
+                        try {
+                            return translator.getCurrentLanguage() === translator.getLanguages().FA && !AppStyle.languageChanged
+                        }
+                        catch(e){
+                            return false
+                        }
+                    }
+
                     onCheckedChanged: {
                         try{
                             if(translator.getCurrentLanguage() !== translator.getLanguages().FA)
@@ -101,17 +125,22 @@ Item {
                                 translator.updateLanguage(translator.getLanguages().FA)
                                 AppStyle.languageChanged = false
                             }
-                        }catch(e){}
+                        }
+                        catch(e){
+                        }
                     }
                 }
                 AppRadioButton{
                     text: "English"
-                    checked: try{
-                                 return translator.getCurrentLanguage() === translator.getLanguages().ENG && !AppStyle.languageChanged
-                             }
-                             catch(e){
-                                 return false
-                             }
+                    checked:{
+                        try{
+                            return translator.getCurrentLanguage() === translator.getLanguages().ENG && !AppStyle.languageChanged
+                        }
+                        catch(e){
+                            return false
+                        }
+                    }
+
                     onCheckedChanged: {
                         try{
                             if(translator.getCurrentLanguage() !== translator.getLanguages().ENG)
@@ -120,22 +149,28 @@ Item {
                                 translator.updateLanguage(translator.getLanguages().ENG)
                                 AppStyle.languageChanged = false
                             }
-                        }catch(e){}
+                        }
+                        catch(e){
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                layoutDirection: Qt.RightToLeft
+
+                Text{
+                    text: qsTr("شخصی‌سازی")
+                    Layout.fillHeight: true
+                    color: AppStyle.textColor
+                    verticalAlignment: Text.AlignVCenter
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 30*AppStyle.size1F;
                     }
                 }
 
-            }
-            RowLayout {
-                layoutDirection: Qt.RightToLeft
-                Layout.fillWidth: true
-                Text{
-                    text: qsTr("شخصی‌سازی")
-                    font{family: AppStyle.appFont;pixelSize: 30*AppStyle.size1F;bold:false}
-                    Layout.fillHeight: true
-
-                    verticalAlignment: Text.AlignVCenter
-                    color: AppStyle.textColor
-                }
                 MenuSeparator{
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -147,70 +182,83 @@ Item {
                 }
             }
             RowLayout {
-                layoutDirection: Qt.RightToLeft
-                spacing: 20*AppStyle.size1W
                 Layout.fillWidth: true
+                spacing: 20*AppStyle.size1W
+                layoutDirection: Qt.RightToLeft
+
                 Text{
                     id:pageText
-                    text: qsTr("صفحه ابتدایی") + " :"
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
-                    color: AppStyle.textColor
+
                     Layout.fillHeight: true
-                    Layout.minimumWidth: textColorText.width
+                    color: AppStyle.textColor
+                    text: qsTr("صفحه ابتدایی") + " :"
                     verticalAlignment: Text.AlignVCenter
+                    Layout.minimumWidth: textColorText.width
+
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F;
+                    }
                 }
+
                 AppComboBox{
                     id: pageCombo
+
                     hasClear: false
-                    placeholderText: qsTr("صفحات")
-                    Layout.preferredWidth: 270*AppStyle.size1W
-                    Layout.preferredHeight: 90*AppStyle.size1H
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F}
                     textRole: "title"
                     iconRole: "iconSrc"
-                    iconColor: AppStyle.textColor
                     iconSize: AppStyle.size1W*40
+                    iconColor: AppStyle.textColor
+                    placeholderText: qsTr("صفحات")
+                    Layout.preferredHeight: 90*AppStyle.size1H
+                    Layout.preferredWidth: 270*AppStyle.size1W
                     currentIndex: UsefulFunc.findInModel(Number(SettingDriver.value("firstPage",0)),"listId",model).index
-                    model: ListModel{
-                        ListElement{
-                            title:qsTr("خانه")
-                            pageSource :""
-                            iconSrc: "qrc:/home.svg"
+
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F
+                    }
+
+                    model: ListModel {
+                        ListElement {
                             listId: 0
+                            pageSource :""
+                            title:qsTr("خانه")
+                            iconSrc: "qrc:/home.svg"
                         }
-                        ListElement{
+                        ListElement {
                             title: qsTr("جمع‌آوری")
-                            pageSource :"qrc:/Things/AddEditThing.qml"
-                            iconSrc: "qrc:/collect.svg"
                             listId: Memorito.Collect
+                            iconSrc: "qrc:/collect.svg"
+                            pageSource :"qrc:/Things/AddEditThing.qml"
                         }
-                        ListElement{
+                        ListElement {
+                            listId: Memorito.Process
                             title:qsTr("پردازش نشده‌ها")
                             iconSrc: "qrc:/process.svg"
                             pageSource: "qrc:/Things/ThingList.qml"
-                            listId: Memorito.Process
                         }
-                        ListElement{
+                        ListElement {
                             title:qsTr("عملیات بعدی")
+                            listId: Memorito.NextAction
                             iconSrc: "qrc:/nextAction.svg"
                             pageSource: "qrc:/Things/ThingList.qml"
-                            listId: Memorito.NextAction
                         }
-                        ListElement{
+                        ListElement {
                             title:qsTr("تقویم")
+                            listId: Memorito.Calendar
                             iconSrc: "qrc:/calendar.svg"
                             pageSource: "qrc:/Things/ThingList.qml"
-                            listId: Memorito.Calendar
                         }
                         ListElement{
                             title:qsTr("پروژه‌ها")
+                            listId: Memorito.Project
                             iconSrc: "qrc:/project.svg"
                             pageSource: "qrc:/Categories/CategoriesList.qml"
-                            listId: Memorito.Project
                         }
                     }
                     onCurrentIndexChanged: {
-                        if(currentIndex!==-1 && !AppStyle.languageChanged) // Need For Do Not change Color When Language Changed
+                        if(currentIndex !== -1 && !AppStyle.languageChanged) // Need For Do Not change Color When Language Changed
                         {
                             SettingDriver.setValue("firstPage",model.get(currentIndex).listId)
                         }
@@ -219,11 +267,15 @@ Item {
 
                 Item{ Layout.fillWidth: true }
             }
+
             RowLayout {
-                layoutDirection: Qt.RightToLeft
-                spacing: 20*AppStyle.size1W
                 Layout.fillWidth: true
+                spacing: 20*AppStyle.size1W
+                layoutDirection: Qt.RightToLeft
+
                 Text{
+                    id:colorText
+
                     ToolTip{ id: textTooltip }
                     HoverHandler{
                         acceptedDevices: PointerDevice.Mouse
@@ -233,25 +285,34 @@ Item {
                             else textTooltip.hide()
                         }
                     }
-                    id:colorText
+
                     text: qsTr("رنگ اصلی") + " :"
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
                     color: AppStyle.textColor
                     Layout.fillHeight: true
                     Layout.minimumWidth: textColorText.width
                     verticalAlignment: Text.AlignVCenter
+                    font{
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F;
+                    }
                 }
+
                 AppComboBox{
                     id:primaryCombo
                     hasClear: false
+                    iconSize: AppStyle.size1W*45
+                    iconColor: AppStyle.textColor
                     placeholderText: qsTr("رنگ‌ها")
-                    Layout.preferredWidth: 270*AppStyle.size1W
+                    placeholderIcon: "qrc:/paint.svg"
                     currentIndex : AppStyle.primaryInt
                     Layout.preferredHeight: 90*AppStyle.size1H
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F}
-                    placeholderIcon: "qrc:/paint.svg"
-                    iconColor: AppStyle.textColor
-                    iconSize: AppStyle.size1W*45
+                    Layout.preferredWidth: 270*AppStyle.size1W
+
+                    font{
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F
+                    }
+
                     model: [
                         qsTr("قرمز"),
                         qsTr("صورتی"),
@@ -276,15 +337,18 @@ Item {
 
                     delegate: ItemDelegate {
                         id: colorDelegate
+
                         width: primaryCombo.popupWidth
                         height: 120*AppStyle.size1H
+
+                        // background: Rectangle { color: Material.color(index) }
                         Text{
                             text: modelData
                             color:Material.color(index)
                             anchors.centerIn: parent
                             font{family: AppStyle.appFont;pixelSize: 30*AppStyle.size1F;bold:true}
                         }
-//                        background: Rectangle { color: Material.color(index) }
+
                         Image {
                             id: iconImg
                             visible: false
@@ -298,6 +362,7 @@ Item {
                             height: width
                             sourceSize: Qt.size(width,height)
                         }
+
                         ColorOverlay{
                             source : iconImg
                             anchors.fill: iconImg
@@ -305,7 +370,7 @@ Item {
                         }
                     }
                     onCurrentIndexChanged: {
-                        if(currentIndex!==-1 && !AppStyle.languageChanged) // Need For Do Not change Color When Language Changed
+                        if(currentIndex !== -1 && !AppStyle.languageChanged) // Need For Do Not change Color When Language Changed
                         {
                             AppStyle.primaryInt = currentIndex
                         }
@@ -316,10 +381,13 @@ Item {
             }
 
             RowLayout {
-                layoutDirection: Qt.RightToLeft
                 Layout.fillWidth: true
                 spacing: 20*AppStyle.size1W
+                layoutDirection: Qt.RightToLeft
+
                 Text{
+                    id: themeText
+
                     ToolTip{ id: themeTooltip}
                     HoverHandler{
                         acceptedDevices: PointerDevice.Mouse
@@ -329,13 +397,17 @@ Item {
                             else themeTooltip.hide()
                         }
                     }
-                    id: themeText
+
                     color: AppStyle.textColor
                     text: qsTr("طرح زمینه") + " :"
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
                     Layout.fillHeight: true
                     verticalAlignment: Text.AlignVCenter
                     Layout.minimumWidth: textColorText.width
+
+                    font{
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F;
+                    }
                 }
 
                 AppRadioButton{
@@ -361,26 +433,32 @@ Item {
             }
 
             RowLayout {
-                layoutDirection: Qt.RightToLeft
                 spacing: 20*AppStyle.size1W
                 Layout.fillWidth: true
-                ToolTip{ id: pTextTooltip}
-                HoverHandler{
-                    acceptedDevices: PointerDevice.Mouse
-                    onHoveredChanged: {
-                        if(hovered)
-                            pTextTooltip.show("Alt + Y")
-                        else pTextTooltip.hide()
-                    }
-                }
+                layoutDirection: Qt.RightToLeft
                 Text{
                     id: textColorText
-                    text: qsTr("رنگ نوشته در رنگ اصلی") + " :"
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
-                    Layout.alignment: Qt.AlignRight
-                    color: AppStyle.textColor
+
+                    ToolTip{ id: pTextTooltip}
+                    HoverHandler{
+                        acceptedDevices: PointerDevice.Mouse
+                        onHoveredChanged: {
+                            if(hovered)
+                                pTextTooltip.show("Alt + Y")
+                            else pTextTooltip.hide()
+                        }
+                    }
+
                     wrapMode: Text.WordWrap
+                    color: AppStyle.textColor
+                    Layout.alignment: Qt.AlignRight
                     verticalAlignment: Text.AlignVCenter
+                    text: qsTr("رنگ نوشته در رنگ اصلی") + " :"
+
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F
+                    }
                 }
 
                 AppRadioButton{
@@ -405,17 +483,24 @@ Item {
                 }
                 Item{ Layout.fillWidth: true }
             }
+
             RowLayout {
-                layoutDirection: Qt.RightToLeft
                 Layout.fillWidth: true
+                layoutDirection: Qt.RightToLeft
+
                 Text{
-                    text: qsTr("تغییر اندازه‌ها")
-                    font{family: AppStyle.appFont;pixelSize: 30*AppStyle.size1F;bold:false}
                     color: AppStyle.textColor
+                    text: qsTr("تغییر اندازه‌ها")
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 30*AppStyle.size1F
+                    }
                 }
+
                 MenuSeparator{
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+
                     contentItem: Rectangle {
                         radius: width
                         opacity: 0.2
@@ -425,12 +510,16 @@ Item {
             }
 
             RowLayout {
-                layoutDirection: Qt.RightToLeft
                 Layout.fillWidth: true
+                layoutDirection: Qt.RightToLeft
+
                 Text{
                     text: qsTr("اندازه‌ی نوشته") + " :"
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
                     color: AppStyle.textColor
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F
+                    }
                 }
                 Slider {
                     id: fontSlider
@@ -444,7 +533,7 @@ Item {
                     }
                 }
                 AppButton{
-                    enabled: fontSlider.value !=10
+                    enabled: fontSlider.value !==10
                     radius: width
                     icon{
                         source: "qrc:/rotate-left.svg"
@@ -453,16 +542,22 @@ Item {
                     }
                     onClicked: fontSlider.value = 10
                 }
-                Item{ Layout.fillWidth: true }
+
             }
 
             RowLayout {
-                layoutDirection: Qt.RightToLeft
                 Layout.fillWidth: true
+                layoutDirection: Qt.RightToLeft
+
                 Text{
                     text: qsTr("اندازه‌ی عرض") + " :"
-                    font{family: AppStyle.appFont;pixelSize: 25*AppStyle.size1F;bold:false}
                     color: AppStyle.textColor
+                    Layout.preferredWidth: 150*AppStyle.size1H
+
+                    font {
+                        family: AppStyle.appFont;
+                        pixelSize: 25*AppStyle.size1F
+                    }
                 }
                 Slider {
                     id: widthSlider
@@ -476,7 +571,7 @@ Item {
                     }
                 }
                 AppButton{
-                    enabled: widthSlider.value !=10
+                    enabled: widthSlider.value !==10
                     radius: width
                     icon{
                         source: "qrc:/rotate-left.svg"
@@ -510,7 +605,7 @@ Item {
                     }
                 }
                 AppButton{
-                    enabled: heightSlider.value !=10
+                    enabled: heightSlider.value !==10
                     radius: width
                     icon{
                         source: "qrc:/rotate-left.svg"
@@ -519,7 +614,6 @@ Item {
                     }
                     onClicked: heightSlider.value = 10
                 }
-                Item{ Layout.fillWidth: true }
             }
         }
     }

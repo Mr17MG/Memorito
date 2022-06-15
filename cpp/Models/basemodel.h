@@ -29,7 +29,7 @@ public:
     QVariant getByLocalId(int id);
     QVariant getByServerId(int id);
     QList<QVariantMap> getAllByCondition(QString condition,QVariantMap data);
-
+    QList<QVariantMap> getByQuery(QString query);
 
     const QString &getTableName() const;
     void setTableName(const QString &newTableName);

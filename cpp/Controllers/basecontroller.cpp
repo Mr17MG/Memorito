@@ -103,7 +103,7 @@ QJsonObject BaseController::parseToJsonObject(QByteArray rawData)
         if(dataString.indexOf("{")!= -1 && dataString.lastIndexOf("}")!= -1)
         {
             dataString = dataString.remove(0,dataString.indexOf("{"));
-            jsonObj = doc.fromJson(dataString.toLatin1(), &jsonError).object();
+            jsonObj = doc.fromJson(dataString.toUtf8(), &jsonError).object();
             if(jsonError.error != QJsonParseError::NoError)
                 emit parseError(jsonError.errorString());
         }

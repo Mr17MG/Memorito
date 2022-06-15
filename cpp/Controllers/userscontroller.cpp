@@ -187,7 +187,7 @@ void UsersController::getUser(int userId)
 void UsersController::editUser(int userId, QString rawjson)
 {
     baseApi->setApiName("users");
-    QJsonDocument doc = QJsonDocument::fromJson(rawjson.toLatin1());
+    QJsonDocument doc = QJsonDocument::fromJson(rawjson.toUtf8());
 
     QNetworkRequest patchReq = baseApi->createRequest(QString::number(userId));
     baseApi->sendRequest(QNetworkAccessManager::CustomOperation, patchReq,&doc);

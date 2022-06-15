@@ -10,19 +10,46 @@ QVariant LogsModel::getAllLogs()
     return QVariant::fromValue(this->getAll());
 }
 
-QVariant LogsModel::getLogById(int id)
+QVariant LogsModel::getAllLogsByThingLocalId(int thingLocalId)
+{
+    QVariantMap map;
+    map[":thing_id_local"] = thingLocalId;
+    return QVariant::fromValue(this->getAllByCondition("thing_id_local=:thing_id_local",map));
+}
+
+QVariant LogsModel::getAllLogsByThingServerId(int thingServerId)
+{
+    QVariantMap map;
+    map[":thing_id_server"] = thingServerId;
+    return QVariant::fromValue(this->getAllByCondition("thing_id_server=:thing_id_server",map));
+}
+
+QVariant LogsModel::getLogByLocalId(int id)
 {
     QVariantMap map;
     map[":local_id"] = id;
+    QList rows = this->getAllByCondition("local_id=:local_id",map);
+    return QVariant::fromValue(rows[0]);
+}
+QVariant LogsModel::getLogByServerId(int id)
+{
+    QVariantMap map;
     map[":server_id"] = id;
-    QList rows = this->getAllByCondition("local_id=:local_id OR server_id=:server_id",map);
+    QList rows = this->getAllByCondition("server_id=:server_id",map);
     return QVariant::fromValue(rows[0]);
 }
 
 int LogsModel::addNewLog(QVariantMap data)
 {
+    ThingsModel thingsModel;
+
     data["server_id"] = data["id"];
+    data["thing_id_server"] = data["thing_id"];
+    data["thing_id_local"] = thingsModel.getThingByServerId(data["thing_id"].toInt()).toMap().value("local_id").toInt();
+
     data.remove("id");
+    data.remove("thing_id");
+
     return this->insert(data);
 }
 
@@ -31,7 +58,7 @@ int LogsModel::addNewLog(QString logText,int thingId,int userId, int serverId,QS
     QVariantMap data;
     data["log_text"] = '"'+logText+'"';
     data["user_id"] = userId;
-    data["thing_id"] = thingId;
+    data["thing_id_local"] = thingId;
     if(serverId>-1)
         data["server_id"] = serverId;
     if(registerDate != "")
@@ -42,24 +69,31 @@ int LogsModel::addNewLog(QString logText,int thingId,int userId, int serverId,QS
     return this->insert(data);
 }
 
-void LogsModel::addMulltiLog(QList<QVariantMap> logList)
+void LogsModel::addMulltiLogs(QList<QVariantMap> logList)
 {
+    ThingsModel thingsModel;
     foreach(QVariantMap logRow,logList)
     {
+
         logRow["server_id"] = logRow["id"];
+        logRow["thing_id_server"] = logRow["thing_id"];
+        logRow["thing_id_local"] = thingsModel.getThingByServerId(logRow["thing_id"].toInt()).toMap().value("local_id").toInt();
+
         logRow.remove("id");
+        logRow.remove("thing_id");
+
         this->insert(logRow);
     }
 }
 
-bool LogsModel::deleteLogByServerId(int id)
+bool LogsModel::deleteLogsByServerId(QString idList)
 {
-    return this->deleteRows("server_id",QString::number(id));
+    return this->deleteRows("server_id",idList);
 }
 
-bool LogsModel::deleteLogByLocalId(int id)
+bool LogsModel::deleteLogsByLocalId(QString idList)
 {
-    return this->deleteRows("local_id",QString::number(id));
+    return this->deleteRows("local_id",idList);
 }
 
 QVariant LogsModel::updateLogByServerId(int serverId, QVariantMap data)

@@ -79,10 +79,10 @@ Item {
     }
     Label {
         text: detailInput.placeholderText
-        color: detailInput.focus || detailInput.text!==""?AppStyle.textColor: AppStyle.placeholderColor
+        color: detailInput.focus || detailInput.text.length > 0?AppStyle.textColor: AppStyle.placeholderColor
         anchors{
             top: control.top
-            topMargin: detailInput.focus || detailInput.text!==""?-5*AppStyle.size1H:height-10*AppStyle.size1H
+            topMargin: detailInput.focus || detailInput.text.length > 0?-5*AppStyle.size1H:height-10*AppStyle.size1H
             right:  control.right
             rightMargin: detailInput.rightPadding
         }
@@ -98,7 +98,7 @@ Item {
             z:-1
             color: item.areaInDialog? AppStyle.dialogBackgroundColor
                                     : AppStyle.appBackgroundColor
-            visible: detailInput.focus || detailInput.text!==""
+            visible: detailInput.focus || detailInput.text.length > 0
             radius: 15*AppStyle.size1W
         }
     }

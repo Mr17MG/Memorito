@@ -10,8 +10,8 @@ import Memorito.Friends
 
 Item {
     function cameInToPage(object) {
-        friendListModel.clear()
-        friendListModel.append(friendsModel.getAllFriends())
+        if(Constants.friendsListModel.count === 0)
+            Constants.friendsListModel.append(friendsModel.getAllFriends())
     }
 
     FriendsController {
@@ -26,20 +26,20 @@ Item {
         target: friendsController
         function onNewFriendAdded(id)
         {
-            friendListModel.append(friendsModel.getFriendById(id))
+            Constants.friendsListModel.append(friendsModel.getFriendById(id))
         }
         function onFriendDeleted(serverId)
         {
-            var res = UsefulFunc.findInModel(serverId,"server_id",friendListModel)
+            var res = UsefulFunc.findInModel(serverId,"server_id",Constants.friendsListModel)
             if( res.index>=0 )
-                friendListModel.remove(res.index)
+                Constants.friendsListModel.remove(res.index)
         }
 
         function onFriendUpdated(serverId,friendDetail)
         {
-            var res = UsefulFunc.findInModel(serverId,"server_id",friendListModel)
+            var res = UsefulFunc.findInModel(serverId,"server_id",Constants.friendsListModel)
             if( res.index>=0 )
-                friendListModel.set(res.index,friendDetail)
+                Constants.friendsListModel.set(res.index,friendDetail)
         }
 
         function onFriendSerched(list)
@@ -55,7 +55,7 @@ Item {
 
     Item {
         anchors{ centerIn: parent }
-        visible: friendListModel.count === 0
+        visible: Constants.friendsListModel.count === 0
         width:  600*AppStyle.size1W
         height: width
         Image {
@@ -333,14 +333,11 @@ Item {
         }
 
         /***********************************************/
-        model: ListModel{
-            id: friendListModel
-            dynamicRoles: true
-        }
+        model: Constants.friendsListModel
     }
 
     AppButton{
-        text: qsTr("اضافه کردن دوست")
+        text: qsTr("افزودن دوست")
         radius: 20*AppStyle.size1W
         leftPadding: 35*AppStyle.size1W
         rightPadding: 35*AppStyle.size1W

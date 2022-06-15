@@ -7,7 +7,8 @@ import Memorito.Contexts
 
 Item {
     function cameInToPage(object) {
-        contextListModel.append(contextsModel.getAllContexts())
+        if(Constants.contextsListModel.count === 0)
+            Constants.contextsListModel.append(contextsModel.getAllContexts())
     }
 
     ContextsModel{
@@ -21,27 +22,27 @@ Item {
         target: contextsController
         function onNewContextAdded(id)
         {
-            contextListModel.append(contextsModel.getContextById(id))
+            Constants.contextsListModel.append(contextsModel.getContextByLocalId(id))
         }
         function onContextDeleted(serverId)
         {
-            var res = UsefulFunc.findInModel(serverId,"server_id",contextListModel)
+            var res = UsefulFunc.findInModel(serverId,"server_id",Constants.contextsListModel)
             if( res.index>=0 )
-                contextListModel.remove(res.index)
+                Constants.contextsListModel.remove(res.index)
         }
 
         function onContextUpdated(serverId,contextName)
         {
-            var res = UsefulFunc.findInModel(serverId,"server_id",contextListModel)
+            var res = UsefulFunc.findInModel(serverId,"server_id",Constants.contextsListModel)
             if( res.index>=0 )
-                contextListModel.setProperty(res.index,"context_name",contextName)
+                Constants.contextsListModel.setProperty(res.index,"context_name",contextName)
         }
     }
 
     Item {
         height: width
         width:  600*AppStyle.size1W
-        visible: contextListModel.count === 0
+        visible: Constants.contextsListModel.count === 0
         anchors {
             centerIn: parent
         }
@@ -198,9 +199,7 @@ Item {
         }
 
         /***********************************************/
-        model: ListModel{
-            id: contextListModel
-        }
+        model: Constants.contextsListModel
     }
 
     AppButton{
@@ -290,7 +289,7 @@ Item {
         }
     }
 
-    Loader{
+    Loader {
         id: deleteLoader
         active: false
         sourceComponent: AppConfirmDialog{

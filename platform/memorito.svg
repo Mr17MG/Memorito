@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="memorito-new-logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffedff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="1"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="1.0527344"
+     inkscape:cx="151.5102"
+     inkscape:cy="197.5807"
+     inkscape:window-width="1920"
+     inkscape:window-height="1039"
+     inkscape:window-x="1366"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid32026" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient7985">
+      <stop
+         style="stop-color:#000669;stop-opacity:1"
+         offset="0"
+         id="stop7981" />
+      <stop
+         style="stop-color:#fd68fd;stop-opacity:0.99847001"
+         offset="1"
+         id="stop7983" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7985"
+       id="linearGradient33637"
+       gradientUnits="userSpaceOnUse"
+       x1="0.62806374"
+       y1="1.6561711"
+       x2="511.66006"
+       y2="512.47864" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:266.667px;line-height:1.25;font-family:Wonderbar;-inkscape-font-specification:Wonderbar;fill:url(#linearGradient33637);fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
+       x="68.29287"
+       y="322.15549"
+       id="text957"><tspan
+         sodipodi:role="line"
+         id="tspan955"
+         x="68.29287"
+         y="322.15549"
+         style="font-size:266.667px;fill:url(#linearGradient33637);stroke:#000000;fill-opacity:1;stroke-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none">MG</tspan></text>
+    <path
+       style="fill:none;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 236.58377,315.67577 c 0,0 34.3856,56.83636 49.48861,64.75988 82.19338,43.12125 91.46167,9.17576 91.46167,9.17576"
+       id="path162197"
+       sodipodi:nodetypes="csc" />
+    <path
+       style="fill:none;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 330.13278,279.85498 c 0,0 29.52802,11.591 54.43694,11.40203 32.0296,-0.24299 44.5347,-2.00725 44.5347,-2.00725"
+       id="path168747"
+       sodipodi:nodetypes="csc" />
+  </g>
+</svg>

@@ -5,6 +5,7 @@ singleton AppStyle              AppStyle.qml
 singleton UsefulFunc            UsefulFunctions.qml
 singleton UiFunctions           UiFunctions.qml
 singleton SettingDriver         SettingDriver.qml
+singleton Constants             Constants.qml
 
 AppShortcut                     AppShortcut.qml
 

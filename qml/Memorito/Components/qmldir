@@ -8,7 +8,6 @@ AppComboBox                 ComboBox.qml
 AppConfirmDialog            ConfirmDialog.qml
 AppConfirmDialogButton      ConfirmDialogButton.qml
 AppDatePicker               DatePicker.qml
-AppDayOfWeekRow             DayOfWeekRow.qml
 AppDialog                   Dialog.qml
 AppFilesSelection           FilesSelection.qml
 AppFlickTextArea            FlickTextArea.qml

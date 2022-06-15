@@ -1,13 +1,13 @@
 pragma Singleton
 import QtQuick  // Require For QtObject
-import Memorito.SystemInfo // Require For SystemInfo
+import Memorito.Tools // Require For SystemInfo
+
+import QDatePicker
 
 QtObject {
     id: root
-    property int connectionType: 1
 
-//    property MSysInfo mSysInfo: MSysInfo{}
-
+    property MTools mTools: MTools{}
     property ListModel stackPages: ListModel{}
 
     property var rootWindow: null
@@ -132,11 +132,6 @@ QtObject {
             console.error(component.errorString())
     }
 
-    function showUnauthorizedError()
-    {
-        showLog(qsTr("نام کاربریت مجاز شناخته نشد، ممکن حسابت پاک شده باشه."),true,400*AppStyle.size1W)
-    }
-
     function showBusy(text,callback)
     {
         var component = Qt.createComponent("qrc:/Memorito/Components/BusyDialog.qml")
@@ -192,17 +187,17 @@ QtObject {
 
     function getAndroidAccessToFile()
     {
-        if( !mSysInfo.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE") )
+        if( !mTools.getPermissionResult("android.permission.WRITE_EXTERNAL_STORAGE") )
         {
 
             UsefulFunc.showMessage( qsTr("مجوز"),
                                    qsTr("برای ذخیره‌سازی و نمایش فایل‌هات نیاز به مجوز دارم، بهم میدی؟"),
                                    function () {
-                                       if( !mSysInfo.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") )
+                                       if( !mTools.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") )
                                        {
                                            UsefulFunc.showConfirm( qsTr("مجوز") , qsTr("چون اجازه ندادی نمیتونم به فایل‌هات دسترسی داشته باشم و این ممکنه باعث بشه فایل‌هاتو تو این دستگاه نبینی, میخوای دوباره امتحان کنی؟"),
                                                                   function(){
-                                                                      if( !mSysInfo.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") )
+                                                                      if( !mTools.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") )
                                                                       {
                                                                           UsefulFunc.showLog(qsTr("بازم که اجازه ندادی! :( "),true)
                                                                           getAndroidAccessToFileResponsed(false)
@@ -216,7 +211,7 @@ QtObject {
                                                                       getAndroidAccessToFileResponsed(false)
                                                                   })
                                        }
-                                       else if( mSysInfo.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") === -1 )
+                                       else if( mTools.requestPermission("android.permission.WRITE_EXTERNAL_STORAGE") === -1 )
                                        {
                                            UsefulFunc.showLog(qsTr("گفتی دیگه پیام درخواست مجوز بهت نشون داده نشه، لطفا از داخل تنظیمات یهم دسترسی یده"),true)
                                            getAndroidAccessToFileResponsed(true)
@@ -243,10 +238,10 @@ QtObject {
         if(page !== stackPages.get(stackPages.count-1).page || title !== stackPages.get(stackPages.count-1).title)
         {
             let result = findListModel(stackPages,function(model){return page===model["page"] && title===model["title"]},false)
-            if(result)
+            if(result !== null)
             {
+                root.stackPages.remove(result,stackPages.count-result)
                 root.stackPages.append({"page":page,"title":title})
-                root.stackPages.remove(result,stackPages.count-result-1)
                 root.mainPage.item.mainStackView.pop(mainPage.item.mainStackView.get(result))
             }
             else{
@@ -265,6 +260,39 @@ QtObject {
             object =  mainPage.item.mainStackView.callForGetDataBeforePop()
         root.mainPage.item.mainStackView.pop()
         root.mainPage.item.mainStackView.callWhenPop(object)
+    }
+
+    //######################################################//
+    property var calendar: QDatePicker {
+        id: qDatePicker
+        locale: AppStyle.appLocale
+        calendar:  AppStyle.appCalendar
+    }
+    function convertLocaleDateToGregotian(year,month,day){
+        return qDatePicker.localeToGregorianDate(year,month,day)
+    }
+    function convertDateToLocale(date)
+    {
+        if( (new Date(date)).toString() !== "Invlaid Date")
+        {
+            date = new Date(date)
+            var localeDate = qDatePicker.dateToLocalDateString(date.getFullYear(),date.getMonth()+1,date.getDate())
+            return localeDate
+        }
+        else
+            return ""
+    }
+
+    function convertDateTimeToLocaleText(date)
+    {
+        if( (new Date(date)).toString() !== "Invlaid Date")
+        {
+            date = new Date(date)
+            var localeDateStr = qDatePicker.dateToLocalDateString(date.getFullYear(),date.getMonth()+1,date.getDate())
+            return ("%1/%2/%3 - %4:%5:%6".arg(localeDateStr[0]).arg(localeDateStr[1]).arg(localeDateStr[2]).arg(date.getHours()).arg(date.getMinutes()).arg(date.getSeconds()))
+        }
+        else
+            return ""
     }
 
 }

@@ -1,10 +1,11 @@
-import QtQuick 
+import QtQuick
 import QtQuick.Controls 
 import QtQuick.Controls.Material 
 import Memorito.Global
 
 Dialog{
-    id:dialog
+    id:root
+
     property string dialogText: ""
     property string dialogTitle: ""
     property string dialogButtonColor: AppStyle.primaryColor
@@ -37,9 +38,9 @@ Dialog{
     closePolicy: Dialog.NoAutoClose
     Shortcut {
         sequences: ["Esc", "Back"]
-        enabled: dialog.visible
+        enabled: root.visible
         onActivated: {
-            dialog.close()
+            root.close()
         }
     }
     x: -parent.x + (parent===null?0:(parent.width- width)/2)
@@ -96,9 +97,9 @@ Dialog{
             text: qsTr("بلی")
             radius: AppStyle.size1W*20
             onClicked: {
-                if(accepted)
-                    accepted()
-                dialog.close()
+                if(typeof root.accepted === "function")
+                    root.accepted()
+                root.close()
             }
         }
 
@@ -110,9 +111,9 @@ Dialog{
             borderColor: AppStyle.textColor
             radius: AppStyle.size1W*20
             onClicked: {
-                if(rejected)
-                    rejected()
-                dialog.close()
+                if(typeof root.rejected === "function")
+                    root.rejected()
+                root.close()
             }
         }
     }

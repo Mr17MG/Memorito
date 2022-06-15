@@ -1,4 +1,4 @@
-QT += androidextras
+QT += core-private
 DISTFILES += \
     $$PWD/AndroidManifest.xml \
     $$PWD/res/values/libs.xml \

@@ -36,7 +36,7 @@ Rectangle {
         y: (parent.height - height) / 2
         width: 30*AppStyle.size1W
         height: width
-        source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/check.png"
+        source: "qrc:/qt-project.org/imports/QtQuick/Controls/Material/images/check.png"
         fillMode: Image.PreserveAspectFit
         sourceSize.width: width*2
         sourceSize.height: height*2

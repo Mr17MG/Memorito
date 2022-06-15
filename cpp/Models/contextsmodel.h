@@ -12,7 +12,8 @@ public:
     explicit ContextsModel();
 
     Q_INVOKABLE QVariant getAllContexts();
-    Q_INVOKABLE QVariant getContextById(int id);
+    Q_INVOKABLE QVariant getContextByLocalId(int localId);
+    Q_INVOKABLE QVariant getContextByServerId(int serverId);
     Q_INVOKABLE int addNewContext(QVariantMap data);
     Q_INVOKABLE int addNewContext(QString contextName,int userId, int serverId=-1,QString registerDate="",QString modifiedDate ="");
     Q_INVOKABLE void addMulltiContext(QList <QVariantMap> contextList);

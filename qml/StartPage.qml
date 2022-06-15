@@ -2,8 +2,10 @@ import QtQuick                       // Require For MouseArea and other
 import QtQuick.Window                // Require For Screen
 import QtQuick.Controls              // Require For Drawer and other
 import QtQuick.Controls.Material     // Require For Material Theme
-import "qrc:/Splash/" as Splash      // Require For SplashLoader
+
 import Memorito.Global
+
+import "qrc:/Splash/" as Splash      // Require For SplashLoader
 
 ApplicationWindow {
     id:rootWindow
@@ -39,8 +41,17 @@ ApplicationWindow {
     LayoutMirroring.enabled: AppStyle.ltr
     LayoutMirroring.childrenInherit: true
 
+    Connections{
+        target: translator
+        function onLanguageChanged() {
+            AppStyle.ltr = translator ? translator.getCurrentLanguage() === translator.getLanguages().ENG
+                                      : false
+        }
+    }
+
     /********************************************************************************/
     ///////////////////////////////// Responsive UI //////////////////////////////////
+
     Component.onCompleted: {
         UsefulFunc.setRootWindowVar(rootWindow)
     }
@@ -54,6 +65,7 @@ ApplicationWindow {
 
     /********************************************************************************/
     ////////////////////////////// useful Component ////////////////////////////////
+
     AppShortcut{}
 
     /********************************************************************************/
@@ -69,14 +81,8 @@ ApplicationWindow {
         }
         sourceComponent: Splash.SplashLoader{}
     }
-    ////////////////////////////////////////////////////////////////////
-    Connections{
-        target: translator
-        function onLanguageChanged() {
-            AppStyle.ltr = translator ? translator.getCurrentLanguage() === translator.getLanguages().ENG
-                                      : false
-        }
-    }
+
+    /********************************************************************************/
     ////////////////////////////////////////////////////////////////////
 
     Connections{
@@ -109,9 +115,9 @@ ApplicationWindow {
 
         function onLoaded()
         {
-            logger.busyLoader.close()
+            if(logger.busyLoader)
+                logger.busyLoader.close()
         }
     }
-    ////////////////////////////////////////////////////////////////////
 
 }

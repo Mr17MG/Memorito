@@ -35,8 +35,8 @@ Pane {
     }
 
     Component.onCompleted: {
-        LocalDatabase.dropAallLocalTables()
-        LocalDatabase.makeLocalTables()
+//        LocalDatabase.dropAallLocalTables()
+//        LocalDatabase.makeLocalTables()
         UsefulFunc.setAuthLoaderVar(authLoader)
     }
 
@@ -174,7 +174,7 @@ Pane {
                 height: parent.height*0.8
 
                 Loader{
-                    id: SettingDriverPage
+                    id: appSettingPage
                     active: setting.visible
                     width: parent.width
                     height: parent.height

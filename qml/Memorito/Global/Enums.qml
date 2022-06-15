@@ -7,7 +7,7 @@ QtObject {
         Process,
         NextAction,
         Refrence,
-        Waiting,
+        Coop,
         Calendar,
         Trash,
         Done,

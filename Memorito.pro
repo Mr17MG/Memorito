@@ -1,6 +1,6 @@
-QT += quick svg quickcontrols2 sql
+QT += quick svg quickcontrols2 sql core
 
-CONFIG += c++11
+CONFIG += c++17
 
 android{
     include(platform/android/android.pri)
